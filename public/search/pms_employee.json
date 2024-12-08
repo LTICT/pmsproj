@@ -1,0 +1,9 @@
+[
+      {"name":"emp_id_no","type":"text", "col_id":"emp_id_no","table_name":"pms_employee","key_name":"emp_id_no", "field_label":"emp_id_no"},
+      {"name":"emp_full_name","type":"text", "col_id":"emp_full_name","table_name":"pms_employee","key_name":"emp_full_name", "field_label":"emp_full_name"}
+
+]
+
+
+
+ 

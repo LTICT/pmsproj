@@ -1,0 +1,4 @@
+[{"name": "emp_department_id", "type": "dropdown",  "table_name": "hrm_department","key_name": "dep_id", "field_label":"dep_name", "col_id":"department_id", "foreign_object":"\\App\\Modelhrmdepartment","owner_id":"dep_owner_id"},
+{"name": "emp_profession_id", "type": "dropdown",  "table_name": "hrm_profession_type","key_name": "prt_id", "field_label":"prt_name", "col_id":"profession_id", "foreign_object":"\\App\\Modelhrmprofessiontype","owner_id":"prt_owner_id"},
+{"name":"active_payroll","type":"boolean", "col_id":"active_payroll"},
+{"name":"emp_on_leave","type":"boolean", "col_id":"emp_on_leave"}]

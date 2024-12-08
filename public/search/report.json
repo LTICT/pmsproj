@@ -1,0 +1,7 @@
+[
+	{"name": "prj_id", "type": "dropdown",  "table_name": "pms_project","key_name": "prj_id", "field_label":"prj_name", "col_id":"prj_id", "foreign_object":"\\App\\Project\\Modelpmsproject"},
+	{"name":"ppa_month","type":"enum", "col_id":"month","table_name":"pms_project_plan_achievement","key_name":"ppa_month", "field_label":"ppa_month"},
+	{"name":"ppa_year","type":"enum", "col_id":"year","table_name":"pms_project_plan_achievement","key_name":"ppa_year", "field_label":"ppa_year"},
+	{"name": "rsc_id", "type": "dropdown",  "table_name": "pms_report_schedule","key_name": "rsc_id", "field_label":"rsc_report_name", "col_id":"rsc_id", "foreign_object":"\\App\\Modelpmsreportschedule"}
+
+]

@@ -1,0 +1,4 @@
+[
+{"name": "prs_project_id", "type": "dropdown",  "table_name": "hrm_address","key_name": "prj_id", "field_label":"prj_name", "col_id":"prs_project_id", "foreign_object":"\\App\\Project\\Modelpmsproject"},
+{"name":"prs_budget_year","type":"enum", "col_id":"prs_budget_year","table_name":"pms_project_status","key_name":"prs_budget_year", "field_label":"prs_budget_year"}
+]

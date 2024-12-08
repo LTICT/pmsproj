@@ -1,0 +1,6 @@
+[{"name":"prj_status","type":"enum", "col_id":"prj_status","table_name":"pms_project","key_name":"prj_status", "field_label":"prj_status"},
+	{"name": "prj_budget_source_id", "type": "dropdown",  "table_name": "pms_budget_source","key_name": "pbs_id", "field_label":"pbs_name", "col_id":"prj_budget_source", "foreign_object":"\\App\\Modelpmsbudgetsource"},
+	{"name": "prj_procrument_unit", "type": "dropdown",  "table_name": "vdc_bureau","key_name": "bre_id", "field_label":"bre_name", "col_id":"prj_bureau", "foreign_object":"\\App\\Modelvdcbureau"},
+	{"name": "prj_zone_id", "type": "dropdown",  "table_name": "hrm_address","key_name": "add_id", "field_label":"add_name", "col_id":"prj_zone", "foreign_object":"\\App\\Modelhrmaddress","owner_id":"add_parent_id"}
+
+]
