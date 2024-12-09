@@ -1,12 +1,12 @@
 <?php
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\MyController;
-use App\Modelpmscontractterminationreason;
+use App\Modelpmsexpenditurecode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 //PROPERTY OF LT ICT SOLUTION PLC
-class PmscontractterminationreasonController extends MyController
+class PmsexpenditurecodeController extends MyController
 {
    public function __construct()
    {
@@ -31,20 +31,20 @@ class PmscontractterminationreasonController extends MyController
     $filepath = base_path() .'\resources\lang\en\ag_grid.php';
     $txt = file_get_contents($filepath);
     $data['ag_grid_lang']=$txt;
-    $searchParams= $this->getSearchSetting('pms_contract_termination_reason');
-    $dataInfo = Modelpmscontractterminationreason::latest();
+    $searchParams= $this->getSearchSetting('pms_expenditure_code');
+    $dataInfo = Modelpmsexpenditurecode::latest();
     $this->searchQuery($searchParams, $request,$dataInfo);
     $perPage = 20;
     $dataInfo =$dataInfo->paginate($perPage);
-    $data['pms_contract_termination_reason_data']=$dataInfo;
+    $data['pms_expenditure_code_data']=$dataInfo;
     $generatedSearchInfo= $this->displaySearchForm($searchParams, $request,false, 1, true);
     $generatedSearchInfo=explode("@", $generatedSearchInfo);
     $generatedSearchForm=$generatedSearchInfo[0];
     $generatedSearchTitle=$generatedSearchInfo[1];
     $data['searchForm']=$generatedSearchForm;
     $data['searchTitle']=$generatedSearchTitle;
-    $data['page_title']=trans("form_lang.pms_contract_termination_reason");
-    return view('contract_termination_reason.list_pms_contract_termination_reason', $data);
+    $data['page_title']=trans("form_lang.pms_expenditure_code");
+    return view('expenditure_code.list_pms_expenditure_code', $data);
 }
 function getForm(Request $request)
 {
@@ -53,26 +53,26 @@ function getForm(Request $request)
     
     $data['is_editable']=1;
     if(isset($id) && !empty($id)){
-       $data_info = Modelpmscontractterminationreason::findOrFail($id);                
+       $data_info = Modelpmsexpenditurecode::findOrFail($id);                
        if(isset($data_info) && !empty($data_info)){
-        $controllerName="PmscontractterminationreasonController";
-        $data= $this->validateEdit($data, $data_info['ctr_create_time'], $controllerName);
-        $data['pms_contract_termination_reason_data']=$data_info;
+        $controllerName="PmsexpenditurecodeController";
+        $data= $this->validateEdit($data, $data_info['pec_create_time'], $controllerName);
+        $data['pms_expenditure_code_data']=$data_info;
     }
 }
-$data['page_title']=trans("form_lang.pms_contract_termination_reason");
-$form= view('contract_termination_reason.form_popup_pms_contract_termination_reason', $data)->render();
+$data['page_title']=trans("form_lang.pms_expenditure_code");
+$form= view('expenditure_code.form_popup_pms_expenditure_code', $data)->render();
 $resultObject = array(
-    "" => "", "form" => $form, 'pageTitle'=>trans('form_lang.pms_contract_termination_reason'));
+    "" => "", "form" => $form, 'pageTitle'=>trans('form_lang.pms_expenditure_code'));
 return response()->json($resultObject);
 }
 function getListForm(Request $request)
 {
     $id=$request->get('id');
     $data['page_title']='';
-    $form= view('contract_termination_reason.editable_list_pms_contract_termination_reason', $data)->render();
+    $form= view('expenditure_code.editable_list_pms_expenditure_code', $data)->render();
     $resultObject = array(
-        "" => "", "form" => $form, 'page_info'=>trans('form_lang.pms_contract_termination_reason'));
+        "" => "", "form" => $form, 'page_info'=>trans('form_lang.pms_expenditure_code'));
     return response()->json($resultObject);
     //echo json_encode($resultObject, JSON_NUMERIC_CHECK);
 }
@@ -85,9 +85,9 @@ function getListForm(Request $request)
     {
         
         
-        $data['page_title']=trans("form_lang.pms_contract_termination_reason");
+        $data['page_title']=trans("form_lang.pms_expenditure_code");
         $data['action_mode']="create";
-        return view('contract_termination_reason.form_pms_contract_termination_reason', $data);
+        return view('expenditure_code.form_pms_expenditure_code', $data);
     }
     /**`
      * Store a newly created resource in storage.
@@ -99,30 +99,30 @@ function getListForm(Request $request)
     public function store(Request $request)
     {
        $attributeNames = [
-        'ctr_reason_name_or'=> trans('form_lang.ctr_reason_name_or'), 
-'ctr_reason_name_am'=> trans('form_lang.ctr_reason_name_am'), 
-'ctr_reason_name_en'=> trans('form_lang.ctr_reason_name_en'), 
-'ctr_description'=> trans('form_lang.ctr_description'), 
-'ctr_status'=> trans('form_lang.ctr_status'), 
+        'pec_name'=> trans('form_lang.pec_name'), 
+'pec_code'=> trans('form_lang.pec_code'), 
+'pec_status'=> trans('form_lang.pec_status'), 
+'pec_description'=> trans('form_lang.pec_description'), 
+'pec_created_date'=> trans('form_lang.pec_created_date'), 
 
     ];
     $rules= [
-        'ctr_reason_name_or'=> 'max:200', 
-'ctr_reason_name_am'=> 'max:60', 
-'ctr_reason_name_en'=> 'max:60', 
-'ctr_description'=> 'max:425', 
-'ctr_status'=> 'integer', 
+        'pec_name'=> 'max:200', 
+'pec_code'=> 'max:200', 
+'pec_status'=> 'integer', 
+'pec_description'=> 'max:100', 
+'pec_created_date'=> 'integer', 
 
     ]; 
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
     if (!$validator->fails()) {
         $requestData = $request->all();
-        $requestData['ctr_created_by']=auth()->user()->usr_Id;
-        Modelpmscontractterminationreason::create($requestData);
-        return redirect('contract_termination_reason')->with('flash_message',  trans('form_lang.insert_success'));
+        $requestData['pec_created_by']=auth()->user()->usr_Id;
+        Modelpmsexpenditurecode::create($requestData);
+        return redirect('expenditure_code')->with('flash_message',  trans('form_lang.insert_success'));
     }else{
-        return redirect('contract_termination_reason/create')
+        return redirect('expenditure_code/create')
         ->withErrors($validator)
         ->withInput();
     }
@@ -136,17 +136,17 @@ function getListForm(Request $request)
      */
     public function show($id)
     {
-        $query='SELECT ctr_id,ctr_reason_name_or,ctr_reason_name_am,ctr_reason_name_en,ctr_description,ctr_create_time,ctr_update_time,ctr_delete_time,ctr_created_by,ctr_status FROM pms_contract_termination_reason ';       
+        $query='SELECT pec_id,pec_name,pec_code,pec_status,pec_description,pec_created_by,pec_created_date,pec_create_time,pec_update_time FROM pms_expenditure_code ';       
         
-        $query .=' WHERE ctr_id='.$id.' ';
+        $query .=' WHERE pec_id='.$id.' ';
         $data_info=DB::select(DB::raw($query));
         if(isset($data_info) && !empty($data_info)){
-            $data['pms_contract_termination_reason_data']=$data_info[0];
+            $data['pms_expenditure_code_data']=$data_info[0];
         }
-        //$data_info = Modelpmscontractterminationreason::findOrFail($id);
-        //$data['pms_contract_termination_reason_data']=$data_info;
-        $data['page_title']=trans("form_lang.pms_contract_termination_reason");
-        return view('contract_termination_reason.show_pms_contract_termination_reason', $data);
+        //$data_info = Modelpmsexpenditurecode::findOrFail($id);
+        //$data['pms_expenditure_code_data']=$data_info;
+        $data['page_title']=trans("form_lang.pms_expenditure_code");
+        return view('expenditure_code.show_pms_expenditure_code', $data);
     }
     /**
      * Show the form for editing the specified resource.
@@ -159,12 +159,12 @@ function getListForm(Request $request)
     {
         
         
-        $data_info = Modelpmscontractterminationreason::find($id);
-        $data['pms_contract_termination_reason_data']=$data_info;
-        $data['page_title']=trans("form_lang.pms_contract_termination_reason");
+        $data_info = Modelpmsexpenditurecode::find($id);
+        $data['pms_expenditure_code_data']=$data_info;
+        $data['page_title']=trans("form_lang.pms_expenditure_code");
         $data['action_mode']="edit";
         $data['record_id']=$id;
-        return view('contract_termination_reason.form_pms_contract_termination_reason', $data);
+        return view('expenditure_code.form_pms_expenditure_code', $data);
     }
     /**
      * Update the specified resource in storage.
@@ -177,37 +177,37 @@ function getListForm(Request $request)
     public function update(Request $request, $id)
     {
      $attributeNames = [
-        'ctr_reason_name_or'=> trans('form_lang.ctr_reason_name_or'), 
-'ctr_reason_name_am'=> trans('form_lang.ctr_reason_name_am'), 
-'ctr_reason_name_en'=> trans('form_lang.ctr_reason_name_en'), 
-'ctr_description'=> trans('form_lang.ctr_description'), 
-'ctr_status'=> trans('form_lang.ctr_status'), 
+        'pec_name'=> trans('form_lang.pec_name'), 
+'pec_code'=> trans('form_lang.pec_code'), 
+'pec_status'=> trans('form_lang.pec_status'), 
+'pec_description'=> trans('form_lang.pec_description'), 
+'pec_created_date'=> trans('form_lang.pec_created_date'), 
 
     ];
     $rules= [
-        'ctr_reason_name_or'=> 'max:200', 
-'ctr_reason_name_am'=> 'max:60', 
-'ctr_reason_name_en'=> 'max:60', 
-'ctr_description'=> 'max:425', 
-'ctr_status'=> 'integer', 
+        'pec_name'=> 'max:200', 
+'pec_code'=> 'max:200', 
+'pec_status'=> 'integer', 
+'pec_description'=> 'max:100', 
+'pec_created_date'=> 'integer', 
 
     ];     
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
     if (!$validator->fails()) {
      $requestData = $request->all();
-     $data_info = Modelpmscontractterminationreason::findOrFail($id);
+     $data_info = Modelpmsexpenditurecode::findOrFail($id);
      $data_info->update($requestData);
      $ischanged=$data_info->wasChanged();
      if($ischanged){
-         return redirect('contract_termination_reason')->with('flash_message',  trans('form_lang.update_success'));
+         return redirect('expenditure_code')->with('flash_message',  trans('form_lang.update_success'));
      }else{
-        return redirect('contract_termination_reason/'.$id.'/edit')
+        return redirect('expenditure_code/'.$id.'/edit')
         ->with('flash_message',trans('form_lang.not_changed') )
         ->withInput();
     }
 }else{
-    return redirect('contract_termination_reason/'.$id.'/edit')
+    return redirect('expenditure_code/'.$id.'/edit')
     ->withErrors($validator)
     ->withInput();
 }
@@ -221,52 +221,48 @@ function getListForm(Request $request)
      */
     public function destroy($id)
     {
-        Modelpmscontractterminationreason::destroy($id);
-        return redirect('contract_termination_reason')->with('flash_message',  trans('form_lang.delete_success'));
+        Modelpmsexpenditurecode::destroy($id);
+        return redirect('expenditure_code')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT ctr_id,ctr_reason_name_or,ctr_reason_name_am,ctr_reason_name_en,ctr_description,ctr_create_time,ctr_update_time,ctr_delete_time,ctr_created_by,ctr_status,1 AS is_editable, 1 AS is_deletable FROM pms_contract_termination_reason ';       
+     $query='SELECT pec_id,pec_name,pec_code,pec_status,pec_description,pec_created_by,pec_created_date,pec_create_time,pec_update_time,1 AS is_editable, 1 AS is_deletable FROM pms_expenditure_code ';       
      
      $query .=' WHERE 1=1';
-     $ctrid=$request->input('ctr_id');
-if(isset($ctrid) && isset($ctrid)){
-$query .=' AND ctr_id="'.$ctrid.'"'; 
+     $pecid=$request->input('pec_id');
+if(isset($pecid) && isset($pecid)){
+$query .=' AND pec_id="'.$pecid.'"'; 
 }
-$ctrreasonnameor=$request->input('ctr_reason_name_or');
-if(isset($ctrreasonnameor) && isset($ctrreasonnameor)){
-$query .=' AND ctr_reason_name_or="'.$ctrreasonnameor.'"'; 
+$pecname=$request->input('pec_name');
+if(isset($pecname) && isset($pecname)){
+$query .=' AND pec_name="'.$pecname.'"'; 
 }
-$ctrreasonnameam=$request->input('ctr_reason_name_am');
-if(isset($ctrreasonnameam) && isset($ctrreasonnameam)){
-$query .=' AND ctr_reason_name_am="'.$ctrreasonnameam.'"'; 
+$peccode=$request->input('pec_code');
+if(isset($peccode) && isset($peccode)){
+$query .=' AND pec_code="'.$peccode.'"'; 
 }
-$ctrreasonnameen=$request->input('ctr_reason_name_en');
-if(isset($ctrreasonnameen) && isset($ctrreasonnameen)){
-$query .=' AND ctr_reason_name_en="'.$ctrreasonnameen.'"'; 
+$pecstatus=$request->input('pec_status');
+if(isset($pecstatus) && isset($pecstatus)){
+$query .=' AND pec_status="'.$pecstatus.'"'; 
 }
-$ctrdescription=$request->input('ctr_description');
-if(isset($ctrdescription) && isset($ctrdescription)){
-$query .=' AND ctr_description="'.$ctrdescription.'"'; 
+$pecdescription=$request->input('pec_description');
+if(isset($pecdescription) && isset($pecdescription)){
+$query .=' AND pec_description="'.$pecdescription.'"'; 
 }
-$ctrcreatetime=$request->input('ctr_create_time');
-if(isset($ctrcreatetime) && isset($ctrcreatetime)){
-$query .=' AND ctr_create_time="'.$ctrcreatetime.'"'; 
+$peccreatedby=$request->input('pec_created_by');
+if(isset($peccreatedby) && isset($peccreatedby)){
+$query .=' AND pec_created_by="'.$peccreatedby.'"'; 
 }
-$ctrupdatetime=$request->input('ctr_update_time');
-if(isset($ctrupdatetime) && isset($ctrupdatetime)){
-$query .=' AND ctr_update_time="'.$ctrupdatetime.'"'; 
+$peccreateddate=$request->input('pec_created_date');
+if(isset($peccreateddate) && isset($peccreateddate)){
+$query .=' AND pec_created_date="'.$peccreateddate.'"'; 
 }
-$ctrdeletetime=$request->input('ctr_delete_time');
-if(isset($ctrdeletetime) && isset($ctrdeletetime)){
-$query .=' AND ctr_delete_time="'.$ctrdeletetime.'"'; 
+$peccreatetime=$request->input('pec_create_time');
+if(isset($peccreatetime) && isset($peccreatetime)){
+$query .=' AND pec_create_time="'.$peccreatetime.'"'; 
 }
-$ctrcreatedby=$request->input('ctr_created_by');
-if(isset($ctrcreatedby) && isset($ctrcreatedby)){
-$query .=' AND ctr_created_by="'.$ctrcreatedby.'"'; 
-}
-$ctrstatus=$request->input('ctr_status');
-if(isset($ctrstatus) && isset($ctrstatus)){
-$query .=' AND ctr_status="'.$ctrstatus.'"'; 
+$pecupdatetime=$request->input('pec_update_time');
+if(isset($pecupdatetime) && isset($pecupdatetime)){
+$query .=' AND pec_update_time="'.$pecupdatetime.'"'; 
 }
 
      $masterId=$request->input('master_id');
@@ -293,18 +289,19 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 public function updategrid(Request $request)
 {
     $attributeNames = [
-        'ctr_reason_name_or'=> trans('form_lang.ctr_reason_name_or'), 
-'ctr_reason_name_am'=> trans('form_lang.ctr_reason_name_am'), 
-'ctr_reason_name_en'=> trans('form_lang.ctr_reason_name_en'), 
-'ctr_description'=> trans('form_lang.ctr_description'), 
-'ctr_status'=> trans('form_lang.ctr_status'), 
+        'pec_name'=> trans('form_lang.pec_name'), 
+'pec_code'=> trans('form_lang.pec_code'), 
+'pec_status'=> trans('form_lang.pec_status'), 
+'pec_description'=> trans('form_lang.pec_description'), 
+'pec_created_date'=> trans('form_lang.pec_created_date'), 
 
     ];
     $rules= [
-        'ctr_reason_name_or'=> 'max:200', 
-'ctr_reason_name_am'=> 'max:60', 
-'ctr_reason_name_en'=> 'max:60', 
-'ctr_description'=> 'max:425'
+        'pec_name'=> 'max:200', 
+'pec_code'=> 'max:200', 
+'pec_status'=> 'integer', 
+'pec_description'=> 'max:100', 
+
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -319,18 +316,18 @@ public function updategrid(Request $request)
         );
         return response()->json($resultObject);
     }else{
-        $id=$request->get("ctr_id");
+        $id=$request->get("pec_id");
         //$requestData['foreign_field_name']=$request->get('master_id');
             //assign data from of foreign key
         $requestData = $request->all();            
-        $status= $request->input('ctr_status');
+        $status= $request->input('pec_status');
         if($status=="true"){
-            $requestData['ctr_status']=1;
+            $requestData['pec_status']=1;
         }else{
-            $requestData['ctr_status']=0;
+            $requestData['pec_status']=0;
         }
         if(isset($id) && !empty($id)){
-            $data_info = Modelpmscontractterminationreason::findOrFail($id);
+            $data_info = Modelpmsexpenditurecode::findOrFail($id);
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
@@ -356,8 +353,8 @@ public function updategrid(Request $request)
     }else{
         //Parent Id Assigment
         //$requestData['ins_vehicle_id']=$request->get('master_id');
-        //$requestData['ctr_created_by']=auth()->user()->usr_Id;
-        $data_info=Modelpmscontractterminationreason::create($requestData);
+        //$requestData['pec_created_by']=auth()->user()->usr_Id;
+        $data_info=Modelpmsexpenditurecode::create($requestData);
         $resultObject= array(
             "odata.metadata"=>"",
             "value" =>$data_info,
@@ -372,19 +369,18 @@ public function updategrid(Request $request)
 public function insertgrid(Request $request)
 {
     $attributeNames = [
-        'ctr_reason_name_or'=> trans('form_lang.ctr_reason_name_or'), 
-'ctr_reason_name_am'=> trans('form_lang.ctr_reason_name_am'), 
-'ctr_reason_name_en'=> trans('form_lang.ctr_reason_name_en'), 
-'ctr_description'=> trans('form_lang.ctr_description'), 
-'ctr_status'=> trans('form_lang.ctr_status'), 
+        'pec_name'=> trans('form_lang.pec_name'), 
+'pec_code'=> trans('form_lang.pec_code'), 
+'pec_status'=> trans('form_lang.pec_status'), 
+'pec_description'=> trans('form_lang.pec_description'), 
+'pec_created_date'=> trans('form_lang.pec_created_date'), 
 
     ];
     $rules= [
-        'ctr_reason_name_or'=> 'max:200', 
-'ctr_reason_name_am'=> 'max:60', 
-'ctr_reason_name_en'=> 'max:60', 
-'ctr_description'=> 'max:425',
-
+        'pec_name'=> 'max:200', 
+'pec_code'=> 'max:200', 
+'pec_status'=> 'integer', 
+'pec_description'=> 'max:100'
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -400,14 +396,14 @@ public function insertgrid(Request $request)
         return response()->json($resultObject);
     }else{
         $requestData = $request->all();
-        //$requestData['ctr_created_by']=auth()->user()->usr_Id;
-        $status= $request->input('ctr_status');
+        //$requestData['pec_created_by']=auth()->user()->usr_Id;
+        $status= $request->input('pec_status');
         if($status=="true"){
-            $requestData['ctr_status']=1;
+            $requestData['pec_status']=1;
         }else{
-            $requestData['ctr_status']=0;
+            $requestData['pec_status']=0;
         }
-        $data_info=Modelpmscontractterminationreason::create($requestData);
+        $data_info=Modelpmsexpenditurecode::create($requestData);
         $resultObject= array(
             "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
@@ -420,8 +416,8 @@ public function insertgrid(Request $request)
 }
 public function deletegrid(Request $request)
 {
-    $id=$request->get("ctr_id");
-    Modelpmscontractterminationreason::destroy($id);
+    $id=$request->get("pec_id");
+    Modelpmsexpenditurecode::destroy($id);
     $resultObject= array(
         "odata.metadata"=>"",
         "value" =>"",
@@ -432,14 +428,14 @@ public function deletegrid(Request $request)
     return response()->json($resultObject);
 }
 function listRoutes(){
-    Route::resource('contract_termination_reason', 'PmscontractterminationreasonController');
-    Route::post('contract_termination_reason/listgrid', 'Api\PmscontractterminationreasonController@listgrid');
-    Route::post('contract_termination_reason/insertgrid', 'Api\PmscontractterminationreasonController@insertgrid');
-    Route::post('contract_termination_reason/updategrid', 'Api\PmscontractterminationreasonController@updategrid');
-    Route::post('contract_termination_reason/deletegrid', 'Api\PmscontractterminationreasonController@deletegrid');
-    Route::post('contract_termination_reason/search', 'PmscontractterminationreasonController@search');
-    Route::post('contract_termination_reason/getform', 'PmscontractterminationreasonController@getForm');
-    Route::post('contract_termination_reason/getlistform', 'PmscontractterminationreasonController@getListForm');
+    Route::resource('expenditure_code', 'PmsexpenditurecodeController');
+    Route::post('expenditure_code/listgrid', 'Api\PmsexpenditurecodeController@listgrid');
+    Route::post('expenditure_code/insertgrid', 'Api\PmsexpenditurecodeController@insertgrid');
+    Route::post('expenditure_code/updategrid', 'Api\PmsexpenditurecodeController@updategrid');
+    Route::post('expenditure_code/deletegrid', 'Api\PmsexpenditurecodeController@deletegrid');
+    Route::post('expenditure_code/search', 'PmsexpenditurecodeController@search');
+    Route::post('expenditure_code/getform', 'PmsexpenditurecodeController@getForm');
+    Route::post('expenditure_code/getlistform', 'PmsexpenditurecodeController@getListForm');
 
 }
 }

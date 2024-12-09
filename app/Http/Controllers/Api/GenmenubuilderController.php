@@ -249,10 +249,10 @@ function getListForm(Request $request)
         return redirect('permission')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-         //$authenticatedUser = $request->authUser;
-       // $userId=$authenticatedUser->usr_id;
-         $userId=13;
-        if(1==1){
+        $authenticatedUser = $request->authUser;
+        $userId=$authenticatedUser->usr_id;
+         //$userId=13;
+        if(1==2){
      $query='SELECT pag_link_name AS link_name,pag_description AS link_icon,pag_controller AS link_url,pag_parent AS parent_menu 
      FROM tbl_pages ORDER BY pag_parent DESC'; 
         }else{
@@ -260,7 +260,7 @@ function getListForm(Request $request)
            pag_parent AS parent_menu 
      FROM tbl_pages 
      INNER JOIN tbl_permission ON tbl_permission.pem_page_id=tbl_pages.pag_id
-     INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id WHERE url_user_id=8 ORDER BY pag_parent DESC';  
+     INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id WHERE url_user_id='.$userId.' ORDER BY pag_parent DESC';  
         }
      $pemid=$request->input('pem_id');
 if(isset($pemid) && isset($pemid)){

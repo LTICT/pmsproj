@@ -249,11 +249,11 @@ function getListForm(Request $request)
         return redirect('permission')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-         $authenticatedUser = $request->authUser;
-        //$userId=$authenticatedUser->usr_id;
-         $userId=13;
+          $authenticatedUser = $request->authUser;
+        $userId=$authenticatedUser->usr_id;
+         //$userId=13;
          if(1==1){
-       $query="SELECT r.rol_name AS role, jsonb_agg(jsonb_build_object( 'name', rd.rod_name,
+     $query="SELECT r.rol_name AS role, JSON_ARRAYAGG(JSON_OBJECT( 'name', rd.rod_name,
      'gridArea',rd.rod_display_area, 'width', rd.rod_width, 'height', rd.rod_height,'class_name',
      rd.rod_class,'dashboard_type',rd.rod_dashboard_type, 'end_point',rd.rod_end_point, 'column_list',rd.rod_column_list)) AS components 
      FROM tbl_roles r 
@@ -261,7 +261,7 @@ function getListForm(Request $request)
      INNER JOIN tbl_user_role ON r.rol_id=tbl_user_role.url_role_id
      WHERE url_user_id=".$userId." GROUP BY r.rol_id";
          }else{
-              $query="SELECT r.rol_name AS role, jsonb_agg(jsonb_build_object( 'name', rd.rod_name,
+              $query="SELECT r.rol_name AS role, JSON_ARRAYAGG(JSON_OBJECT( 'name', rd.rod_name,
      'gridArea',rd.rod_display_area, 'width', rd.rod_width, 'height', rd.rod_height,'class_name',
      rd.rod_class,'dashboard_type',rd.rod_dashboard_type, 'end_point',rd.rod_end_point, 'column_list',rd.rod_column_list)) AS components 
      FROM tbl_roles r 
@@ -269,12 +269,7 @@ function getListForm(Request $request)
      INNER JOIN tbl_user_role ON r.rol_id=tbl_user_role.url_role_id
      WHERE url_user_id=8 GROUP BY r.rol_id";
          }
-     $pemid=$request->input('pem_id');
-$pemroleid=$request->input('pem_role_id');
-if(isset($pemroleid) && isset($pemroleid)){
-$query .=' AND pem_role_id="'.$pemroleid.'"'; 
-}
-//$query.=' ORDER BY rod_order_number';
+$query.=' ORDER BY rod_order_number';
 
 $data_info=DB::select($query);
 

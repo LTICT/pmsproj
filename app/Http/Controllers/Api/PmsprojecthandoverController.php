@@ -1,12 +1,12 @@
 <?php
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\MyController;
-use App\Modelpmscontractterminationreason;
+use App\Modelpmsprojecthandover;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 //PROPERTY OF LT ICT SOLUTION PLC
-class PmscontractterminationreasonController extends MyController
+class PmsprojecthandoverController extends MyController
 {
    public function __construct()
    {
@@ -31,20 +31,20 @@ class PmscontractterminationreasonController extends MyController
     $filepath = base_path() .'\resources\lang\en\ag_grid.php';
     $txt = file_get_contents($filepath);
     $data['ag_grid_lang']=$txt;
-    $searchParams= $this->getSearchSetting('pms_contract_termination_reason');
-    $dataInfo = Modelpmscontractterminationreason::latest();
+    $searchParams= $this->getSearchSetting('pms_project_handover');
+    $dataInfo = Modelpmsprojecthandover::latest();
     $this->searchQuery($searchParams, $request,$dataInfo);
     $perPage = 20;
     $dataInfo =$dataInfo->paginate($perPage);
-    $data['pms_contract_termination_reason_data']=$dataInfo;
+    $data['pms_project_handover_data']=$dataInfo;
     $generatedSearchInfo= $this->displaySearchForm($searchParams, $request,false, 1, true);
     $generatedSearchInfo=explode("@", $generatedSearchInfo);
     $generatedSearchForm=$generatedSearchInfo[0];
     $generatedSearchTitle=$generatedSearchInfo[1];
     $data['searchForm']=$generatedSearchForm;
     $data['searchTitle']=$generatedSearchTitle;
-    $data['page_title']=trans("form_lang.pms_contract_termination_reason");
-    return view('contract_termination_reason.list_pms_contract_termination_reason', $data);
+    $data['page_title']=trans("form_lang.pms_project_handover");
+    return view('project_handover.list_pms_project_handover', $data);
 }
 function getForm(Request $request)
 {
@@ -53,26 +53,26 @@ function getForm(Request $request)
     
     $data['is_editable']=1;
     if(isset($id) && !empty($id)){
-       $data_info = Modelpmscontractterminationreason::findOrFail($id);                
+       $data_info = Modelpmsprojecthandover::findOrFail($id);                
        if(isset($data_info) && !empty($data_info)){
-        $controllerName="PmscontractterminationreasonController";
-        $data= $this->validateEdit($data, $data_info['ctr_create_time'], $controllerName);
-        $data['pms_contract_termination_reason_data']=$data_info;
+        $controllerName="PmsprojecthandoverController";
+        $data= $this->validateEdit($data, $data_info['prh_create_time'], $controllerName);
+        $data['pms_project_handover_data']=$data_info;
     }
 }
-$data['page_title']=trans("form_lang.pms_contract_termination_reason");
-$form= view('contract_termination_reason.form_popup_pms_contract_termination_reason', $data)->render();
+$data['page_title']=trans("form_lang.pms_project_handover");
+$form= view('project_handover.form_popup_pms_project_handover', $data)->render();
 $resultObject = array(
-    "" => "", "form" => $form, 'pageTitle'=>trans('form_lang.pms_contract_termination_reason'));
+    "" => "", "form" => $form, 'pageTitle'=>trans('form_lang.pms_project_handover'));
 return response()->json($resultObject);
 }
 function getListForm(Request $request)
 {
     $id=$request->get('id');
     $data['page_title']='';
-    $form= view('contract_termination_reason.editable_list_pms_contract_termination_reason', $data)->render();
+    $form= view('project_handover.editable_list_pms_project_handover', $data)->render();
     $resultObject = array(
-        "" => "", "form" => $form, 'page_info'=>trans('form_lang.pms_contract_termination_reason'));
+        "" => "", "form" => $form, 'page_info'=>trans('form_lang.pms_project_handover'));
     return response()->json($resultObject);
     //echo json_encode($resultObject, JSON_NUMERIC_CHECK);
 }
@@ -85,9 +85,9 @@ function getListForm(Request $request)
     {
         
         
-        $data['page_title']=trans("form_lang.pms_contract_termination_reason");
+        $data['page_title']=trans("form_lang.pms_project_handover");
         $data['action_mode']="create";
-        return view('contract_termination_reason.form_pms_contract_termination_reason', $data);
+        return view('project_handover.form_pms_project_handover', $data);
     }
     /**`
      * Store a newly created resource in storage.
@@ -99,30 +99,30 @@ function getListForm(Request $request)
     public function store(Request $request)
     {
        $attributeNames = [
-        'ctr_reason_name_or'=> trans('form_lang.ctr_reason_name_or'), 
-'ctr_reason_name_am'=> trans('form_lang.ctr_reason_name_am'), 
-'ctr_reason_name_en'=> trans('form_lang.ctr_reason_name_en'), 
-'ctr_description'=> trans('form_lang.ctr_description'), 
-'ctr_status'=> trans('form_lang.ctr_status'), 
+        'prh_project_id'=> trans('form_lang.prh_project_id'), 
+'prh_handover_date_ec'=> trans('form_lang.prh_handover_date_ec'), 
+'prh_handover_date_gc'=> trans('form_lang.prh_handover_date_gc'), 
+'prh_description'=> trans('form_lang.prh_description'), 
+'prh_status'=> trans('form_lang.prh_status'), 
 
     ];
     $rules= [
-        'ctr_reason_name_or'=> 'max:200', 
-'ctr_reason_name_am'=> 'max:60', 
-'ctr_reason_name_en'=> 'max:60', 
-'ctr_description'=> 'max:425', 
-'ctr_status'=> 'integer', 
+        'prh_project_id'=> 'max:200', 
+'prh_handover_date_ec'=> 'max:200', 
+'prh_handover_date_gc'=> 'max:200', 
+'prh_description'=> 'max:425', 
+'prh_status'=> 'integer', 
 
     ]; 
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
     if (!$validator->fails()) {
         $requestData = $request->all();
-        $requestData['ctr_created_by']=auth()->user()->usr_Id;
-        Modelpmscontractterminationreason::create($requestData);
-        return redirect('contract_termination_reason')->with('flash_message',  trans('form_lang.insert_success'));
+        $requestData['prh_created_by']=auth()->user()->usr_Id;
+        Modelpmsprojecthandover::create($requestData);
+        return redirect('project_handover')->with('flash_message',  trans('form_lang.insert_success'));
     }else{
-        return redirect('contract_termination_reason/create')
+        return redirect('project_handover/create')
         ->withErrors($validator)
         ->withInput();
     }
@@ -136,17 +136,17 @@ function getListForm(Request $request)
      */
     public function show($id)
     {
-        $query='SELECT ctr_id,ctr_reason_name_or,ctr_reason_name_am,ctr_reason_name_en,ctr_description,ctr_create_time,ctr_update_time,ctr_delete_time,ctr_created_by,ctr_status FROM pms_contract_termination_reason ';       
+        $query='SELECT prh_id,prh_project_id,prh_handover_date_ec,prh_handover_date_gc,prh_description,prh_create_time,prh_update_time,prh_delete_time,prh_created_by,prh_status FROM pms_project_handover ';       
         
-        $query .=' WHERE ctr_id='.$id.' ';
+        $query .=' WHERE prh_id='.$id.' ';
         $data_info=DB::select(DB::raw($query));
         if(isset($data_info) && !empty($data_info)){
-            $data['pms_contract_termination_reason_data']=$data_info[0];
+            $data['pms_project_handover_data']=$data_info[0];
         }
-        //$data_info = Modelpmscontractterminationreason::findOrFail($id);
-        //$data['pms_contract_termination_reason_data']=$data_info;
-        $data['page_title']=trans("form_lang.pms_contract_termination_reason");
-        return view('contract_termination_reason.show_pms_contract_termination_reason', $data);
+        //$data_info = Modelpmsprojecthandover::findOrFail($id);
+        //$data['pms_project_handover_data']=$data_info;
+        $data['page_title']=trans("form_lang.pms_project_handover");
+        return view('project_handover.show_pms_project_handover', $data);
     }
     /**
      * Show the form for editing the specified resource.
@@ -159,12 +159,12 @@ function getListForm(Request $request)
     {
         
         
-        $data_info = Modelpmscontractterminationreason::find($id);
-        $data['pms_contract_termination_reason_data']=$data_info;
-        $data['page_title']=trans("form_lang.pms_contract_termination_reason");
+        $data_info = Modelpmsprojecthandover::find($id);
+        $data['pms_project_handover_data']=$data_info;
+        $data['page_title']=trans("form_lang.pms_project_handover");
         $data['action_mode']="edit";
         $data['record_id']=$id;
-        return view('contract_termination_reason.form_pms_contract_termination_reason', $data);
+        return view('project_handover.form_pms_project_handover', $data);
     }
     /**
      * Update the specified resource in storage.
@@ -177,37 +177,37 @@ function getListForm(Request $request)
     public function update(Request $request, $id)
     {
      $attributeNames = [
-        'ctr_reason_name_or'=> trans('form_lang.ctr_reason_name_or'), 
-'ctr_reason_name_am'=> trans('form_lang.ctr_reason_name_am'), 
-'ctr_reason_name_en'=> trans('form_lang.ctr_reason_name_en'), 
-'ctr_description'=> trans('form_lang.ctr_description'), 
-'ctr_status'=> trans('form_lang.ctr_status'), 
+        'prh_project_id'=> trans('form_lang.prh_project_id'), 
+'prh_handover_date_ec'=> trans('form_lang.prh_handover_date_ec'), 
+'prh_handover_date_gc'=> trans('form_lang.prh_handover_date_gc'), 
+'prh_description'=> trans('form_lang.prh_description'), 
+'prh_status'=> trans('form_lang.prh_status'), 
 
     ];
     $rules= [
-        'ctr_reason_name_or'=> 'max:200', 
-'ctr_reason_name_am'=> 'max:60', 
-'ctr_reason_name_en'=> 'max:60', 
-'ctr_description'=> 'max:425', 
-'ctr_status'=> 'integer', 
+        'prh_project_id'=> 'max:200', 
+'prh_handover_date_ec'=> 'max:200', 
+'prh_handover_date_gc'=> 'max:200', 
+'prh_description'=> 'max:425', 
+'prh_status'=> 'integer', 
 
     ];     
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
     if (!$validator->fails()) {
      $requestData = $request->all();
-     $data_info = Modelpmscontractterminationreason::findOrFail($id);
+     $data_info = Modelpmsprojecthandover::findOrFail($id);
      $data_info->update($requestData);
      $ischanged=$data_info->wasChanged();
      if($ischanged){
-         return redirect('contract_termination_reason')->with('flash_message',  trans('form_lang.update_success'));
+         return redirect('project_handover')->with('flash_message',  trans('form_lang.update_success'));
      }else{
-        return redirect('contract_termination_reason/'.$id.'/edit')
+        return redirect('project_handover/'.$id.'/edit')
         ->with('flash_message',trans('form_lang.not_changed') )
         ->withInput();
     }
 }else{
-    return redirect('contract_termination_reason/'.$id.'/edit')
+    return redirect('project_handover/'.$id.'/edit')
     ->withErrors($validator)
     ->withInput();
 }
@@ -221,52 +221,52 @@ function getListForm(Request $request)
      */
     public function destroy($id)
     {
-        Modelpmscontractterminationreason::destroy($id);
-        return redirect('contract_termination_reason')->with('flash_message',  trans('form_lang.delete_success'));
+        Modelpmsprojecthandover::destroy($id);
+        return redirect('project_handover')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT ctr_id,ctr_reason_name_or,ctr_reason_name_am,ctr_reason_name_en,ctr_description,ctr_create_time,ctr_update_time,ctr_delete_time,ctr_created_by,ctr_status,1 AS is_editable, 1 AS is_deletable FROM pms_contract_termination_reason ';       
+     $query='SELECT prh_id,prh_project_id,prh_handover_date_ec,prh_handover_date_gc,prh_description,prh_create_time,prh_update_time,prh_delete_time,prh_created_by,prh_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_handover ';       
      
      $query .=' WHERE 1=1';
-     $ctrid=$request->input('ctr_id');
-if(isset($ctrid) && isset($ctrid)){
-$query .=' AND ctr_id="'.$ctrid.'"'; 
+     $prhid=$request->input('prh_id');
+if(isset($prhid) && isset($prhid)){
+$query .=' AND prh_id="'.$prhid.'"'; 
 }
-$ctrreasonnameor=$request->input('ctr_reason_name_or');
-if(isset($ctrreasonnameor) && isset($ctrreasonnameor)){
-$query .=' AND ctr_reason_name_or="'.$ctrreasonnameor.'"'; 
+$prhprojectid=$request->input('prh_project_id');
+if(isset($prhprojectid) && isset($prhprojectid)){
+$query .=' AND prh_project_id="'.$prhprojectid.'"'; 
 }
-$ctrreasonnameam=$request->input('ctr_reason_name_am');
-if(isset($ctrreasonnameam) && isset($ctrreasonnameam)){
-$query .=' AND ctr_reason_name_am="'.$ctrreasonnameam.'"'; 
+$prhhandoverdateec=$request->input('prh_handover_date_ec');
+if(isset($prhhandoverdateec) && isset($prhhandoverdateec)){
+$query .=' AND prh_handover_date_ec="'.$prhhandoverdateec.'"'; 
 }
-$ctrreasonnameen=$request->input('ctr_reason_name_en');
-if(isset($ctrreasonnameen) && isset($ctrreasonnameen)){
-$query .=' AND ctr_reason_name_en="'.$ctrreasonnameen.'"'; 
+$prhhandoverdategc=$request->input('prh_handover_date_gc');
+if(isset($prhhandoverdategc) && isset($prhhandoverdategc)){
+$query .=' AND prh_handover_date_gc="'.$prhhandoverdategc.'"'; 
 }
-$ctrdescription=$request->input('ctr_description');
-if(isset($ctrdescription) && isset($ctrdescription)){
-$query .=' AND ctr_description="'.$ctrdescription.'"'; 
+$prhdescription=$request->input('prh_description');
+if(isset($prhdescription) && isset($prhdescription)){
+$query .=' AND prh_description="'.$prhdescription.'"'; 
 }
-$ctrcreatetime=$request->input('ctr_create_time');
-if(isset($ctrcreatetime) && isset($ctrcreatetime)){
-$query .=' AND ctr_create_time="'.$ctrcreatetime.'"'; 
+$prhcreatetime=$request->input('prh_create_time');
+if(isset($prhcreatetime) && isset($prhcreatetime)){
+$query .=' AND prh_create_time="'.$prhcreatetime.'"'; 
 }
-$ctrupdatetime=$request->input('ctr_update_time');
-if(isset($ctrupdatetime) && isset($ctrupdatetime)){
-$query .=' AND ctr_update_time="'.$ctrupdatetime.'"'; 
+$prhupdatetime=$request->input('prh_update_time');
+if(isset($prhupdatetime) && isset($prhupdatetime)){
+$query .=' AND prh_update_time="'.$prhupdatetime.'"'; 
 }
-$ctrdeletetime=$request->input('ctr_delete_time');
-if(isset($ctrdeletetime) && isset($ctrdeletetime)){
-$query .=' AND ctr_delete_time="'.$ctrdeletetime.'"'; 
+$prhdeletetime=$request->input('prh_delete_time');
+if(isset($prhdeletetime) && isset($prhdeletetime)){
+$query .=' AND prh_delete_time="'.$prhdeletetime.'"'; 
 }
-$ctrcreatedby=$request->input('ctr_created_by');
-if(isset($ctrcreatedby) && isset($ctrcreatedby)){
-$query .=' AND ctr_created_by="'.$ctrcreatedby.'"'; 
+$prhcreatedby=$request->input('prh_created_by');
+if(isset($prhcreatedby) && isset($prhcreatedby)){
+$query .=' AND prh_created_by="'.$prhcreatedby.'"'; 
 }
-$ctrstatus=$request->input('ctr_status');
-if(isset($ctrstatus) && isset($ctrstatus)){
-$query .=' AND ctr_status="'.$ctrstatus.'"'; 
+$prhstatus=$request->input('prh_status');
+if(isset($prhstatus) && isset($prhstatus)){
+$query .=' AND prh_status="'.$prhstatus.'"'; 
 }
 
      $masterId=$request->input('master_id');
@@ -293,18 +293,17 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 public function updategrid(Request $request)
 {
     $attributeNames = [
-        'ctr_reason_name_or'=> trans('form_lang.ctr_reason_name_or'), 
-'ctr_reason_name_am'=> trans('form_lang.ctr_reason_name_am'), 
-'ctr_reason_name_en'=> trans('form_lang.ctr_reason_name_en'), 
-'ctr_description'=> trans('form_lang.ctr_description'), 
-'ctr_status'=> trans('form_lang.ctr_status'), 
+        'prh_project_id'=> trans('form_lang.prh_project_id'), 
+'prh_handover_date_ec'=> trans('form_lang.prh_handover_date_ec'), 
+'prh_handover_date_gc'=> trans('form_lang.prh_handover_date_gc'), 
+'prh_description'=> trans('form_lang.prh_description'), 
 
     ];
     $rules= [
-        'ctr_reason_name_or'=> 'max:200', 
-'ctr_reason_name_am'=> 'max:60', 
-'ctr_reason_name_en'=> 'max:60', 
-'ctr_description'=> 'max:425'
+        'prh_project_id'=> 'max:200', 
+'prh_handover_date_ec'=> 'max:200', 
+'prh_handover_date_gc'=> 'max:200', 
+'prh_description'=> 'max:425'
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -319,18 +318,18 @@ public function updategrid(Request $request)
         );
         return response()->json($resultObject);
     }else{
-        $id=$request->get("ctr_id");
+        $id=$request->get("prh_id");
         //$requestData['foreign_field_name']=$request->get('master_id');
             //assign data from of foreign key
         $requestData = $request->all();            
-        $status= $request->input('ctr_status');
+        $status= $request->input('prh_status');
         if($status=="true"){
-            $requestData['ctr_status']=1;
+            $requestData['prh_status']=1;
         }else{
-            $requestData['ctr_status']=0;
+            $requestData['prh_status']=0;
         }
         if(isset($id) && !empty($id)){
-            $data_info = Modelpmscontractterminationreason::findOrFail($id);
+            $data_info = Modelpmsprojecthandover::findOrFail($id);
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
@@ -356,8 +355,8 @@ public function updategrid(Request $request)
     }else{
         //Parent Id Assigment
         //$requestData['ins_vehicle_id']=$request->get('master_id');
-        //$requestData['ctr_created_by']=auth()->user()->usr_Id;
-        $data_info=Modelpmscontractterminationreason::create($requestData);
+        //$requestData['prh_created_by']=auth()->user()->usr_Id;
+        $data_info=Modelpmsprojecthandover::create($requestData);
         $resultObject= array(
             "odata.metadata"=>"",
             "value" =>$data_info,
@@ -372,18 +371,17 @@ public function updategrid(Request $request)
 public function insertgrid(Request $request)
 {
     $attributeNames = [
-        'ctr_reason_name_or'=> trans('form_lang.ctr_reason_name_or'), 
-'ctr_reason_name_am'=> trans('form_lang.ctr_reason_name_am'), 
-'ctr_reason_name_en'=> trans('form_lang.ctr_reason_name_en'), 
-'ctr_description'=> trans('form_lang.ctr_description'), 
-'ctr_status'=> trans('form_lang.ctr_status'), 
+        'prh_project_id'=> trans('form_lang.prh_project_id'), 
+'prh_handover_date_ec'=> trans('form_lang.prh_handover_date_ec'), 
+'prh_handover_date_gc'=> trans('form_lang.prh_handover_date_gc'), 
+'prh_description'=> trans('form_lang.prh_description'), 
 
     ];
     $rules= [
-        'ctr_reason_name_or'=> 'max:200', 
-'ctr_reason_name_am'=> 'max:60', 
-'ctr_reason_name_en'=> 'max:60', 
-'ctr_description'=> 'max:425',
+        'prh_project_id'=> 'max:200', 
+'prh_handover_date_ec'=> 'max:200', 
+'prh_handover_date_gc'=> 'max:200', 
+'prh_description'=> 'max:425', 
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -400,14 +398,14 @@ public function insertgrid(Request $request)
         return response()->json($resultObject);
     }else{
         $requestData = $request->all();
-        //$requestData['ctr_created_by']=auth()->user()->usr_Id;
-        $status= $request->input('ctr_status');
+        //$requestData['prh_created_by']=auth()->user()->usr_Id;
+        $status= $request->input('prh_status');
         if($status=="true"){
-            $requestData['ctr_status']=1;
+            $requestData['prh_status']=1;
         }else{
-            $requestData['ctr_status']=0;
+            $requestData['prh_status']=0;
         }
-        $data_info=Modelpmscontractterminationreason::create($requestData);
+        $data_info=Modelpmsprojecthandover::create($requestData);
         $resultObject= array(
             "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
@@ -420,8 +418,8 @@ public function insertgrid(Request $request)
 }
 public function deletegrid(Request $request)
 {
-    $id=$request->get("ctr_id");
-    Modelpmscontractterminationreason::destroy($id);
+    $id=$request->get("prh_id");
+    Modelpmsprojecthandover::destroy($id);
     $resultObject= array(
         "odata.metadata"=>"",
         "value" =>"",
@@ -432,14 +430,14 @@ public function deletegrid(Request $request)
     return response()->json($resultObject);
 }
 function listRoutes(){
-    Route::resource('contract_termination_reason', 'PmscontractterminationreasonController');
-    Route::post('contract_termination_reason/listgrid', 'Api\PmscontractterminationreasonController@listgrid');
-    Route::post('contract_termination_reason/insertgrid', 'Api\PmscontractterminationreasonController@insertgrid');
-    Route::post('contract_termination_reason/updategrid', 'Api\PmscontractterminationreasonController@updategrid');
-    Route::post('contract_termination_reason/deletegrid', 'Api\PmscontractterminationreasonController@deletegrid');
-    Route::post('contract_termination_reason/search', 'PmscontractterminationreasonController@search');
-    Route::post('contract_termination_reason/getform', 'PmscontractterminationreasonController@getForm');
-    Route::post('contract_termination_reason/getlistform', 'PmscontractterminationreasonController@getListForm');
+    Route::resource('project_handover', 'PmsprojecthandoverController');
+    Route::post('project_handover/listgrid', 'Api\PmsprojecthandoverController@listgrid');
+    Route::post('project_handover/insertgrid', 'Api\PmsprojecthandoverController@insertgrid');
+    Route::post('project_handover/updategrid', 'Api\PmsprojecthandoverController@updategrid');
+    Route::post('project_handover/deletegrid', 'Api\PmsprojecthandoverController@deletegrid');
+    Route::post('project_handover/search', 'PmsprojecthandoverController@search');
+    Route::post('project_handover/getform', 'PmsprojecthandoverController@getForm');
+    Route::post('project_handover/getlistform', 'PmsprojecthandoverController@getListForm');
 
 }
 }
