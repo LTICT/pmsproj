@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        PHP_VERSION = '8.2' 
+        PHP_VERSION = '7.4' 
         COMPOSER_CACHE = "$HOME/.composer"
         DEPLOY_DIR = '/var/www/dev_app_backend'
         NGINX_CONF = '/etc/nginx/sites-available/dev_app_backend'
