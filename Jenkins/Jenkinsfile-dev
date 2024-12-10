@@ -60,7 +60,7 @@ pipeline {
             sudo bash -c "cat <<EOL > '${NGINX_CONF}'
 server {
     listen 1212;
-    server_name dev.app.backend;
+    server_name _;
 
     root ${DEPLOY_DIR}/public;
     index index.php;
