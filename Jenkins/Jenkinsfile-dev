@@ -62,7 +62,7 @@ server {
     listen 1432;
     server_name _;
 
-    root ${DEPLOY_DIR}/public;
+    root ${DEPLOY_DIR};
     index index.php;
 
     location / {
