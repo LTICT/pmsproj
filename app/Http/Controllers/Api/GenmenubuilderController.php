@@ -249,10 +249,10 @@ function getListForm(Request $request)
         return redirect('permission')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-        $authenticatedUser = $request->authUser;
-        $userId=$authenticatedUser->usr_id;
+        //$authenticatedUser = $request->authUser;
+        //$userId=$authenticatedUser->usr_id;
          //$userId=13;
-        if(1==2){
+        if(1==1){
      $query='SELECT pag_link_name AS link_name,pag_description AS link_icon,pag_controller AS link_url,pag_parent AS parent_menu 
      FROM tbl_pages ORDER BY pag_parent DESC'; 
         }else{

@@ -245,15 +245,41 @@ function getListForm(Request $request)
         return redirect('budget_request')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
+    $query='SELECT bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
      bdr_released_amount,bdr_project_id,bdr_requested_date_ec,bdr_requested_date_gc,
-     bdr_released_date_ec,bdr_released_date_gc,bdr_description,bdr_create_time,bdr_update_time, bdr_delete_time,bdr_created_by,bdr_status,bdr_action_remark,1 AS is_editable, 1 AS is_deletable FROM pms_budget_request ';       
+     bdr_released_date_ec,bdr_released_date_gc,bdr_description,bdr_create_time,bdr_update_time,
+     bdr_delete_time,bdr_created_by,bdr_status,bdr_action_remark,1 AS is_editable, 1 AS is_deletable 
+     FROM pms_budget_request 
+     INNER JOIN pms_project ON pms_project.prj_id=pms_budget_request.bdr_project_id
+     INNER JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_budget_request.bdr_budget_year_id';     
      
      $query .=' WHERE 1=1';
-     $bdrid=$request->input('bdr_id');
-if(isset($bdrid) && isset($bdrid)){
-$query .=' AND bdr_id="'.$bdrid.'"'; 
+    $prjName=$request->input('prj_name');
+if(isset($prjName) && isset($prjName)){
+$query .=' AND prj_name LIKE "%'.$prjName.'%"'; 
 }
+$startTime=$request->input('payment_dateStart');
+if(isset($startTime) && isset($startTime)){
+$query .=' AND prp_payment_date_gc >="'.$startTime.' 00 00 00"'; 
+}
+$endTime=$request->input('payment_dateEnd');
+if(isset($endTime) && isset($endTime)){
+$query .=' AND prp_payment_date_gc <="'.$endTime.' 23 59 59"'; 
+}
+
+     $prjCode=$request->input('prj_code');
+if(isset($prjCode) && isset($prjCode)){
+$query .=' AND prj_code="'.$prjCode.'"'; 
+}
+$prjZone=$request->input('prj_location_zone_id');
+if(isset($prjZone) && isset($prjZone)){
+$query .=' AND prj_location_zone_id="'.$prjZone.'"'; 
+}
+$prjWoreda=$request->input('prj_location_woreda_id');
+if(isset($prjWoreda) && isset($prjWoreda)){
+$query .=' AND prj_location_woreda_id="'.$prjWoreda.'"'; 
+}
+
 $bdrbudgetyearid=$request->input('bdr_budget_year_id');
 if(isset($bdrbudgetyearid) && isset($bdrbudgetyearid)){
 $query .=' AND bdr_budget_year_id="'.$bdrbudgetyearid.'"'; 

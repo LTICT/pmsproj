@@ -369,7 +369,7 @@ $data['related_pms_budget_source']= $pms_budget_source_set ;
     
     public function listgrid(Request $request){
 
-$query='SELECT prj_id,prj_name,prj_code, pms_project_status.prs_status_name_or As prj_project_status_id,pms_project_category.pct_name_or As prj_project_category_id, pms_budget_source.pbs_name_or AS prj_project_budget_source_id,prj_total_estimate_budget,prj_total_actual_budget,
+/*$query='SELECT prj_id,prj_name,prj_code, pms_project_status.prs_status_name_or As prj_project_status_id,pms_project_category.pct_name_or As prj_project_category_id, pms_budget_source.pbs_name_or AS prj_project_budget_source_id,prj_total_estimate_budget,prj_total_actual_budget,
 prj_geo_location,pms_sector_information.sci_name_or As prj_sector_id, 
  prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,prj_location_kebele_id,
 prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_kebele_id,prj_owner_description,
@@ -382,7 +382,13 @@ $query .= ' LEFT JOIN pms_sector_information ON pms_project.prj_sector_id = pms_
 
 $query .= ' LEFT JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id'; 
 
-$query .= ' LEFT JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id'; 
+$query .= ' LEFT JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id'; */
+$query='SELECT prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id, prj_project_budget_source_id,prj_total_estimate_budget,prj_total_actual_budget,
+prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,prj_location_kebele_id,
+prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_kebele_id,prj_owner_description,
+prj_start_date_et,prj_start_date_gc,prj_start_date_plan_et,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,
+prj_end_date_plan_gc,prj_end_date_plan_et,prj_outcome,prj_deleted,prj_remark,prj_created_by,prj_created_date,prj_create_time,
+prj_update_time,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number,1 AS is_editable, 0 AS is_deletable,COUNT(*) OVER () AS total_count  FROM pms_project ';
 
  $query .=' WHERE 1=1';
      $prjid=$request->input('prj_id');
@@ -403,7 +409,7 @@ $query .=' AND prj_project_status_id="'.$prjprojectstatusid.'"';
 }
 $prjprojectcategoryid=$request->input('prj_project_category_id');
 if(isset($prjprojectcategoryid) && isset($prjprojectcategoryid)){
-$query .=' AND prj_project_category_id="'.$prjprojectcategoryid.'"'; 
+$query .=' AND prj_project_category_id='.$prjprojectcategoryid.''; 
 }
 $prjprojectbudgetsourceid=$request->input('prj_project_budget_source_id');
 if(isset($prjprojectbudgetsourceid) && isset($prjprojectbudgetsourceid)){
@@ -427,15 +433,15 @@ $query .=' AND prj_sector_id="'.$prjsectorid.'"';
 }
 $prjlocationregionid=$request->input('prj_location_region_id');
 if(isset($prjlocationregionid) && isset($prjlocationregionid)){
-$query .=' AND prj_location_region_id="'.$prjlocationregionid.'"'; 
+$query .=' AND prj_location_region_id='.$prjlocationregionid.''; 
 }
 $prjlocationzoneid=$request->input('prj_location_zone_id');
 if(isset($prjlocationzoneid) && isset($prjlocationzoneid)){
-$query .=' AND prj_location_zone_id="'.$prjlocationzoneid.'"'; 
+$query .=' AND prj_location_zone_id='.$prjlocationzoneid.''; 
 }
 $prjlocationworedaid=$request->input('prj_location_woreda_id');
 if(isset($prjlocationworedaid) && isset($prjlocationworedaid)){
-$query .=' AND prj_location_woreda_id="'.$prjlocationworedaid.'"'; 
+$query .=' AND prj_location_woreda_id='.$prjlocationworedaid.''; 
 }
 $prjlocationkebeleid=$request->input('prj_location_kebele_id');
 if(isset($prjlocationkebeleid) && isset($prjlocationkebeleid)){

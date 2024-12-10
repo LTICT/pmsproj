@@ -4,7 +4,7 @@ use Closure;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use App\Models\Modeltblaccesslog;
-class JwtMiddleware
+class JwtMiddleware 
 {
     /**
      * Handle an incoming request.
@@ -15,8 +15,9 @@ class JwtMiddleware
      */
     public function handle($request, Closure $next)
     {
+        
         try {
-            //dd(JWTAuth::getToken());
+           // dd(JWTAuth::getToken());
             //$payload = auth()->payload();
             //dd(auth('api'));
             $headers = $request->headers->all();

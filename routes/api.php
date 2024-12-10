@@ -213,7 +213,6 @@ Route::post('permission/getlistform', 'TblpermissionController@getListForm');
 Route::resource('roles', 'TblrolesController');
 
 Route::post('roles/insertgrid', 'Api\TblrolesController@insertgrid');
-Route::post('roles/updategrid', 'Api\TblrolesController@updategrid');
 Route::post('roles/deletegrid', 'Api\TblrolesController@deletegrid');
 Route::post('roles/search', 'TblrolesController@search');
 Route::post('roles/getform', 'TblrolesController@getForm');
@@ -251,11 +250,6 @@ Route::post('user/change_password', 'AuthController@changePassword');
 Route::post('project_status/listgrid', 'Api\PmsprojectstatusController@listgrid');
 
 Route::post('users/listgrid', 'Api\TblusersController@listgrid');
-Route::post('dashboard_builder', 'Api\GendashboardbuilderController@listgrid');
-Route::post('menus', 'Api\GenmenubuilderController@listgrid');
-Route::post('roles/listgrid', 'Api\TblrolesController@listgrid');
-Route::post('roles/updategrid', 'Api\TblrolesController@updategrid');
-Route::post('department/listgrid', 'Api\GendepartmentController@listgrid');
 //NEWLY ADDED
  Route::resource('expenditure_code', 'PmsexpenditurecodeController');
     Route::post('expenditure_code/listgrid', 'Api\PmsexpenditurecodeController@listgrid');
@@ -330,8 +324,19 @@ Route::post('department/listgrid', 'Api\GendepartmentController@listgrid');
     Route::post('project_variation/getform', 'PmsprojectvariationController@getForm');
     Route::post('project_variation/getlistform', 'PmsprojectvariationController@getListForm');
     //END NEWLY ADDED
-Route::group(['middleware' => 'apilogin', 'except' => ['api/login', 'api/register']], function () {
+    Route::post('dashboard_builder', 'Api\GendashboardbuilderController@listgrid');
+   // Route::post('department/listgrid', [\Api\GendepartmentController::class, 'listgrid'])->middleware('apilogin');
+Route::group(['middleware' => [\App\Http\Middleware\JwtMiddleware::class], 'except' => ['api/login', 'api/register']], function () {
 
+Route::post('menus', 'Api\GenmenubuilderController@listgrid');
 
+//Route::resource('roles', 'TblrolesController');
+       //Route::post('menus', 'Api\GenmenubuilderController@listgrid');
+       
+       Route::post('roles/updategrid', 'Api\TblrolesController@updategrid');
+       Route::post('roles/listgrid', 'Api\TblrolesController@listgrid');
+    Route::post('department/listgrid', 'Api\GendepartmentController@listgrid');
+    Route::post('department/insertgrid', 'Api\GendepartmentController@insertgrid');
+    Route::post('department/updategrid', 'Api\GendepartmentController@updategrid');
+    Route::post('department/deletegrid', 'Api\GendepartmentController@deletegrid');
 });
-                                     
