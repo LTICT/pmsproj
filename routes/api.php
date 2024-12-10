@@ -324,10 +324,10 @@ Route::post('users/listgrid', 'Api\TblusersController@listgrid');
     Route::post('project_variation/getform', 'PmsprojectvariationController@getForm');
     Route::post('project_variation/getlistform', 'PmsprojectvariationController@getListForm');
     //END NEWLY ADDED
-    Route::post('dashboard_builder', 'Api\GendashboardbuilderController@listgrid');
+   
    // Route::post('department/listgrid', [\Api\GendepartmentController::class, 'listgrid'])->middleware('apilogin');
 Route::group(['middleware' => [\App\Http\Middleware\JwtMiddleware::class], 'except' => ['api/login', 'api/register']], function () {
-
+ Route::post('dashboard_builder', 'Api\GendashboardbuilderController@listgrid');
 Route::post('menus', 'Api\GenmenubuilderController@listgrid');
 
 //Route::resource('roles', 'TblrolesController');

@@ -249,9 +249,9 @@ function getListForm(Request $request)
         return redirect('permission')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-         //$authenticatedUser = $request->authUser;
-        //$userId=$authenticatedUser->usr_id;
-        $userId=1;
+         $authenticatedUser = $request->authUser;
+        $userId=$authenticatedUser->usr_id;
+        //$userId=1;
          //$userId=13;
      /*    if(1==1){
      $query="SELECT r.rol_name AS role, JSON_ARRAYAGG(JSON_OBJECT( 'name', rd.rod_name,
