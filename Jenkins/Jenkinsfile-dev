@@ -59,7 +59,7 @@ pipeline {
             # Create Nginx configuration file
             sudo bash -c "cat <<EOL > '${NGINX_CONF}'
 server {
-    listen 1212;
+    listen 1432;
     server_name _;
 
     root ${DEPLOY_DIR}/public;
