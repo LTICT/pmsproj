@@ -1,0 +1,112 @@
+pipeline {
+    agent any
+
+    environment {
+        PHP_VERSION = '7.4' 
+        COMPOSER_CACHE = "$HOME/.composer"
+        DEPLOY_DIR = '/var/www/dev_app_backend'
+        NGINX_CONF = '/etc/nginx/sites-available/dev_app_backend'
+    }
+
+    stages {
+        stage('Pull Code') {
+            steps {
+                git branch: 'main', credentialsId: 'github-token',  url: 'https://github.com/LTICT/pmsproj.git'  
+            }
+        }
+
+        stage('Copy .env File') {
+            steps {
+                sh 'cp /home/testthree/env/backend/.env .'
+            }
+        }
+
+      stage('Install Dependencies') {
+    steps {
+        script {
+            sh '''
+            echo "Downloading Composer from a mirror..."
+            curl -sS https://mirrors.aliyun.com/composer/composer.phar -o composer.phar
+            php composer.phar install --no-interaction --prefer-dist --no-progress
+            '''
+        }
+    }
+}
+
+
+     stage('Deploy to Development Environment') {
+    steps {
+        script {
+            sh '''
+            echo "Deploying application to ${DEPLOY_DIR}..."
+
+            # Sync workspace to deployment directory
+            sudo rsync -av --delete --no-group "${WORKSPACE}/" "${DEPLOY_DIR}/"
+
+            # Ensure proper ownership and permissions
+            sudo chown -R www-data:www-data ${DEPLOY_DIR}
+            sudo chmod -R 775 ${DEPLOY_DIR}/storage ${DEPLOY_DIR}/bootstrap/cache
+            '''
+        }
+    }
+}
+ stage('Configure Nginx') {
+    steps {
+        script {
+            sh '''
+            echo "Configuring Nginx for Laravel application on port 1144..."
+
+            # Create Nginx configuration file
+            sudo bash -c "cat <<EOL > '${NGINX_CONF}'
+server {
+    listen 1144;
+    server_name dev.app.backend;
+
+    root ${DEPLOY_DIR}/public;
+    index index.php;
+
+    location / {
+        try_files \\$uri \\$uri/ /index.php?\\$query_string;
+    }
+
+    location ~ \\.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php${PHP_VERSION}-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME \\$document_root/\\$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\\.ht {
+        deny all;
+    }
+}
+EOL"
+
+            # Create a symlink in sites-enabled
+            sudo ln -sf "${NGINX_CONF}" /etc/nginx/sites-enabled/dev_app_backend
+
+            # Validate Nginx configuration
+            
+
+            # Reload Nginx
+            sudo systemctl reload nginx || (echo "Nginx reload failed!" && exit 1)
+            '''
+        }
+    }
+}
+
+  
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished, cleaning up if necessary...'
+        }
+        success {
+            echo 'Build and deploy were successful!'
+        }
+        failure {
+            echo 'Build or deploy failed!'
+        }
+    }
+}
