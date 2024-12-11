@@ -310,7 +310,7 @@ $query .=' AND usr_id="'.$usrid.'"';
 }
 $usremail=$request->input('usr_email');
 if(isset($usremail) && isset($usremail)){
-$query .=' AND usr_email="'.$usremail.'"'; 
+$query .=" AND usr_email='".$usremail."'"; 
 }
 $usrpassword=$request->input('usr_password');
 if(isset($usrpassword) && isset($usrpassword)){
@@ -330,15 +330,15 @@ $query .=' AND usr_role_id="'.$usrroleid.'"';
 }
 $usrregionid=$request->input('usr_region_id');
 if(isset($usrregionid) && isset($usrregionid)){
-$query .=' AND usr_region_id="'.$usrregionid.'"'; 
+$query .=" AND usr_region_id='".$usrregionid."'"; 
 }
 $usrzoneid=$request->input('usr_zone_id');
 if(isset($usrzoneid) && isset($usrzoneid)){
-$query .=' AND usr_zone_id="'.$usrzoneid.'"'; 
+$query .=" AND usr_zone_id='".$usrzoneid."'"; 
 }
 $usrworedaid=$request->input('usr_woreda_id');
 if(isset($usrworedaid) && isset($usrworedaid)){
-$query .=' AND usr_woreda_id="'.$usrworedaid.'"'; 
+$query .=" AND usr_woreda_id='".$usrworedaid."'"; 
 }
 $usrkebeleid=$request->input('usr_kebele_id');
 if(isset($usrkebeleid) && isset($usrkebeleid)){

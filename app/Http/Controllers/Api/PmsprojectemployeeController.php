@@ -282,7 +282,7 @@ $query .=' AND emp_role="'.$emprole.'"';
 }
 $empprojectid=$request->input('emp_project_id');
 if(isset($empprojectid) && isset($empprojectid)){
-$query .=" AND emp_project_id="'.$empprojectid."'"; 
+$query .=" AND emp_project_id='".$empprojectid."'"; 
 }
 $empstartdateec=$request->input('emp_start_date_ec');
 if(isset($empstartdateec) && isset($empstartdateec)){
