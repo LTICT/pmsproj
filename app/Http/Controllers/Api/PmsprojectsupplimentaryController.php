@@ -258,7 +258,7 @@ $query .=' AND prs_released_amount="'.$prsreleasedamount.'"';
 }
 $prsprojectid=$request->input('prs_project_id');
 if(isset($prsprojectid) && isset($prsprojectid)){
-$query .=' AND prs_project_id="'.$prsprojectid.'"'; 
+$query .=" AND prs_project_id='".$prsprojectid."'"; 
 }
 $prsrequesteddateec=$request->input('prs_requested_date_ec');
 if(isset($prsrequesteddateec) && isset($prsrequesteddateec)){

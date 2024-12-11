@@ -254,7 +254,7 @@ $query .=' AND pbe_reason="'.$pbereason.'"';
 }
 $pbeprojectid=$request->input('pbe_project_id');
 if(isset($pbeprojectid) && isset($pbeprojectid)){
-$query .=' AND pbe_project_id="'.$pbeprojectid.'"'; 
+$query .=" AND pbe_project_id='".$pbeprojectid."'"; 
 }
 $pbebudgetcodeid=$request->input('pbe_budget_code_id');
 if(isset($pbebudgetcodeid) && isset($pbebudgetcodeid)){

@@ -295,13 +295,14 @@ $data['related_gen_department']= $gen_department_set ;
         return redirect('users')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT usr_id,usr_email,usr_password,usr_full_name,usr_phone_number,
+     $query='SELECT usr_id,usr_email,usr_password,usr_full_name,usr_phone_number,sci_name_or AS sector_name,
      usr_role_id,usr_region_id, usr_zone_id,usr_woreda_id,usr_kebele_id,usr_sector_id,
      usr_department_id,usr_is_active,usr_picture,usr_last_logged_in,usr_ip,
      usr_remember_token,usr_notified,usr_description,usr_create_time,
      usr_update_time,usr_delete_time,usr_created_by,usr_status,1 AS is_editable, 1 AS is_deletable FROM tbl_users ';       
      //$query .= ' INNER JOIN gen_address_structure ON tbl_users.usr_zone_id = gen_address_structure.add_id'; 
 //$query .= ' INNER JOIN gen_department ON tbl_users.usr_department_id = gen_department.dep_id';
+$query .= ' INNER JOIN pms_sector_information ON tbl_users.usr_sector_id = pms_sector_information.sci_id';
      $query .=' WHERE 1=1';
      $usrid=$request->input('usr_id');
 if(isset($usrid) && isset($usrid)){
@@ -446,26 +447,23 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'usr_email'=> 'max:200', 
+ 'usr_email'=> 'max:200', 
+'usr_email' => 'required|max:200',
+//'usr_email' => 'required|max:200|unique:tbl_users',
 'usr_password'=> 'max:200', 
 'usr_full_name'=> 'max:128', 
-'usr_phone_number'=> 'max:20', 
-'usr_role_id'=> 'integer', 
+'usr_phone_number'=> 'max:20',
 'usr_region_id'=> 'integer', 
 'usr_zone_id'=> 'integer', 
 'usr_woreda_id'=> 'integer', 
 'usr_kebele_id'=> 'integer', 
 'usr_sector_id'=> 'integer', 
-'usr_department_id'=> 'integer', 
-'usr_is_active'=> 'integer', 
+'usr_department_id'=> 'integer',
 //'usr_picture'=> 'max:100', 
 'usr_last_logged_in'=> 'max:30', 
 'usr_ip'=> 'max:15', 
 'usr_remember_token'=> 'max:100', 
-'usr_notified'=> 'integer', 
-'usr_description'=> 'max:425', 
-'usr_status'=> 'integer', 
-
+'usr_description'=> 'max:425'
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -568,24 +566,21 @@ public function insertgrid(Request $request)
     ];
     $rules= [
         'usr_email'=> 'max:200', 
+         'usr_email' => 'required|max:200|unique:tbl_users',
 'usr_password'=> 'max:200', 
 'usr_full_name'=> 'max:128', 
-'usr_phone_number'=> 'max:20', 
-'usr_role_id'=> 'integer', 
+'usr_phone_number'=> 'max:20',
 'usr_region_id'=> 'integer', 
 'usr_zone_id'=> 'integer', 
 'usr_woreda_id'=> 'integer', 
 'usr_kebele_id'=> 'integer', 
 'usr_sector_id'=> 'integer', 
-'usr_department_id'=> 'integer', 
-'usr_is_active'=> 'integer', 
+'usr_department_id'=> 'integer',
 //'usr_picture'=> 'max:100', 
 'usr_last_logged_in'=> 'max:30', 
 'usr_ip'=> 'max:15', 
 'usr_remember_token'=> 'max:100', 
-'usr_notified'=> 'integer', 
-'usr_description'=> 'max:425', 
-'usr_status'=> 'integer', 
+'usr_description'=> 'max:425'
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -594,18 +589,16 @@ public function insertgrid(Request $request)
     if($validator->fails()) {
         $errorString = implode(",",$validator->messages()->all());
         $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>"",
-            "statusCode"=>"error",
-            "type"=>"update",
-            "errorMsg"=>$errorString
+            "errorMsg"=>$errorString,
+            "data" =>array(),
+            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+            "status_code"=>200,
+            "type"=>"duplicate"
         );
         return response()->json($resultObject);
     }else{
         $requestData = $request->all();
         //$requestData['usr_created_by']=auth()->user()->usr_Id;
-        $requestData['usr_created_by']=1;
-
         $status= $request->input('usr_status');
         $uploadedFile = $request->file('usr_picture');
         $hasFile=$request->hasFile('usr_picture');

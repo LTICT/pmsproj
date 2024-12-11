@@ -234,7 +234,7 @@ $query .=' AND prh_id="'.$prhid.'"';
 }
 $prhprojectid=$request->input('prh_project_id');
 if(isset($prhprojectid) && isset($prhprojectid)){
-$query .=' AND prh_project_id="'.$prhprojectid.'"'; 
+$query .=" AND prh_project_id='".$prhprojectid."'"; 
 }
 $prhhandoverdateec=$request->input('prh_handover_date_ec');
 if(isset($prhhandoverdateec) && isset($prhhandoverdateec)){

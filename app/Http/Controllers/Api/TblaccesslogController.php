@@ -245,9 +245,20 @@ function getListForm(Request $request)
         return redirect('access_log')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT acl_id,acl_ip,acl_user_id,acl_role_id,acl_object_name,acl_object_id,acl_remark,acl_detail,acl_object_action,acl_description,acl_create_time,acl_update_time,acl_delete_time,acl_created_by,acl_status,1 AS is_editable, 1 AS is_deletable FROM tbl_access_log ';       
-     
+     $query='SELECT acl_id,acl_ip,usr_email AS acl_user_id,acl_role_id,acl_object_name,pag_name AS acl_object_id,acl_remark,acl_detail,
+     acl_object_action,acl_description,acl_create_time,acl_update_time,acl_delete_time,
+     acl_created_by,acl_status,1 AS is_editable, 1 AS is_deletable FROM tbl_access_log ';      
+     $query .=' LEFT JOIN tbl_users ON tbl_users.usr_id=tbl_access_log.acl_user_id';
+     $query .=' LEFT JOIN tbl_pages ON tbl_pages.pag_id=tbl_access_log.acl_role_id';
      $query .=' WHERE 1=1';
+          $startTime=$request->input('log_timeStart');
+if(isset($startTime) && isset($startTime)){
+$query .=" AND acl_create_time >='".$startTime." 00 00 00'"; 
+}
+     $endTime=$request->input('log_timeEnd');
+if(isset($endTime) && isset($endTime)){
+$query .=" AND acl_create_time <='".$endTime." 23 59 59'"; 
+}
      $aclid=$request->input('acl_id');
 if(isset($aclid) && isset($aclid)){
 $query .=' AND acl_id="'.$aclid.'"'; 
@@ -258,11 +269,11 @@ $query .=' AND acl_ip="'.$aclip.'"';
 }
 $acluserid=$request->input('acl_user_id');
 if(isset($acluserid) && isset($acluserid)){
-$query .=' AND acl_user_id="'.$acluserid.'"'; 
+$query .=" AND usr_email='".$acluserid."'"; 
 }
 $aclroleid=$request->input('acl_role_id');
 if(isset($aclroleid) && isset($aclroleid)){
-$query .=' AND acl_role_id="'.$aclroleid.'"'; 
+$query .=" AND acl_role_id='".$aclroleid."'"; 
 }
 $aclobjectname=$request->input('acl_object_name');
 if(isset($aclobjectname) && isset($aclobjectname)){
@@ -324,7 +335,7 @@ $query .=' AND acl_status="'.$aclstatus.'"';
     }
 }
 //$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
-$data_info=DB::select(DB::raw($query));
+$data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
     "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));

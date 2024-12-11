@@ -256,33 +256,37 @@ function getListForm(Request $request)
      $query .=' WHERE 1=1';
     $prjName=$request->input('prj_name');
 if(isset($prjName) && isset($prjName)){
-$query .=' AND prj_name LIKE "%'.$prjName.'%"'; 
+$query .=" AND prj_name LIKE '%".$prjName."%'"; 
 }
 $startTime=$request->input('payment_dateStart');
 if(isset($startTime) && isset($startTime)){
-$query .=' AND prp_payment_date_gc >="'.$startTime.' 00 00 00"'; 
+$query .=" AND prp_payment_date_gc >='".$startTime." 00 00 00'"; 
 }
 $endTime=$request->input('payment_dateEnd');
 if(isset($endTime) && isset($endTime)){
-$query .=' AND prp_payment_date_gc <="'.$endTime.' 23 59 59"'; 
+$query .=" AND prp_payment_date_gc <='".$endTime." 23 59 59'"; 
 }
 
      $prjCode=$request->input('prj_code');
 if(isset($prjCode) && isset($prjCode)){
-$query .=' AND prj_code="'.$prjCode.'"'; 
+$query .=" AND prj_code='".$prjCode."'"; 
 }
-$prjZone=$request->input('prj_location_zone_id');
-if(isset($prjZone) && isset($prjZone)){
-$query .=' AND prj_location_zone_id="'.$prjZone.'"'; 
+$prjlocationregionid=$request->input('prj_location_region_id');
+if(isset($prjlocationregionid) && isset($prjlocationregionid)){
+//$query .=" AND prj_location_region_id='".$prjlocationregionid."'"; 
 }
-$prjWoreda=$request->input('prj_location_woreda_id');
-if(isset($prjWoreda) && isset($prjWoreda)){
-$query .=' AND prj_location_woreda_id="'.$prjWoreda.'"'; 
+$prjlocationzoneid=$request->input('prj_location_zone_id');
+if(isset($prjlocationzoneid) && isset($prjlocationzoneid)){
+$query .=" AND prj_location_zone_id='".$prjlocationzoneid."'"; 
+}
+$prjlocationworedaid=$request->input('prj_location_woreda_id');
+if(isset($prjlocationworedaid) && isset($prjlocationworedaid)){
+$query .=" AND prj_location_woreda_id='".$prjlocationworedaid."'"; 
 }
 
 $bdrbudgetyearid=$request->input('bdr_budget_year_id');
 if(isset($bdrbudgetyearid) && isset($bdrbudgetyearid)){
-$query .=' AND bdr_budget_year_id="'.$bdrbudgetyearid.'"'; 
+$query .=" AND bdr_budget_year_id='".$bdrbudgetyearid."'"; 
 }
 $bdrrequestedamount=$request->input('bdr_requested_amount');
 if(isset($bdrrequestedamount) && isset($bdrrequestedamount)){

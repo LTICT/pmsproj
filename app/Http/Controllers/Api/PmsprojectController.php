@@ -397,11 +397,11 @@ $query .=' AND prj_id="'.$prjid.'"';
 }
 $prjname=$request->input('prj_name');
 if(isset($prjname) && isset($prjname)){
-$query .=' AND prj_name="'.$prjname.'"'; 
+$query .=" AND prj_name='".$prjname."'"; 
 }
 $prjcode=$request->input('prj_code');
 if(isset($prjcode) && isset($prjcode)){
-$query .=' AND prj_code="'.$prjcode.'"'; 
+$query .=" AND prj_code='".$prjcode."'"; 
 }
 $prjprojectstatusid=$request->input('prj_project_status_id');
 if(isset($prjprojectstatusid) && isset($prjprojectstatusid)){
@@ -409,7 +409,7 @@ $query .=' AND prj_project_status_id="'.$prjprojectstatusid.'"';
 }
 $prjprojectcategoryid=$request->input('prj_project_category_id');
 if(isset($prjprojectcategoryid) && isset($prjprojectcategoryid)){
-$query .=' AND prj_project_category_id='.$prjprojectcategoryid.''; 
+$query .=" AND prj_project_category_id='".$prjprojectcategoryid."'"; 
 }
 $prjprojectbudgetsourceid=$request->input('prj_project_budget_source_id');
 if(isset($prjprojectbudgetsourceid) && isset($prjprojectbudgetsourceid)){
@@ -433,15 +433,15 @@ $query .=' AND prj_sector_id="'.$prjsectorid.'"';
 }
 $prjlocationregionid=$request->input('prj_location_region_id');
 if(isset($prjlocationregionid) && isset($prjlocationregionid)){
-$query .=' AND prj_location_region_id='.$prjlocationregionid.''; 
+$query .=" AND prj_location_region_id='".$prjlocationregionid."'"; 
 }
 $prjlocationzoneid=$request->input('prj_location_zone_id');
 if(isset($prjlocationzoneid) && isset($prjlocationzoneid)){
-$query .=' AND prj_location_zone_id='.$prjlocationzoneid.''; 
+$query .=" AND prj_location_zone_id='".$prjlocationzoneid."'"; 
 }
 $prjlocationworedaid=$request->input('prj_location_woreda_id');
 if(isset($prjlocationworedaid) && isset($prjlocationworedaid)){
-$query .=' AND prj_location_woreda_id='.$prjlocationworedaid.''; 
+$query .=" AND prj_location_woreda_id='".$prjlocationworedaid."'"; 
 }
 $prjlocationkebeleid=$request->input('prj_location_kebele_id');
 if(isset($prjlocationkebeleid) && isset($prjlocationkebeleid)){

@@ -287,7 +287,7 @@ public function updategrid(Request $request)
     $rules= [
         'rol_name'=> 'max:200', 
 'rol_description'=> 'max:425', 
-'rol_status'=> 'integer', 
+//'rol_status'=> 'integer', 
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -364,7 +364,7 @@ public function insertgrid(Request $request)
     $rules= [
         'rol_name'=> 'max:200', 
 'rol_description'=> 'max:425', 
-'rol_status'=> 'integer', 
+//'rol_status'=> 'integer', 
 
     ];
     $validator = Validator::make ( $request->all(), $rules );

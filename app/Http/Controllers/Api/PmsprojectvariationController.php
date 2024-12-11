@@ -258,7 +258,7 @@ $query .=' AND bdr_released_amount="'.$bdrreleasedamount.'"';
 }
 $bdrprojectid=$request->input('bdr_project_id');
 if(isset($bdrprojectid) && isset($bdrprojectid)){
-$query .=' AND bdr_project_id="'.$bdrprojectid.'"'; 
+$query .=" AND bdr_project_id='".$bdrprojectid."'"; 
 }
 $bdrrequesteddateec=$request->input('bdr_requested_date_ec');
 if(isset($bdrrequesteddateec) && isset($bdrrequesteddateec)){
