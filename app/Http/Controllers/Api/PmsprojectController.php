@@ -606,7 +606,7 @@ public function updategrid(Request $request)
     ];
     $rules= [
         'prj_name'=> 'max:200', 
-'prj_code'=> 'max:10', 
+'prj_code'=> 'max:15', 
 'prj_project_status_id'=> 'max:200', 
 'prj_project_category_id'=> 'max:200', 
 'prj_project_budget_source_id'=> 'max:200', 
@@ -618,7 +618,7 @@ public function updategrid(Request $request)
 'prj_location_zone_id'=> 'integer', 
 'prj_location_woreda_id'=> 'integer', 
 //'prj_location_kebele_id'=> 'integer', 
-'prj_location_description'=> 'max:200', 
+'prj_location_description'=> 'max:250', 
 'prj_start_date_et'=> 'max:15', 
 'prj_start_date_gc'=> 'max:15', 
 'prj_start_date_plan_et'=> 'max:15', 
