@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\MyController;
-use App\Modelpmscontractterminationreason;
+use App\Models\Modelpmscontractterminationreason;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -234,7 +234,7 @@ $query .=' AND ctr_id="'.$ctrid.'"';
 }
 $ctrreasonnameor=$request->input('ctr_reason_name_or');
 if(isset($ctrreasonnameor) && isset($ctrreasonnameor)){
-$query .=' AND ctr_reason_name_or="'.$ctrreasonnameor.'"'; 
+$query .=" AND ctr_reason_name_or LIKE '%".$ctrreasonnameor."%'"; 
 }
 $ctrreasonnameam=$request->input('ctr_reason_name_am');
 if(isset($ctrreasonnameam) && isset($ctrreasonnameam)){
@@ -301,9 +301,9 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'ctr_reason_name_or'=> 'max:200', 
-'ctr_reason_name_am'=> 'max:60', 
-'ctr_reason_name_en'=> 'max:60', 
+'ctr_reason_name_or'=> 'max:100', 
+'ctr_reason_name_am'=> 'max:100', 
+'ctr_reason_name_en'=> 'max:100', 
 'ctr_description'=> 'max:425'
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -380,10 +380,10 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-        'ctr_reason_name_or'=> 'max:200', 
-'ctr_reason_name_am'=> 'max:60', 
-'ctr_reason_name_en'=> 'max:60', 
-'ctr_description'=> 'max:425',
+'ctr_reason_name_or'=> 'max:100', 
+'ctr_reason_name_am'=> 'max:100', 
+'ctr_reason_name_en'=> 'max:100', 
+'ctr_description'=> 'max:425'
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -401,6 +401,7 @@ public function insertgrid(Request $request)
     }else{
         $requestData = $request->all();
         //$requestData['ctr_created_by']=auth()->user()->usr_Id;
+        $requestData['ctr_created_by']=2;
         $status= $request->input('ctr_status');
         if($status=="true"){
             $requestData['ctr_status']=1;

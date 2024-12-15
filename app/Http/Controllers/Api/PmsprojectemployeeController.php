@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\MyController;
-use App\Modelpmsprojectemployee;
+use App\Models\Modelpmsprojectemployee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;

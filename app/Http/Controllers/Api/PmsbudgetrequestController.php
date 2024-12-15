@@ -251,29 +251,28 @@ function getListForm(Request $request)
      bdr_delete_time,bdr_created_by,bdr_status,bdr_action_remark,1 AS is_editable, 1 AS is_deletable 
      FROM pms_budget_request 
      INNER JOIN pms_project ON pms_project.prj_id=pms_budget_request.bdr_project_id
-     INNER JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_budget_request.bdr_budget_year_id';     
-     
+     INNER JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_budget_request.bdr_budget_year_id'; 
+
      $query .=' WHERE 1=1';
     $prjName=$request->input('prj_name');
 if(isset($prjName) && isset($prjName)){
 $query .=" AND prj_name LIKE '%".$prjName."%'"; 
 }
-$startTime=$request->input('payment_dateStart');
-if(isset($startTime) && isset($startTime)){
-$query .=" AND prp_payment_date_gc >='".$startTime." 00 00 00'"; 
-}
-$endTime=$request->input('payment_dateEnd');
-if(isset($endTime) && isset($endTime)){
-$query .=" AND prp_payment_date_gc <='".$endTime." 23 59 59'"; 
-}
-
-     $prjCode=$request->input('prj_code');
+$prjCode=$request->input('prj_code');
 if(isset($prjCode) && isset($prjCode)){
 $query .=" AND prj_code='".$prjCode."'"; 
 }
+$startTime=$request->input('budget_request_dateStart');
+if(isset($startTime) && isset($startTime)){
+$query .=" AND bdr_requested_date_gc >='".$startTime." 00 00 00'"; 
+}
+$endTime=$request->input('budget_request_dateEnd');
+if(isset($endTime) && isset($endTime)){
+$query .=" AND bdr_requested_date_gc <='".$endTime." 23 59 59'"; 
+}
 $prjlocationregionid=$request->input('prj_location_region_id');
 if(isset($prjlocationregionid) && isset($prjlocationregionid)){
-//$query .=" AND prj_location_region_id='".$prjlocationregionid."'"; 
+$query .=" AND prj_location_region_id='".$prjlocationregionid."'"; 
 }
 $prjlocationzoneid=$request->input('prj_location_zone_id');
 if(isset($prjlocationzoneid) && isset($prjlocationzoneid)){

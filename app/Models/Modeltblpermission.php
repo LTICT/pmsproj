@@ -25,7 +25,7 @@ class Modeltblpermission extends Model
      *
      * @var array
      */
-    protected $fillable = ['pem_id','pem_page_id','pem_role_id','pem_enabled','pem_edit','pem_insert','pem_view','pem_delete','pem_show','pem_search','pem_description','pem_create_time','pem_update_time','pem_delete_time','pem_created_by','pem_status',];
+    protected $fillable = ['pem_page_id','pem_role_id','pem_enabled','pem_edit','pem_insert','pem_view','pem_delete','pem_show','pem_search','pem_description','pem_create_time','pem_update_time','pem_delete_time','pem_created_by','pem_status',];
 
     
 

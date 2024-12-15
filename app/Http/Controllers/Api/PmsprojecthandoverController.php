@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\MyController;
-use App\Modelpmsprojecthandover;
+use App\Models\Modelpmsprojecthandover;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -225,12 +225,24 @@ function getListForm(Request $request)
         return redirect('project_handover')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT prh_id,prh_project_id,prh_handover_date_ec,prh_handover_date_gc,prh_description,prh_create_time,prh_update_time,prh_delete_time,prh_created_by,prh_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_handover ';       
-     
+     $query='SELECT prj_name,prj_code, prh_id,prh_project_id,prh_handover_date_ec,prh_handover_date_gc,prh_description,prh_create_time,prh_update_time,prh_delete_time,prh_created_by,prh_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_handover ';       
+      $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_handover.prh_project_id';
      $query .=' WHERE 1=1';
-     $prhid=$request->input('prh_id');
-if(isset($prhid) && isset($prhid)){
-$query .=' AND prh_id="'.$prhid.'"'; 
+ $prjName=$request->input('prj_name');
+if(isset($prjName) && isset($prjName)){
+$query .=" AND prj_name LIKE '%".$prjName."%'"; 
+}
+$prjCode=$request->input('prj_code');
+if(isset($prjCode) && isset($prjCode)){
+$query .=" AND prj_code='".$prjCode."'"; 
+}
+$startTime=$request->input('handover_dateStart');
+if(isset($startTime) && isset($startTime)){
+$query .=" AND prh_handover_date_gc >='".$startTime." 00 00 00'"; 
+}
+$endTime=$request->input('handover_dateEnd');
+if(isset($endTime) && isset($endTime)){
+$query .=" AND prh_handover_date_gc <='".$endTime." 23 59 59'"; 
 }
 $prhprojectid=$request->input('prh_project_id');
 if(isset($prhprojectid) && isset($prhprojectid)){

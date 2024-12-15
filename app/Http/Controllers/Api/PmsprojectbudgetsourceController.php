@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\MyController;
-use App\Modelpmsprojectbudgetsource;
+use App\Models\Modelpmsprojectbudgetsource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -233,24 +233,30 @@ function getListForm(Request $request)
         return redirect('project_budget_source')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT bsr_id,bsr_name,bsr_project_id,bsr_budget_source_id,bsr_amount,bsr_status,bsr_description,bsr_created_by,bsr_created_date,bsr_create_time,bsr_update_time,1 AS is_editable, 1 AS is_deletable FROM pms_project_budget_source ';       
+     $query='SELECT bsr_id,bsr_name,bsr_project_id,bsr_budget_source_id,bsr_amount,bsr_status,bsr_description,bsr_created_by,bsr_created_date,bsr_create_time,bsr_update_time,1 AS is_editable, 1 AS is_deletable FROM pms_project_budget_source ';
+     $query .='INNER JOIN pms_project ON pms_project.prj_id=pms_project_budget_source.bsr_project_id';    
      
      $query .=' WHERE 1=1';
      $bsrid=$request->input('bsr_id');
-if(isset($bsrid) && isset($bsrid)){
-$query .=' AND bsr_id="'.$bsrid.'"'; 
+if(isset($prjName) && isset($prjName)){
+$query .=" AND prj_name LIKE '%".$prjName."%'"; 
 }
+$prjCode=$request->input('prj_code');
+if(isset($prjCode) && isset($prjCode)){
+$query .=" AND prj_code='".$prjCode."'"; 
+}
+
 $bsrname=$request->input('bsr_name');
 if(isset($bsrname) && isset($bsrname)){
 $query .=' AND bsr_name="'.$bsrname.'"'; 
 }
 $bsrprojectid=$request->input('bsr_project_id');
 if(isset($bsrprojectid) && isset($bsrprojectid)){
-$query .=' AND bsr_project_id="'.$bsrprojectid.'"'; 
+$query .=" AND bsr_project_id='".$bsrprojectid."'"; 
 }
 $bsrbudgetsourceid=$request->input('bsr_budget_source_id');
 if(isset($bsrbudgetsourceid) && isset($bsrbudgetsourceid)){
-$query .=' AND bsr_budget_source_id="'.$bsrbudgetsourceid.'"'; 
+$query .=" AND bsr_budget_source_id='".$bsrbudgetsourceid."'"; 
 }
 $bsramount=$request->input('bsr_amount');
 if(isset($bsramount) && isset($bsramount)){
@@ -315,13 +321,12 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'bsr_name'=> 'max:200', 
-'bsr_project_id'=> 'max:200', 
+         'bsr_name'=> 'max:200', 
+//'bsr_project_id'=> 'max:200', 
 'bsr_budget_source_id'=> 'max:200', 
 'bsr_amount'=> 'numeric', 
-'bsr_status'=> 'integer', 
-'bsr_description'=> 'max:100', 
-
+//'bsr_status'=> 'integer', 
+'bsr_description'=> 'max:100',
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -400,10 +405,10 @@ public function insertgrid(Request $request)
     ];
     $rules= [
         'bsr_name'=> 'max:200', 
-'bsr_project_id'=> 'max:200', 
+//'bsr_project_id'=> 'max:200', 
 'bsr_budget_source_id'=> 'max:200', 
 'bsr_amount'=> 'numeric', 
-'bsr_status'=> 'integer', 
+//'bsr_status'=> 'integer', 
 'bsr_description'=> 'max:100',
 
     ];

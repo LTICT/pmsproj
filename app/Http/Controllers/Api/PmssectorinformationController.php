@@ -252,14 +252,15 @@ function getListForm(Request $request)
         return redirect('sector_information')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT sci_id,sci_name_or,sci_name_am,sci_name_en,sci_code,prj_sector_category.psc_name AS sci_sector_category_id,region.add_name_or as sci_available_at_region,
+    /* $query='SELECT sci_id,sci_name_or,sci_name_am,sci_name_en,sci_code,prj_sector_category.psc_name AS sci_sector_category_id,region.add_name_or as sci_available_at_region,
          zone.add_name_or as sci_available_at_zone,woreda.add_name_or as sci_available_at_woreda,sci_description,sci_create_time,sci_update_time,sci_delete_time,sci_created_by,sci_status,1 AS is_editable, 1 AS is_deletable FROM pms_sector_information ';       
      $query .= ' INNER JOIN prj_sector_category ON pms_sector_information.sci_sector_category_id = prj_sector_category.psc_id'; 
-
      $query .= ' INNER JOIN gen_address_structure region ON pms_sector_information.sci_available_at_region = region.add_id';
     $query .= ' INNER JOIN gen_address_structure zone ON pms_sector_information.sci_available_at_zone = zone.add_id';
-    $query .= ' INNER JOIN gen_address_structure woreda ON pms_sector_information.sci_available_at_woreda = woreda.add_id';
+    $query .= ' INNER JOIN gen_address_structure woreda ON pms_sector_information.sci_available_at_woreda = woreda.add_id';*/
 
+    $query='SELECT sci_id,sci_name_or,sci_name_am,sci_name_en,sci_code,prj_sector_category.psc_name AS sci_sector_category_id, sci_available_at_region, sci_available_at_zone,sci_available_at_woreda,sci_description,sci_create_time,sci_update_time,sci_delete_time,sci_created_by,sci_status,1 AS is_editable, 1 AS is_deletable FROM pms_sector_information ';   
+     $query .= ' LEFT JOIN prj_sector_category ON pms_sector_information.sci_sector_category_id = prj_sector_category.psc_id'; 
 
      $query .=' WHERE 1=1';
      $sciid=$request->input('sci_id');
@@ -268,15 +269,15 @@ $query .=' AND sci_id="'.$sciid.'"';
 }
 $scinameor=$request->input('sci_name_or');
 if(isset($scinameor) && isset($scinameor)){
-$query .=' AND sci_name_or="'.$scinameor.'"'; 
+$query .=" AND sci_name_or LIKE '%".$scinameor."%'"; 
 }
 $scinameam=$request->input('sci_name_am');
 if(isset($scinameam) && isset($scinameam)){
-$query .=' AND sci_name_am="'.$scinameam.'"'; 
+$query .=" AND sci_name_am LIKE '%".$scinameam."%'"; 
 }
 $scinameen=$request->input('sci_name_en');
 if(isset($scinameen) && isset($scinameen)){
-$query .=' AND sci_name_en="'.$scinameen.'"'; 
+$query .=" AND sci_name_en LIKE '%".$scinameen."%'"; 
 }
 $scicode=$request->input('sci_code');
 if(isset($scicode) && isset($scicode)){
@@ -363,8 +364,8 @@ public function updategrid(Request $request)
         'sci_name_or'=> 'max:200', 
 'sci_name_am'=> 'max:100', 
 'sci_name_en'=> 'max:100', 
-'sci_code'=> 'max:10', 
-'sci_sector_category_id'=> 'max:200', 
+'sci_code'=> 'max:20', 
+//'sci_sector_category_id'=> 'max:200', 
 'sci_available_at_region'=> 'integer', 
 'sci_available_at_zone'=> 'integer', 
 'sci_available_at_woreda'=> 'integer', 
@@ -454,8 +455,8 @@ public function insertgrid(Request $request)
         'sci_name_or'=> 'max:200', 
 'sci_name_am'=> 'max:100', 
 'sci_name_en'=> 'max:100', 
-'sci_code'=> 'max:10', 
-'sci_sector_category_id'=> 'max:200', 
+'sci_code'=> 'max:20', 
+//'sci_sector_category_id'=> 'max:200', 
 'sci_available_at_region'=> 'integer', 
 'sci_available_at_zone'=> 'integer', 
 'sci_available_at_woreda'=> 'integer', 

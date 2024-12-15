@@ -264,7 +264,7 @@ if(isset($pempageid) && isset($pempageid)){
 }
 $pemroleid=$request->input('pem_role_id');
 if(isset($pemroleid) && isset($pemroleid)){
-//$query .=' AND pem_role_id="'.$pemroleid.'"'; 
+$query .=" AND pem_role_id='".$pemroleid."'"; 
 }
 $pemenabled=$request->input('pem_enabled');
 if(isset($pemenabled) && isset($pemenabled)){
@@ -333,7 +333,7 @@ $query .=' AND pem_status="'.$pemstatus.'"';
         $query.=' AND (add_name LIKE "%'.$search.'%")  ';
     }
 }
-//$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
+$query.=' ORDER BY pem_id';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,

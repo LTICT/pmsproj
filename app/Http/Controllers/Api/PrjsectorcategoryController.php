@@ -108,11 +108,9 @@ function getListForm(Request $request)
 
     ];
     $rules= [
-        'psc_status'=> 'integer', 
-'psc_id'=> 'max:200', 
-'psc_name'=> 'max:200', 
-'psc_code'=> 'max:30', 
-'psc_sector_id'=> 'max:200', 
+'psc_id'=> 'max:100', 
+'psc_name'=> 'max:100', 
+'psc_code'=> 'max:20', 
 'psc_description'=> 'max:425', 
 
     ]; 
@@ -250,7 +248,7 @@ $query .=' AND psc_id="'.$pscid.'"';
 }
 $pscname=$request->input('psc_name');
 if(isset($pscname) && isset($pscname)){
-$query .=' AND psc_name="'.$pscname.'"'; 
+$query .=" AND psc_name LIKE '%".$pscname."%'"; 
 }
 $psccode=$request->input('psc_code');
 if(isset($psccode) && isset($psccode)){
@@ -306,11 +304,9 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        //'psc_status'=> 'integer', 
-'psc_id'=> 'max:200', 
-'psc_name'=> 'max:200', 
-'psc_code'=> 'max:30', 
-//'psc_sector_id'=> 'max:200', 
+'psc_id'=> 'max:100', 
+'psc_name'=> 'max:100', 
+'psc_code'=> 'max:20', 
 'psc_description'=> 'max:425', 
 
     ];
@@ -389,11 +385,9 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-        //'psc_status'=> 'integer', 
-'psc_id'=> 'max:200', 
-'psc_name'=> 'max:200', 
-'psc_code'=> 'max:30', 
-//'psc_sector_id'=> 'max:200', 
+   'psc_id'=> 'max:100', 
+'psc_name'=> 'max:100', 
+'psc_code'=> 'max:20', 
 'psc_description'=> 'max:425', 
 
     ];

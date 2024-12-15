@@ -238,7 +238,7 @@ $query .=' AND pbs_id="'.$pbsid.'"';
 }
 $pbsnameor=$request->input('pbs_name_or');
 if(isset($pbsnameor) && isset($pbsnameor)){
-$query .=' AND pbs_name_or="'.$pbsnameor.'"'; 
+$query .=" AND pbs_name_or LIKE '%".$pbsnameor."%'"; 
 }
 $pbsnameam=$request->input('pbs_name_am');
 if(isset($pbsnameam) && isset($pbsnameam)){
@@ -310,10 +310,10 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'pbs_name_or'=> 'max:200', 
+'pbs_name_or'=> 'max:100', 
 'pbs_name_am'=> 'max:100', 
 'pbs_name_en'=> 'max:100', 
-'pbs_code'=> 'max:10', 
+'pbs_code'=> 'max:20', 
 'pbs_description'=> 'max:425', 
 //'pbs_status'=> 'integer', 
 
@@ -393,10 +393,10 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-        'pbs_name_or'=> 'max:200', 
+'pbs_name_or'=> 'max:100', 
 'pbs_name_am'=> 'max:100', 
 'pbs_name_en'=> 'max:100', 
-'pbs_code'=> 'max:10', 
+'pbs_code'=> 'max:20', 
 'pbs_description'=> 'max:425', 
 //'pbs_status'=> 'integer', 
 

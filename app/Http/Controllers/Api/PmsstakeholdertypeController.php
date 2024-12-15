@@ -234,7 +234,7 @@ $query .=' AND sht_id="'.$shtid.'"';
 }
 $shttypenameor=$request->input('sht_type_name_or');
 if(isset($shttypenameor) && isset($shttypenameor)){
-$query .=' AND sht_type_name_or="'.$shttypenameor.'"'; 
+$query .=" AND sht_type_name_or LIKE '%".$shttypenameor."%'"; 
 }
 $shttypenameam=$request->input('sht_type_name_am');
 if(isset($shttypenameam) && isset($shttypenameam)){
@@ -301,11 +301,10 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'sht_type_name_or'=> 'max:200', 
-'sht_type_name_am'=> 'max:60', 
-'sht_type_name_en'=> 'max:60', 
+'sht_type_name_or'=> 'max:100', 
+'sht_type_name_am'=> 'max:100', 
+'sht_type_name_en'=> 'max:100', 
 'sht_description'=> 'max:425', 
-//'sht_status'=> 'integer', 
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -382,11 +381,10 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-        'sht_type_name_or'=> 'max:200', 
-'sht_type_name_am'=> 'max:60', 
-'sht_type_name_en'=> 'max:60', 
+'sht_type_name_or'=> 'max:100', 
+'sht_type_name_am'=> 'max:100', 
+'sht_type_name_en'=> 'max:100', 
 'sht_description'=> 'max:425', 
-//'sht_status'=> 'integer', 
 
     ];
     $validator = Validator::make ( $request->all(), $rules );

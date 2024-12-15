@@ -238,7 +238,7 @@ $query .=' AND pdt_id="'.$pdtid.'"';
 }
 $pdtdocnameor=$request->input('pdt_doc_name_or');
 if(isset($pdtdocnameor) && isset($pdtdocnameor)){
-$query .=' AND pdt_doc_name_or="'.$pdtdocnameor.'"'; 
+$query .=" AND pdt_doc_name_or LIKE '%".$pdtdocnameor."%'"; 
 }
 $pdtdocnameam=$request->input('pdt_doc_name_am');
 if(isset($pdtdocnameam) && isset($pdtdocnameam)){
@@ -310,10 +310,10 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'pdt_doc_name_or'=> 'max:200', 
+        'pdt_doc_name_or'=> 'max:100', 
 'pdt_doc_name_am'=> 'max:100', 
 'pdt_doc_name_en'=> 'max:100', 
-'pdt_code'=> 'max:10', 
+'pdt_code'=> 'max:20', 
 'pdt_description'=> 'max:425', 
 //'pdt_status'=> 'integer', 
 
@@ -393,10 +393,10 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-        'pdt_doc_name_or'=> 'max:200', 
+    'pdt_doc_name_or'=> 'max:100', 
 'pdt_doc_name_am'=> 'max:100', 
 'pdt_doc_name_en'=> 'max:100', 
-'pdt_code'=> 'max:10', 
+'pdt_code'=> 'max:20', 
 'pdt_description'=> 'max:425', 
 //'pdt_status'=> 'integer', 
 

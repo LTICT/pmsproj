@@ -238,7 +238,7 @@ function getListForm(Request $request)
     }
     //START BY PARENT ID
  public function addressByParent(Request $request){
-     $query='SELECT  add_id AS id,add_name_or AS name,add_parent_id AS rootId,false AS selected FROM gen_address_structure ';       
+     $query='SELECT  add_id AS id,add_name_or AS name,add_parent_id AS rootId,0 AS selected FROM gen_address_structure ';
      $query .=' WHERE 1=1';
 $addparentid=$request->input('parent_id');
 if(isset($addparentid) && isset($addparentid)){
@@ -254,7 +254,7 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 //END BY PARENT ID
 
     public function listgrid(Request $request){
-     $query='SELECT add_id AS id,add_name_or AS name,add_parent_id AS rootId,false AS selected FROM gen_address_structure ';       
+     $query='SELECT add_id AS id,add_name_or AS name,add_parent_id AS "rootId",0 AS selected FROM gen_address_structure ';       
      
      $query .=' WHERE 1=1';
      $addid=$request->input('add_id');

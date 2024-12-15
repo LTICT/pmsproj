@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\MyController;
-use App\Modelpmsexpenditurecode;
+use App\Models\Modelpmsexpenditurecode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -234,11 +234,13 @@ $query .=' AND pec_id="'.$pecid.'"';
 }
 $pecname=$request->input('pec_name');
 if(isset($pecname) && isset($pecname)){
-$query .=' AND pec_name="'.$pecname.'"'; 
+$query .=" AND pec_name LIKE '%".$pecname."%'"; 
+
 }
 $peccode=$request->input('pec_code');
 if(isset($peccode) && isset($peccode)){
-$query .=' AND pec_code="'.$peccode.'"'; 
+$query .=" AND pec_code LIKE '%".$peccode."%'"; 
+
 }
 $pecstatus=$request->input('pec_status');
 if(isset($pecstatus) && isset($pecstatus)){
@@ -297,10 +299,9 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'pec_name'=> 'max:200', 
-'pec_code'=> 'max:200', 
-'pec_status'=> 'integer', 
-'pec_description'=> 'max:100', 
+'pec_name'=> 'max:100', 
+'pec_code'=> 'max:20', 
+'pec_description'=> 'max:425', 
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -377,10 +378,9 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-        'pec_name'=> 'max:200', 
-'pec_code'=> 'max:200', 
-'pec_status'=> 'integer', 
-'pec_description'=> 'max:100'
+'pec_name'=> 'max:100', 
+'pec_code'=> 'max:20', 
+'pec_description'=> 'max:425',
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -397,6 +397,7 @@ public function insertgrid(Request $request)
     }else{
         $requestData = $request->all();
         //$requestData['pec_created_by']=auth()->user()->usr_Id;
+        $requestData['pec_created_by']=1;
         $status= $request->input('pec_status');
         if($status=="true"){
             $requestData['pec_status']=1;

@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\MyController;
-use App\Modelpmsprojectvariation;
+use App\Models\Modelpmsprojectvariation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -56,7 +56,7 @@ function getForm(Request $request)
        $data_info = Modelpmsprojectvariation::findOrFail($id);                
        if(isset($data_info) && !empty($data_info)){
         $controllerName="PmsprojectvariationController";
-        $data= $this->validateEdit($data, $data_info['bdr_create_time'], $controllerName);
+        $data= $this->validateEdit($data, $data_info['prv_create_time'], $controllerName);
         $data['pms_project_variation_data']=$data_info;
     }
 }
@@ -99,34 +99,34 @@ function getListForm(Request $request)
     public function store(Request $request)
     {
        $attributeNames = [
-        'bdr_requested_amount'=> trans('form_lang.bdr_requested_amount'), 
-'bdr_released_amount'=> trans('form_lang.bdr_released_amount'), 
-'bdr_project_id'=> trans('form_lang.bdr_project_id'), 
-'bdr_requested_date_ec'=> trans('form_lang.bdr_requested_date_ec'), 
-'bdr_requested_date_gc'=> trans('form_lang.bdr_requested_date_gc'), 
-'bdr_released_date_ec'=> trans('form_lang.bdr_released_date_ec'), 
-'bdr_released_date_gc'=> trans('form_lang.bdr_released_date_gc'), 
-'bdr_description'=> trans('form_lang.bdr_description'), 
-'bdr_status'=> trans('form_lang.bdr_status'), 
+        'prv_requested_amount'=> trans('form_lang.prv_requested_amount'), 
+'prv_released_amount'=> trans('form_lang.prv_released_amount'), 
+'prv_project_id'=> trans('form_lang.prv_project_id'), 
+'prv_requested_date_ec'=> trans('form_lang.prv_requested_date_ec'), 
+'prv_requested_date_gc'=> trans('form_lang.prv_requested_date_gc'), 
+'prv_released_date_ec'=> trans('form_lang.prv_released_date_ec'), 
+'prv_released_date_gc'=> trans('form_lang.prv_released_date_gc'), 
+'prv_description'=> trans('form_lang.prv_description'), 
+'prv_status'=> trans('form_lang.prv_status'), 
 
     ];
     $rules= [
-        'bdr_requested_amount'=> 'max:200', 
-'bdr_released_amount'=> 'numeric', 
-'bdr_project_id'=> 'max:200', 
-'bdr_requested_date_ec'=> 'max:200', 
-'bdr_requested_date_gc'=> 'max:200', 
-'bdr_released_date_ec'=> 'max:10', 
-'bdr_released_date_gc'=> 'max:10', 
-'bdr_description'=> 'max:425', 
-'bdr_status'=> 'integer', 
+        'prv_requested_amount'=> 'max:200', 
+'prv_released_amount'=> 'numeric', 
+'prv_project_id'=> 'max:200', 
+'prv_requested_date_ec'=> 'max:200', 
+'prv_requested_date_gc'=> 'max:200', 
+'prv_released_date_ec'=> 'max:10', 
+'prv_released_date_gc'=> 'max:10', 
+'prv_description'=> 'max:425', 
+'prv_status'=> 'integer', 
 
     ]; 
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
     if (!$validator->fails()) {
         $requestData = $request->all();
-        $requestData['bdr_created_by']=auth()->user()->usr_Id;
+        $requestData['prv_created_by']=auth()->user()->usr_Id;
         Modelpmsprojectvariation::create($requestData);
         return redirect('project_variation')->with('flash_message',  trans('form_lang.insert_success'));
     }else{
@@ -144,9 +144,9 @@ function getListForm(Request $request)
      */
     public function show($id)
     {
-        $query='SELECT bdr_id,bdr_requested_amount,bdr_released_amount,bdr_project_id,bdr_requested_date_ec,bdr_requested_date_gc,bdr_released_date_ec,bdr_released_date_gc,bdr_description,bdr_create_time,bdr_update_time,bdr_delete_time,bdr_created_by,bdr_status FROM pms_project_variation ';       
+        $query='SELECT prv_id,prv_requested_amount,prv_released_amount,prv_project_id,prv_requested_date_ec,prv_requested_date_gc,prv_released_date_ec,prv_released_date_gc,prv_description,prv_create_time,prv_update_time,prv_delete_time,prv_created_by,prv_status FROM pms_project_variation ';       
         
-        $query .=' WHERE bdr_id='.$id.' ';
+        $query .=' WHERE prv_id='.$id.' ';
         $data_info=DB::select(DB::raw($query));
         if(isset($data_info) && !empty($data_info)){
             $data['pms_project_variation_data']=$data_info[0];
@@ -185,27 +185,27 @@ function getListForm(Request $request)
     public function update(Request $request, $id)
     {
      $attributeNames = [
-        'bdr_requested_amount'=> trans('form_lang.bdr_requested_amount'), 
-'bdr_released_amount'=> trans('form_lang.bdr_released_amount'), 
-'bdr_project_id'=> trans('form_lang.bdr_project_id'), 
-'bdr_requested_date_ec'=> trans('form_lang.bdr_requested_date_ec'), 
-'bdr_requested_date_gc'=> trans('form_lang.bdr_requested_date_gc'), 
-'bdr_released_date_ec'=> trans('form_lang.bdr_released_date_ec'), 
-'bdr_released_date_gc'=> trans('form_lang.bdr_released_date_gc'), 
-'bdr_description'=> trans('form_lang.bdr_description'), 
-'bdr_status'=> trans('form_lang.bdr_status'), 
+        'prv_requested_amount'=> trans('form_lang.prv_requested_amount'), 
+'prv_released_amount'=> trans('form_lang.prv_released_amount'), 
+'prv_project_id'=> trans('form_lang.prv_project_id'), 
+'prv_requested_date_ec'=> trans('form_lang.prv_requested_date_ec'), 
+'prv_requested_date_gc'=> trans('form_lang.prv_requested_date_gc'), 
+'prv_released_date_ec'=> trans('form_lang.prv_released_date_ec'), 
+'prv_released_date_gc'=> trans('form_lang.prv_released_date_gc'), 
+'prv_description'=> trans('form_lang.prv_description'), 
+'prv_status'=> trans('form_lang.prv_status'), 
 
     ];
     $rules= [
-        'bdr_requested_amount'=> 'max:200', 
-'bdr_released_amount'=> 'numeric', 
-'bdr_project_id'=> 'max:200', 
-'bdr_requested_date_ec'=> 'max:200', 
-'bdr_requested_date_gc'=> 'max:200', 
-'bdr_released_date_ec'=> 'max:10', 
-'bdr_released_date_gc'=> 'max:10', 
-'bdr_description'=> 'max:425', 
-'bdr_status'=> 'integer', 
+        'prv_requested_amount'=> 'max:200', 
+'prv_released_amount'=> 'numeric', 
+'prv_project_id'=> 'max:200', 
+'prv_requested_date_ec'=> 'max:200', 
+'prv_requested_date_gc'=> 'max:200', 
+'prv_released_date_ec'=> 'max:10', 
+'prv_released_date_gc'=> 'max:10', 
+'prv_description'=> 'max:425', 
+'prv_status'=> 'integer', 
 
     ];     
     $validator = Validator::make ( $request->all(), $rules );
@@ -241,64 +241,68 @@ function getListForm(Request $request)
         return redirect('project_variation')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT bdr_id,bdr_requested_amount,bdr_released_amount,bdr_project_id,bdr_requested_date_ec,bdr_requested_date_gc,bdr_released_date_ec,bdr_released_date_gc,bdr_description,bdr_create_time,bdr_update_time,bdr_delete_time,bdr_created_by,bdr_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_variation ';       
-     
+     $query='SELECT prj_name,prj_code,prv_id,prv_requested_amount,prv_released_amount,prv_project_id,prv_requested_date_ec,prv_requested_date_gc,prv_released_date_ec,prv_released_date_gc,prv_description,prv_create_time,prv_update_time,prv_delete_time,prv_created_by,prv_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_variation ';       
+     $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_variation.prv_project_id';      
      $query .=' WHERE 1=1';
-     $bdrid=$request->input('bdr_id');
-if(isset($bdrid) && isset($bdrid)){
-$query .=' AND bdr_id="'.$bdrid.'"'; 
+$prjName=$request->input('prj_name');
+if(isset($prjName) && isset($prjName)){
+$query .=" AND prj_name LIKE '%".$prjName."%'"; 
 }
-$bdrrequestedamount=$request->input('bdr_requested_amount');
-if(isset($bdrrequestedamount) && isset($bdrrequestedamount)){
-$query .=' AND bdr_requested_amount="'.$bdrrequestedamount.'"'; 
+$prjCode=$request->input('prj_code');
+if(isset($prjCode) && isset($prjCode)){
+$query .=" AND prj_code='".$prjCode."'"; 
 }
-$bdrreleasedamount=$request->input('bdr_released_amount');
-if(isset($bdrreleasedamount) && isset($bdrreleasedamount)){
-$query .=' AND bdr_released_amount="'.$bdrreleasedamount.'"'; 
+$startTime=$request->input('variation_dateStart');
+if(isset($startTime) && isset($startTime)){
+$query .=" AND prv_released_date_gc >='".$startTime." 00 00 00'"; 
 }
-$bdrprojectid=$request->input('bdr_project_id');
-if(isset($bdrprojectid) && isset($bdrprojectid)){
-$query .=" AND bdr_project_id='".$bdrprojectid."'"; 
+$endTime=$request->input('variation_dateEnd');
+if(isset($endTime) && isset($endTime)){
+$query .=" AND prv_released_date_gc <='".$endTime." 23 59 59'"; 
 }
-$bdrrequesteddateec=$request->input('bdr_requested_date_ec');
-if(isset($bdrrequesteddateec) && isset($bdrrequesteddateec)){
-$query .=' AND bdr_requested_date_ec="'.$bdrrequesteddateec.'"'; 
+$prvprojectid=$request->input('prv_project_id');
+if(isset($prvprojectid) && isset($prvprojectid)){
+$query .=" AND prv_project_id='".$prvprojectid."'"; 
 }
-$bdrrequesteddategc=$request->input('bdr_requested_date_gc');
-if(isset($bdrrequesteddategc) && isset($bdrrequesteddategc)){
-$query .=' AND bdr_requested_date_gc="'.$bdrrequesteddategc.'"'; 
+$prvrequesteddateec=$request->input('prv_requested_date_ec');
+if(isset($prvrequesteddateec) && isset($prvrequesteddateec)){
+$query .=' AND prv_requested_date_ec="'.$prvrequesteddateec.'"'; 
 }
-$bdrreleaseddateec=$request->input('bdr_released_date_ec');
-if(isset($bdrreleaseddateec) && isset($bdrreleaseddateec)){
-$query .=' AND bdr_released_date_ec="'.$bdrreleaseddateec.'"'; 
+$prvrequesteddategc=$request->input('prv_requested_date_gc');
+if(isset($prvrequesteddategc) && isset($prvrequesteddategc)){
+$query .=' AND prv_requested_date_gc="'.$prvrequesteddategc.'"'; 
 }
-$bdrreleaseddategc=$request->input('bdr_released_date_gc');
-if(isset($bdrreleaseddategc) && isset($bdrreleaseddategc)){
-$query .=' AND bdr_released_date_gc="'.$bdrreleaseddategc.'"'; 
+$prvreleaseddateec=$request->input('prv_released_date_ec');
+if(isset($prvreleaseddateec) && isset($prvreleaseddateec)){
+$query .=' AND prv_released_date_ec="'.$prvreleaseddateec.'"'; 
 }
-$bdrdescription=$request->input('bdr_description');
-if(isset($bdrdescription) && isset($bdrdescription)){
-$query .=' AND bdr_description="'.$bdrdescription.'"'; 
+$prvreleaseddategc=$request->input('prv_released_date_gc');
+if(isset($prvreleaseddategc) && isset($prvreleaseddategc)){
+$query .=' AND prv_released_date_gc="'.$prvreleaseddategc.'"'; 
 }
-$bdrcreatetime=$request->input('bdr_create_time');
-if(isset($bdrcreatetime) && isset($bdrcreatetime)){
-$query .=' AND bdr_create_time="'.$bdrcreatetime.'"'; 
+$prvdescription=$request->input('prv_description');
+if(isset($prvdescription) && isset($prvdescription)){
+$query .=' AND prv_description="'.$prvdescription.'"'; 
 }
-$bdrupdatetime=$request->input('bdr_update_time');
-if(isset($bdrupdatetime) && isset($bdrupdatetime)){
-$query .=' AND bdr_update_time="'.$bdrupdatetime.'"'; 
+$prvcreatetime=$request->input('prv_create_time');
+if(isset($prvcreatetime) && isset($prvcreatetime)){
+$query .=' AND prv_create_time="'.$prvcreatetime.'"'; 
 }
-$bdrdeletetime=$request->input('bdr_delete_time');
-if(isset($bdrdeletetime) && isset($bdrdeletetime)){
-$query .=' AND bdr_delete_time="'.$bdrdeletetime.'"'; 
+$prvupdatetime=$request->input('prv_update_time');
+if(isset($prvupdatetime) && isset($prvupdatetime)){
+$query .=' AND prv_update_time="'.$prvupdatetime.'"'; 
 }
-$bdrcreatedby=$request->input('bdr_created_by');
-if(isset($bdrcreatedby) && isset($bdrcreatedby)){
-$query .=' AND bdr_created_by="'.$bdrcreatedby.'"'; 
+$prvdeletetime=$request->input('prv_delete_time');
+if(isset($prvdeletetime) && isset($prvdeletetime)){
+$query .=' AND prv_delete_time="'.$prvdeletetime.'"'; 
 }
-$bdrstatus=$request->input('bdr_status');
-if(isset($bdrstatus) && isset($bdrstatus)){
-$query .=' AND bdr_status="'.$bdrstatus.'"'; 
+$prvcreatedby=$request->input('prv_created_by');
+if(isset($prvcreatedby) && isset($prvcreatedby)){
+$query .=' AND prv_created_by="'.$prvcreatedby.'"'; 
+}
+$prvstatus=$request->input('prv_status');
+if(isset($prvstatus) && isset($prvstatus)){
+$query .=' AND prv_status="'.$prvstatus.'"'; 
 }
 
      $masterId=$request->input('master_id');
@@ -325,24 +329,24 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 public function updategrid(Request $request)
 {
     $attributeNames = [
-        'bdr_requested_amount'=> trans('form_lang.bdr_requested_amount'), 
-'bdr_released_amount'=> trans('form_lang.bdr_released_amount'), 
-'bdr_project_id'=> trans('form_lang.bdr_project_id'), 
-'bdr_requested_date_ec'=> trans('form_lang.bdr_requested_date_ec'), 
-'bdr_requested_date_gc'=> trans('form_lang.bdr_requested_date_gc'), 
-'bdr_released_date_ec'=> trans('form_lang.bdr_released_date_ec'), 
-'bdr_released_date_gc'=> trans('form_lang.bdr_released_date_gc'), 
-'bdr_description'=> trans('form_lang.bdr_description')
+        'prv_requested_amount'=> trans('form_lang.prv_requested_amount'), 
+'prv_released_amount'=> trans('form_lang.prv_released_amount'), 
+'prv_project_id'=> trans('form_lang.prv_project_id'), 
+'prv_requested_date_ec'=> trans('form_lang.prv_requested_date_ec'), 
+'prv_requested_date_gc'=> trans('form_lang.prv_requested_date_gc'), 
+'prv_released_date_ec'=> trans('form_lang.prv_released_date_ec'), 
+'prv_released_date_gc'=> trans('form_lang.prv_released_date_gc'), 
+'prv_description'=> trans('form_lang.prv_description')
     ];
     $rules= [
-        'bdr_requested_amount'=> 'max:200', 
-'bdr_released_amount'=> 'numeric', 
-'bdr_project_id'=> 'max:200', 
-'bdr_requested_date_ec'=> 'max:200', 
-'bdr_requested_date_gc'=> 'max:200', 
-'bdr_released_date_ec'=> 'max:10', 
-'bdr_released_date_gc'=> 'max:10', 
-'bdr_description'=> 'max:425', 
+        'prv_requested_amount'=> 'max:200', 
+'prv_released_amount'=> 'numeric', 
+'prv_project_id'=> 'max:200', 
+'prv_requested_date_ec'=> 'max:200', 
+'prv_requested_date_gc'=> 'max:200', 
+'prv_released_date_ec'=> 'max:10', 
+'prv_released_date_gc'=> 'max:10', 
+'prv_description'=> 'max:425', 
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -357,15 +361,15 @@ public function updategrid(Request $request)
         );
         return response()->json($resultObject);
     }else{
-        $id=$request->get("bdr_id");
+        $id=$request->get("prv_id");
         //$requestData['foreign_field_name']=$request->get('master_id');
             //assign data from of foreign key
         $requestData = $request->all();            
-        $status= $request->input('bdr_status');
+        $status= $request->input('prv_status');
         if($status=="true"){
-            $requestData['bdr_status']=1;
+            $requestData['prv_status']=1;
         }else{
-            $requestData['bdr_status']=0;
+            $requestData['prv_status']=0;
         }
         if(isset($id) && !empty($id)){
             $data_info = Modelpmsprojectvariation::findOrFail($id);
@@ -394,7 +398,7 @@ public function updategrid(Request $request)
     }else{
         //Parent Id Assigment
         //$requestData['ins_vehicle_id']=$request->get('master_id');
-        //$requestData['bdr_created_by']=auth()->user()->usr_Id;
+        //$requestData['prv_created_by']=auth()->user()->usr_Id;
         $data_info=Modelpmsprojectvariation::create($requestData);
         $resultObject= array(
             "odata.metadata"=>"",
@@ -410,25 +414,25 @@ public function updategrid(Request $request)
 public function insertgrid(Request $request)
 {
     $attributeNames = [
-        'bdr_requested_amount'=> trans('form_lang.bdr_requested_amount'), 
-'bdr_released_amount'=> trans('form_lang.bdr_released_amount'), 
-'bdr_project_id'=> trans('form_lang.bdr_project_id'), 
-'bdr_requested_date_ec'=> trans('form_lang.bdr_requested_date_ec'), 
-'bdr_requested_date_gc'=> trans('form_lang.bdr_requested_date_gc'), 
-'bdr_released_date_ec'=> trans('form_lang.bdr_released_date_ec'), 
-'bdr_released_date_gc'=> trans('form_lang.bdr_released_date_gc'), 
-'bdr_description'=> trans('form_lang.bdr_description'), 
+        'prv_requested_amount'=> trans('form_lang.prv_requested_amount'), 
+'prv_released_amount'=> trans('form_lang.prv_released_amount'), 
+'prv_project_id'=> trans('form_lang.prv_project_id'), 
+'prv_requested_date_ec'=> trans('form_lang.prv_requested_date_ec'), 
+'prv_requested_date_gc'=> trans('form_lang.prv_requested_date_gc'), 
+'prv_released_date_ec'=> trans('form_lang.prv_released_date_ec'), 
+'prv_released_date_gc'=> trans('form_lang.prv_released_date_gc'), 
+'prv_description'=> trans('form_lang.prv_description'), 
 
     ];
     $rules= [
-        'bdr_requested_amount'=> 'max:200', 
-'bdr_released_amount'=> 'numeric', 
-'bdr_project_id'=> 'max:200', 
-'bdr_requested_date_ec'=> 'max:200', 
-'bdr_requested_date_gc'=> 'max:200', 
-'bdr_released_date_ec'=> 'max:10', 
-'bdr_released_date_gc'=> 'max:10', 
-'bdr_description'=> 'max:425'
+        'prv_requested_amount'=> 'max:200', 
+'prv_released_amount'=> 'numeric', 
+'prv_project_id'=> 'max:200', 
+'prv_requested_date_ec'=> 'max:200', 
+'prv_requested_date_gc'=> 'max:200', 
+'prv_released_date_ec'=> 'max:10', 
+'prv_released_date_gc'=> 'max:10', 
+'prv_description'=> 'max:425'
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -444,12 +448,12 @@ public function insertgrid(Request $request)
         return response()->json($resultObject);
     }else{
         $requestData = $request->all();
-        //$requestData['bdr_created_by']=auth()->user()->usr_Id;
-        $status= $request->input('bdr_status');
+        //$requestData['prv_created_by']=auth()->user()->usr_Id;
+        $status= $request->input('prv_status');
         if($status=="true"){
-            $requestData['bdr_status']=1;
+            $requestData['prv_status']=1;
         }else{
-            $requestData['bdr_status']=0;
+            $requestData['prv_status']=0;
         }
         $data_info=Modelpmsprojectvariation::create($requestData);
         $resultObject= array(
@@ -464,7 +468,7 @@ public function insertgrid(Request $request)
 }
 public function deletegrid(Request $request)
 {
-    $id=$request->get("bdr_id");
+    $id=$request->get("prv_id");
     Modelpmsprojectvariation::destroy($id);
     $resultObject= array(
         "odata.metadata"=>"",

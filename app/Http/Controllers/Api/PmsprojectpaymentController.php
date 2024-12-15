@@ -271,7 +271,7 @@ $query .=" AND prj_location_woreda_id='".$prjlocationworedaid."'";
 
 $prpprojectid=$request->input('project_id');
 if(isset($prpprojectid) && isset($prpprojectid)){
-$query .= " AND prp_project_id = '$prpprojectid'";
+$query .= " AND prp_project_id = '".$prpprojectid."'";
 
 }
 $prptype=$request->input('prp_type');

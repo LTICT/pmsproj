@@ -250,15 +250,15 @@ $query .=' AND dep_id="'.$depid.'"';
 }
 $depnameor=$request->input('dep_name_or');
 if(isset($depnameor) && isset($depnameor)){
-$query .=' AND dep_name_or="'.$depnameor.'"'; 
+$query .=" AND dep_name_or LIKE '%".$depnameor."%'"; 
 }
 $depnameam=$request->input('dep_name_am');
 if(isset($depnameam) && isset($depnameam)){
-$query .=' AND dep_name_am="'.$depnameam.'"'; 
+$query .=" AND dep_name_am LIKE '%".$depnameam."%'"; 
 }
 $depnameen=$request->input('dep_name_en');
 if(isset($depnameen) && isset($depnameen)){
-$query .=' AND dep_name_en="'.$depnameen.'"'; 
+$query .=" AND dep_name_en LIKE '%".$depnameen."%'"; 
 }
 $depcode=$request->input('dep_code');
 if(isset($depcode) && isset($depcode)){
@@ -337,10 +337,10 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'dep_name_or'=> 'max:200', 
+        'dep_name_or'=> 'max:100', 
         'dep_name_am'=> 'max:100', 
         'dep_name_en'=> 'max:100', 
-        'dep_code'=> 'max:10', 
+        'dep_code'=> 'max:20', 
         'dep_available_at_region'=> 'integer', 
         'dep_available_at_zone'=> 'integer', 
         'dep_available_at_woreda'=> 'integer', 
@@ -426,15 +426,14 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-        'dep_name_or'=> 'max:200', 
+      'dep_name_or'=> 'max:100', 
         'dep_name_am'=> 'max:100', 
         'dep_name_en'=> 'max:100', 
-        'dep_code'=> 'max:10', 
+        'dep_code'=> 'max:20', 
         'dep_available_at_region'=> 'integer', 
         'dep_available_at_zone'=> 'integer', 
         'dep_available_at_woreda'=> 'integer', 
-        'dep_description'=> 'max:425', 
-        //'dep_status'=> 'integer', 
+        'dep_description'=> 'max:425',
 
     ];
     $validator = Validator::make ( $request->all(), $rules );

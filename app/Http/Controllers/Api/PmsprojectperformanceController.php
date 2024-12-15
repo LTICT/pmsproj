@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\MyController;
-use App\Modelpmsprojectperformance;
+use App\Models\Modelpmsprojectperformance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -245,20 +245,33 @@ function getListForm(Request $request)
         return redirect('project_performance')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT prp_id,prp_project_id,prp_project_status_id,prp_record_date_ec,prp_record_date_gc,prp_total_budget_used,prp_physical_performance,prp_description,prp_status,prp_created_by,prp_created_date,prp_create_time,prp_update_time,prp_termination_reason_id,1 AS is_editable, 1 AS is_deletable FROM pms_project_performance ';       
-     
+     $query='SELECT prj_name,prj_code,prp_id,prp_project_id,prp_project_status_id,prp_record_date_ec,prp_record_date_gc,prp_total_budget_used,prp_physical_performance,prp_description,prp_status,prp_created_by,prp_created_date,prp_create_time,prp_update_time,prp_termination_reason_id,1 AS is_editable, 1 AS is_deletable FROM pms_project_performance ';       
+     $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_performance.prp_project_id';
      $query .=' WHERE 1=1';
-     $prpid=$request->input('prp_id');
-if(isset($prpid) && isset($prpid)){
-$query .=' AND prp_id="'.$prpid.'"'; 
+$prjName=$request->input('prj_name');
+if(isset($prjName) && isset($prjName)){
+$query .=" AND prj_name LIKE '%".$prjName."%'"; 
 }
+$startTime=$request->input('performance_dateStart');
+if(isset($startTime) && isset($startTime)){
+$query .=" AND prp_record_date_gc >='".$startTime." 00 00 00'"; 
+}
+$endTime=$request->input('performance_dateEnd');
+if(isset($endTime) && isset($endTime)){
+$query .=" AND prp_record_date_gc <='".$endTime." 23 59 59'"; 
+}
+$prjCode=$request->input('prj_code');
+if(isset($prjCode) && isset($prjCode)){
+$query .=" AND prj_code='".$prjCode."'"; 
+}
+
 $prpprojectid=$request->input('prp_project_id');
 if(isset($prpprojectid) && isset($prpprojectid)){
-$query .=' AND prp_project_id="'.$prpprojectid.'"'; 
+$query .=" AND prp_project_id='".$prpprojectid."'"; 
 }
 $prpprojectstatusid=$request->input('prp_project_status_id');
 if(isset($prpprojectstatusid) && isset($prpprojectstatusid)){
-$query .=' AND prp_project_status_id="'.$prpprojectstatusid.'"'; 
+$query .=" AND prp_project_status_id='".$prpprojectstatusid."'"; 
 }
 $prprecorddateec=$request->input('prp_record_date_ec');
 if(isset($prprecorddateec) && isset($prprecorddateec)){
@@ -348,9 +361,7 @@ public function updategrid(Request $request)
 'prp_record_date_gc'=> 'max:200', 
 'prp_total_budget_used'=> 'max:200', 
 'prp_physical_performance'=> 'max:200', 
-'prp_description'=> 'max:100', 
-'prp_status'=> 'integer', 
-'prp_created_date'=> 'integer',
+'prp_description'=> 'max:100'
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -439,8 +450,7 @@ public function insertgrid(Request $request)
 'prp_total_budget_used'=> 'max:200', 
 'prp_physical_performance'=> 'max:200', 
 'prp_description'=> 'max:100', 
-'prp_status'=> 'integer', 
-'prp_created_date'=> 'integer',
+//'prp_created_date'=> 'integer',
 
     ];
     $validator = Validator::make ( $request->all(), $rules );

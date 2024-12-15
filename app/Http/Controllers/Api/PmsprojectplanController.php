@@ -254,7 +254,7 @@ $query .=' AND pld_name="'.$pldname.'"';
 }
 $pldprojectid=$request->input('pld_project_id');
 if(isset($pldprojectid) && isset($pldprojectid)){
-$query .=' AND pld_project_id="'.$pldprojectid.'"'; 
+$query .=" AND pld_project_id='".$pldprojectid."'"; 
 }
 $pldbudgetyearid=$request->input('pld_budget_year_id');
 if(isset($pldbudgetyearid) && isset($pldbudgetyearid)){

@@ -241,8 +241,9 @@ function getListForm(Request $request)
         return redirect('project_budget_expenditure')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT pbe_id,pbe_reason,pbe_project_id,pbe_budget_code_id,pbe_used_date_ec,pbe_used_date_gc,ppe_amount,pbe_status,pbe_description,pbe_created_by,pbe_created_date,pbe_create_time,pbe_update_time,1 AS is_editable, 1 AS is_deletable FROM pms_project_budget_expenditure ';       
+     $query='SELECT prj_name,prj_code,pbe_id,pbe_reason,pbe_project_id,pbe_budget_code_id,pbe_used_date_ec,pbe_used_date_gc,ppe_amount,pbe_status,pbe_description,pbe_created_by,pbe_created_date,pbe_create_time,pbe_update_time,1 AS is_editable, 1 AS is_deletable FROM pms_project_budget_expenditure ';       
      
+     $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_budget_expenditure.pbe_project_id';
      $query .=' WHERE 1=1';
      $pbeid=$request->input('pbe_id');
 if(isset($pbeid) && isset($pbeid)){

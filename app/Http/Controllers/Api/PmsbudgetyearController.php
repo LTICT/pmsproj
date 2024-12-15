@@ -230,11 +230,12 @@ $query .=' AND bdy_id="'.$bdyid.'"';
 }
 $bdyname=$request->input('bdy_name');
 if(isset($bdyname) && isset($bdyname)){
-$query .=' AND bdy_name="'.$bdyname.'"'; 
+$query .=" AND bdy_name LIKE '%".$bdyname."%'"; 
+
 }
 $bdycode=$request->input('bdy_code');
 if(isset($bdycode) && isset($bdycode)){
-$query .=' AND bdy_code="'.$bdycode.'"'; 
+$query .=" AND bdy_code LIKE '%".$bdycode."%'"; 
 }
 $bdydescription=$request->input('bdy_description');
 if(isset($bdydescription) && isset($bdydescription)){
@@ -292,9 +293,9 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'bdy_name'=> 'max:200', 
+        'bdy_name'=> 'max:4', 
 //'bdy_code'=> 'max:200', 
-'bdy_description'=> 'max:425', 
+'bdy_description'=> 'max:100', 
 //'bdy_status'=> 'integer', 
 
     ];
@@ -371,9 +372,9 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-        'bdy_name'=> 'max:200', 
+        'bdy_name'=> 'max:4', 
 //'bdy_code'=> 'max:200', 
-'bdy_description'=> 'max:425', 
+'bdy_description'=> 'max:100', 
 //'bdy_status'=> 'integer', 
 
     ];

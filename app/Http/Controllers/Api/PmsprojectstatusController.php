@@ -246,7 +246,8 @@ $query .=' AND prs_id="'.$prsid.'"';
 }
 $prsstatusnameor=$request->input('prs_status_name_or');
 if(isset($prsstatusnameor) && isset($prsstatusnameor)){
-$query .=' AND prs_status_name_or="'.$prsstatusnameor.'"'; 
+$query .=" AND prs_status_name_or LIKE '%".$prsstatusnameor."%'"; 
+
 }
 $prsstatusnameam=$request->input('prs_status_name_am');
 if(isset($prsstatusnameam) && isset($prsstatusnameam)){
@@ -328,14 +329,12 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'prs_status_name_or'=> 'max:200', 
-'prs_status_name_am'=> 'max:200', 
-'prs_status_name_en'=> 'max:200', 
-'prs_color_code'=> 'max:10', 
-'prs_order_number'=> 'max:200', 
+        'prs_status_name_or'=> 'max:100', 
+'prs_status_name_am'=> 'max:100', 
+'prs_status_name_en'=> 'max:100', 
+'prs_color_code'=> 'max:20', 
+'prs_order_number'=> 'max:20', 
 'prs_description'=> 'max:425', 
-'prs_status'=> 'integer', 
-'prs_spare_column'=> 'max:50', 
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -415,14 +414,12 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-        'prs_status_name_or'=> 'max:200', 
-'prs_status_name_am'=> 'max:200', 
-'prs_status_name_en'=> 'max:200', 
-'prs_color_code'=> 'max:10', 
-'prs_order_number'=> 'max:200', 
+ 'prs_status_name_or'=> 'max:100', 
+'prs_status_name_am'=> 'max:100', 
+'prs_status_name_en'=> 'max:100', 
+'prs_color_code'=> 'max:20', 
+'prs_order_number'=> 'max:20', 
 'prs_description'=> 'max:425', 
-'prs_status'=> 'integer', 
-'prs_spare_column'=> 'max:50', 
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -440,6 +437,7 @@ public function insertgrid(Request $request)
     }else{
         $requestData = $request->all();
         //$requestData['prs_created_by']=auth()->user()->usr_Id;
+        $requestData['prs_created_by']=1;
         $status= $request->input('prs_status');
         if($status=="true"){
             $requestData['prs_status']=1;

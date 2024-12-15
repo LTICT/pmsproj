@@ -4,8 +4,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Modelpmsprojectvariation extends Model
 {
-    const CREATED_AT = 'bdr_create_time';
-    const UPDATED_AT = 'bdr_update_time';
+    const CREATED_AT = 'prv_create_time';
+    const UPDATED_AT = 'prv_update_time';
     /**
      * The database table used by the model.
      *
@@ -18,14 +18,14 @@ class Modelpmsprojectvariation extends Model
     *
     * @var string
     */
-    protected $primaryKey = 'bdr_id';
+    protected $primaryKey = 'prv_id';
 
     /**
      * Attributes that should be mass-assignable.
      *
      * @var array
      */
-    protected $fillable = ['bdr_id','bdr_requested_amount','bdr_released_amount','bdr_project_id','bdr_requested_date_ec','bdr_requested_date_gc','bdr_released_date_ec','bdr_released_date_gc','bdr_description','bdr_create_time','bdr_update_time','bdr_delete_time','bdr_created_by','bdr_status'];
+    protected $fillable = ['prv_id','prv_requested_amount','prv_released_amount','prv_project_id','prv_requested_date_ec','prv_requested_date_gc','prv_released_date_ec','prv_released_date_gc','prv_description','prv_create_time','prv_update_time','prv_delete_time','prv_created_by','prv_status'];
 
     /**
      * Change activity log event description

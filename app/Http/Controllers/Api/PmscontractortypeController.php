@@ -234,7 +234,8 @@ $query .=' AND cnt_id="'.$cntid.'"';
 }
 $cnttypenameor=$request->input('cnt_type_name_or');
 if(isset($cnttypenameor) && isset($cnttypenameor)){
-$query .=' AND cnt_type_name_or="'.$cnttypenameor.'"'; 
+$query .=" AND cnt_type_name_or LIKE '%".$cnttypenameor."%'"; 
+
 }
 $cnttypenameam=$request->input('cnt_type_name_am');
 if(isset($cnttypenameam) && isset($cnttypenameam)){
@@ -301,9 +302,9 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'cnt_type_name_or'=> 'max:200', 
-'cnt_type_name_am'=> 'max:60', 
-'cnt_type_name_en'=> 'max:60', 
+'cnt_type_name_or'=> 'max:100', 
+'cnt_type_name_am'=> 'max:100', 
+'cnt_type_name_en'=> 'max:100', 
 'cnt_description'=> 'max:425', 
 //'cnt_status'=> 'integer', 
 
@@ -382,9 +383,9 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-        'cnt_type_name_or'=> 'max:200', 
-'cnt_type_name_am'=> 'max:60', 
-'cnt_type_name_en'=> 'max:60', 
+'cnt_type_name_or'=> 'max:100', 
+'cnt_type_name_am'=> 'max:100', 
+'cnt_type_name_en'=> 'max:100', 
 'cnt_description'=> 'max:425', 
 //'cnt_status'=> 'integer', 
 

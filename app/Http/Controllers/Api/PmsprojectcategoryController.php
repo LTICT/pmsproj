@@ -310,11 +310,11 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'pct_name_or'=> 'max:200', 
+        'pct_name_or'=> 'max:100', 
 'pct_name_am'=> 'max:100', 
 'pct_name_en'=> 'max:100', 
-'pct_code'=> 'max:10', 
-//'pct_description'=> 'max:425', 
+'pct_code'=> 'max:20', 
+'pct_description'=> 'max:425', 
 //'pct_status'=> 'integer', 
 
     ];
@@ -393,11 +393,11 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-        'pct_name_or'=> 'max:200', 
+ 'pct_name_or'=> 'max:100', 
 'pct_name_am'=> 'max:100', 
 'pct_name_en'=> 'max:100', 
-'pct_code'=> 'max:10', 
-//'pct_description'=> 'max:425', 
+'pct_code'=> 'max:20', 
+'pct_description'=> 'max:425',  
 //'pct_status'=> 'integer', 
 
     ];

@@ -241,10 +241,10 @@ $urlroleid=$request->input('url_role_id');
 if(isset($urlroleid) && isset($urlroleid)){
 $query .=' AND url_role_id="'.$urlroleid.'"'; 
 }
-/*$urluserid=$request->input('user_id');
+$urluserid=$request->input('user_id');
 if(isset($urluserid) && isset($urluserid)){
-$query .=' AND url_user_id="'.$urluserid.'"'; 
-}*/
+$query .=" AND url_user_id='".$urluserid."'"; 
+}
 
 $urldescription=$request->input('url_description');
 if(isset($urldescription) && isset($urldescription)){

@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\MyController;
-use App\Modelpmsprojectsupplimentary;
+use App\Models\Modelpmsprojectsupplimentary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -241,20 +241,24 @@ function getListForm(Request $request)
         return redirect('project_supplimentary')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT prs_id,prs_requested_amount,prs_released_amount,prs_project_id,prs_requested_date_ec,prs_requested_date_gc,prs_released_date_ec,prs_released_date_gc,prs_description,prs_create_time,prs_update_time,prs_delete_time,prs_created_by,prs_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_supplimentary ';       
-     
+     $query='SELECT prj_name,prj_code,prs_id,prs_requested_amount,prs_released_amount,prs_project_id,prs_requested_date_ec,prs_requested_date_gc,prs_released_date_ec,prs_released_date_gc,prs_description,prs_create_time,prs_update_time,prs_delete_time,prs_created_by,prs_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_supplimentary '; 
+     $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_supplimentary.prs_project_id';    
      $query .=' WHERE 1=1';
-     $prsid=$request->input('prs_id');
-if(isset($prsid) && isset($prsid)){
-$query .=' AND prs_id="'.$prsid.'"'; 
+    $prjName=$request->input('prj_name');
+if(isset($prjName) && isset($prjName)){
+$query .=" AND prj_name LIKE '%".$prjName."%'"; 
 }
-$prsrequestedamount=$request->input('prs_requested_amount');
-if(isset($prsrequestedamount) && isset($prsrequestedamount)){
-$query .=' AND prs_requested_amount="'.$prsrequestedamount.'"'; 
+$prjCode=$request->input('prj_code');
+if(isset($prjCode) && isset($prjCode)){
+$query .=" AND prj_code='".$prjCode."'"; 
 }
-$prsreleasedamount=$request->input('prs_released_amount');
-if(isset($prsreleasedamount) && isset($prsreleasedamount)){
-$query .=' AND prs_released_amount="'.$prsreleasedamount.'"'; 
+$startTime=$request->input('supplimentary_dateStart');
+if(isset($startTime) && isset($startTime)){
+$query .=" AND prs_released_date_gc >='".$startTime." 00 00 00'"; 
+}
+$endTime=$request->input('supplimentary_dateEnd');
+if(isset($endTime) && isset($endTime)){
+$query .=" AND prs_released_date_gc <='".$endTime." 23 59 59'"; 
 }
 $prsprojectid=$request->input('prs_project_id');
 if(isset($prsprojectid) && isset($prsprojectid)){
