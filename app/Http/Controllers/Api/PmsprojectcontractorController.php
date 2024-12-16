@@ -300,10 +300,26 @@ function getListForm(Request $request)
         return redirect('project_contractor')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT cni_id,cni_name,cni_tin_num,pms_contractor_type.cnt_type_name_or AS cni_contractor_type_id,cni_vat_num,cni_total_contract_price,cni_contract_start_date_et,cni_contract_start_date_gc,cni_contract_end_date_et,cni_contract_end_date_gc,cni_contact_person,cni_phone_number,cni_address,cni_email,cni_website,cni_project_id,cni_procrument_method,cni_bid_invitation_date,cni_bid_opening_date,cni_bid_evaluation_date,cni_bid_award_date,cni_bid_contract_signing_date,cni_description,cni_create_time,cni_update_time,cni_delete_time,cni_created_by,cni_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_contractor ';       
+     $query='SELECT prj_name,prj_code, cni_id,cni_name,cni_tin_num,pms_contractor_type.cnt_type_name_or AS contractor_name,cni_contractor_type_id,cni_vat_num,cni_total_contract_price,cni_contract_start_date_et,cni_contract_start_date_gc,cni_contract_end_date_et,cni_contract_end_date_gc,cni_contact_person,cni_phone_number,cni_address,cni_email,cni_website,cni_project_id,cni_procrument_method,cni_bid_invitation_date,cni_bid_opening_date,cni_bid_evaluation_date,cni_bid_award_date,cni_bid_contract_signing_date,cni_description,cni_create_time,cni_update_time,cni_delete_time,cni_created_by,cni_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_contractor ';       
      $query .= ' INNER JOIN pms_contractor_type ON pms_project_contractor.cni_contractor_type_id = pms_contractor_type.cnt_id'; 
-
+$query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_contractor.cni_project_id';
      $query .=' WHERE 1=1';
+ $prjName=$request->input('prj_name');
+if(isset($prjName) && isset($prjName)){
+$query .=" AND prj_name LIKE '%".$prjName."%'"; 
+}
+$prjCode=$request->input('prj_code');
+if(isset($prjCode) && isset($prjCode)){
+$query .=" AND prj_code='".$prjCode."'"; 
+}
+$startTime=$request->input('contractsign_dateStart');
+if(isset($startTime) && isset($startTime)){
+$query .=" AND cni_bid_contract_signing_date >='".$startTime." 00 00 00'"; 
+}
+$endTime=$request->input('contractsign_dateEnd');
+if(isset($endTime) && isset($endTime)){
+$query .=" AND cni_bid_contract_signing_date <='".$endTime." 23 59 59'"; 
+}
      $cniid=$request->input('cni_id');
 if(isset($cniid) && isset($cniid)){
 $query .=' AND cni_id="'.$cniid.'"'; 
@@ -318,7 +334,7 @@ $query .=' AND cni_tin_num="'.$cnitinnum.'"';
 }
 $cnicontractortypeid=$request->input('cni_contractor_type_id');
 if(isset($cnicontractortypeid) && isset($cnicontractortypeid)){
-$query .=' AND cni_contractor_type_id="'.$cnicontractortypeid.'"'; 
+$query .=" AND cni_contractor_type_id='".$cnicontractortypeid."'"; 
 }
 $cnivatnum=$request->input('cni_vat_num');
 if(isset($cnivatnum) && isset($cnivatnum)){
@@ -364,9 +380,9 @@ $cniwebsite=$request->input('cni_website');
 if(isset($cniwebsite) && isset($cniwebsite)){
 $query .=' AND cni_website="'.$cniwebsite.'"'; 
 }
-$cniprojectid=$request->input('project_id');
+$cniprojectid=$request->input('cni_project_id');
 if(isset($cniprojectid) && isset($cniprojectid)){
-$query .= " AND cni_project_id = '$cniprojectid'";
+$query .= " AND cni_project_id = '".$cniprojectid."'";
 
 }
 $cniprocrumentmethod=$request->input('cni_procrument_method');

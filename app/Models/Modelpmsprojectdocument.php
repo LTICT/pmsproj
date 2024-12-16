@@ -25,7 +25,7 @@ class Modelpmsprojectdocument extends Model
      *
      * @var array
      */
-    protected $fillable = ['prd_id','prd_project_id','prd_document_type_id','prd_name','prd_file_path','prd_size','prd_file_extension','prd_uploaded_date','prd_description','prd_create_time','prd_update_time','prd_delete_time','prd_created_by','prd_status',];
+    protected $fillable = ['prd_id','prd_project_id','prd_document_type_id','prd_name','prd_file_path','prd_size','prd_file_extension','prd_uploaded_date','prd_description','prd_create_time','prd_update_time','prd_delete_time','prd_created_by','prd_status','prd_owner_type_id', 'prd_owner_id'];
 
     
 

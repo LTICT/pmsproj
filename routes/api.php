@@ -323,6 +323,22 @@ Route::post('users/listgrid', 'Api\TblusersController@listgrid');
     Route::post('project_variation/search', 'PmsprojectvariationController@search');
     Route::post('project_variation/getform', 'PmsprojectvariationController@getForm');
     Route::post('project_variation/getlistform', 'PmsprojectvariationController@getListForm');
+
+    Route::post('project_budget_plan/listgrid', 'Api\PmsprojectbudgetplanController@listgrid');
+    Route::post('project_budget_plan/insertgrid', 'Api\PmsprojectbudgetplanController@insertgrid');
+    Route::post('project_budget_plan/updategrid', 'Api\PmsprojectbudgetplanController@updategrid');
+    Route::post('project_budget_plan/deletegrid', 'Api\PmsprojectbudgetplanController@deletegrid');
+    Route::post('project_budget_plan/search', 'PmsprojectbudgetplanController@search');
+    Route::post('project_budget_plan/getform', 'PmsprojectbudgetplanController@getForm');
+    Route::post('project_budget_plan/getlistform', 'PmsprojectbudgetplanController@getListForm');
+
+    Route::post('budget_month/listgrid', 'Api\PmsbudgetmonthController@listgrid');
+    Route::post('budget_month/insertgrid', 'Api\PmsbudgetmonthController@insertgrid');
+    Route::post('budget_month/updategrid', 'Api\PmsbudgetmonthController@updategrid');
+    Route::post('budget_month/deletegrid', 'Api\PmsbudgetmonthController@deletegrid');
+    Route::post('budget_month/search', 'PmsbudgetmonthController@search');
+    Route::post('budget_month/getform', 'PmsbudgetmonthController@getForm');
+    Route::post('budget_month/getlistform', 'PmsbudgetmonthController@getListForm');
     //END NEWLY ADDED
    
    // Route::post('department/listgrid', [\Api\GendepartmentController::class, 'listgrid'])->middleware('apilogin');

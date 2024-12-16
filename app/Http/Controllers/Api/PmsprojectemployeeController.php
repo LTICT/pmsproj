@@ -253,29 +253,48 @@ function getListForm(Request $request)
         return redirect('project_employee')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT emp_id,emp_id_no,emp_full_name,emp_email,emp_phone_num,emp_role,emp_project_id,emp_start_date_ec,emp_start_date_gc,emp_end_date_ec,emp_end_date_gc,emp_address,emp_description,emp_create_time,emp_update_time,emp_delete_time,emp_created_by,emp_current_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_employee ';       
+     $query='SELECT prj_name,prj_code,emp_id,emp_id_no,emp_full_name,emp_email,emp_phone_num,emp_role,emp_project_id,emp_start_date_ec,emp_start_date_gc,emp_end_date_ec,emp_end_date_gc,emp_address,emp_description,emp_create_time,emp_update_time,emp_delete_time,emp_created_by,emp_current_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_employee ';       
      
+$query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_employee.emp_project_id';
      $query .=' WHERE 1=1';
-     $empid=$request->input('emp_id');
-if(isset($empid) && isset($empid)){
-$query .=' AND emp_id="'.$empid.'"'; 
+ $prjName=$request->input('prj_name');
+if(isset($prjName) && isset($prjName)){
+$query .=" AND prj_name LIKE '%".$prjName."%'"; 
 }
+$prjCode=$request->input('prj_code');
+if(isset($prjCode) && isset($prjCode)){
+$query .=" AND prj_code='".$prjCode."'"; 
+}
+$startTime=$request->input('employee_dateStart');
+if(isset($startTime) && isset($startTime)){
+$query .=" AND emp_start_date_gc >='".$startTime." 00 00 00'"; 
+}
+$endTime=$request->input('employee_dateEnd');
+if(isset($endTime) && isset($endTime)){
+$query .=" AND emp_start_date_gc <='".$endTime." 23 59 59'"; 
+}
+
 $empidno=$request->input('emp_id_no');
 if(isset($empidno) && isset($empidno)){
-$query .=' AND emp_id_no="'.$empidno.'"'; 
+$query .=" AND emp_id_no LIKE '%".$empidno."%'"; 
+}
+$empemail=$request->input('emp_email');
+if(isset($empemail) && isset($empemail)){
+$query .=" AND emp_email LIKE '%".$empemail."%'"; 
+}
+$empphonenum=$request->input('emp_phone_num');
+if(isset($empphonenum) && isset($empphonenum)){
+$query .=" AND emp_phone_num LIKE '%".$empphonenum."%'"; 
+}
+$empid=$request->input('emp_id');
+if(isset($empid) && isset($empid)){
+$query .=' AND emp_id="'.$empid.'"'; 
 }
 $empfullname=$request->input('emp_full_name');
 if(isset($empfullname) && isset($empfullname)){
 $query .=' AND emp_full_name="'.$empfullname.'"'; 
 }
-$empemail=$request->input('emp_email');
-if(isset($empemail) && isset($empemail)){
-$query .=' AND emp_email="'.$empemail.'"'; 
-}
-$empphonenum=$request->input('emp_phone_num');
-if(isset($empphonenum) && isset($empphonenum)){
-$query .=' AND emp_phone_num="'.$empphonenum.'"'; 
-}
+
 $emprole=$request->input('emp_role');
 if(isset($emprole) && isset($emprole)){
 $query .=' AND emp_role="'.$emprole.'"'; 

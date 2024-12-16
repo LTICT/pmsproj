@@ -233,7 +233,7 @@ function getListForm(Request $request)
         return redirect('project_budget_source')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT bsr_id,bsr_name,bsr_project_id,bsr_budget_source_id,bsr_amount,bsr_status,bsr_description,bsr_created_by,bsr_created_date,bsr_create_time,bsr_update_time,1 AS is_editable, 1 AS is_deletable FROM pms_project_budget_source ';
+     $query='SELECT prj_name,prj_code,bsr_id,bsr_name,bsr_project_id,bsr_budget_source_id,bsr_amount,bsr_status,bsr_description,bsr_created_by,bsr_created_date,bsr_create_time,bsr_update_time,1 AS is_editable, 1 AS is_deletable FROM pms_project_budget_source ';
      $query .='INNER JOIN pms_project ON pms_project.prj_id=pms_project_budget_source.bsr_project_id';    
      
      $query .=' WHERE 1=1';
