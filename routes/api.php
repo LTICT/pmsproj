@@ -235,7 +235,7 @@ Route::post('users/getform', 'TblusersController@getForm');
 Route::post('users/getlistform', 'TblusersController@getListForm');
 Route::post('addressbyparent', 'Api\GenaddressstructureController@addressByParent');
 Route::resource('address_structure', 'GenaddressstructureController');
-Route::post('address_structure/listgrid', 'Api\GenaddressstructureController@listgrid');
+//Route::post('address_structure/listgrid', 'Api\GenaddressstructureController@listgrid');
 Route::post('address_structure/insertgrid', 'Api\GenaddressstructureController@insertgrid');
 Route::post('address_structure/updategrid', 'Api\GenaddressstructureController@updategrid');
 Route::post('address_structure/deletegrid', 'Api\GenaddressstructureController@deletegrid');
@@ -345,7 +345,7 @@ Route::post('users/listgrid', 'Api\TblusersController@listgrid');
 Route::group(['middleware' => [\App\Http\Middleware\JwtMiddleware::class], 'except' => ['api/login', 'api/register']], function () {
  Route::post('dashboard_builder', 'Api\GendashboardbuilderController@listgrid');
 Route::post('menus', 'Api\GenmenubuilderController@listgrid');
-
+Route::post('address_structure/listgrid', 'Api\GenaddressstructureController@listgrid');
 //Route::resource('roles', 'TblrolesController');
        //Route::post('menus', 'Api\GenmenubuilderController@listgrid');
        

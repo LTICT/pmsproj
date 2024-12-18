@@ -273,6 +273,18 @@ $endTime=$request->input('employee_dateEnd');
 if(isset($endTime) && isset($endTime)){
 $query .=" AND emp_start_date_gc <='".$endTime." 23 59 59'"; 
 }
+$prjlocationregionid=$request->input('prj_location_region_id');
+if(isset($prjlocationregionid) && isset($prjlocationregionid)){
+$query .=" AND prj_location_region_id='".$prjlocationregionid."'"; 
+}
+$prjlocationzoneid=$request->input('prj_location_zone_id');
+if(isset($prjlocationzoneid) && isset($prjlocationzoneid)){
+$query .=" AND prj_location_zone_id='".$prjlocationzoneid."'"; 
+}
+$prjlocationworedaid=$request->input('prj_location_woreda_id');
+if(isset($prjlocationworedaid) && isset($prjlocationworedaid)){
+$query .=" AND prj_location_woreda_id='".$prjlocationworedaid."'"; 
+}
 
 $empidno=$request->input('emp_id_no');
 if(isset($empidno) && isset($empidno)){

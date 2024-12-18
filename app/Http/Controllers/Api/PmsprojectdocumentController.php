@@ -481,7 +481,7 @@ public function insertgrid(Request $request)
                     $requestData['prd_file_path']=$fileName;
                 } 
 
-        //$status= $request->input('prd_status');
+        $status= $request->input('prd_status');
         if($status=="true"){
             $requestData['prd_status']=1;
         }else{

@@ -254,9 +254,38 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 //END BY PARENT ID
 
     public function listgrid(Request $request){
-     $query='SELECT add_id AS id,add_name_or AS name,add_parent_id AS "rootId",0 AS selected FROM gen_address_structure ';       
-     
-     $query .=' WHERE 1=1';
+      $authenticatedUser = $request->authUser;
+        $userId=$authenticatedUser->usr_id;
+        //$userId=19;
+     //$query='SELECT add_id AS id,add_name_or AS name,add_parent_id AS "rootId",0 AS selected FROM gen_address_structure ';
+     if($userId!=9){ 
+     $query ='WITH RECURSIVE children AS (
+    SELECT
+        add_id AS id,
+        add_name_or AS name,
+        0::integer AS "rootId",
+        0 AS selected
+    FROM
+        gen_address_structure
+    INNER JOIN tbl_users ON tbl_users.usr_zone_id = gen_address_structure.add_id
+    WHERE
+        usr_id = '.$userId.'
+    UNION ALL
+    SELECT
+        a.add_id AS id,
+        a.add_name_or AS name,
+        a.add_parent_id::integer AS "rootId",
+        0 AS selected
+    FROM
+        gen_address_structure a
+    INNER JOIN children cd ON a.add_parent_id::text = cd.id::text
+)
+SELECT * FROM children';
+}else{
+    $query='SELECT add_id AS id,add_name_or AS name,add_parent_id AS "rootId",0 AS selected FROM gen_address_structure ';
+}
+     //$query .=' INNER JOIN tbl_users ON tbl_users.usr_zone_id=gen_address_structure.add_id'; 
+     //$query .=" WHERE usr_id=".$userId." ";
      $addid=$request->input('add_id');
 if(isset($addid) && isset($addid)){
 $query .=' AND add_id="'.$addid.'"'; 

@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\MyController;
-use App\Modelpmsprojectplan;
+use App\Models\Modelpmsprojectplan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -241,12 +241,37 @@ function getListForm(Request $request)
         return redirect('project_plan')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT pld_id,pld_name,pld_project_id,pld_budget_year_id,pld_start_date_ec,pld_start_date_gc,pld_end_date_ec,pld_end_date_gc,pld_description,pld_create_time,pld_update_time,pld_delete_time,pld_created_by,pld_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_plan ';       
-     
-     $query .=' WHERE 1=1';
-     $pldid=$request->input('pld_id');
-if(isset($pldid) && isset($pldid)){
-$query .=' AND pld_id="'.$pldid.'"'; 
+     $query='SELECT prj_name,prj_code,bdy_name, pld_id,pld_name,pld_project_id,pld_budget_year_id,pld_start_date_ec,pld_start_date_gc,pld_end_date_ec,pld_end_date_gc,pld_description,pld_create_time,pld_update_time,pld_delete_time,pld_created_by,pld_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_plan ';       
+     $query .= ' INNER JOIN pms_budget_year ON pms_project_plan.pld_budget_year_id = pms_budget_year.bdy_id';
+     $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_plan.pld_project_id';
+$query .=' WHERE 1=1';
+ $prjName=$request->input('prj_name');
+if(isset($prjName) && isset($prjName)){
+$query .=" AND prj_name LIKE '%".$prjName."%'"; 
+}
+$prjCode=$request->input('prj_code');
+if(isset($prjCode) && isset($prjCode)){
+$query .=" AND prj_code='".$prjCode."'"; 
+}
+$startTime=$request->input('projectplan_dateStart');
+if(isset($startTime) && isset($startTime)){
+$query .=" AND pld_start_date_gc >='".$startTime." 00 00 00'"; 
+}
+$endTime=$request->input('projectplan_dateEnd');
+if(isset($endTime) && isset($endTime)){
+$query .=" AND pld_start_date_gc <='".$endTime." 23 59 59'"; 
+}
+$prjlocationregionid=$request->input('prj_location_region_id');
+if(isset($prjlocationregionid) && isset($prjlocationregionid)){
+$query .=" AND prj_location_region_id='".$prjlocationregionid."'"; 
+}
+$prjlocationzoneid=$request->input('prj_location_zone_id');
+if(isset($prjlocationzoneid) && isset($prjlocationzoneid)){
+$query .=" AND prj_location_zone_id='".$prjlocationzoneid."'"; 
+}
+$prjlocationworedaid=$request->input('prj_location_woreda_id');
+if(isset($prjlocationworedaid) && isset($prjlocationworedaid)){
+$query .=" AND prj_location_woreda_id='".$prjlocationworedaid."'"; 
 }
 $pldname=$request->input('pld_name');
 if(isset($pldname) && isset($pldname)){
@@ -448,6 +473,7 @@ public function insertgrid(Request $request)
     }else{
         $requestData = $request->all();
         //$requestData['pld_created_by']=auth()->user()->usr_Id;
+        $requestData['pld_created_by']=1;
         $status= $request->input('pld_status');
         if($status=="true"){
             $requestData['pld_status']=1;

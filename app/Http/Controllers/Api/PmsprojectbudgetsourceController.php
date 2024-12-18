@@ -233,8 +233,9 @@ function getListForm(Request $request)
         return redirect('project_budget_source')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT prj_name,prj_code,bsr_id,bsr_name,bsr_project_id,bsr_budget_source_id,bsr_amount,bsr_status,bsr_description,bsr_created_by,bsr_created_date,bsr_create_time,bsr_update_time,1 AS is_editable, 1 AS is_deletable FROM pms_project_budget_source ';
-     $query .='INNER JOIN pms_project ON pms_project.prj_id=pms_project_budget_source.bsr_project_id';    
+     $query='SELECT prj_name,prj_code,pbs_name_or,bsr_id,bsr_name,bsr_project_id,bsr_budget_source_id,bsr_amount,bsr_status,bsr_description,bsr_created_by,bsr_created_date,bsr_create_time,bsr_update_time,1 AS is_editable, 1 AS is_deletable FROM pms_project_budget_source ';
+     $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_budget_source.bsr_project_id'; 
+     $query .=' INNER JOIN pms_budget_source ON pms_budget_source.pbs_id=pms_project_budget_source.bsr_budget_source_id';    
      
      $query .=' WHERE 1=1';
      $bsrid=$request->input('bsr_id');
@@ -245,7 +246,18 @@ $prjCode=$request->input('prj_code');
 if(isset($prjCode) && isset($prjCode)){
 $query .=" AND prj_code='".$prjCode."'"; 
 }
-
+$prjlocationregionid=$request->input('prj_location_region_id');
+if(isset($prjlocationregionid) && isset($prjlocationregionid)){
+//$query .=" AND prj_location_region_id='".$prjlocationregionid."'"; 
+}
+$prjlocationzoneid=$request->input('prj_location_zone_id');
+if(isset($prjlocationzoneid) && isset($prjlocationzoneid)){
+$query .=" AND prj_location_zone_id='".$prjlocationzoneid."'"; 
+}
+$prjlocationworedaid=$request->input('prj_location_woreda_id');
+if(isset($prjlocationworedaid) && isset($prjlocationworedaid)){
+$query .=" AND prj_location_woreda_id='".$prjlocationworedaid."'"; 
+}
 $bsrname=$request->input('bsr_name');
 if(isset($bsrname) && isset($bsrname)){
 $query .=' AND bsr_name="'.$bsrname.'"'; 
