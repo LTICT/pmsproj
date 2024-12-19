@@ -616,9 +616,13 @@ public function insertgrid(Request $request)
         }else{
             $requestData['usr_status']=0;
         }
+        $requestData['usr_status']=1;
         $requestData['email']=$request->input('usr_email');
-        $requestData['password']=bcrypt($request->get('usr_password'));
+        $requestData['password']=bcrypt($request->get('usr_password'));        
+        $requestData['usr_created_by']=1;
         $data_info=Modeltblusers::create($requestData);
+        $data_info['is_editable']=1;
+        $data_info['is_deletable']=1;
         $resultObject= array(
             "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
