@@ -340,7 +340,13 @@ Route::post('users/listgrid', 'Api\TblusersController@listgrid');
     Route::post('budget_month/getform', 'PmsbudgetmonthController@getForm');
     Route::post('budget_month/getlistform', 'PmsbudgetmonthController@getListForm');
     //END NEWLY ADDED
-   
+Route::post('statistics/getprojectstatistics', 'Api\StatisticalReportController@getprojectstatistics');
+Route::post('statistics/getprojectemployees', 'Api\StatisticalReportController@getprojectemployees');
+Route::post('statistics/getprojectbudgetplan', 'Api\StatisticalReportController@getprojectbudgetplan');
+Route::post('statistics/getprojectbudgetexpenditure', 'Api\StatisticalReportController@getprojectbudgetexpenditure');
+Route::post('statistics/getprojectbudgetsource', 'Api\StatisticalReportController@getprojectbudgetsource');
+Route::post('statistics/getprojectcontractor', 'Api\StatisticalReportController@getprojectcontractor');
+Route::post('statistical_report/getstatistics', 'Api\StatisticalReportController@getStatistics');
    // Route::post('department/listgrid', [\Api\GendepartmentController::class, 'listgrid'])->middleware('apilogin');
 Route::group(['middleware' => [\App\Http\Middleware\JwtMiddleware::class], 'except' => ['api/login', 'api/register']], function () {
  Route::post('dashboard_builder', 'Api\GendashboardbuilderController@listgrid');

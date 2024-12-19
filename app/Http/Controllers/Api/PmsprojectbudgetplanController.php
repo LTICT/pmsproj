@@ -233,9 +233,12 @@ function getListForm(Request $request)
         return redirect('project_budget_plan')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT bpl_id,bpl_project_id,bpl_budget_year_id,bpl_budget_code_id,bpl_amount,bpl_description,bpl_status,bpl_created_by,bpl_create_time,bpl_update_time,1 AS is_editable, 1 AS is_deletable FROM pms_project_budget_plan ';
+     $query='SELECT bpl_id,bpl_project_id,prj_name,prj_code,pms_budget_year.bdy_name As bpl_budget_year, bpl_budget_year_id,pms_expenditure_code.pec_name  As bpl_budget_code, bpl_budget_code_id,bpl_amount,bpl_description,bpl_status,bpl_created_by,bpl_create_time,bpl_update_time,1 AS is_editable, 1 AS is_deletable FROM pms_project_budget_plan ';
      $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_budget_plan.bpl_project_id';
+     $query .=' INNER JOIN pms_expenditure_code ON pms_expenditure_code.pec_id=pms_project_budget_plan.bpl_budget_code_id';
+       $query .=' INNER JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_project_budget_plan.bpl_budget_year_id';
      $query .=' WHERE 1=1';
+
  $prjName=$request->input('prj_name');
 if(isset($prjName) && isset($prjName)){
 $query .=" AND prj_name LIKE '%".$prjName."%'"; 
@@ -333,13 +336,8 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'bpl_project_id'=> 'max:200', 
-'bpl_budget_year_id'=> 'max:200', 
-'bpl_budget_code_id'=> 'max:200', 
 'bpl_amount'=> 'numeric', 
 'bpl_description'=> 'max:425', 
-//'bpl_status'=> 'integer', 
-//'bpl_created_date'=> 'integer', 
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -417,10 +415,7 @@ public function insertgrid(Request $request)
 'bpl_created_date'=> trans('form_lang.bpl_created_date'), 
 
     ];
-    $rules= [
-        'bpl_project_id'=> 'max:200', 
-'bpl_budget_year_id'=> 'max:200', 
-'bpl_budget_code_id'=> 'max:200', 
+    $rules= [ 
 'bpl_amount'=> 'numeric', 
 'bpl_description'=> 'max:425', 
 
@@ -440,6 +435,7 @@ public function insertgrid(Request $request)
     }else{
         $requestData = $request->all();
         //$requestData['bpl_created_by']=auth()->user()->usr_Id;
+        $requestData['bpl_created_by']=2;
         $status= $request->input('bpl_status');
         if($status=="true"){
             $requestData['bpl_status']=1;

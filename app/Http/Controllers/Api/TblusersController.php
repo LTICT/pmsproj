@@ -318,11 +318,11 @@ $query .=' AND usr_password="'.$usrpassword.'"';
 }
 $usrfullname=$request->input('usr_full_name');
 if(isset($usrfullname) && isset($usrfullname)){
-$query .=' AND usr_full_name="'.$usrfullname.'"'; 
+$query .=" AND usr_full_name='".$usrfullname."'"; 
 }
 $usrphonenumber=$request->input('usr_phone_number');
 if(isset($usrphonenumber) && isset($usrphonenumber)){
-$query .=' AND usr_phone_number="'.$usrphonenumber.'"'; 
+$query .=" AND usr_phone_number='".$usrphonenumber."'"; 
 }
 $usrroleid=$request->input('usr_role_id');
 if(isset($usrroleid) && isset($usrroleid)){

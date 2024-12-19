@@ -190,13 +190,11 @@ function getListForm(Request $request)
 
     ];
     $rules= [
-        'bdm_month'=> 'max:200', 
-'bdm_name_or'=> 'max:200', 
-'bdm_name_am'=> 'max:200', 
-'bdm_name_en'=> 'max:200', 
-'bdm_code'=> 'max:200', 
+'bdm_name_or'=> 'max:100', 
+'bdm_name_am'=> 'max:100', 
+'bdm_name_en'=> 'max:100', 
+'bdm_code'=> 'max:20', 
 'bdm_description'=> 'max:425', 
-'bdm_status'=> 'integer', 
 
     ];     
     $validator = Validator::make ( $request->all(), $rules );
@@ -318,13 +316,11 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'bdm_month'=> 'max:200', 
-'bdm_name_or'=> 'max:200', 
-'bdm_name_am'=> 'max:200', 
-'bdm_name_en'=> 'max:200', 
-'bdm_code'=> 'max:200', 
+'bdm_name_or'=> 'max:100', 
+'bdm_name_am'=> 'max:100', 
+'bdm_name_en'=> 'max:100', 
+'bdm_code'=> 'max:20', 
 'bdm_description'=> 'max:425', 
-
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -402,11 +398,10 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-        'bdm_month'=> 'max:200', 
-'bdm_name_or'=> 'max:200', 
-'bdm_name_am'=> 'max:200', 
-'bdm_name_en'=> 'max:200', 
-'bdm_code'=> 'max:200', 
+'bdm_name_or'=> 'max:100', 
+'bdm_name_am'=> 'max:100', 
+'bdm_name_en'=> 'max:100', 
+'bdm_code'=> 'max:20', 
 'bdm_description'=> 'max:425', 
 
     ];
@@ -425,6 +420,7 @@ public function insertgrid(Request $request)
     }else{
         $requestData = $request->all();
         //$requestData['bdm_created_by']=auth()->user()->usr_Id;
+        $requestData['bdm_created_by']=1;
         $status= $request->input('bdm_status');
         if($status=="true"){
             $requestData['bdm_status']=1;

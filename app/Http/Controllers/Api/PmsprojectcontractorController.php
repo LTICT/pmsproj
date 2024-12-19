@@ -300,7 +300,7 @@ function getListForm(Request $request)
         return redirect('project_contractor')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT prj_name,prj_code, cni_id,cni_name,cni_tin_num,pms_contractor_type.cnt_type_name_or AS contractor_name,cni_contractor_type_id,cni_vat_num,cni_total_contract_price,cni_contract_start_date_et,cni_contract_start_date_gc,cni_contract_end_date_et,cni_contract_end_date_gc,cni_contact_person,cni_phone_number,cni_address,cni_email,cni_website,cni_project_id,cni_procrument_method,cni_bid_invitation_date,cni_bid_opening_date,cni_bid_evaluation_date,cni_bid_award_date,cni_bid_contract_signing_date,cni_description,cni_create_time,cni_update_time,cni_delete_time,cni_created_by,cni_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_contractor ';       
+     $query='SELECT prj_name,prj_code, cni_id,cni_name,cni_tin_num,pms_contractor_type.cnt_type_name_or AS cni_contractor_type,cni_contractor_type_id,cni_vat_num,cni_total_contract_price,cni_contract_start_date_et,cni_contract_start_date_gc,cni_contract_end_date_et,cni_contract_end_date_gc,cni_contact_person,cni_phone_number,cni_address,cni_email,cni_website,cni_project_id,cni_procrument_method,cni_bid_invitation_date,cni_bid_opening_date,cni_bid_evaluation_date,cni_bid_award_date,cni_bid_contract_signing_date,cni_description,cni_create_time,cni_update_time,cni_delete_time,cni_created_by,cni_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_contractor ';       
      $query .= ' INNER JOIN pms_contractor_type ON pms_project_contractor.cni_contractor_type_id = pms_contractor_type.cnt_id'; 
 $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_contractor.cni_project_id';
      $query .=' WHERE 1=1';
@@ -483,28 +483,22 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'cni_name'=> 'max:200', 
+'cni_name'=> 'max:100', 
 'cni_tin_num'=> 'max:16', 
-'cni_contractor_type_id'=> 'max:200', 
+'cni_contractor_type_id'=> 'max:100', 
 'cni_vat_num'=> 'max:45', 
-'cni_total_contract_price'=> 'max:200', 
-//'cni_contract_start_date_et'=> 'max:200', 
-'cni_contract_start_date_gc'=> 'max:200', 
-//'cni_contract_end_date_et'=> 'max:10', 
 'cni_contract_end_date_gc'=> 'max:10', 
-'cni_contact_person'=> 'max:45', 
-'cni_phone_number'=> 'max:45', 
-'cni_address'=> 'max:250', 
-'cni_email'=> 'max:45', 
-'cni_website'=> 'max:45', 
-'cni_project_id'=> 'max:200', 
-'cni_bid_invitation_date'=> 'max:15', 
-'cni_bid_opening_date'=> 'max:15', 
-'cni_bid_evaluation_date'=> 'max:15', 
-'cni_bid_award_date'=> 'max:15', 
-'cni_bid_contract_signing_date'=> 'max:15', 
+'cni_contact_person'=> 'max:100', 
+'cni_phone_number'=> 'max:15', 
+'cni_address'=> 'max:425', 
+'cni_email'=> 'max:50', 
+'cni_website'=> 'max:50', 
+'cni_bid_invitation_date'=> 'max:10', 
+'cni_bid_opening_date'=> 'max:10', 
+'cni_bid_evaluation_date'=> 'max:10', 
+'cni_bid_award_date'=> 'max:10', 
+'cni_bid_contract_signing_date'=> 'max:10', 
 'cni_description'=> 'max:425', 
-//'cni_status'=> 'integer', 
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -598,28 +592,22 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-        'cni_name'=> 'max:200', 
-'cni_tin_num'=> 'max:16', 
-'cni_contractor_type_id'=> 'max:200', 
-'cni_vat_num'=> 'max:45', 
-'cni_total_contract_price'=> 'max:200', 
-//'cni_contract_start_date_et'=> 'max:200', 
-'cni_contract_start_date_gc'=> 'max:200', 
-//'cni_contract_end_date_et'=> 'max:10', 
-'cni_contract_end_date_gc'=> 'max:10', 
-'cni_contact_person'=> 'max:45', 
-'cni_phone_number'=> 'max:45', 
-'cni_address'=> 'max:250', 
-'cni_email'=> 'max:45', 
-'cni_website'=> 'max:45', 
-'cni_project_id'=> 'max:200', 
-'cni_bid_invitation_date'=> 'max:15', 
-'cni_bid_opening_date'=> 'max:15', 
-'cni_bid_evaluation_date'=> 'max:15', 
-'cni_bid_award_date'=> 'max:15', 
-'cni_bid_contract_signing_date'=> 'max:15', 
-'cni_description'=> 'max:425', 
-//'cni_status'=> 'integer', 
+    'cni_name'=> 'max:100', 
+    'cni_tin_num'=> 'max:20', 
+    'cni_contractor_type_id'=> 'max:100', 
+    'cni_vat_num'=> 'max:45', 
+    'cni_contract_end_date_gc'=> 'max:10', 
+    'cni_contact_person'=> 'max:100', 
+    'cni_phone_number'=> 'max:15', 
+    'cni_address'=> 'max:425', 
+    'cni_email'=> 'max:100', 
+    'cni_website'=> 'max:100', 
+    'cni_bid_invitation_date'=> 'max:10', 
+    'cni_bid_opening_date'=> 'max:10', 
+    'cni_bid_evaluation_date'=> 'max:10', 
+    'cni_bid_award_date'=> 'max:10', 
+    'cni_bid_contract_signing_date'=> 'max:10', 
+    'cni_description'=> 'max:425', 
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
