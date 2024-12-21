@@ -349,7 +349,7 @@ Route::post('statistics/getprojectcontractor', 'Api\StatisticalReportController@
 Route::post('statistical_report/getstatistics', 'Api\StatisticalReportController@getStatistics');
 
 Route::post('report/getreport', 'Api\ReportController@getReport');
-
+Route::post('refreshtoken', 'RefreshTokenController@refresh');
    // Route::post('department/listgrid', [\Api\GendepartmentController::class, 'listgrid'])->middleware('apilogin');
 Route::group(['middleware' => [\App\Http\Middleware\JwtMiddleware::class], 'except' => ['api/login', 'api/register']], function () {
  Route::post('dashboard_builder', 'Api\GendashboardbuilderController@listgrid');
