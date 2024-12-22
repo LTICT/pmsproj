@@ -40,7 +40,12 @@ class AuthController extends Controller
                 'message'=>'Incorrect email/Password'
             ], 401);
         }
+//STAR TTEST
 
+        // Set the refresh token in an HTTP-only cookie
+        $cookie = cookie('refresh-token', $token, 60 * 60 * 24 * 7, null, null, null, true); // 7 days expiration
+       // return response()->json(['access_token' => $token])->withCookie($cookie);
+        //END TEST
         $user = auth('api')->user();
         return response()->json([
             'status'=> 'success',
@@ -49,7 +54,7 @@ class AuthController extends Controller
                 'token' => $token,
                 'type' => 'bearer'
             ]
-        ]);
+        ])->withCookie($cookie);
     }
     /* Register API */
     public function register(Request $request)

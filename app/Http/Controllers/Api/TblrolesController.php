@@ -219,7 +219,7 @@ function getListForm(Request $request)
     public function listgrid(Request $request){
         //$authenticatedUser = $request->authUser;
         //$userId=$authenticatedUser->usr_id;
-     $query='SELECT rol_id,rol_name,rol_description,rol_create_time,rol_update_time,rol_delete_time,rol_created_by,rol_status,1 AS is_editable, 1 AS is_deletable,COUNT(*) OVER () AS total_count FROM tbl_roles ';       
+     $query='SELECT rol_id,rol_name,rol_description,rol_create_time,rol_update_time,rol_delete_time,rol_created_by,rol_status,1 AS is_editable, 0 AS is_deletable,COUNT(*) OVER () AS total_count FROM tbl_roles ';       
     
      $query .=' WHERE 1=1';
      $rolid=$request->input('rol_id');
@@ -273,7 +273,7 @@ $query .=' AND rol_status="'.$rolstatus.'"';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>0,'is_role_can_add'=>1));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)

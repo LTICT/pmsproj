@@ -17,6 +17,18 @@ class MyController extends Controller
 	function test(){
 		echo "something";
 	}
+	public function getUserInfo(Request $request){
+		 $authenticatedUser = $request->authUser;
+        $userId=$authenticatedUser->usr_id;
+        $query="SELECT usr_zone_id,usr_woreda_id,usr_department_id,usr_sector_id
+     FROM tbl_users 
+     WHERE usr_id=".$userId."";
+     $data_info=DB::select($query);
+     if(isset($data_info) && !empty($data_info)){
+     	return $data_info[0];
+     }
+     return null;
+	}
 	public function getSearchSetting($fileName)
 	{
 		$filePath='public/search/'.$fileName.'.json';

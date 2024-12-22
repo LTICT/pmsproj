@@ -381,7 +381,7 @@ $query .= ' LEFT JOIN pms_sector_information ON pms_project.prj_sector_id = pms_
 $query .= ' LEFT JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id'; 
 
 $query .= ' LEFT JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id'; */
-$query='SELECT prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id, prj_project_budget_source_id,prj_total_estimate_budget,prj_total_actual_budget,
+$query='SELECT prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id, prj_project_budget_source_id,prj_total_estimate_budget,prj_total_actual_budget,
 prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,prj_location_kebele_id,
 prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_kebele_id,prj_owner_description,
 prj_start_date_et,prj_start_date_gc,prj_start_date_plan_et,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,
@@ -556,7 +556,7 @@ $query .=' AND prj_rural_ben_number="'.$prjruralbennumber.'"';
         $query.=' AND (add_name LIKE "%'.$search.'%")  ';
     }
 }
-//$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
+$query.=' ORDER BY prj_id DESC';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
@@ -778,6 +778,13 @@ public function insertgrid(Request $request)
             $requestData['prj_status']=1;
         }else{
             $requestData['prj_status']=0;
+        }
+        $userInfo=$this->getUserInfo($request);
+        if(isset($userInfo)){
+            $requestData['prj_owner_region_id']=1;
+            $requestData['prj_owner_zone_id']=$userInfo->usr_zone_id;
+            $requestData['prj_owner_woreda_id']=$userInfo->usr_woreda_id;
+            $requestData['prj_sector_id']=$userInfo->usr_sector_id;
         }
         $data_info=Modelpmsproject::create($requestData);
         $resultObject= array(
