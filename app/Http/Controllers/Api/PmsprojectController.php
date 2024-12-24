@@ -558,9 +558,19 @@ $query .=' AND prj_rural_ben_number="'.$prjruralbennumber.'"';
 }
 $query.=' ORDER BY prj_id DESC';
 $data_info=DB::select($query);
+$authenticatedUser = $request->authUser;
+        $userId=$authenticatedUser->usr_id;
+if($userId==79){
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1),
+'allowedTabs'=> [1,3,6]);
+}else{
+    $resultObject= array(
+    "data" =>$data_info,
+    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1),
+'allowedTabs'=> array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16));
+}
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
