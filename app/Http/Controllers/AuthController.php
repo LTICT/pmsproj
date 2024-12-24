@@ -33,6 +33,7 @@ class AuthController extends Controller
         $cridentials=array('email'=>$request->input('email'),'password'=>$request->input('password'));
        // dd($cridentials);
         //$token = Auth::attempt($cridentials);
+        try{
         $token = auth('api')->attempt($cridentials);
         if(!$token){
             return response()->json([
@@ -40,10 +41,14 @@ class AuthController extends Controller
                 'message'=>'Incorrect email/Password'
             ], 401);
         }
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'Could not create token'], 500);
+        }
 //STAR TTEST
-
+//$refreshToken = JWTAuth::refresh(); 
         // Set the refresh token in an HTTP-only cookie
-        $cookie = cookie('refresh-token', $token, 60 * 60 * 24 * 7, null, null, null, true); // 7 days expiration
+  //      $cookie = cookie('refresh-token', $refreshToken, 60 * 60 * 24 * 7, null, null, null, true); // 7 days expiration
+
        // return response()->json(['access_token' => $token])->withCookie($cookie);
         //END TEST
         $user = auth('api')->user();
@@ -54,7 +59,7 @@ class AuthController extends Controller
                 'token' => $token,
                 'type' => 'bearer'
             ]
-        ])->withCookie($cookie);
+        ]);
     }
     /* Register API */
     public function register(Request $request)

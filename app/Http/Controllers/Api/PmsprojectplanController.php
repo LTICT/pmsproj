@@ -481,6 +481,8 @@ public function insertgrid(Request $request)
             $requestData['pld_status']=0;
         }
         $data_info=Modelpmsprojectplan::create($requestData);
+        $data_info['is_editable']=1;
+        $data_info['is_deletable']=1;
         $resultObject= array(
             "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),

@@ -787,6 +787,8 @@ public function insertgrid(Request $request)
             $requestData['prj_sector_id']=$userInfo->usr_sector_id;
         }
         $data_info=Modelpmsproject::create($requestData);
+        $data_info['is_editable']=1;
+        $data_info['is_deletable']=1;
         $resultObject= array(
             "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),

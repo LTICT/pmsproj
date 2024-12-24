@@ -561,8 +561,7 @@ public function insertgrid(Request $request)
 'usr_remember_token'=> trans('form_lang.usr_remember_token'), 
 'usr_notified'=> trans('form_lang.usr_notified'), 
 'usr_description'=> trans('form_lang.usr_description'), 
-'usr_status'=> trans('form_lang.usr_status'), 
-
+'usr_status'=> trans('form_lang.usr_status')
     ];
     $rules= [
         'usr_email'=> 'max:200', 
@@ -621,6 +620,14 @@ public function insertgrid(Request $request)
         $requestData['password']=bcrypt($request->get('usr_password'));        
         $requestData['usr_created_by']=1;
         $data_info=Modeltblusers::create($requestData);
+        //START ADD DEFAULT ROLE
+        if(isset($data_info) && !empty($data_info)){
+            $role_usr_data['url_role_id']=8;
+            $role_usr_data['url_user_id']=$data_info->usr_id;
+            //$role_usr_data['usr_role_id']=$data_info
+            \App\Models\Modeltbluserrole::create($role_usr_data);
+        }
+        //START ADD DEFAULT ROLE
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;
         $resultObject= array(

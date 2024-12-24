@@ -20,7 +20,7 @@ class MyController extends Controller
 	public function getUserInfo(Request $request){
 		 $authenticatedUser = $request->authUser;
         $userId=$authenticatedUser->usr_id;
-        $query="SELECT usr_zone_id,usr_woreda_id,usr_department_id,usr_sector_id
+        $query="SELECT usr_id,usr_zone_id,usr_woreda_id,usr_department_id,usr_sector_id
      FROM tbl_users 
      WHERE usr_id=".$userId."";
      $data_info=DB::select($query);

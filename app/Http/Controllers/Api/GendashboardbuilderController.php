@@ -421,8 +421,7 @@ public function updategrid(Request $request)
         $data_info=Modeltblpermission::create($requestData);
         $data_info['pag_id']=$request->get('pag_id');
         $data_info['pag_name']=$request->get('pag_name');
-        $data_info['is_editable']=1;
-            $data_info['is_deletable']=1;
+        
          $resultObject= array(
             "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
@@ -519,5 +518,87 @@ function listRoutes(){
     Route::post('permission/getform', 'TblpermissionController@getForm');
     Route::post('permission/getlistform', 'TblpermissionController@getListForm');
 
+}
+
+public function dashboardData(Request $request){
+         $authenticatedUser = $request->authUser;
+        $userId=$authenticatedUser->usr_id;
+$combinedArray = [];
+//START PROJECT
+$query="SELECT COUNT(prj_id) as count_result, sci_name_or FROM pms_project 
+INNER JOIN pms_sector_information ON pms_project.prj_sector_id=pms_sector_information.sci_id WHERE 1=1 ";
+$query=$this->getSearchParam($request,$query);
+$query .=" GROUP BY sci_name_or";
+$data_info1=DB::select($query);
+$resultObject1= array("data" =>$data_info1,"name"=>"dash_project_count", "type"=>'chart',"column_list"=>"sci_name_or,count_result","dashboard_type"=>"total_count","class_name"=>"col-sm-4");
+if(isset($data_info1) && !empty($data_info1) && $data_info1 !=="" && $data_info1[0]->count_result !==null){
+$combinedArray[] = $resultObject1; 
+}
+
+$query="SELECT sci_name_or, COUNT(prj_id) as count_result FROM pms_project INNER JOIN pms_sector_information ON pms_project.prj_sector_id=pms_sector_information.sci_id WHERE 1=1";
+$query=$this->getSearchParam($request,$query);
+$query .=" GROUP BY sci_name_or";
+$data_info1=DB::select($query);
+$resultObject1= array("data" =>$data_info1,"name"=>"dash_project_by_sector", "type"=>'chart',"column_list"=>"sci_name_or,count_result","dashboard_type"=>"table","class_name"=>"col-sm-4");
+if(isset($data_info1) && !empty($data_info1)){
+$combinedArray[] = $resultObject1; 
+}
+
+$query="SELECT COUNT(prj_id) as value, add_name_or AS name FROM pms_project INNER JOIN gen_address_structure 
+ON pms_project.prj_location_zone_id=gen_address_structure.add_id WHERE 1=1";
+$query=$this->getSearchParam($request,$query);
+$query .=" GROUP BY add_name_or";
+$data_info1=DB::select($query);
+$resultObject1= array("data" =>$data_info1,"name"=>"dash_project_by_address", "type"=>'chart',"column_list"=>"","dashboard_type"=>"chart","class_name"=>"col-sm-4");
+if(isset($data_info1) && !empty($data_info1)){
+$combinedArray[] = $resultObject1; 
+}
+
+$query="SELECT prp_type, SUM(prp_payment_amount) AS prp_payment_amount
+FROM pms_project 
+INNER JOIN pms_project_payment ON pms_project_payment.prp_project_id = pms_project.prj_id WHERE 1=1 ";
+$query=$this->getSearchParam($request,$query);
+$query .=" GROUP BY prp_type";
+$data_info1=DB::select($query);
+$resultObject1= array("data" =>$data_info1,"name"=>"dash_project_payment", "type"=>'group_count',"column_list"=>"prp_type,prp_payment_amount","dashboard_type"=>"group_count","class_name"=>"col-sm-4");
+if(isset($data_info1) && !empty($data_info1)){
+$combinedArray[] = $resultObject1; 
+}
+
+$query="SELECT COUNT(usr_id) as count_result FROM tbl_users ";
+$data_info1=DB::select($query);
+$resultObject1= array("data" =>$data_info1,"name"=>"dash_users_count", "type"=>'chart',"column_list"=>"sci_name_or,count_result","dashboard_type"=>"total_count","class_name"=>"col-sm-4");
+$combinedArray[] = $resultObject1; 
+
+$query="SELECT SUM(bdr_released_amount) AS count_result
+FROM pms_budget_request
+INNER JOIN pms_project ON pms_budget_request.bdr_project_id = pms_project.prj_id WHERE 1=1 ";
+$query=$this->getSearchParam($request,$query);
+$data_info1=DB::select($query);
+$resultObject1= array("data" =>$data_info1,"name"=>"dash_released_budget", "type"=>'chart',"column_list"=>"sci_name_or,count_result","dashboard_type"=>"total_count","class_name"=>"col-sm-4");
+if(isset($data_info1) && !empty($data_info1) && $data_info1 !=="" && $data_info1[0]->count_result !==null){
+$combinedArray[] = $resultObject1; 
+}
+$resultObject= array("data" =>$combinedArray);
+return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
+//END EXPERIMENT
+}
+public function getSearchParam($request,$query){
+    $userInfo=$this->getUserInfo($request);
+        if(isset($userInfo) && $userInfo->usr_id !=9){
+            $zoneId=$userInfo->usr_zone_id;
+            $woredaId=$userInfo->usr_woreda_id;
+            $sectorId=$userInfo->usr_sector_id;
+            if(isset($zoneId) && !empty($zoneId)){
+              $query .=" AND prj_location_zone_id='".$zoneId."'";   
+            }
+            if(isset($woredaId) && !empty($woredaId)){
+              $query .=" AND prj_location_woreda_id='".$woredaId."'";   
+            }
+            if(isset($sectorId) && !empty($sectorId)){
+              $query .=" AND prj_sector_id='".$sectorId."'";   
+            }
+        }
+return $query;
 }
 }

@@ -261,12 +261,14 @@ Route::post('me', 'TokenController@validateToken');
 Route::post('refreshToken', 'TokenController@refreshToken');
    // Route::post('department/listgrid', [\Api\GendepartmentController::class, 'listgrid'])->middleware('apilogin');
 Route::group(['middleware' => [\App\Http\Middleware\JwtMiddleware::class], 'except' => ['api/login', 'api/register']], function () {
+    Route::resource('project', 'Api\PmsprojectController');
     Route::post('project/listgrid', 'Api\PmsprojectController@listgrid');
 Route::post('project/insertgrid', 'Api\PmsprojectController@insertgrid');
 Route::post('project/updategrid', 'Api\PmsprojectController@updategrid');
 Route::post('project/deletegrid', 'Api\PmsprojectController@deletegrid');
 Route::post('project/search', 'PmsprojectController@search');
- Route::post('dashboard_builder', 'Api\GendashboardbuilderController@listgrid');
+
+ Route::post('dashboard_builder', 'Api\GendashboardbuilderController@dashboardData');
 Route::post('menus', 'Api\GenmenubuilderController@listgrid');
 Route::post('address_structure/listgrid', 'Api\GenaddressstructureController@listgrid');
        Route::post('roles/updategrid', 'Api\TblrolesController@updategrid');
