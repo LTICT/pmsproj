@@ -381,7 +381,7 @@ $query .= ' LEFT JOIN pms_sector_information ON pms_project.prj_sector_id = pms_
 $query .= ' LEFT JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id'; 
 
 $query .= ' LEFT JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id'; */
-$query='SELECT prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id, prj_project_budget_source_id,prj_total_estimate_budget,prj_total_actual_budget,
+$query='SELECT prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id, prj_project_budget_source_id,prj_total_estimate_budget,prj_total_actual_budget,
 prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,prj_location_kebele_id,
 prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_kebele_id,prj_owner_description,
 prj_start_date_et,prj_start_date_gc,prj_start_date_plan_et,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,
@@ -564,7 +564,7 @@ if($userId==79){
 $resultObject= array(
     "data" =>$data_info,
     "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1),
-'allowedTabs'=> [1,3,6]);
+'allowedTabs'=> [2,4,3,6,7]);
 }else{
     $resultObject= array(
     "data" =>$data_info,
@@ -613,8 +613,10 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'prj_name'=> 'max:200', 
-'prj_code'=> 'max:15', 
+        'prj_name'=> 'max:200',
+'prj_name_am'=> 'max:200',
+'prj_name_en'=> 'max:200', 
+'prj_code'=> 'max:20', 
 'prj_project_status_id'=> 'max:200', 
 'prj_project_category_id'=> 'max:200', 
 'prj_project_budget_source_id'=> 'max:200', 
@@ -742,8 +744,10 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-'prj_name'=> 'max:200', 
-'prj_code'=> 'max:10', 
+'prj_name'=> 'max:200',
+'prj_name_am'=> 'max:200',
+'prj_name_en'=> 'max:200', 
+'prj_code'=> 'max:20', 
 'prj_project_status_id'=> 'max:200', 
 'prj_project_category_id'=> 'max:200', 
 'prj_project_budget_source_id'=> 'max:200', 

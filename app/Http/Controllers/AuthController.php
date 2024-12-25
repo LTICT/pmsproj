@@ -34,6 +34,8 @@ class AuthController extends Controller
        // dd($cridentials);
         //$token = Auth::attempt($cridentials);
         try{
+        $data_info['is_editable']=1;
+        $data_info['is_deletable']=1;
         $token = auth('api')->attempt($cridentials);
         if(!$token){
             return response()->json([
@@ -155,6 +157,8 @@ class AuthController extends Controller
       $data_info = Modeltblusers::findOrFail($userId);
       $data_info->update($request_data);
      $resultObject= array(
+                "data" =>$data_info,
+            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
             "is_updated"=>true,
                 "status_code"=>200,
                 "type"=>"update",

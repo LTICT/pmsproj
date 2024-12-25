@@ -525,10 +525,10 @@ public function dashboardData(Request $request){
         $userId=$authenticatedUser->usr_id;
 $combinedArray = [];
 //START PROJECT
-$query="SELECT COUNT(prj_id) as count_result, sci_name_or FROM pms_project 
+$query="SELECT COUNT(prj_id) as count_result FROM pms_project 
 INNER JOIN pms_sector_information ON pms_project.prj_sector_id=pms_sector_information.sci_id WHERE 1=1 ";
 $query=$this->getSearchParam($request,$query);
-$query .=" GROUP BY sci_name_or";
+//$query .=" GROUP BY sci_name_or";
 $data_info1=DB::select($query);
 $resultObject1= array("data" =>$data_info1,"name"=>"dash_project_count", "type"=>'chart',"column_list"=>"sci_name_or,count_result","dashboard_type"=>"total_count","class_name"=>"col-sm-4");
 if(isset($data_info1) && !empty($data_info1) && $data_info1 !=="" && $data_info1[0]->count_result !==null){

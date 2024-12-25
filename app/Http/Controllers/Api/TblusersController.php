@@ -299,10 +299,11 @@ $data['related_gen_department']= $gen_department_set ;
      usr_role_id,usr_region_id, usr_zone_id,usr_woreda_id,usr_kebele_id,usr_sector_id,
      usr_department_id,usr_is_active,usr_picture,usr_last_logged_in,usr_ip,
      usr_remember_token,usr_notified,usr_description,usr_create_time,
-     usr_update_time,usr_delete_time,usr_created_by,usr_status,1 AS is_editable, 1 AS is_deletable FROM tbl_users ';       
-     //$query .= ' INNER JOIN gen_address_structure ON tbl_users.usr_zone_id = gen_address_structure.add_id'; 
-//$query .= ' INNER JOIN gen_department ON tbl_users.usr_department_id = gen_department.dep_id';
-$query .= ' INNER JOIN pms_sector_information ON tbl_users.usr_sector_id = pms_sector_information.sci_id';
+     usr_update_time,usr_delete_time,usr_created_by,usr_status,1 AS is_editable, 1 AS is_deletable,
+     gen_address_structure.add_name_or AS zone_name, gen_department.dep_name_or as dep_name FROM tbl_users ';       
+$query .= ' INNER JOIN gen_address_structure ON tbl_users.usr_zone_id = gen_address_structure.add_id'; 
+$query .= ' INNER JOIN gen_department ON tbl_users.usr_department_id = gen_department.dep_id';
+$query .= ' LEFT JOIN pms_sector_information ON tbl_users.usr_sector_id = pms_sector_information.sci_id';
      $query .=' WHERE 1=1';
      $usrid=$request->input('usr_id');
 if(isset($usrid) && isset($usrid)){
@@ -540,6 +541,7 @@ public function updategrid(Request $request)
     }        
 }
 }
+
 public function insertgrid(Request $request)
 {
     $attributeNames = [
@@ -639,6 +641,75 @@ public function insertgrid(Request $request)
         );
     }  
     return response()->json($resultObject);
+}
+
+public function changeuserstatus(Request $request)
+{
+    $attributeNames = [
+        'usr_email'=> trans('form_lang.usr_email'),
+'usr_status'=> trans('form_lang.usr_status'), 
+
+    ];
+    $rules= [
+ 'usr_email'=> 'max:200',  
+'usr_id'=> 'max:15', 
+    ];
+    $validator = Validator::make ( $request->all(), $rules );
+    $validator->setAttributeNames($attributeNames);
+    if($validator->fails()) {
+        $errorString = implode(",",$validator->messages()->all());
+        $resultObject= array(
+            "odata.metadata"=>"",
+            "value" =>"",
+            "statusCode"=>"error",
+            "type"=>"update",
+            "errorMsg"=>$errorString
+        );
+        return response()->json($resultObject);
+    }else{
+        $id=$request->get("usr_id");
+        $requestData = $request->all();            
+        $status= $request->input('usr_status');
+            $requestData['usr_status']=$request->input('usr_status');
+        if(isset($id) && !empty($id)){
+            $data_info = Modeltblusers::findOrFail($id);
+            $data_info->update($requestData);
+            $ischanged=$data_info->wasChanged();
+            if($ischanged){
+               $resultObject= array(
+                "data" =>$data_info,
+            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+            "is_updated"=>true,
+                "status_code"=>200,
+                "type"=>"update",
+                "errorMsg"=>""
+            );
+           }else{
+            $resultObject= array(
+                "data" =>$data_info,
+            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+            "is_updated"=>true,
+                "status_code"=>200,
+                "type"=>"update",
+                "errorMsg"=>""
+            );
+        }
+        return response()->json($resultObject);
+    }else{
+        //Parent Id Assigment
+        //$requestData['ins_vehicle_id']=$request->get('master_id');
+        //$requestData['usr_created_by']=auth()->user()->usr_Id;
+        $data_info=Modeltblusers::create($requestData);
+        $resultObject= array(
+            "odata.metadata"=>"",
+            "value" =>$data_info,
+            "statusCode"=>200,
+            "type"=>"save",
+            "errorMsg"=>""
+        );
+        return response()->json($resultObject);
+    }        
+}
 }
 public function deletegrid(Request $request)
 {
