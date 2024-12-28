@@ -548,7 +548,7 @@ function buildTree(array $elements, $parentId = null) {
      //WHERE usr_id = '.$userId.' AND add_id::integer =0   
       $authenticatedUser = $request->authUser;
         $userId=$authenticatedUser->usr_id;
-        $userId=79;
+        //$userId=79;
         if($userId!=9){
          $query='WITH RECURSIVE address_hierarchy AS (
     SELECT 
