@@ -302,10 +302,10 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-'cnt_type_name_or'=> 'max:100', 
-'cnt_type_name_am'=> 'max:100', 
-'cnt_type_name_en'=> 'max:100', 
-'cnt_description'=> 'max:425', 
+'cnt_type_name_or'=> 'required|max:30', 
+'cnt_type_name_am'=> 'required|max:30', 
+'cnt_type_name_en'=> 'required|max:30', 
+'cnt_description'=> 'max:425', , 
 //'cnt_status'=> 'integer', 
 
     ];
@@ -383,9 +383,9 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-'cnt_type_name_or'=> 'max:100', 
-'cnt_type_name_am'=> 'max:100', 
-'cnt_type_name_en'=> 'max:100', 
+'cnt_type_name_or'=> 'required|max:30', 
+'cnt_type_name_am'=> 'required|max:30', 
+'cnt_type_name_en'=> 'required|max:30', 
 'cnt_description'=> 'max:425', 
 //'cnt_status'=> 'integer', 
 
@@ -433,6 +433,7 @@ public function deletegrid(Request $request)
         "odata.metadata"=>"",
         "value" =>"",
         "statusCode"=>200,
+        "deleted_id"=>$id,
         "type"=>"delete",
         "errorMsg"=>""
     );

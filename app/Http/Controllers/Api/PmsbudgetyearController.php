@@ -293,11 +293,9 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'bdy_name'=> 'max:4', 
-//'bdy_code'=> 'max:200', 
-'bdy_description'=> 'max:100', 
-//'bdy_status'=> 'integer', 
-
+      'bdy_name'=> 'required|max:4', 
+'bdy_code'=> 'max:10', 
+'bdy_description'=> 'max:425'
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -372,9 +370,9 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-        'bdy_name'=> 'max:4', 
-//'bdy_code'=> 'max:200', 
-'bdy_description'=> 'max:100', 
+        'bdy_name'=> 'required|max:4', 
+'bdy_code'=> 'max:10', 
+'bdy_description'=> 'max:425', 
 //'bdy_status'=> 'integer', 
 
     ];
@@ -417,6 +415,7 @@ public function deletegrid(Request $request)
         "odata.metadata"=>"",
         "value" =>"",
         "statusCode"=>200,
+        "deleted_id"=>$id,
         "type"=>"delete",
         "errorMsg"=>""
     );

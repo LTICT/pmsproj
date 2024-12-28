@@ -17,6 +17,20 @@ class MyController extends Controller
 	function test(){
 		echo "something";
 	}
+	public function getPagePermission($request,$pageId){
+		$authenticatedUser = $request->authUser;
+        $userId=$authenticatedUser->usr_id;
+        $query="SELECT tbl_permission.*
+     FROM tbl_permission 
+     INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id 
+     WHERE url_user_id=".$userId." AND pem_page_id=".$pageId."";
+     $data_info=DB::select($query);
+     if(isset($data_info) && !empty($data_info)){
+     	return $data_info[0];
+     }
+     return null;
+	}
+
 	public function getUserInfo(Request $request){
 		 $authenticatedUser = $request->authUser;
         $userId=$authenticatedUser->usr_id;
@@ -29,6 +43,7 @@ class MyController extends Controller
      }
      return null;
 	}
+
 	public function getSearchSetting($fileName)
 	{
 		$filePath='public/search/'.$fileName.'.json';

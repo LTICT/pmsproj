@@ -248,11 +248,7 @@ Route::post('users/listgrid', 'Api\TblusersController@listgrid');
     Route::post('project_budget_plan/deletegrid', 'Api\PmsprojectbudgetplanController@deletegrid');
     Route::post('project_budget_plan/search', 'PmsprojectbudgetplanController@search');
 
-    Route::post('budget_month/listgrid', 'Api\PmsbudgetmonthController@listgrid');
-    Route::post('budget_month/insertgrid', 'Api\PmsbudgetmonthController@insertgrid');
-    Route::post('budget_month/updategrid', 'Api\PmsbudgetmonthController@updategrid');
-    Route::post('budget_month/deletegrid', 'Api\PmsbudgetmonthController@deletegrid');
-    Route::post('budget_month/search', 'PmsbudgetmonthController@search');
+
 
     //END NEWLY ADDED
 Route::post('statistics/getprojectstatistics', 'Api\StatisticalReportController@getprojectstatistics');
@@ -278,4 +274,10 @@ Route::post('address_structure/listgrid', 'Api\GenaddressstructureController@lis
     Route::post('department/insertgrid', 'Api\GendepartmentController@insertgrid');
     Route::post('department/updategrid', 'Api\GendepartmentController@updategrid');
     Route::post('department/deletegrid', 'Api\GendepartmentController@deletegrid');
+
+        Route::post('budget_month/listgrid', 'Api\PmsbudgetmonthController@listgrid');
+    Route::post('budget_month/insertgrid', 'Api\PmsbudgetmonthController@insertgrid');
+    Route::post('budget_month/updategrid', 'Api\PmsbudgetmonthController@updategrid');
+    Route::post('budget_month/deletegrid', 'Api\PmsbudgetmonthController@deletegrid');
+    Route::post('budget_month/search', 'PmsbudgetmonthController@search');
 });

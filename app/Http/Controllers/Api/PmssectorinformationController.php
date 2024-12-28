@@ -259,7 +259,7 @@ function getListForm(Request $request)
     $query .= ' INNER JOIN gen_address_structure zone ON pms_sector_information.sci_available_at_zone = zone.add_id';
     $query .= ' INNER JOIN gen_address_structure woreda ON pms_sector_information.sci_available_at_woreda = woreda.add_id';*/
 
-    $query='SELECT sci_id,sci_name_or,sci_name_am,sci_name_en,sci_code,prj_sector_category.psc_name AS sci_sector_category_id, sci_available_at_region, sci_available_at_zone,sci_available_at_woreda,sci_description,sci_create_time,sci_update_time,sci_delete_time,sci_created_by,sci_status,1 AS is_editable, 1 AS is_deletable FROM pms_sector_information ';   
+    $query='SELECT sci_id,sci_name_or,sci_name_am,sci_name_en,sci_code,prj_sector_category.psc_name AS sector_name, sci_sector_category_id, sci_available_at_region, sci_available_at_zone,sci_available_at_woreda,sci_description,sci_create_time,sci_update_time,sci_delete_time,sci_created_by,sci_status,1 AS is_editable, 1 AS is_deletable FROM pms_sector_information ';   
      $query .= ' LEFT JOIN prj_sector_category ON pms_sector_information.sci_sector_category_id = prj_sector_category.psc_id'; 
 
      $query .=' WHERE 1=1';
@@ -507,6 +507,7 @@ public function deletegrid(Request $request)
         "odata.metadata"=>"",
         "value" =>"",
         "statusCode"=>200,
+        "deleted_id"=>$id,
         "type"=>"delete",
         "errorMsg"=>""
     );

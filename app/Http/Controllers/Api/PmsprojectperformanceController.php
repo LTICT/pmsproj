@@ -495,6 +495,7 @@ public function deletegrid(Request $request)
         "odata.metadata"=>"",
         "value" =>"",
         "statusCode"=>200,
+        "deleted_id"=>$id,
         "type"=>"delete",
         "errorMsg"=>""
     );

@@ -230,7 +230,12 @@ function getListForm(Request $request)
         return redirect('budget_month')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT bdm_id,bdm_month,bdm_name_or,bdm_name_am,bdm_name_en,bdm_code,bdm_description,bdm_create_time,bdm_update_time,bdm_delete_time,bdm_created_by,bdm_status,1 AS is_editable, 1 AS is_deletable FROM pms_budget_month ';       
+        $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+     $permissionData=$this->getPagePermission($request,45);
+     if(isset($permissionData) && !empty($permissionData)){
+        $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
+     }
+     $query="SELECT bdm_id,bdm_month,bdm_name_or,bdm_name_am,bdm_name_en,bdm_code,bdm_description,bdm_create_time,bdm_update_time,bdm_delete_time,bdm_created_by,bdm_status ".$permissionIndex." FROM pms_budget_month ";
      
      $query .=' WHERE 1=1';
      $bdmid=$request->input('bdm_id');
@@ -300,7 +305,7 @@ $query .=' AND bdm_status="'.$bdmstatus.'"';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
@@ -316,11 +321,12 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-'bdm_name_or'=> 'max:100', 
-'bdm_name_am'=> 'max:100', 
-'bdm_name_en'=> 'max:100', 
+'bdm_month'=> 'required|max:2', 
+'bdm_name_or'=> 'required|max:20', 
+'bdm_name_am'=> 'required|max:20', 
+'bdm_name_en'=> 'required|max:20', 
 'bdm_code'=> 'max:20', 
-'bdm_description'=> 'max:425', 
+'bdm_description'=> 'max:425',
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -398,9 +404,10 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-'bdm_name_or'=> 'max:100', 
-'bdm_name_am'=> 'max:100', 
-'bdm_name_en'=> 'max:100', 
+'bdm_month'=> 'required|max:2', 
+'bdm_name_or'=> 'required|max:20', 
+'bdm_name_am'=> 'required|max:20', 
+'bdm_name_en'=> 'required|max:20', 
 'bdm_code'=> 'max:20', 
 'bdm_description'=> 'max:425', 
 
@@ -450,7 +457,8 @@ public function deletegrid(Request $request)
         "value" =>"",
         "statusCode"=>200,
         "type"=>"delete",
-        "errorMsg"=>""
+        "errorMsg"=>"",
+        "deleted_id"=>$id,
     );
     return response()->json($resultObject);
 }
