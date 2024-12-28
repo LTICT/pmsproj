@@ -517,4 +517,99 @@ function listRoutes(){
     Route::post('address_structure/getlistform', 'GenaddressstructureController@getListForm');
 
 }
+function buildHierarchy(array $elements, $parentId=1) {
+    $branch = [];
+    //dd($elements);
+    foreach ($elements as $element) {
+        //dd($element);
+        if ($element['rootId'] == $parentId) {
+            $children = $this->buildHierarchy($elements, $element['id']);
+            $element['children'] = $children;
+            $branch[] = $element;
+        }
+    }
+    return $branch;
+}
+
+function buildTree(array $elements, $parentId = null) {
+    $branch = [];
+    foreach ($elements as $element) {
+        if ($element->rootId == $parentId) {
+            $children = $this->buildTree($elements, $element->id);
+            $element->children = $children;
+            $branch[] = $element;
+        }
+    }
+
+    return $branch;
+}
+    public function listaddress(Request $request){
+        //INNER JOIN tbl_users ON tbl_users.usr_zone_id = gen_address_structure.add_id
+     //WHERE usr_id = '.$userId.' AND add_id::integer =0   
+      $authenticatedUser = $request->authUser;
+        $userId=$authenticatedUser->usr_id;
+        $userId=79;
+        if($userId!=9){
+         $query='WITH RECURSIVE address_hierarchy AS (
+    SELECT 
+        add_id AS id,
+        add_name_or AS name,
+        add_parent_id AS "rootId",
+        ARRAY[]::json[] AS children -- Initialize children as empty array
+    FROM gen_address_structure 
+    INNER JOIN tbl_users ON tbl_users.usr_zone_id = gen_address_structure.add_id
+     WHERE usr_id = '.$userId.' 
+    UNION ALL
+    SELECT 
+        g.add_id AS id,
+        g.add_name_or AS name,
+        g.add_parent_id AS "rootId",
+        ARRAY[]::json[] AS children
+    FROM gen_address_structure g
+    INNER JOIN address_hierarchy h ON g.add_parent_id::text = h.id::text -- Link child nodes to parents
+)
+SELECT * FROM address_hierarchy';
+}else{
+   $query='WITH RECURSIVE address_hierarchy AS (
+    SELECT 
+        add_id AS id,
+        add_name_or AS name,
+        add_parent_id AS "rootId",
+        ARRAY[]::json[] AS children -- Initialize children as empty array
+    FROM gen_address_structure 
+     WHERE add_id::integer =1 
+    UNION ALL
+    SELECT 
+        g.add_id AS id,
+        g.add_name_or AS name,
+        g.add_parent_id AS "rootId",
+        ARRAY[]::json[] AS children
+    FROM gen_address_structure g
+    INNER JOIN address_hierarchy h ON g.add_parent_id::text = h.id::text -- Link child nodes to parents
+)
+SELECT * FROM address_hierarchy';
+}
+
+     $masterId=$request->input('master_id');
+     if(isset($masterId) && !empty($masterId)){
+        //set foreign key field name
+        //$query .=' AND add_name="'.$masterId.'"'; 
+     }
+     $search=$request->input('search');
+     if(isset($search) && !empty($search)){
+       $advanced= $request->input('adva-search');
+       if(isset($advanced) && $advanced =='on'){
+           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
+       }else{
+        $query.=' AND (add_name LIKE "%'.$search.'%")  ';
+    }
+}
+//$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
+$data_info=DB::select($query);
+$hierarchicalData = $this->buildHierarchy(json_decode(json_encode($data_info), true));
+$resultObject= array(
+    "data" =>$hierarchicalData,
+    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
+}
 }

@@ -235,8 +235,7 @@ function getListForm(Request $request)
      if(isset($permissionData) && !empty($permissionData)){
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
      }
-     $query="SELECT bdm_id,bdm_month,bdm_name_or,bdm_name_am,bdm_name_en,bdm_code,bdm_description,bdm_create_time,bdm_update_time,bdm_delete_time,bdm_created_by,bdm_status ".$permissionIndex." FROM pms_budget_month ";
-     
+     $query="SELECT bdm_id,bdm_month,bdm_name_or,bdm_name_am,bdm_name_en,bdm_code,bdm_description,bdm_create_time,bdm_update_time,bdm_delete_time,bdm_created_by,bdm_status ".$permissionIndex." FROM pms_budget_month ";     
      $query .=' WHERE 1=1';
      $bdmid=$request->input('bdm_id');
 if(isset($bdmid) && isset($bdmid)){

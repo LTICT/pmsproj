@@ -268,6 +268,8 @@ Route::post('project/search', 'PmsprojectController@search');
  Route::post('dashboard_builder', 'Api\GendashboardbuilderController@dashboardData');
 Route::post('menus', 'Api\GenmenubuilderController@listgrid');
 Route::post('address_structure/listgrid', 'Api\GenaddressstructureController@listgrid');
+Route::post('address_structure/listaddress', 'Api\GenaddressstructureController@listaddress');
+
        Route::post('roles/updategrid', 'Api\TblrolesController@updategrid');
        Route::post('roles/listgrid', 'Api\TblrolesController@listgrid');
     Route::post('department/listgrid', 'Api\GendepartmentController@listgrid');
