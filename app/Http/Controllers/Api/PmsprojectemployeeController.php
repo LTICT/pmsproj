@@ -404,7 +404,7 @@ public function updategrid(Request $request)
 'emp_email'=> 'max:50', 
 'emp_phone_num'=> 'max:200', 
 'emp_role'=> 'max:200', 
-'emp_project_id'=> 'max:200', 
+
 'emp_start_date_ec'=> 'max:200', 
 'emp_start_date_gc'=> 'max:200', 
 'emp_end_date_ec'=> 'max:10', 
@@ -498,8 +498,7 @@ public function insertgrid(Request $request)
 'emp_full_name'=> 'max:200', 
 'emp_email'=> 'max:50', 
 'emp_phone_num'=> 'max:200', 
-'emp_role'=> 'max:200', 
-'emp_project_id'=> 'max:200', 
+'emp_role'=> 'max:200',
 'emp_start_date_ec'=> 'max:200', 
 'emp_start_date_gc'=> 'max:200', 
 'emp_end_date_ec'=> 'max:10', 

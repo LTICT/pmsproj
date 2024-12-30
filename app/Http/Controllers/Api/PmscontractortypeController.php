@@ -305,7 +305,7 @@ public function updategrid(Request $request)
 'cnt_type_name_or'=> 'required|max:30', 
 'cnt_type_name_am'=> 'required|max:30', 
 'cnt_type_name_en'=> 'required|max:30', 
-'cnt_description'=> 'max:425', , 
+'cnt_description'=> 'max:425',
 //'cnt_status'=> 'integer', 
 
     ];

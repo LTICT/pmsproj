@@ -256,7 +256,7 @@ use App\Http\Controllers\MyController;
     if(isset($pbereason) && isset($pbereason)){
     $query .=' AND pbe_reason="'.$pbereason.'"'; 
     }
-    $pbeprojectid=$request->input('pbe_project_id');
+    $pbeprojectid=$request->input('project_id');
     if(isset($pbeprojectid) && isset($pbeprojectid)){
     $query .=" AND pbe_project_id='".$pbeprojectid."'"; 
     }
@@ -272,35 +272,6 @@ use App\Http\Controllers\MyController;
     if(isset($pbeuseddategc) && isset($pbeuseddategc)){
     $query .=' AND pbe_used_date_gc="'.$pbeuseddategc.'"'; 
     }
-    $ppeamount=$request->input('ppe_amount');
-    if(isset($ppeamount) && isset($ppeamount)){
-    $query .=' AND ppe_amount="'.$ppeamount.'"'; 
-    }
-    $pbestatus=$request->input('pbe_status');
-    if(isset($pbestatus) && isset($pbestatus)){
-    $query .=' AND pbe_status="'.$pbestatus.'"'; 
-    }
-    $pbedescription=$request->input('pbe_description');
-    if(isset($pbedescription) && isset($pbedescription)){
-    $query .=' AND pbe_description="'.$pbedescription.'"'; 
-    }
-    $pbecreatedby=$request->input('pbe_created_by');
-    if(isset($pbecreatedby) && isset($pbecreatedby)){
-    $query .=' AND pbe_created_by="'.$pbecreatedby.'"'; 
-    }
-    $pbecreateddate=$request->input('pbe_created_date');
-    if(isset($pbecreateddate) && isset($pbecreateddate)){
-    $query .=' AND pbe_created_date="'.$pbecreateddate.'"'; 
-    }
-    $pbecreatetime=$request->input('pbe_create_time');
-    if(isset($pbecreatetime) && isset($pbecreatetime)){
-    $query .=' AND pbe_create_time="'.$pbecreatetime.'"'; 
-    }
-    $pbeupdatetime=$request->input('pbe_update_time');
-    if(isset($pbeupdatetime) && isset($pbeupdatetime)){
-    $query .=' AND pbe_update_time="'.$pbeupdatetime.'"'; 
-    }
-
          $masterId=$request->input('master_id');
          if(isset($masterId) && !empty($masterId)){
             //set foreign key field name

@@ -334,7 +334,7 @@ $query .=' AND acl_status="'.$aclstatus.'"';
         $query.=' AND (add_name LIKE "%'.$search.'%")  ';
     }
 }
-//$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
+$query.=' ORDER BY acl_id DESC';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,

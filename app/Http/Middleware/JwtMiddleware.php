@@ -32,8 +32,10 @@ class JwtMiddleware
             $requestData['acl_object_name'] = $request->fullUrl();
             $requestData['acl_object_id'] = $request->userAgent();
             //$requestData['acl_remark'] = $request->all();
-            //$requestData['acl_description'] = serialize($request->input()->all());
-            
+            $requestData['acl_description'] = json_encode($request->input());
+            $requestData['acl_user_id']=$user->usr_id;
+            //serialize($request->input()->all());
+            //dd($request->input());
         $data_info=Modeltblaccesslog::create($requestData);
         $request->authUser = $user;
         } catch (JWTException $e) {
