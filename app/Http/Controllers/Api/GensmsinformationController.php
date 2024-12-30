@@ -103,7 +103,6 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'smi_sms_template_id'=> 'max:200', 
 'smi_sent_to'=> 'max:200', 
 'smi_sent_date'=> 'max:200', 
 'smi_sms_content'=> 'max:200', 
@@ -182,7 +181,6 @@ public function insertgrid(Request $request)
 'smi_status'=> trans('form_lang.smi_status'), 
     ];
     $rules= [
-        'smi_sms_template_id'=> 'max:200', 
 'smi_sent_to'=> 'max:200', 
 'smi_sent_date'=> 'max:200', 
 'smi_sms_content'=> 'max:200', 

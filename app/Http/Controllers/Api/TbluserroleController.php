@@ -305,8 +305,7 @@ public function updategrid(Request $request)
         'url_role_id'=> 'max:200', 
 'url_user_id'=> 'max:200', 
 'url_description'=> 'max:425', 
-'url_status'=> 'integer', 
-
+//'url_status'=> 'integer',
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -384,8 +383,7 @@ public function insertgrid(Request $request)
         'url_role_id'=> 'max:200', 
 'url_user_id'=> 'max:200', 
 'url_description'=> 'max:425', 
-'url_status'=> 'integer', 
-
+//'url_status'=> 'integer', 
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
