@@ -57,13 +57,14 @@ RUN chown -R www-data:www-data $DEPLOY_DIR \
 # ---------------------------------------------------------
 # 5. Configure Nginx (assumes you have a custom site conf)
 # ---------------------------------------------------------
-# Example: you have a dev_app_backend.conf that listens on port 1144
-COPY dev_app_backend.conf /etc/nginx/sites-available/dev_app_backend
+# Example: you have a dev_app_backend.conf that listens on port 1155
+COPY ngnix_backend.conf /etc/nginx/sites-available/dev_app_backend
 RUN ln -s /etc/nginx/sites-available/dev_app_backend /etc/nginx/sites-enabled/ \
     && rm -f /etc/nginx/sites-enabled/default
 
+
 # ---------------------------------------------------------
-# 6. Expose port 1144 and start Nginx + PHP-FPM
+# 6. Expose port 1155 and start Nginx + PHP-FPM
 # ---------------------------------------------------------
 EXPOSE 1155
 
