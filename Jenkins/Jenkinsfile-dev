@@ -2,78 +2,82 @@ pipeline {
     agent any
 
     environment {
-        PHP_VERSION = '8.2' 
-        COMPOSER_CACHE = "$HOME/.composer"
-        DEPLOY_DIR = '/var/www/dev_app_backend'
-        NGINX_CONF = '/etc/nginx/sites-available/dev_app_backend'
+        // Update to your own Docker image name/tag
+        DOCKER_IMAGE = 'otecpms/laravel-app'
+        DOCKER_TAG  = 'latest'
+ 
+        FULL_DOCKER_IMAGE = "${DOCKER_IMAGE}:${DOCKER_TAG}"
+        REGISTRY_CREDENTIALS = 'dockerhub-credentials' // Jenkins credentials ID for Docker registry
+    }       
+    options {
+        retry(3) // Retry up to 3 times
     }
+
 
     stages {
-        stage('Pull Code') {
+        stage('Checkout') {
             steps {
-                git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/LTICT/pmsproj.git'
+                // Pull the source code from GitHub
+                git branch: 'main', 
+                    credentialsId: 'github-token', 
+                    url: 'https://github.com/LTICT/pmsproj.git'
             }
         }
 
-        stage('Copy .env File') {
-            steps {
-                sh 'cp /home/testthree/env/backend/.env .'
-            }
-        }
-
-        stage('Install Dependencies') {
+        stage('Build Docker Image') {
             steps {
                 script {
-                    sh '''
-                    echo "Downloading Composer from a mirror..."
-                    curl -sS https://mirrors.aliyun.com/composer/composer.phar -o composer.phar
-                    php composer.phar install --no-interaction --prefer-dist --no-progress
-                    '''
+                    // Build the image using the Dockerfile in your repo
+                    sh """
+                        docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+                    """
+                }
+            }
+        }
+ 
+     
+           stage('Push to Docker Registry') {
+            steps {
+                script {
+                    // If you want to push the image to a registry like Docker Hub:
+                    docker.withRegistry('', "${REGISTRY_CREDENTIALS}") {
+                        sh """
+                            docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
+                        """
+                    }
                 }
             }
         }
 
-        stage('Deploy to Development Environment') {
+     
+        stage('Deploy (Run Docker Container)') {
             steps {
                 script {
-                    sh '''
-                    echo "Deploying application to ${DEPLOY_DIR}..."
+                    // Optional: remove existing container before re-deploy
+                    sh """
+                        docker rm -f laravel_app || true
+                    """
 
-                    # Sync workspace to deployment directory
-                    sudo rsync -av --delete --exclude=".git" --exclude="node_modules" "${WORKSPACE}/" "${DEPLOY_DIR}/"
-
-                    # Ensure proper ownership and permissions
-                    sudo chown -R www-data:www-data ${DEPLOY_DIR}
-                    sudo chmod -R 775 ${DEPLOY_DIR}/storage ${DEPLOY_DIR}/bootstrap/cache
-                    '''
+                    // Run a new container from the built image on port 1144
+                    sh """
+                        docker run -d -p 1155:1155 --name laravel_app \
+                            --restart always \
+                            ${DOCKER_IMAGE}:${DOCKER_TAG}
+                    """
                 }
             }
         }
-stage('Configure Nginx') {
-    steps {
-        script {
-            sh '''
-            echo "Configuring Nginx for Laravel application on port 1144..."
-
-           
-            # Reload Nginx
-            sudo systemctl reload nginx || (echo "Nginx reload failed!" && exit 1)
-            '''
-        }
-    }
-}
-
     }
 
     post {
         always {
-            echo 'Pipeline finished, cleaning up if necessary...'
+            echo 'Pipeline has finished.'
         }
         success {
             echo 'Build and deploy were successful!'
         }
         failure {
-            echo 'Build or deploy failed!'
+            echo 'Build or deploy failed.'
         }
     }
 }
