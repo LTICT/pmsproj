@@ -65,7 +65,7 @@ RUN ln -s /etc/nginx/sites-available/dev_app_backend /etc/nginx/sites-enabled/ \
 # ---------------------------------------------------------
 # 6. Expose port 1144 and start Nginx + PHP-FPM
 # ---------------------------------------------------------
-EXPOSE 1144
+EXPOSE 1155
 
 # Start both processes in the foreground so Docker can track them.
 CMD service php8.2-fpm start && nginx -g 'daemon off;'
