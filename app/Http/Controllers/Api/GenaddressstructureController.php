@@ -390,7 +390,7 @@ public function updategrid(Request $request)
         );
         return response()->json($resultObject);
     }else{
-        $id=$request->get("id");
+        $id=$request->get("add_id");
         //$requestData['foreign_field_name']=$request->get('master_id');
             //assign data from of foreign key
         $requestData = $request->all();            
@@ -400,21 +400,21 @@ public function updategrid(Request $request)
         }else{
             $requestData['add_status']=0;
         }
-            $data_info = Modelgenaddressstructure::findOrFail($id);
-            $requestData['add_name_or']= $request->input('name');
-        $requestData['add_parent_id']= $request->input('rootId');
-        $requestData['add_id']= $request->input('id');
-        
+           $data_info = Modelgenaddressstructure::findOrFail($id);
+            //$requestData['add_name_or']= $request->input('name');
+        //$requestData['add_parent_id']= $request->input('rootId');
+        //$requestData['add_id']= $request->input('id');
             $data_info->update($requestData);
-             $new_data_info['id']= $request->input('id');
-        $new_data_info['name']= $request->input('name');
-        $new_data_info['rootId']= $request->input('rootId');
-        $new_data_info['selected']= 0;
-        
+             //$new_data_info['id']= $request->input('id');
+        //$new_data_info['name']= $request->input('name');
+        //$new_data_info['rootId']= $request->input('rootId');
+        //$new_data_info['selected']= 0;
+        //$new_data_info['add_id']= $data_info->add_id;
+        //$new_data_info['add_name_or']= $request->input('add_name_or');
             $ischanged=$data_info->wasChanged();
             if($ischanged){
                $resultObject= array(
-                "data" =>$new_data_info,
+                "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
             "is_updated"=>true,
                 "status_code"=>200,
@@ -423,7 +423,7 @@ public function updategrid(Request $request)
             );
            }else{
             $resultObject= array(
-                "data" =>$new_data_info,
+                "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
             "is_updated"=>true,
                 "status_code"=>200,
@@ -451,6 +451,7 @@ public function insertgrid(Request $request)
     $rules= [
         'add_name_or'=> 'max:30'
     ];
+    //dd($request->all());
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
     if($validator->fails()) {
@@ -474,16 +475,17 @@ public function insertgrid(Request $request)
         }
        // SELECT add_id AS id,add_name_or AS name,add_parent_id AS rootId,false AS selected
         //$requestData['add_id']= $request->input('id');
-        $requestData['add_name_or']= $request->input('name');
-        $requestData['add_parent_id']= $request->input('rootId');
+        //$requestData['add_name_or']= $request->input('name');
+        //$requestData['add_parent_id']= $request->input('rootId');
         
         $data_info=Modelgenaddressstructure::create($requestData);
-        $new_data_info['id']= $data_info->add_id;
-        $new_data_info['name']= $request->input('name');
+        /*$new_data_info['add']= $data_info->add_id;
+        $new_data_info['name']= $request->input('add_name_or');
         $new_data_info['rootId']= $request->input('rootId');
-        $new_data_info['selected']= 0;
+        $new_data_info['children']= array();
+        $new_data_info['selected']= 0;*/
         $resultObject= array(
-            "data" =>$new_data_info,
+            "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
             "status_code"=>200,
             "type"=>"save",
