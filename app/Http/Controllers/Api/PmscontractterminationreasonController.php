@@ -225,7 +225,15 @@ function getListForm(Request $request)
         return redirect('contract_termination_reason')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT ctr_id,ctr_reason_name_or,ctr_reason_name_am,ctr_reason_name_en,ctr_description,ctr_create_time,ctr_update_time,ctr_delete_time,ctr_created_by,ctr_status,1 AS is_editable, 1 AS is_deletable FROM pms_contract_termination_reason ';       
+
+    $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+     $permissionData=$this->getPagePermission($request,27);
+     if(isset($permissionData) && !empty($permissionData)){
+        $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
+     }
+
+     $query=" SELECT ctr_id,ctr_reason_name_or,ctr_reason_name_am,ctr_reason_name_en,ctr_description,ctr_create_time,ctr_update_time,ctr_delete_time,ctr_created_by 
+         ".$permissionIndex." FROM pms_contract_termination_reason ";       
      
      $query .=' WHERE 1=1';
      $ctrid=$request->input('ctr_id');
@@ -287,7 +295,7 @@ $query .=' AND ctr_status="'.$ctrstatus.'"';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+"previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
@@ -400,8 +408,7 @@ public function insertgrid(Request $request)
         return response()->json($resultObject);
     }else{
         $requestData = $request->all();
-        //$requestData['ctr_created_by']=auth()->user()->usr_Id;
-        $requestData['ctr_created_by']=2;
+        $requestData['ctr_created_by']=auth()->user()->usr_id;
         $status= $request->input('ctr_status');
         if($status=="true"){
             $requestData['ctr_status']=1;

@@ -225,7 +225,14 @@ function getListForm(Request $request)
         return redirect('stakeholder_type')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT sht_id,sht_type_name_or,sht_type_name_am,sht_type_name_en,sht_description,sht_create_time,sht_update_time,sht_delete_time,sht_created_by,sht_status,1 AS is_editable, 1 AS is_deletable FROM pms_stakeholder_type ';       
+        $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+  $permissionData=$this->getPagePermission($request,30);
+  if(isset($permissionData) && !empty($permissionData)){
+        $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
+     }
+
+     $query="SELECT sht_id,sht_type_name_or,sht_type_name_am,sht_type_name_en,sht_description,sht_create_time,sht_update_time,sht_delete_time,sht_created_by,sht_status 
+     ".$permissionIndex." FROM pms_stakeholder_type ";       
      
      $query .=' WHERE 1=1';
      $shtid=$request->input('sht_id');
@@ -287,7 +294,7 @@ $query .=' AND sht_status="'.$shtstatus.'"';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+"previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
@@ -401,8 +408,7 @@ public function insertgrid(Request $request)
         return response()->json($resultObject);
     }else{
         $requestData = $request->all();
-        //$requestData['sht_created_by']=auth()->user()->usr_Id;
-        $requestData['sht_created_by']=1;
+        $requestData['sht_created_by']=auth()->user()->usr_id;
         $status= $request->input('sht_status');
         if($status=="true"){
             $requestData['sht_status']=1;

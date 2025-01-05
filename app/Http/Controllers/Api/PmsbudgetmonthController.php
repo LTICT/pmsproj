@@ -230,12 +230,14 @@ function getListForm(Request $request)
         return redirect('budget_month')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-        $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+     $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
      $permissionData=$this->getPagePermission($request,45);
      if(isset($permissionData) && !empty($permissionData)){
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
      }
-     $query="SELECT bdm_id,bdm_month,bdm_name_or,bdm_name_am,bdm_name_en,bdm_code,bdm_description,bdm_create_time,bdm_update_time,bdm_delete_time,bdm_created_by,bdm_status ".$permissionIndex." FROM pms_budget_month ";     
+
+     $query="SELECT bdm_id,bdm_month,bdm_name_or,bdm_name_am,bdm_name_en,bdm_code,bdm_description,bdm_create_time,bdm_update_time,bdm_delete_time,bdm_created_by,bdm_status ".$permissionIndex." FROM pms_budget_month ";
+     
      $query .=' WHERE 1=1';
      $bdmid=$request->input('bdm_id');
 if(isset($bdmid) && isset($bdmid)){
@@ -343,7 +345,8 @@ public function updategrid(Request $request)
         $id=$request->get("bdm_id");
         //$requestData['foreign_field_name']=$request->get('master_id');
             //assign data from of foreign key
-        $requestData = $request->all();            
+        $requestData = $request->all();     
+        //$requestData['bdm_created_by']=auth()->user()->usr_id;       
         $status= $request->input('bdm_status');
         if($status=="true"){
             $requestData['bdm_status']=1;
@@ -425,8 +428,7 @@ public function insertgrid(Request $request)
         return response()->json($resultObject);
     }else{
         $requestData = $request->all();
-        //$requestData['bdm_created_by']=auth()->user()->usr_Id;
-        $requestData['bdm_created_by']=1;
+        $requestData['bdm_created_by']=auth()->user()->usr_id;
         $status= $request->input('bdm_status');
         if($status=="true"){
             $requestData['bdm_status']=1;

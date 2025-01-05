@@ -41,7 +41,7 @@ class GenemailtemplateController extends MyController
       if(isset($permissionData) && !empty($permissionData)){
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
      }
-     $query="SELECT emt_id,emt_template_name,emt_template_content,emt_description,emt_create_time,emt_update_time,emt_delete_time,emt_created_by,emt_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM gen_email_template ";
+     $query="SELECT emt_template_content_en,emt_template_content_am,emt_id,emt_template_name,emt_template_content,emt_description,emt_create_time,emt_update_time,emt_delete_time,emt_created_by,emt_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM gen_email_template ";
      
      $query .=' WHERE 1=1';
      $emtid=$request->input('emt_id');

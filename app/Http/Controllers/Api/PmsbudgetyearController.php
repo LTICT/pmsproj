@@ -49,8 +49,6 @@ class PmsbudgetyearController extends MyController
 function getForm(Request $request)
 {
     $id=$request->get('id');
-    
-    
     $data['is_editable']=1;
     if(isset($id) && !empty($id)){
        $data_info = Modelpmsbudgetyear::findOrFail($id);                
@@ -221,8 +219,12 @@ function getListForm(Request $request)
         return redirect('budget_year')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT bdy_id,bdy_name,bdy_code,bdy_description,bdy_create_time,bdy_update_time,bdy_delete_time,bdy_created_by,bdy_status,1 AS is_editable, 1 AS is_deletable FROM pms_budget_year ';       
-     
+    $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+     $permissionData=$this->getPagePermission($request,10);
+     if(isset($permissionData) && !empty($permissionData)){
+        $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
+     }
+     $query="SELECT bdy_id,bdy_name,bdy_code,bdy_description,bdy_create_time,bdy_update_time,bdy_delete_time,bdy_created_by,bdy_status ".$permissionIndex."  FROM pms_budget_year";       
      $query .=' WHERE 1=1';
      $bdyid=$request->input('bdy_id');
 if(isset($bdyid) && isset($bdyid)){
@@ -280,7 +282,8 @@ $query .=' AND bdy_status="'.$bdystatus.'"';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+"previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
+
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
@@ -390,10 +393,8 @@ public function insertgrid(Request $request)
         return response()->json($resultObject);
     }else{
         $requestData = $request->all();
-        //$requestData['bdy_created_by']=auth()->user()->usr_Id;
-        $requestData['bdy_created_by']=2;
+        $requestData['bdy_created_by']=auth()->user()->usr_id;
         $status= $request->input('bdy_status');
-      
         $data_info=Modelpmsbudgetyear::create($requestData);
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;

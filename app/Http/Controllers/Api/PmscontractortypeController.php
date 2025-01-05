@@ -225,7 +225,13 @@ function getListForm(Request $request)
         return redirect('contractor_type')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT cnt_id,cnt_type_name_or,cnt_type_name_am,cnt_type_name_en,cnt_description,cnt_create_time,cnt_update_time,cnt_delete_time,cnt_created_by,cnt_status,1 AS is_editable, 1 AS is_deletable FROM pms_contractor_type ';       
+        $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+     $permissionData=$this->getPagePermission($request,28);
+     if(isset($permissionData) && !empty($permissionData)){
+        $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
+     }
+
+     $query="SELECT cnt_id,cnt_type_name_or,cnt_type_name_am,cnt_type_name_en,cnt_description,cnt_create_time,cnt_update_time,cnt_delete_time,cnt_created_by ".$permissionIndex."  FROM pms_contractor_type";       
      
      $query .=' WHERE 1=1';
      $cntid=$request->input('cnt_id');
@@ -288,7 +294,7 @@ $query .=' AND cnt_status="'.$cntstatus.'"';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+"previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
@@ -302,10 +308,10 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-'cnt_type_name_or'=> 'required|max:30', 
-'cnt_type_name_am'=> 'required|max:30', 
-'cnt_type_name_en'=> 'required|max:30', 
-'cnt_description'=> 'max:425',
+'cnt_type_name_or'=> 'required|max:100', 
+'cnt_type_name_am'=> 'required|max:100', 
+'cnt_type_name_en'=> 'required|max:100', 
+'cnt_description'=> 'max:425', 
 //'cnt_status'=> 'integer', 
 
     ];
@@ -383,9 +389,9 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-'cnt_type_name_or'=> 'required|max:30', 
-'cnt_type_name_am'=> 'required|max:30', 
-'cnt_type_name_en'=> 'required|max:30', 
+'cnt_type_name_or'=> 'required|max:100', 
+'cnt_type_name_am'=> 'required|max:100', 
+'cnt_type_name_en'=> 'required|max:100', 
 'cnt_description'=> 'max:425', 
 //'cnt_status'=> 'integer', 
 
@@ -404,8 +410,7 @@ public function insertgrid(Request $request)
         return response()->json($resultObject);
     }else{
         $requestData = $request->all();
-        //$requestData['cnt_created_by']=auth()->user()->usr_Id;
-        $requestData['cnt_created_by']=1;
+        $requestData['cnt_created_by']=auth()->user()->usr_id;
         $status= $request->input('cnt_status');
         if($status=="true"){
             $requestData['cnt_status']=1;

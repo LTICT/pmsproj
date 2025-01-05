@@ -301,8 +301,8 @@ $data['related_gen_department']= $gen_department_set ;
      usr_remember_token,usr_notified,usr_description,usr_create_time,
      usr_update_time,usr_delete_time,usr_created_by,usr_status,1 AS is_editable, 1 AS is_deletable,
      gen_address_structure.add_name_or AS zone_name, gen_department.dep_name_or as dep_name FROM tbl_users ';       
-$query .= ' INNER JOIN gen_address_structure ON tbl_users.usr_zone_id = gen_address_structure.add_id'; 
-$query .= ' INNER JOIN gen_department ON tbl_users.usr_department_id = gen_department.dep_id';
+$query .= ' LEFT JOIN gen_address_structure ON tbl_users.usr_zone_id = gen_address_structure.add_id'; 
+$query .= ' LEFT JOIN gen_department ON tbl_users.usr_department_id = gen_department.dep_id';
 $query .= ' LEFT JOIN pms_sector_information ON tbl_users.usr_sector_id = pms_sector_information.sci_id';
      $query .=' WHERE 1=1';
      $usrid=$request->input('usr_id');

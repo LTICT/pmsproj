@@ -41,7 +41,7 @@ class GensmstemplateController extends MyController
       if(isset($permissionData) && !empty($permissionData)){
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
      }
-     $query="SELECT smt_id,smt_template_name,smt_template_content,smt_description,smt_create_time,smt_update_time,smt_delete_time,smt_created_by,smt_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM gen_sms_template ";
+     $query="SELECT smt_template_content_en,smt_template_content_am,smt_id,smt_template_name,smt_template_content,smt_description,smt_create_time,smt_update_time,smt_delete_time,smt_created_by,smt_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM gen_sms_template ";
      
      $query .=' WHERE 1=1';
      $smtid=$request->input('smt_id');
@@ -96,7 +96,7 @@ public function updategrid(Request $request)
         'smt_template_name'=> 'max:200', 
 'smt_template_content'=> 'max:200', 
 'smt_description'=> 'max:425', 
-'smt_status'=> 'integer', 
+//'smt_status'=> 'integer', 
 
     ];
     $validator = Validator::make ( $request->all(), $rules );

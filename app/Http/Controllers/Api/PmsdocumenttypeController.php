@@ -229,7 +229,14 @@ function getListForm(Request $request)
         return redirect('document_type')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT pdt_id,pdt_doc_name_or,pdt_doc_name_am,pdt_doc_name_en,pdt_code,pdt_description,pdt_create_time,pdt_update_time,pdt_delete_time,pdt_created_by,pdt_status,1 AS is_editable, 1 AS is_deletable FROM pms_document_type ';       
+    $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+     $permissionData=$this->getPagePermission($request,18);
+     if(isset($permissionData) && !empty($permissionData)){
+        $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
+     }
+
+     $query="SELECT pdt_id,pdt_doc_name_or,pdt_doc_name_am,pdt_doc_name_en,pdt_code,pdt_description,pdt_create_time,pdt_update_time,pdt_delete_time,pdt_created_by
+            ".$permissionIndex."  FROM pms_document_type ";       
      
      $query .=' WHERE 1=1';
      $pdtid=$request->input('pdt_id');
@@ -295,7 +302,7 @@ $query .=' AND pdt_status="'.$pdtstatus.'"';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+"previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
@@ -415,8 +422,7 @@ public function insertgrid(Request $request)
         return response()->json($resultObject);
     }else{
         $requestData = $request->all();
-        //$requestData['pdt_created_by']=auth()->user()->usr_Id;
-        $requestData['pdt_created_by']=1;
+        $requestData['pdt_created_by']=auth()->user()->usr_id;
         $status= $request->input('pdt_status');
         if($status=="true"){
             $requestData['pdt_status']=1;

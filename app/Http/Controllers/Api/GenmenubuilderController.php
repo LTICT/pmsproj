@@ -257,10 +257,10 @@ function getListForm(Request $request)
      FROM tbl_pages ORDER BY pag_parent DESC'; 
         }else{
            $query='SELECT DISTINCT pag_link_name AS link_name,pag_description AS link_icon,pag_controller AS link_url,
-           pag_parent AS parent_menu 
+           pag_parent AS parent_menu,pag_order_number
      FROM tbl_pages 
      INNER JOIN tbl_permission ON tbl_permission.pem_page_id=tbl_pages.pag_id
-     INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id WHERE url_user_id='.$userId.' ORDER BY pag_parent DESC';  
+     INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id WHERE url_user_id='.$userId.' ORDER BY pag_parent,pag_order_number ASC';  
         }
      $pemid=$request->input('pem_id');
 if(isset($pemid) && isset($pemid)){

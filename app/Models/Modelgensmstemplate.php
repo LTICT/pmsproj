@@ -25,9 +25,7 @@ class Modelgensmstemplate extends Model
      *
      * @var array
      */
-    protected $fillable = ['smt_id','smt_template_name','smt_template_content','smt_description','smt_create_time','smt_update_time','smt_delete_time','smt_created_by','smt_status',];
-
-    
+    protected $fillable = ['smt_id','smt_template_name','smt_template_content','smt_description','smt_create_time','smt_update_time','smt_delete_time','smt_created_by','smt_status','smt_template_content_am','smt_template_content_en'];
 
     /**
      * Change activity log event description
@@ -41,4 +39,3 @@ class Modelgensmstemplate extends Model
         return __CLASS__ . " model has been {$eventName}";
     }
 }
-

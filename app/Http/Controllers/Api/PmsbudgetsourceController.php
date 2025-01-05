@@ -229,7 +229,14 @@ function getListForm(Request $request)
         return redirect('budget_source')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT pbs_id,pbs_name_or,pbs_name_am,pbs_name_en,pbs_code,pbs_description,pbs_create_time,pbs_update_time,pbs_delete_time,pbs_created_by,pbs_status,1 AS is_editable, 1 AS is_deletable FROM pms_budget_source ';       
+        $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+     $permissionData=$this->getPagePermission($request,13);
+     if(isset($permissionData) && !empty($permissionData)){
+        $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
+     }
+
+     $query="SELECT pbs_id,pbs_name_or,pbs_name_am,pbs_name_en,pbs_code,pbs_description,pbs_create_time,pbs_update_time,pbs_delete_time,pbs_created_by
+      ".$permissionIndex."  FROM pms_budget_source ";       
      
      $query .=' WHERE 1=1';
      $pbsid=$request->input('pbs_id');
@@ -295,7 +302,7 @@ $query .=' AND pbs_status="'.$pbsstatus.'"';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+"previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
@@ -415,8 +422,7 @@ public function insertgrid(Request $request)
         return response()->json($resultObject);
     }else{
         $requestData = $request->all();
-        //$requestData['pbs_created_by']=auth()->user()->usr_Id;
-        $requestData['pbs_created_by']=2;
+        $requestData['pbs_created_by']=auth()->user()->usr_id;
         $status= $request->input('pbs_status');
         if($status=="true"){
             $requestData['pbs_status']=1;

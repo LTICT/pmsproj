@@ -17,6 +17,30 @@ class MyController extends Controller
 	function test(){
 		echo "something";
 	}
+	public function getSearchParam($request,$query){
+    $userInfo=$this->getUserInfo($request);
+        if(isset($userInfo) && $userInfo->usr_id !=9){
+            $zoneId=$userInfo->usr_zone_id;
+            $woredaId=$userInfo->usr_woreda_id;
+            $sectorId=$userInfo->usr_sector_id;
+            $prjownerzoneid=$request->input('prj_location_zone_id');
+            $prjownerworedaid=$request->input('prj_location_woreda_id');
+            if(isset($zoneId) && !empty($zoneId) && $zoneId > 0){
+              $query .=" AND prj_owner_zone_id='".$zoneId."'";   
+            }else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $prjownerzoneid>0){
+            	$query .=" AND prj_owner_zone_id='".$prjownerzoneid."'";   
+            }
+            if(isset($woredaId) && !empty($woredaId) && $woredaId > 0){
+              $query .=" AND prj_owner_woreda_id='".$woredaId."'"; 
+            }else if(isset($prjownerworedaid) && isset($prjownerworedaid) && $prjownerworedaid>0){
+            	$query .=" AND prj_owner_woreda_id='".$prjownerworedaid."'";   
+            }
+            if(isset($sectorId) && !empty($sectorId)){
+              $query .=" AND prj_sector_id='".$sectorId."'";   
+            }
+        }
+return $query;
+}
 	public function getPagePermission($request,$pageId){
 		$authenticatedUser = $request->authUser;
         $userId=$authenticatedUser->usr_id;
@@ -29,6 +53,21 @@ class MyController extends Controller
      	return $data_info[0];
      }
      return null;
+	}
+
+	public function getTabPermission($request){
+		$authenticatedUser = $request->authUser;
+        $userId=$authenticatedUser->usr_id;
+        $query="SELECT pag_id
+     FROM tbl_permission 
+     INNER JOIN tbl_pages ON tbl_pages.pag_id=tbl_permission.pem_page_id
+     INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id 
+     WHERE url_user_id=".$userId." AND pag_appear_tab=1 AND pem_view='1'";
+     $data_info=DB::select($query);
+     $pagIds = array_map(function ($item) {
+    return $item->pag_id;
+}, $data_info);
+     return $pagIds;
 	}
 
 	public function getUserInfo(Request $request){

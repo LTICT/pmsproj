@@ -241,8 +241,12 @@ function getListForm(Request $request)
         return redirect('department')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT dep_id,dep_name_or,dep_name_am,dep_name_en,dep_code,dep_available_at_region,dep_available_at_zone,dep_available_at_woreda,dep_description,dep_create_time,dep_update_time,dep_delete_time,dep_created_by,dep_status,1 AS is_editable, 1 AS is_deletable,COUNT(*) OVER () AS total_count FROM gen_department ';       
-     
+     $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+     $permissionData=$this->getPagePermission($request,11);
+     if(isset($permissionData) && !empty($permissionData)){
+        $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
+     }
+     $query="SELECT dep_id,dep_name_or,dep_name_am,dep_name_en,dep_code,dep_available_at_region,dep_available_at_zone,dep_available_at_woreda,dep_description,dep_create_time,dep_update_time,dep_delete_time,dep_created_by,dep_status ".$permissionIndex." FROM gen_department ";
      $query .=' WHERE 1=1';
      $depid=$request->input('dep_id');
 if(isset($depid) && isset($depid)){
@@ -319,7 +323,7 @@ $query .=' AND dep_status="'.$depstatus.'"';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+"previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)

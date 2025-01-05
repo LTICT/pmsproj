@@ -229,8 +229,15 @@ function getListForm(Request $request)
         return redirect('project_category')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT pct_id,pct_name_or,pct_name_am,pct_name_en,pct_code,pct_description,pct_create_time,pct_update_time,pct_delete_time,pct_created_by,pct_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_category ';       
-     
+        //dd(config('constants.PROJ_INFORMATION'));
+        $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+        $pageId=config('constants.LU_CATEGORY');
+          $permissionData=$this->getPagePermission($request,$pageId);
+          if(isset($permissionData) && !empty($permissionData)){
+                $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
+             }
+     $query="SELECT pct_id,pct_name_or,pct_name_am,pct_name_en,pct_code,pct_description,pct_create_time,pct_update_time,pct_delete_time,pct_created_by,pct_status
+       ".$permissionIndex." FROM pms_project_category ";
      $query .=' WHERE 1=1';
      $pctid=$request->input('pct_id');
 if(isset($pctid) && isset($pctid)){
@@ -238,7 +245,7 @@ $query .=' AND pct_id="'.$pctid.'"';
 }
 $pctnameor=$request->input('pct_name_or');
 if(isset($pctnameor) && isset($pctnameor)){
-$query .=' AND pct_name_or="'.$pctnameor.'"'; 
+$query .=" AND pct_name_or LIKE '%".$pctnameor."%'"; 
 }
 $pctnameam=$request->input('pct_name_am');
 if(isset($pctnameam) && isset($pctnameam)){
@@ -295,7 +302,7 @@ $query .=' AND pct_status="'.$pctstatus.'"';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+"previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
@@ -415,7 +422,7 @@ public function insertgrid(Request $request)
         return response()->json($resultObject);
     }else{
         $requestData = $request->all();
-        $requestData['pct_created_by']=1;
+        $requestData['pct_created_by']=auth()->user()->usr_id;
         $status= $request->input('pct_status');
         if($status=="true"){
             $requestData['pct_status']=1;

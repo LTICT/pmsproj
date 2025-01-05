@@ -225,7 +225,12 @@ function getListForm(Request $request)
         return redirect('expenditure_code')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT pec_id,pec_name,pec_code,pec_status,pec_description,pec_created_by,pec_created_date,pec_create_time,pec_update_time,1 AS is_editable, 1 AS is_deletable FROM pms_expenditure_code ';       
+     $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+     $permissionData=$this->getPagePermission($request,32);
+     if(isset($permissionData) && !empty($permissionData)){
+        $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
+     }
+     $query="SELECT pec_id,pec_name,pec_code,pec_status,pec_description,pec_created_by,pec_created_date,pec_create_time,pec_update_time ".$permissionIndex."  FROM pms_expenditure_code ";       
      
      $query .=' WHERE 1=1';
      $pecid=$request->input('pec_id');
@@ -285,7 +290,7 @@ $query .=' AND pec_update_time="'.$pecupdatetime.'"';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+"previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
@@ -396,8 +401,7 @@ public function insertgrid(Request $request)
         return response()->json($resultObject);
     }else{
         $requestData = $request->all();
-        //$requestData['pec_created_by']=auth()->user()->usr_Id;
-        $requestData['pec_created_by']=1;
+        $requestData['pec_created_by']=auth()->user()->usr_id;
         $status= $request->input('pec_status');
         if($status=="true"){
             $requestData['pec_status']=1;

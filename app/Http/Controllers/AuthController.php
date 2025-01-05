@@ -25,12 +25,11 @@ class AuthController extends Controller
                 'password'=>'required|string'
             ]
         );
-//dd($request);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
         $cridentials = $request->only('email', 'password');
-        $cridentials=array('email'=>$request->input('email'),'password'=>$request->input('password'));
+        $cridentials=array('email'=>$request->input('email'),'password'=>$request->input('password'),'usr_status'=>1);
        // dd($cridentials);
         //$token = Auth::attempt($cridentials);
         try{

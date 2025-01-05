@@ -583,22 +583,4 @@ $resultObject= array("data" =>$combinedArray);
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 //END EXPERIMENT
 }
-public function getSearchParam($request,$query){
-    $userInfo=$this->getUserInfo($request);
-        if(isset($userInfo) && $userInfo->usr_id !=9){
-            $zoneId=$userInfo->usr_zone_id;
-            $woredaId=$userInfo->usr_woreda_id;
-            $sectorId=$userInfo->usr_sector_id;
-            if(isset($zoneId) && !empty($zoneId)){
-              $query .=" AND prj_location_zone_id='".$zoneId."'";   
-            }
-            if(isset($woredaId) && !empty($woredaId)){
-              $query .=" AND prj_location_woreda_id='".$woredaId."'";   
-            }
-            if(isset($sectorId) && !empty($sectorId)){
-              $query .=" AND prj_sector_id='".$sectorId."'";   
-            }
-        }
-return $query;
-}
 }

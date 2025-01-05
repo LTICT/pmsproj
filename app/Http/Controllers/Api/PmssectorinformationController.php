@@ -252,14 +252,14 @@ function getListForm(Request $request)
         return redirect('sector_information')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-    /* $query='SELECT sci_id,sci_name_or,sci_name_am,sci_name_en,sci_code,prj_sector_category.psc_name AS sci_sector_category_id,region.add_name_or as sci_available_at_region,
-         zone.add_name_or as sci_available_at_zone,woreda.add_name_or as sci_available_at_woreda,sci_description,sci_create_time,sci_update_time,sci_delete_time,sci_created_by,sci_status,1 AS is_editable, 1 AS is_deletable FROM pms_sector_information ';       
-     $query .= ' INNER JOIN prj_sector_category ON pms_sector_information.sci_sector_category_id = prj_sector_category.psc_id'; 
-     $query .= ' INNER JOIN gen_address_structure region ON pms_sector_information.sci_available_at_region = region.add_id';
-    $query .= ' INNER JOIN gen_address_structure zone ON pms_sector_information.sci_available_at_zone = zone.add_id';
-    $query .= ' INNER JOIN gen_address_structure woreda ON pms_sector_information.sci_available_at_woreda = woreda.add_id';*/
+   
+ $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+  $permissionData=$this->getPagePermission($request,20);
+  if(isset($permissionData) && !empty($permissionData)){
+        $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
+     }
 
-    $query='SELECT sci_id,sci_name_or,sci_name_am,sci_name_en,sci_code,prj_sector_category.psc_name AS sector_name, sci_sector_category_id, sci_available_at_region, sci_available_at_zone,sci_available_at_woreda,sci_description,sci_create_time,sci_update_time,sci_delete_time,sci_created_by,sci_status,1 AS is_editable, 1 AS is_deletable FROM pms_sector_information ';   
+    $query="SELECT sci_id,sci_name_or,sci_name_am,sci_name_en,sci_code,prj_sector_category.psc_name AS sector_name, sci_sector_category_id, sci_available_at_region, sci_available_at_zone,sci_available_at_woreda,sci_description,sci_create_time,sci_update_time,sci_delete_time,sci_created_by,sci_status ".$permissionIndex." FROM pms_sector_information ";   
      $query .= ' LEFT JOIN prj_sector_category ON pms_sector_information.sci_sector_category_id = prj_sector_category.psc_id'; 
 
      $query .=' WHERE 1=1';
@@ -342,7 +342,7 @@ $query .=' AND sci_status="'.$scistatus.'"';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+"previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
@@ -478,8 +478,7 @@ public function insertgrid(Request $request)
         return response()->json($resultObject);
     }else{
         $requestData = $request->all();
-        //$requestData['sci_created_by']=auth()->user()->usr_Id;
-        $requestData['sci_created_by']=1;
+        $requestData['sci_created_by']=auth()->user()->usr_id;
         $status= $request->input('sci_status');
         if($status=="true"){
             $requestData['sci_status']=1;

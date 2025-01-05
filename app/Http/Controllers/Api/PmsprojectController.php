@@ -367,32 +367,14 @@ $data['related_pms_budget_source']= $pms_budget_source_set ;
     
     public function listgrid(Request $request){
 
-/*$query='SELECT prj_id,prj_name,prj_code, pms_project_status.prs_status_name_or As prj_project_status_id,pms_project_category.pct_name_or As prj_project_category_id, pms_budget_source.pbs_name_or AS prj_project_budget_source_id,prj_total_estimate_budget,prj_total_actual_budget,
-prj_geo_location,pms_sector_information.sci_name_or As prj_sector_id, 
- prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,prj_location_kebele_id,
-prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_kebele_id,prj_owner_description,
-prj_start_date_et,prj_start_date_gc,prj_start_date_plan_et,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,
-prj_end_date_plan_gc,prj_end_date_plan_et,prj_outcome,prj_deleted,prj_remark,prj_created_by,prj_created_date,prj_create_time,
-prj_update_time,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number,1 AS is_editable, 0 AS is_deletable,COUNT(*) OVER () AS total_count  FROM pms_project ';   
-
-$query .= ' LEFT JOIN pms_budget_source ON pms_project.prj_project_budget_source_id = pms_budget_source.pbs_id';  
-$query .= ' LEFT JOIN pms_sector_information ON pms_project.prj_sector_id = pms_sector_information.sci_id'; 
-
-$query .= ' LEFT JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id'; 
-
-$query .= ' LEFT JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id'; */
 $query='SELECT prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id, prj_project_budget_source_id,prj_total_estimate_budget,prj_total_actual_budget,
 prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,prj_location_kebele_id,
 prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_kebele_id,prj_owner_description,
 prj_start_date_et,prj_start_date_gc,prj_start_date_plan_et,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,
 prj_end_date_plan_gc,prj_end_date_plan_et,prj_outcome,prj_deleted,prj_remark,prj_created_by,prj_created_date,prj_create_time,
-prj_update_time,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number,1 AS is_editable, 1 AS is_deletable,COUNT(*) OVER () AS total_count  FROM pms_project ';
-
+prj_update_time,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number,1 AS is_editable, 1 AS is_deletable FROM pms_project ';
  $query .=' WHERE 1=1';
-     $prjid=$request->input('prj_id');
-if(isset($prjid) && isset($prjid)){
-$query .=' AND prj_id="'.$prjid.'"'; 
-}
+ $query=$this->getSearchParam($request,$query);
 $prjname=$request->input('prj_name');
 if(isset($prjname) && isset($prjname)){
 $query .=" AND prj_name='".$prjname."'"; 
@@ -409,22 +391,6 @@ $prjprojectcategoryid=$request->input('prj_project_category_id');
 if(isset($prjprojectcategoryid) && isset($prjprojectcategoryid)){
 $query .=" AND prj_project_category_id='".$prjprojectcategoryid."'"; 
 }
-$prjprojectbudgetsourceid=$request->input('prj_project_budget_source_id');
-if(isset($prjprojectbudgetsourceid) && isset($prjprojectbudgetsourceid)){
-$query .=' AND prj_project_budget_source_id="'.$prjprojectbudgetsourceid.'"'; 
-}
-$prjtotalestimatebudget=$request->input('prj_total_estimate_budget');
-if(isset($prjtotalestimatebudget) && isset($prjtotalestimatebudget)){
-$query .=' AND prj_total_estimate_budget="'.$prjtotalestimatebudget.'"'; 
-}
-$prjtotalactualbudget=$request->input('prj_total_actual_budget');
-if(isset($prjtotalactualbudget) && isset($prjtotalactualbudget)){
-$query .=' AND prj_total_actual_budget="'.$prjtotalactualbudget.'"'; 
-}
-$prjgeolocation=$request->input('prj_geo_location');
-if(isset($prjgeolocation) && isset($prjgeolocation)){
-$query .=' AND prj_geo_location="'.$prjgeolocation.'"'; 
-}
 $prjsectorid=$request->input('prj_sector_id');
 if(isset($prjsectorid) && isset($prjsectorid)){
 $query .=' AND prj_sector_id="'.$prjsectorid.'"'; 
@@ -433,33 +399,22 @@ $prjlocationregionid=$request->input('prj_location_region_id');
 if(isset($prjlocationregionid) && isset($prjlocationregionid)){
 $query .=" AND prj_location_region_id='".$prjlocationregionid."'"; 
 }
-$prjlocationzoneid=$request->input('prj_location_zone_id');
-if(isset($prjlocationzoneid) && isset($prjlocationzoneid)){
-$query .=" AND prj_location_zone_id='".$prjlocationzoneid."'"; 
-}
-$prjlocationworedaid=$request->input('prj_location_woreda_id');
-if(isset($prjlocationworedaid) && isset($prjlocationworedaid)){
-$query .=" AND prj_location_woreda_id='".$prjlocationworedaid."'"; 
-}
+
 $prjlocationkebeleid=$request->input('prj_location_kebele_id');
 if(isset($prjlocationkebeleid) && isset($prjlocationkebeleid)){
 $query .=' AND prj_location_kebele_id="'.$prjlocationkebeleid.'"'; 
 }
-$prjlocationdescription=$request->input('prj_location_description');
-if(isset($prjlocationdescription) && isset($prjlocationdescription)){
-$query .=' AND prj_location_description="'.$prjlocationdescription.'"'; 
-}
 $prjownerregionid=$request->input('prj_owner_region_id');
 if(isset($prjownerregionid) && isset($prjownerregionid)){
-$query .=' AND prj_owner_region_id="'.$prjownerregionid.'"'; 
+//$query .=' AND prj_owner_region_id="'.$prjownerregionid.'"'; 
 }
 $prjownerzoneid=$request->input('prj_owner_zone_id');
 if(isset($prjownerzoneid) && isset($prjownerzoneid)){
-$query .=' AND prj_owner_zone_id="'.$prjownerzoneid.'"'; 
+//$query .=' AND prj_owner_zone_id="'.$prjownerzoneid.'"'; 
 }
 $prjownerworedaid=$request->input('prj_owner_woreda_id');
 if(isset($prjownerworedaid) && isset($prjownerworedaid)){
-$query .=' AND prj_owner_woreda_id="'.$prjownerworedaid.'"'; 
+//$query .=' AND prj_owner_woreda_id="'.$prjownerworedaid.'"'; 
 }
 $prjownerkebeleid=$request->input('prj_owner_kebele_id');
 if(isset($prjownerkebeleid) && isset($prjownerkebeleid)){
@@ -501,46 +456,6 @@ $prjenddateplanet=$request->input('prj_end_date_plan_et');
 if(isset($prjenddateplanet) && isset($prjenddateplanet)){
 $query .=' AND prj_end_date_plan_et="'.$prjenddateplanet.'"'; 
 }
-$prjoutcome=$request->input('prj_outcome');
-if(isset($prjoutcome) && isset($prjoutcome)){
-$query .=' AND prj_outcome="'.$prjoutcome.'"'; 
-}
-$prjdeleted=$request->input('prj_deleted');
-if(isset($prjdeleted) && isset($prjdeleted)){
-$query .=' AND prj_deleted="'.$prjdeleted.'"'; 
-}
-$prjremark=$request->input('prj_remark');
-if(isset($prjremark) && isset($prjremark)){
-$query .=' AND prj_remark="'.$prjremark.'"'; 
-}
-$prjcreatedby=$request->input('prj_created_by');
-if(isset($prjcreatedby) && isset($prjcreatedby)){
-$query .=' AND prj_created_by="'.$prjcreatedby.'"'; 
-}
-$prjcreateddate=$request->input('prj_created_date');
-if(isset($prjcreateddate) && isset($prjcreateddate)){
-$query .=' AND prj_created_date="'.$prjcreateddate.'"'; 
-}
-$prjcreatetime=$request->input('prj_create_time');
-if(isset($prjcreatetime) && isset($prjcreatetime)){
-$query .=' AND prj_create_time="'.$prjcreatetime.'"'; 
-}
-$prjupdatetime=$request->input('prj_update_time');
-if(isset($prjupdatetime) && isset($prjupdatetime)){
-$query .=' AND prj_update_time="'.$prjupdatetime.'"'; 
-}
-$prjownerid=$request->input('prj_owner_id');
-if(isset($prjownerid) && isset($prjownerid)){
-$query .=' AND prj_owner_id="'.$prjownerid.'"'; 
-}
-$prjurbanbennumber=$request->input('prj_urban_ben_number');
-if(isset($prjurbanbennumber) && isset($prjurbanbennumber)){
-$query .=' AND prj_urban_ben_number="'.$prjurbanbennumber.'"'; 
-}
-$prjruralbennumber=$request->input('prj_rural_ben_number');
-if(isset($prjruralbennumber) && isset($prjruralbennumber)){
-$query .=' AND prj_rural_ben_number="'.$prjruralbennumber.'"'; 
-}
 
      $masterId=$request->input('master_id');
      if(isset($masterId) && !empty($masterId)){
@@ -569,7 +484,7 @@ $resultObject= array(
     $resultObject= array(
     "data" =>$data_info,
     "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1),
-'allowedTabs'=> array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16));
+'allowedTabs'=> $this->getTabPermission($request));
 }
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }

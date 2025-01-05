@@ -36,56 +36,11 @@ Route::get('/data', 'GanttController@get');
 Route::resource('task', 'TaskController');
 Route::resource('link', 'LinkController');
 
-Route::post('budget_year/listgrid', 'Api\PmscontractorController@listgrid');
-//START ROUTE
-Route::resource('department', 'GendepartmentController');
-
-Route::post('department/insertgrid', 'Api\GendepartmentController@insertgrid');
-Route::post('department/updategrid', 'Api\GendepartmentController@updategrid');
-Route::post('department/deletegrid', 'Api\GendepartmentController@deletegrid');
-Route::post('department/search', 'GendepartmentController@search');
-
 Route::post('budget_request/listgrid', 'Api\PmsbudgetrequestController@listgrid');
 Route::post('budget_request/insertgrid', 'Api\PmsbudgetrequestController@insertgrid');
 Route::post('budget_request/updategrid', 'Api\PmsbudgetrequestController@updategrid');
 Route::post('budget_request/deletegrid', 'Api\PmsbudgetrequestController@deletegrid');
 Route::post('budget_request/search', 'PmsbudgetrequestController@search');
-
-Route::post('budget_source/listgrid', 'Api\PmsbudgetsourceController@listgrid');
-Route::post('budget_source/insertgrid', 'Api\PmsbudgetsourceController@insertgrid');
-Route::post('budget_source/updategrid', 'Api\PmsbudgetsourceController@updategrid');
-Route::post('budget_source/deletegrid', 'Api\PmsbudgetsourceController@deletegrid');
-
- Route::resource('budget_year', 'PmsbudgetyearController');
-Route::post('budget_year/listgrid', 'Api\PmsbudgetyearController@listgrid');
-Route::post('budget_year/insertgrid', 'Api\PmsbudgetyearController@insertgrid');
-Route::post('budget_year/updategrid', 'Api\PmsbudgetyearController@updategrid');
-Route::post('budget_year/deletegrid', 'Api\PmsbudgetyearController@deletegrid');
-Route::post('budget_year/search', 'PmsbudgetyearController@search');
-
-Route::post('contractor_type/listgrid', 'Api\PmscontractortypeController@listgrid');
-Route::post('contractor_type/insertgrid', 'Api\PmscontractortypeController@insertgrid');
-Route::post('contractor_type/updategrid', 'Api\PmscontractortypeController@updategrid');
-Route::post('contractor_type/deletegrid', 'Api\PmscontractortypeController@deletegrid');
-Route::post('contractor_type/search', 'PmscontractortypeController@search');
-
-Route::post('contract_termination_reason/listgrid', 'Api\PmscontractterminationreasonController@listgrid');
-Route::post('contract_termination_reason/insertgrid', 'Api\PmscontractterminationreasonController@insertgrid');
-Route::post('contract_termination_reason/updategrid', 'Api\PmscontractterminationreasonController@updategrid');
-Route::post('contract_termination_reason/deletegrid', 'Api\PmscontractterminationreasonController@deletegrid');
-Route::post('contract_termination_reason/search', 'PmscontractterminationreasonController@search');
-
-Route::post('document_type/listgrid', 'Api\PmsdocumenttypeController@listgrid');
-Route::post('document_type/insertgrid', 'Api\PmsdocumenttypeController@insertgrid');
-Route::post('document_type/updategrid', 'Api\PmsdocumenttypeController@updategrid');
-Route::post('document_type/deletegrid', 'Api\PmsdocumenttypeController@deletegrid');
-Route::post('document_type/search', 'PmsdocumenttypeController@search');
-
-Route::post('project_category/listgrid', 'Api\PmsprojectcategoryController@listgrid');
-Route::post('project_category/insertgrid', 'Api\PmsprojectcategoryController@insertgrid');
-Route::post('project_category/updategrid', 'Api\PmsprojectcategoryController@updategrid');
-Route::post('project_category/deletegrid', 'Api\PmsprojectcategoryController@deletegrid');
-
 Route::resource('project_contractor', 'PmsprojectcontractorController');
 Route::post('project_contractor/listgrid', 'Api\PmsprojectcontractorController@listgrid');
 Route::post('project_contractor/insertgrid', 'Api\PmsprojectcontractorController@insertgrid');
@@ -118,24 +73,6 @@ Route::post('project_status/insertgrid', 'Api\PmsprojectstatusController@insertg
 Route::post('project_status/updategrid', 'Api\PmsprojectstatusController@updategrid');
 Route::post('project_status/deletegrid', 'Api\PmsprojectstatusController@deletegrid');
 Route::post('project_status/search', 'PmsprojectstatusController@search');
-
-Route::post('sector_information/listgrid', 'Api\PmssectorinformationController@listgrid');
-Route::post('sector_information/insertgrid', 'Api\PmssectorinformationController@insertgrid');
-Route::post('sector_information/updategrid', 'Api\PmssectorinformationController@updategrid');
-Route::post('sector_information/deletegrid', 'Api\PmssectorinformationController@deletegrid');
-Route::post('sector_information/search', 'PmssectorinformationController@search');
-
-Route::post('stakeholder_type/listgrid', 'Api\PmsstakeholdertypeController@listgrid');
-Route::post('stakeholder_type/insertgrid', 'Api\PmsstakeholdertypeController@insertgrid');
-Route::post('stakeholder_type/updategrid', 'Api\PmsstakeholdertypeController@updategrid');
-Route::post('stakeholder_type/deletegrid', 'Api\PmsstakeholdertypeController@deletegrid');
-Route::post('stakeholder_type/search', 'PmsstakeholdertypeController@search');
-
-Route::post('sector_category/listgrid', 'Api\PrjsectorcategoryController@listgrid');
-Route::post('sector_category/insertgrid', 'Api\PrjsectorcategoryController@insertgrid');
-Route::post('sector_category/updategrid', 'Api\PrjsectorcategoryController@updategrid');
-Route::post('sector_category/deletegrid', 'Api\PrjsectorcategoryController@deletegrid');
-Route::post('sector_category/search', 'PrjsectorcategoryController@search');
 
 Route::post('access_log/listgrid', 'Api\TblaccesslogController@listgrid');
 Route::post('access_log/insertgrid', 'Api\TblaccesslogController@insertgrid');
@@ -330,4 +267,75 @@ Route::post('address_structure/listaddress', 'Api\GenaddressstructureController@
     Route::post('payment_category/insertgrid', 'Api\PmspaymentcategoryController@insertgrid');
     Route::post('payment_category/updategrid', 'Api\PmspaymentcategoryController@updategrid');
     Route::post('payment_category/deletegrid', 'Api\PmspaymentcategoryController@deletegrid');
+
+    Route::post('budget_month/listgrid', 'Api\PmsbudgetmonthController@listgrid');
+Route::post('budget_month/insertgrid', 'Api\PmsbudgetmonthController@insertgrid');
+Route::post('budget_month/updategrid', 'Api\PmsbudgetmonthController@updategrid');
+Route::post('budget_month/deletegrid', 'Api\PmsbudgetmonthController@deletegrid');
+Route::post('budget_month/search', 'PmsbudgetmonthController@search');
+
+Route::post('budget_source/listgrid', 'Api\PmsbudgetsourceController@listgrid');
+Route::post('budget_source/insertgrid', 'Api\PmsbudgetsourceController@insertgrid');
+Route::post('budget_source/updategrid', 'Api\PmsbudgetsourceController@updategrid');
+Route::post('budget_source/deletegrid', 'Api\PmsbudgetsourceController@deletegrid');
+
+Route::resource('budget_year', 'PmsbudgetyearController');
+Route::post('budget_year/listgrid', 'Api\PmsbudgetyearController@listgrid');
+Route::post('budget_year/insertgrid', 'Api\PmsbudgetyearController@insertgrid');
+Route::post('budget_year/updategrid', 'Api\PmsbudgetyearController@updategrid');
+Route::post('budget_year/deletegrid', 'Api\PmsbudgetyearController@deletegrid');
+Route::post('budget_year/search', 'PmsbudgetyearController@search');
+
+Route::resource('department', 'GendepartmentController');
+Route::post('department/insertgrid', 'Api\GendepartmentController@insertgrid');
+Route::post('department/updategrid', 'Api\GendepartmentController@updategrid');
+Route::post('department/deletegrid', 'Api\GendepartmentController@deletegrid');
+Route::post('department/search', 'GendepartmentController@search');
+
+Route::post('contractor_type/listgrid', 'Api\PmscontractortypeController@listgrid');
+Route::post('contractor_type/insertgrid', 'Api\PmscontractortypeController@insertgrid');
+Route::post('contractor_type/updategrid', 'Api\PmscontractortypeController@updategrid');
+Route::post('contractor_type/deletegrid', 'Api\PmscontractortypeController@deletegrid');
+Route::post('contractor_type/search', 'PmscontractortypeController@search');
+
+Route::post('contract_termination_reason/listgrid', 'Api\PmscontractterminationreasonController@listgrid');
+Route::post('contract_termination_reason/insertgrid', 'Api\PmscontractterminationreasonController@insertgrid');
+Route::post('contract_termination_reason/updategrid', 'Api\PmscontractterminationreasonController@updategrid');
+Route::post('contract_termination_reason/deletegrid', 'Api\PmscontractterminationreasonController@deletegrid');
+Route::post('contract_termination_reason/search', 'PmscontractterminationreasonController@search');
+
+Route::post('document_type/listgrid', 'Api\PmsdocumenttypeController@listgrid');
+Route::post('document_type/insertgrid', 'Api\PmsdocumenttypeController@insertgrid');
+Route::post('document_type/updategrid', 'Api\PmsdocumenttypeController@updategrid');
+Route::post('document_type/deletegrid', 'Api\PmsdocumenttypeController@deletegrid');
+Route::post('document_type/search', 'PmsdocumenttypeController@search');
+
+Route::post('project_category/listgrid', 'Api\PmsprojectcategoryController@listgrid');
+Route::post('project_category/insertgrid', 'Api\PmsprojectcategoryController@insertgrid');
+Route::post('project_category/updategrid', 'Api\PmsprojectcategoryController@updategrid');
+Route::post('project_category/deletegrid', 'Api\PmsprojectcategoryController@deletegrid');
+
+Route::post('sector_information/listgrid', 'Api\PmssectorinformationController@listgrid');
+Route::post('sector_information/insertgrid', 'Api\PmssectorinformationController@insertgrid');
+Route::post('sector_information/updategrid', 'Api\PmssectorinformationController@updategrid');
+Route::post('sector_information/deletegrid', 'Api\PmssectorinformationController@deletegrid');
+Route::post('sector_information/search', 'PmssectorinformationController@search');
+
+Route::post('stakeholder_type/listgrid', 'Api\PmsstakeholdertypeController@listgrid');
+Route::post('stakeholder_type/insertgrid', 'Api\PmsstakeholdertypeController@insertgrid');
+Route::post('stakeholder_type/updategrid', 'Api\PmsstakeholdertypeController@updategrid');
+Route::post('stakeholder_type/deletegrid', 'Api\PmsstakeholdertypeController@deletegrid');
+Route::post('stakeholder_type/search', 'PmsstakeholdertypeController@search');
+
+Route::post('sector_category/listgrid', 'Api\PrjsectorcategoryController@listgrid');
+Route::post('sector_category/insertgrid', 'Api\PrjsectorcategoryController@insertgrid');
+Route::post('sector_category/updategrid', 'Api\PrjsectorcategoryController@updategrid');
+Route::post('sector_category/deletegrid', 'Api\PrjsectorcategoryController@deletegrid');
+Route::post('sector_category/search', 'PrjsectorcategoryController@search');
+
+Route::post('expenditure_code/listgrid', 'Api\PmsexpenditurecodeController@listgrid');
+Route::post('expenditure_code/insertgrid', 'Api\PmsexpenditurecodeController@insertgrid');
+Route::post('expenditure_code/updategrid', 'Api\PmsexpenditurecodeController@updategrid');
+Route::post('expenditure_code/deletegrid', 'Api\PmsexpenditurecodeController@deletegrid');
+Route::post('expenditure_code/search', 'PmsexpenditurecodeController@search');
 });
