@@ -204,7 +204,7 @@ $data['related_pms_budget_source']= $pms_budget_source_set ;
      *
      * @return \Illuminate\View\View
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
         $query='SELECT prj_id,prj_name,prj_code,prj_project_status_id,
         pms_project_category.pct_name_or AS prj_project_category_id,prj_project_budget_source_id,prj_total_estimate_budget,prj_total_actual_budget,prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,prj_location_kebele_id,prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_kebele_id,prj_owner_description,prj_start_date_et,prj_start_date_gc,prj_start_date_plan_et,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,prj_end_date_plan_gc,prj_end_date_plan_et,prj_outcome,prj_deleted,prj_remark,prj_created_by,prj_created_date,prj_create_time,prj_update_time,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number FROM pms_project ';
@@ -213,9 +213,16 @@ $query .= ' LEFT JOIN pms_project_category ON pms_project.prj_project_category_i
         $data_info=DB::select($query);
         if(isset($data_info) && !empty($data_info)){
             $data=$data_info[0];
+            $request_role='requester';
+            $authenticatedUser = $request->authUser;
+        $userId=$authenticatedUser->usr_id;
+if($userId==9){
+    $request_role='approver';
+}
             $resultObject= array(
     "data" =>$data,
-    "data_available"=>"1");
+    "data_available"=>"1",
+"request_role"=>$request_role);
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
         }else{
             $resultObject= array(
