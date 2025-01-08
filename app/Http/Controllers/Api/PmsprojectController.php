@@ -13,190 +13,7 @@ class PmsprojectController extends MyController
     parent::__construct();
     //$this->middleware('auth');
 }
- /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\View\View
-     */
- public function index(Request $request)
- {
-    $selectedLanguage=app()->getLocale();
-    if($selectedLanguage=="or"){
-        $filepath = base_path() .'\resources\lang\or\ag_grid.php';
-    }else if($selectedLanguage=="en"){
-        $filepath = base_path() .'\resources\lang\en\ag_grid.php';
-    }else if($selectedLanguage=="am"){
-        $filepath = base_path() .'\resources\lang\am\ag_grid.php';
-    }
-    $filepath = base_path() .'\resources\lang\en\ag_grid.php';
-    $txt = file_get_contents($filepath);
-    $data['ag_grid_lang']=$txt;
-    $searchParams= $this->getSearchSetting('pms_project');
-    $dataInfo = Modelpmsproject::latest();
-    $this->searchQuery($searchParams, $request,$dataInfo);
-    $perPage = 20;
-    $dataInfo =$dataInfo->paginate($perPage);
-    $data['pms_project_data']=$dataInfo;
-    $generatedSearchInfo= $this->displaySearchForm($searchParams, $request,false, 1, true);
-    $generatedSearchInfo=explode("@", $generatedSearchInfo);
-    $generatedSearchForm=$generatedSearchInfo[0];
-    $generatedSearchTitle=$generatedSearchInfo[1];
-    $data['searchForm']=$generatedSearchForm;
-    $data['searchTitle']=$generatedSearchTitle;
-    $data['page_title']=trans("form_lang.pms_project");
-    return view('project.list_pms_project', $data);
-}
-function getForm(Request $request)
-{
-    $id=$request->get('id');
-    $pms_project_status_set=\App\Modelpmsprojectstatus::latest()->get();
-$pms_project_category_set=\App\Modelpmsprojectcategory::latest()->get();
-$pms_budget_source_set=\App\Modelpmsbudgetsource::latest()->get();
-
-$data['related_pms_project_status']= $pms_project_status_set ;
-$data['related_pms_project_category']= $pms_project_category_set ;
-$data['related_pms_budget_source']= $pms_budget_source_set ;
-
-    $data['is_editable']=1;
-    if(isset($id) && !empty($id)){
-       $data_info = Modelpmsproject::findOrFail($id);                
-       if(isset($data_info) && !empty($data_info)){
-        $controllerName="PmsprojectController";
-        $data= $this->validateEdit($data, $data_info['prj_create_time'], $controllerName);
-        $data['pms_project_data']=$data_info;
-    }
-}
-$data['page_title']=trans("form_lang.pms_project");
-$form= view('project.form_popup_pms_project', $data)->render();
-$resultObject = array(
-    "" => "", "form" => $form, 'pageTitle'=>trans('form_lang.pms_project'));
-return response()->json($resultObject);
-}
-function getListForm(Request $request)
-{
-    $id=$request->get('id');
-    $data['page_title']='';
-    $form= view('project.editable_list_pms_project', $data)->render();
-    $resultObject = array(
-        "" => "", "form" => $form, 'page_info'=>trans('form_lang.pms_project'));
-    return response()->json($resultObject);
-    //echo json_encode($resultObject, JSON_NUMERIC_CHECK);
-}
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
-    {
-        $pms_project_status_set=\App\Modelpmsprojectstatus::latest()->get();
-$pms_project_category_set=\App\Modelpmsprojectcategory::latest()->get();
-$pms_budget_source_set=\App\Modelpmsbudgetsource::latest()->get();
-
-        $data['related_pms_project_status']= $pms_project_status_set ;
-$data['related_pms_project_category']= $pms_project_category_set ;
-$data['related_pms_budget_source']= $pms_budget_source_set ;
-
-        $data['page_title']=trans("form_lang.pms_project");
-        $data['action_mode']="create";
-        return view('project.form_pms_project', $data);
-    }
-    /**`
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function store(Request $request)
-    {
-       $attributeNames = [
-        'prj_name'=> trans('form_lang.prj_name'), 
-'prj_code'=> trans('form_lang.prj_code'), 
-'prj_project_status_id'=> trans('form_lang.prj_project_status_id'), 
-'prj_project_category_id'=> trans('form_lang.prj_project_category_id'), 
-'prj_project_budget_source_id'=> trans('form_lang.prj_project_budget_source_id'), 
-'prj_total_estimate_budget'=> trans('form_lang.prj_total_estimate_budget'), 
-'prj_total_actual_budget'=> trans('form_lang.prj_total_actual_budget'), 
-'prj_geo_location'=> trans('form_lang.prj_geo_location'), 
-'prj_sector_id'=> trans('form_lang.prj_sector_id'), 
-'prj_location_region_id'=> trans('form_lang.prj_location_region_id'), 
-'prj_location_zone_id'=> trans('form_lang.prj_location_zone_id'), 
-'prj_location_woreda_id'=> trans('form_lang.prj_location_woreda_id'), 
-'prj_location_kebele_id'=> trans('form_lang.prj_location_kebele_id'), 
-'prj_location_description'=> trans('form_lang.prj_location_description'), 
-'prj_owner_region_id'=> trans('form_lang.prj_owner_region_id'), 
-'prj_owner_zone_id'=> trans('form_lang.prj_owner_zone_id'), 
-'prj_owner_woreda_id'=> trans('form_lang.prj_owner_woreda_id'), 
-'prj_owner_kebele_id'=> trans('form_lang.prj_owner_kebele_id'), 
-'prj_owner_description'=> trans('form_lang.prj_owner_description'), 
-'prj_start_date_et'=> trans('form_lang.prj_start_date_et'), 
-'prj_start_date_gc'=> trans('form_lang.prj_start_date_gc'), 
-'prj_start_date_plan_et'=> trans('form_lang.prj_start_date_plan_et'), 
-'prj_start_date_plan_gc'=> trans('form_lang.prj_start_date_plan_gc'), 
-'prj_end_date_actual_et'=> trans('form_lang.prj_end_date_actual_et'), 
-'prj_end_date_actual_gc'=> trans('form_lang.prj_end_date_actual_gc'), 
-'prj_end_date_plan_gc'=> trans('form_lang.prj_end_date_plan_gc'), 
-'prj_end_date_plan_et'=> trans('form_lang.prj_end_date_plan_et'), 
-'prj_outcome'=> trans('form_lang.prj_outcome'), 
-'prj_deleted'=> trans('form_lang.prj_deleted'), 
-'prj_remark'=> trans('form_lang.prj_remark'), 
-'prj_created_date'=> trans('form_lang.prj_created_date'), 
-'prj_owner_id'=> trans('form_lang.prj_owner_id'), 
-'prj_urban_ben_number'=> trans('form_lang.prj_urban_ben_number'), 
-'prj_rural_ben_number'=> trans('form_lang.prj_rural_ben_number'), 
-
-    ];
-    $rules= [
-        'prj_name'=> 'max:200', 
-'prj_code'=> 'max:10', 
-'prj_project_status_id'=> 'max:200', 
-'prj_project_category_id'=> 'max:200', 
-'prj_project_budget_source_id'=> 'max:200', 
-'prj_total_estimate_budget'=> 'max:200', 
-'prj_total_actual_budget'=> 'max:200', 
-'prj_geo_location'=> 'max:200', 
-'prj_sector_id'=> 'integer', 
-'prj_location_region_id'=> 'integer', 
-'prj_location_zone_id'=> 'integer', 
-'prj_location_woreda_id'=> 'integer', 
-'prj_location_kebele_id'=> 'integer', 
-'prj_location_description'=> 'max:200', 
-'prj_owner_region_id'=> 'integer', 
-'prj_owner_zone_id'=> 'integer', 
-'prj_owner_woreda_id'=> 'integer', 
-'prj_owner_kebele_id'=> 'integer', 
-'prj_owner_description'=> 'max:200', 
-'prj_start_date_et'=> 'max:15', 
-'prj_start_date_gc'=> 'max:15', 
-'prj_start_date_plan_et'=> 'max:15', 
-'prj_start_date_plan_gc'=> 'max:15', 
-'prj_end_date_actual_et'=> 'max:15', 
-'prj_end_date_actual_gc'=> 'max:15', 
-'prj_end_date_plan_gc'=> 'max:15', 
-'prj_end_date_plan_et'=> 'max:15', 
-'prj_outcome'=> 'max:425', 
-'prj_deleted'=> 'integer', 
-'prj_remark'=> 'max:100', 
-'prj_created_date'=> 'integer', 
-'prj_owner_id'=> 'integer', 
-'prj_urban_ben_number'=> 'integer', 
-'prj_rural_ben_number'=> 'integer', 
-
-    ]; 
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if (!$validator->fails()) {
-        $requestData = $request->all();
-        $requestData['prj_created_by']=auth()->user()->usr_Id;
-        Modelpmsproject::create($requestData);
-        return redirect('project')->with('flash_message',  trans('form_lang.insert_success'));
-    }else{
-        return redirect('project/create')
-        ->withErrors($validator)
-        ->withInput();
-    }
-}
+ 
     /**
      * Display the specified resource.
      *
@@ -231,147 +48,6 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
         }
 
     }
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\View\View
-     */
-    public function edit($id)
-    {
-        $pms_project_status_set=\App\Modelpmsprojectstatus::latest()->get();
-$pms_project_category_set=\App\Modelpmsprojectcategory::latest()->get();
-$pms_budget_source_set=\App\Modelpmsbudgetsource::latest()->get();
-
-        $data['related_pms_project_status']= $pms_project_status_set ;
-$data['related_pms_project_category']= $pms_project_category_set ;
-$data['related_pms_budget_source']= $pms_budget_source_set ;
-
-        $data_info = Modelpmsproject::find($id);
-        $data['pms_project_data']=$data_info;
-        $data['page_title']=trans("form_lang.pms_project");
-        $data['action_mode']="edit";
-        $data['record_id']=$id;
-        return view('project.form_pms_project', $data);
-    }
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function update(Request $request, $id)
-    {
-     $attributeNames = [
-        'prj_name'=> trans('form_lang.prj_name'), 
-'prj_code'=> trans('form_lang.prj_code'), 
-'prj_project_status_id'=> trans('form_lang.prj_project_status_id'), 
-'prj_project_category_id'=> trans('form_lang.prj_project_category_id'), 
-'prj_project_budget_source_id'=> trans('form_lang.prj_project_budget_source_id'), 
-'prj_total_estimate_budget'=> trans('form_lang.prj_total_estimate_budget'), 
-'prj_total_actual_budget'=> trans('form_lang.prj_total_actual_budget'), 
-'prj_geo_location'=> trans('form_lang.prj_geo_location'), 
-'prj_sector_id'=> trans('form_lang.prj_sector_id'), 
-'prj_location_region_id'=> trans('form_lang.prj_location_region_id'), 
-'prj_location_zone_id'=> trans('form_lang.prj_location_zone_id'), 
-'prj_location_woreda_id'=> trans('form_lang.prj_location_woreda_id'), 
-'prj_location_kebele_id'=> trans('form_lang.prj_location_kebele_id'), 
-'prj_location_description'=> trans('form_lang.prj_location_description'), 
-'prj_owner_region_id'=> trans('form_lang.prj_owner_region_id'), 
-'prj_owner_zone_id'=> trans('form_lang.prj_owner_zone_id'), 
-'prj_owner_woreda_id'=> trans('form_lang.prj_owner_woreda_id'), 
-'prj_owner_kebele_id'=> trans('form_lang.prj_owner_kebele_id'), 
-'prj_owner_description'=> trans('form_lang.prj_owner_description'), 
-'prj_start_date_et'=> trans('form_lang.prj_start_date_et'), 
-'prj_start_date_gc'=> trans('form_lang.prj_start_date_gc'), 
-'prj_start_date_plan_et'=> trans('form_lang.prj_start_date_plan_et'), 
-'prj_start_date_plan_gc'=> trans('form_lang.prj_start_date_plan_gc'), 
-'prj_end_date_actual_et'=> trans('form_lang.prj_end_date_actual_et'), 
-'prj_end_date_actual_gc'=> trans('form_lang.prj_end_date_actual_gc'), 
-'prj_end_date_plan_gc'=> trans('form_lang.prj_end_date_plan_gc'), 
-'prj_end_date_plan_et'=> trans('form_lang.prj_end_date_plan_et'), 
-'prj_outcome'=> trans('form_lang.prj_outcome'), 
-'prj_deleted'=> trans('form_lang.prj_deleted'), 
-'prj_remark'=> trans('form_lang.prj_remark'), 
-'prj_created_date'=> trans('form_lang.prj_created_date'), 
-'prj_owner_id'=> trans('form_lang.prj_owner_id'), 
-'prj_urban_ben_number'=> trans('form_lang.prj_urban_ben_number'), 
-'prj_rural_ben_number'=> trans('form_lang.prj_rural_ben_number'), 
-
-    ];
-    $rules= [
-        'prj_name'=> 'max:200', 
-'prj_code'=> 'max:10', 
-'prj_project_status_id'=> 'max:200', 
-'prj_project_category_id'=> 'max:200', 
-'prj_project_budget_source_id'=> 'max:200', 
-'prj_total_estimate_budget'=> 'max:200', 
-'prj_total_actual_budget'=> 'max:200', 
-'prj_geo_location'=> 'max:200', 
-'prj_sector_id'=> 'integer', 
-'prj_location_region_id'=> 'integer', 
-'prj_location_zone_id'=> 'integer', 
-'prj_location_woreda_id'=> 'integer', 
-'prj_location_kebele_id'=> 'integer', 
-'prj_location_description'=> 'max:200', 
-'prj_owner_region_id'=> 'integer', 
-'prj_owner_zone_id'=> 'integer', 
-'prj_owner_woreda_id'=> 'integer', 
-'prj_owner_kebele_id'=> 'integer', 
-'prj_owner_description'=> 'max:200', 
-'prj_start_date_et'=> 'max:15', 
-'prj_start_date_gc'=> 'max:15', 
-'prj_start_date_plan_et'=> 'max:15', 
-'prj_start_date_plan_gc'=> 'max:15', 
-'prj_end_date_actual_et'=> 'max:15', 
-'prj_end_date_actual_gc'=> 'max:15', 
-'prj_end_date_plan_gc'=> 'max:15', 
-'prj_end_date_plan_et'=> 'max:15', 
-'prj_outcome'=> 'max:425', 
-'prj_deleted'=> 'integer', 
-'prj_remark'=> 'max:100', 
-'prj_created_date'=> 'integer', 
-'prj_owner_id'=> 'integer', 
-'prj_urban_ben_number'=> 'integer', 
-'prj_rural_ben_number'=> 'integer', 
-
-    ];     
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if (!$validator->fails()) {
-     $requestData = $request->all();
-     $data_info = Modelpmsproject::findOrFail($id);
-     $data_info->update($requestData);
-     $ischanged=$data_info->wasChanged();
-     if($ischanged){
-         return redirect('project')->with('flash_message',  trans('form_lang.update_success'));
-     }else{
-        return redirect('project/'.$id.'/edit')
-        ->with('flash_message',trans('form_lang.not_changed') )
-        ->withInput();
-    }
-}else{
-    return redirect('project/'.$id.'/edit')
-    ->withErrors($validator)
-    ->withInput();
-}
-}
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function destroy($id)
-    {
-        Modelpmsproject::destroy($id);
-        return redirect('project')->with('flash_message',  trans('form_lang.delete_success'));
-    }
-    
     public function listgrid(Request $request){
 
 $query='SELECT prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id, prj_project_budget_source_id,prj_total_estimate_budget,prj_total_actual_budget,
@@ -463,36 +139,21 @@ $prjenddateplanet=$request->input('prj_end_date_plan_et');
 if(isset($prjenddateplanet) && isset($prjenddateplanet)){
 $query .=' AND prj_end_date_plan_et="'.$prjenddateplanet.'"'; 
 }
-
-     $masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
-        //set foreign key field name
-        //$query .=' AND add_name="'.$masterId.'"'; 
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
-        $query.=' AND (add_name LIKE "%'.$search.'%")  ';
-    }
-}
 $query.=' ORDER BY prj_id DESC';
 $data_info=DB::select($query);
 $authenticatedUser = $request->authUser;
         $userId=$authenticatedUser->usr_id;
-if($userId==79){
+/*if($userId==79){
 $resultObject= array(
     "data" =>$data_info,
     "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1),
 'allowedTabs'=> [2,4,3,6,7]);
-}else{
+}else{*/
     $resultObject= array(
     "data" =>$data_info,
     "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1),
 'allowedTabs'=> $this->getTabPermission($request));
-}
+//}
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
@@ -748,16 +409,5 @@ public function deletegrid(Request $request)
         "errorMsg"=>""
     );
     return response()->json($resultObject);
-}
-function listRoutes(){
-    Route::resource('project', 'PmsprojectController');
-    Route::post('project/listgrid', 'Api\PmsprojectController@listgrid');
-    Route::post('project/insertgrid', 'Api\PmsprojectController@insertgrid');
-    Route::post('project/updategrid', 'Api\PmsprojectController@updategrid');
-    Route::post('project/deletegrid', 'Api\PmsprojectController@deletegrid');
-    Route::post('project/search', 'PmsprojectController@search');
-    Route::post('project/getform', 'PmsprojectController@getForm');
-    Route::post('project/getlistform', 'PmsprojectController@getListForm');
-
 }
 }

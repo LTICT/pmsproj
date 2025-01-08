@@ -265,50 +265,8 @@ $prsordernumber=$request->input('prs_order_number');
 if(isset($prsordernumber) && isset($prsordernumber)){
 $query .=' AND prs_order_number="'.$prsordernumber.'"'; 
 }
-$prsdescription=$request->input('prs_description');
-if(isset($prsdescription) && isset($prsdescription)){
-$query .=' AND prs_description="'.$prsdescription.'"'; 
-}
-$prscreatetime=$request->input('prs_create_time');
-if(isset($prscreatetime) && isset($prscreatetime)){
-$query .=' AND prs_create_time="'.$prscreatetime.'"'; 
-}
-$prsupdatetime=$request->input('prs_update_time');
-if(isset($prsupdatetime) && isset($prsupdatetime)){
-$query .=' AND prs_update_time="'.$prsupdatetime.'"'; 
-}
-$prsdeletetime=$request->input('prs_delete_time');
-if(isset($prsdeletetime) && isset($prsdeletetime)){
-$query .=' AND prs_delete_time="'.$prsdeletetime.'"'; 
-}
-$prscreatedby=$request->input('prs_created_by');
-if(isset($prscreatedby) && isset($prscreatedby)){
-$query .=' AND prs_created_by="'.$prscreatedby.'"'; 
-}
-$prsstatus=$request->input('prs_status');
-if(isset($prsstatus) && isset($prsstatus)){
-$query .=' AND prs_status="'.$prsstatus.'"'; 
-}
-$prssparecolumn=$request->input('prs_spare_column');
-if(isset($prssparecolumn) && isset($prssparecolumn)){
-$query .=' AND prs_spare_column="'.$prssparecolumn.'"'; 
-}
 
-     $masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
-        //set foreign key field name
-        //$query .=' AND add_name="'.$masterId.'"'; 
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
-        $query.=' AND (add_name LIKE "%'.$search.'%")  ';
-    }
-}
-//$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
+$query.=' ORDER BY prs_status_name_or';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
@@ -470,16 +428,5 @@ public function deletegrid(Request $request)
         "errorMsg"=>""
     );
     return response()->json($resultObject);
-}
-function listRoutes(){
-    Route::resource('project_status', 'PmsprojectstatusController');
-    Route::post('project_status/listgrid', 'Api\PmsprojectstatusController@listgrid');
-    Route::post('project_status/insertgrid', 'Api\PmsprojectstatusController@insertgrid');
-    Route::post('project_status/updategrid', 'Api\PmsprojectstatusController@updategrid');
-    Route::post('project_status/deletegrid', 'Api\PmsprojectstatusController@deletegrid');
-    Route::post('project_status/search', 'PmsprojectstatusController@search');
-    Route::post('project_status/getform', 'PmsprojectstatusController@getForm');
-    Route::post('project_status/getlistform', 'PmsprojectstatusController@getListForm');
-
 }
 }

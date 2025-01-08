@@ -444,15 +444,4 @@ public function deletegrid(Request $request)
     );
     return response()->json($resultObject);
 }
-function listRoutes(){
-    Route::resource('project_handover', 'PmsprojecthandoverController');
-    Route::post('project_handover/listgrid', 'Api\PmsprojecthandoverController@listgrid');
-    Route::post('project_handover/insertgrid', 'Api\PmsprojecthandoverController@insertgrid');
-    Route::post('project_handover/updategrid', 'Api\PmsprojecthandoverController@updategrid');
-    Route::post('project_handover/deletegrid', 'Api\PmsprojecthandoverController@deletegrid');
-    Route::post('project_handover/search', 'PmsprojecthandoverController@search');
-    Route::post('project_handover/getform', 'PmsprojecthandoverController@getForm');
-    Route::post('project_handover/getlistform', 'PmsprojecthandoverController@getListForm');
-
-}
 }

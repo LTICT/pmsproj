@@ -22,8 +22,7 @@ class PmsbudgetrequesttaskController extends MyController
      */
     public function show($id)
     {
-        $query='SELECT brt_id,brt_task_name,brt_measurement,brt_budget_request_id,brt_previous_year_physical,brt_previous_year_financial,brt_current_year_physical,brt_current_year_financial,brt_next_year_physical,brt_next_year_financial,brt_description,brt_create_time,brt_update_time,brt_delete_time,brt_created_by,brt_status FROM pms_budget_request_task ';       
-        
+        $query='SELECT brt_id,brt_task_name,brt_measurement,brt_budget_request_id,brt_previous_year_physical,brt_previous_year_financial,brt_current_year_physical,brt_current_year_financial,brt_next_year_physical,brt_next_year_financial,brt_description,brt_create_time,brt_update_time,brt_delete_time,brt_created_by,brt_status FROM pms_budget_request_task ';
         $query .=' WHERE brt_id='.$id.' ';
         $data_info=DB::select(DB::raw($query));
         if(isset($data_info) && !empty($data_info)){
@@ -77,7 +76,7 @@ $query .=" AND brt_budget_request_id='".$brtbudgetrequestid."'";
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
+    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 //Update Data
@@ -244,12 +243,5 @@ public function deletegrid(Request $request)
         "errorMsg"=>""
     );
     return response()->json($resultObject);
-}
-function listRoutes(){
-    Route::resource('budget_request_task', 'PmsbudgetrequesttaskController');
-    Route::post('budget_request_task/listgrid', 'Api\PmsbudgetrequesttaskController@listgrid');
-    Route::post('budget_request_task/insertgrid', 'Api\PmsbudgetrequesttaskController@insertgrid');
-    Route::post('budget_request_task/updategrid', 'Api\PmsbudgetrequesttaskController@updategrid');
-    Route::post('budget_request_task/deletegrid', 'Api\PmsbudgetrequesttaskController@deletegrid');
 }
 }

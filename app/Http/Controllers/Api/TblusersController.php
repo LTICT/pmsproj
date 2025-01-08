@@ -725,15 +725,4 @@ public function deletegrid(Request $request)
     );
     return response()->json($resultObject);
 }
-function listRoutes(){
-    Route::resource('users', 'TblusersController');
-    Route::post('users/listgrid', 'Api\TblusersController@listgrid');
-    Route::post('users/insertgrid', 'Api\TblusersController@insertgrid');
-    Route::post('users/updategrid', 'Api\TblusersController@updategrid');
-    Route::post('users/deletegrid', 'Api\TblusersController@deletegrid');
-    Route::post('users/search', 'TblusersController@search');
-    Route::post('users/getform', 'TblusersController@getForm');
-    Route::post('users/getlistform', 'TblusersController@getListForm');
-
-}
 }

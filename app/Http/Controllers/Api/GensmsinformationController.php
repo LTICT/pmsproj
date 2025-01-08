@@ -22,8 +22,7 @@ class GensmsinformationController extends MyController
      */
     public function show($id)
     {
-        $query='SELECT smi_id,smi_sms_template_id,smi_sent_to,smi_sent_date,smi_sms_content,smi_description,smi_create_time,smi_update_time,smi_delete_time,smi_created_by,smi_status FROM gen_sms_information ';       
-        
+        $query='SELECT smi_id,smi_sms_template_id,smi_sent_to,smi_sent_date,smi_sms_content,smi_description,smi_create_time,smi_update_time,smi_delete_time,smi_created_by,smi_status FROM gen_sms_information ';
         $query .=' WHERE smi_id='.$id.' ';
         $data_info=DB::select(DB::raw($query));
         if(isset($data_info) && !empty($data_info)){
@@ -87,7 +86,7 @@ $query .=' AND smi_status="'.$smistatus.'"';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
+    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 //Update Data
@@ -236,12 +235,5 @@ public function deletegrid(Request $request)
         "errorMsg"=>""
     );
     return response()->json($resultObject);
-}
-function listRoutes(){
-    Route::resource('sms_information', 'GensmsinformationController');
-    Route::post('sms_information/listgrid', 'Api\GensmsinformationController@listgrid');
-    Route::post('sms_information/insertgrid', 'Api\GensmsinformationController@insertgrid');
-    Route::post('sms_information/updategrid', 'Api\GensmsinformationController@updategrid');
-    Route::post('sms_information/deletegrid', 'Api\GensmsinformationController@deletegrid');
 }
 }

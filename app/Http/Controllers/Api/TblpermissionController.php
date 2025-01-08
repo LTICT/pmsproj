@@ -519,15 +519,4 @@ public function deletegrid(Request $request)
     );
     return response()->json($resultObject);
 }
-function listRoutes(){
-    Route::resource('permission', 'TblpermissionController');
-    Route::post('permission/listgrid', 'Api\TblpermissionController@listgrid');
-    Route::post('permission/insertgrid', 'Api\TblpermissionController@insertgrid');
-    Route::post('permission/updategrid', 'Api\TblpermissionController@updategrid');
-    Route::post('permission/deletegrid', 'Api\TblpermissionController@deletegrid');
-    Route::post('permission/search', 'TblpermissionController@search');
-    Route::post('permission/getform', 'TblpermissionController@getForm');
-    Route::post('permission/getlistform', 'TblpermissionController@getListForm');
-
-}
 }

@@ -83,7 +83,7 @@ $query .=' AND bes_support_amount="'.$bessupportamount.'"';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
+    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 //Update Data
@@ -231,12 +231,5 @@ public function deletegrid(Request $request)
         "errorMsg"=>""
     );
     return response()->json($resultObject);
-}
-function listRoutes(){
-    Route::resource('budget_ex_source', 'PmsbudgetexsourceController');
-    Route::post('budget_ex_source/listgrid', 'Api\PmsbudgetexsourceController@listgrid');
-    Route::post('budget_ex_source/insertgrid', 'Api\PmsbudgetexsourceController@insertgrid');
-    Route::post('budget_ex_source/updategrid', 'Api\PmsbudgetexsourceController@updategrid');
-    Route::post('budget_ex_source/deletegrid', 'Api\PmsbudgetexsourceController@deletegrid');
 }
 }

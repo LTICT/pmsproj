@@ -483,15 +483,4 @@ public function deletegrid(Request $request)
     );
     return response()->json($resultObject);
 }
-function listRoutes(){
-    Route::resource('project_supplimentary', 'PmsprojectsupplimentaryController');
-    Route::post('project_supplimentary/listgrid', 'Api\PmsprojectsupplimentaryController@listgrid');
-    Route::post('project_supplimentary/insertgrid', 'Api\PmsprojectsupplimentaryController@insertgrid');
-    Route::post('project_supplimentary/updategrid', 'Api\PmsprojectsupplimentaryController@updategrid');
-    Route::post('project_supplimentary/deletegrid', 'Api\PmsprojectsupplimentaryController@deletegrid');
-    Route::post('project_supplimentary/search', 'PmsprojectsupplimentaryController@search');
-    Route::post('project_supplimentary/getform', 'PmsprojectsupplimentaryController@getForm');
-    Route::post('project_supplimentary/getlistform', 'PmsprojectsupplimentaryController@getListForm');
-
-}
 }

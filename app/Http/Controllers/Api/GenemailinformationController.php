@@ -83,7 +83,7 @@ $query .=' AND emi_status="'.$emistatus.'"';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
+    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 //Update Data
@@ -228,12 +228,5 @@ public function deletegrid(Request $request)
         "errorMsg"=>""
     );
     return response()->json($resultObject);
-}
-function listRoutes(){
-    Route::resource('email_information', 'GenemailinformationController');
-    Route::post('email_information/listgrid', 'Api\GenemailinformationController@listgrid');
-    Route::post('email_information/insertgrid', 'Api\GenemailinformationController@insertgrid');
-    Route::post('email_information/updategrid', 'Api\GenemailinformationController@updategrid');
-    Route::post('email_information/deletegrid', 'Api\GenemailinformationController@deletegrid');
 }
 }

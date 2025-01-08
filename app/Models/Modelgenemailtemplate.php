@@ -26,9 +26,6 @@ class Modelgenemailtemplate extends Model
      * @var array
      */
     protected $fillable = ['emt_id','emt_template_name','emt_template_content','emt_description','emt_create_time','emt_update_time','emt_delete_time','emt_created_by','emt_status','emt_template_content_am','emt_template_content_en'];
-
-    
-
     /**
      * Change activity log event description
      *

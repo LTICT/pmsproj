@@ -447,15 +447,4 @@ use App\Http\Controllers\MyController;
         );
         return response()->json($resultObject);
     }
-    function listRoutes(){
-        Route::resource('project_budget_expenditure', 'PmsprojectbudgetexpenditureController');
-        Route::post('project_budget_expenditure/listgrid', 'Api\PmsprojectbudgetexpenditureController@listgrid');
-        Route::post('project_budget_expenditure/insertgrid', 'Api\PmsprojectbudgetexpenditureController@insertgrid');
-        Route::post('project_budget_expenditure/updategrid', 'Api\PmsprojectbudgetexpenditureController@updategrid');
-        Route::post('project_budget_expenditure/deletegrid', 'Api\PmsprojectbudgetexpenditureController@deletegrid');
-        Route::post('project_budget_expenditure/search', 'PmsprojectbudgetexpenditureController@search');
-        Route::post('project_budget_expenditure/getform', 'PmsprojectbudgetexpenditureController@getForm');
-        Route::post('project_budget_expenditure/getlistform', 'PmsprojectbudgetexpenditureController@getListForm');
-
-    }
     }

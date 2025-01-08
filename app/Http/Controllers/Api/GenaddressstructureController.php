@@ -508,17 +508,6 @@ public function deletegrid(Request $request)
     );
     return response()->json($resultObject);
 }
-function listRoutes(){
-    Route::resource('address_structure', 'GenaddressstructureController');
-    Route::post('address_structure/listgrid', 'Api\GenaddressstructureController@listgrid');
-    Route::post('address_structure/insertgrid', 'Api\GenaddressstructureController@insertgrid');
-    Route::post('address_structure/updategrid', 'Api\GenaddressstructureController@updategrid');
-    Route::post('address_structure/deletegrid', 'Api\GenaddressstructureController@deletegrid');
-    Route::post('address_structure/search', 'GenaddressstructureController@search');
-    Route::post('address_structure/getform', 'GenaddressstructureController@getForm');
-    Route::post('address_structure/getlistform', 'GenaddressstructureController@getListForm');
-
-}
 function buildHierarchy(array $elements, $parentId=1) {
     $branch = [];
     //dd($elements);

@@ -509,15 +509,4 @@ public function deletegrid(Request $request)
     );
     return response()->json($resultObject);
 }
-function listRoutes(){
-    Route::resource('pages', 'TblpagesController');
-    Route::post('pages/listgrid', 'Api\TblpagesController@listgrid');
-    Route::post('pages/insertgrid', 'Api\TblpagesController@insertgrid');
-    Route::post('pages/updategrid', 'Api\TblpagesController@updategrid');
-    Route::post('pages/deletegrid', 'Api\TblpagesController@deletegrid');
-    Route::post('pages/search', 'TblpagesController@search');
-    Route::post('pages/getform', 'TblpagesController@getForm');
-    Route::post('pages/getlistform', 'TblpagesController@getListForm');
-
-}
 }

@@ -252,7 +252,6 @@ function getListForm(Request $request)
         return redirect('sector_information')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-   
  $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
   $permissionData=$this->getPagePermission($request,20);
   if(isset($permissionData) && !empty($permissionData)){
@@ -299,50 +298,11 @@ $sciavailableatworeda=$request->input('sci_available_at_woreda');
 if(isset($sciavailableatworeda) && isset($sciavailableatworeda)){
 $query .=' AND sci_available_at_woreda="'.$sciavailableatworeda.'"'; 
 }
-$scidescription=$request->input('sci_description');
-if(isset($scidescription) && isset($scidescription)){
-$query .=' AND sci_description="'.$scidescription.'"'; 
-}
-$scicreatetime=$request->input('sci_create_time');
-if(isset($scicreatetime) && isset($scicreatetime)){
-$query .=' AND sci_create_time="'.$scicreatetime.'"'; 
-}
-$sciupdatetime=$request->input('sci_update_time');
-if(isset($sciupdatetime) && isset($sciupdatetime)){
-$query .=' AND sci_update_time="'.$sciupdatetime.'"'; 
-}
-$scideletetime=$request->input('sci_delete_time');
-if(isset($scideletetime) && isset($scideletetime)){
-$query .=' AND sci_delete_time="'.$scideletetime.'"'; 
-}
-$scicreatedby=$request->input('sci_created_by');
-if(isset($scicreatedby) && isset($scicreatedby)){
-$query .=' AND sci_created_by="'.$scicreatedby.'"'; 
-}
-$scistatus=$request->input('sci_status');
-if(isset($scistatus) && isset($scistatus)){
-$query .=' AND sci_status="'.$scistatus.'"'; 
-}
-
-     $masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
-        //set foreign key field name
-        //$query .=' AND add_name="'.$masterId.'"'; 
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
-        $query.=' AND (add_name LIKE "%'.$search.'%")  ';
-    }
-}
-//$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
+$query.=' ORDER BY sci_name_or';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-"previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
+"previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
@@ -511,16 +471,5 @@ public function deletegrid(Request $request)
         "errorMsg"=>""
     );
     return response()->json($resultObject);
-}
-function listRoutes(){
-    Route::resource('sector_information', 'PmssectorinformationController');
-    Route::post('sector_information/listgrid', 'Api\PmssectorinformationController@listgrid');
-    Route::post('sector_information/insertgrid', 'Api\PmssectorinformationController@insertgrid');
-    Route::post('sector_information/updategrid', 'Api\PmssectorinformationController@updategrid');
-    Route::post('sector_information/deletegrid', 'Api\PmssectorinformationController@deletegrid');
-    Route::post('sector_information/search', 'PmssectorinformationController@search');
-    Route::post('sector_information/getform', 'PmssectorinformationController@getForm');
-    Route::post('sector_information/getlistform', 'PmssectorinformationController@getListForm');
-
 }
 }

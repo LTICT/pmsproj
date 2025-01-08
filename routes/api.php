@@ -16,183 +16,15 @@ use Illuminate\Support\Facades\Route;
 
 /*
 Route::resource('films', 'film\\MoviesController');*/
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+/*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 return $request->user();
-});
-
-Route::get('', 'DashboardController@index');
-//Route::post('login', 'Api\APIController@loginUser');
-Route::post('listprojects', 'Api\APIController@listProjects');
-Route::post('listperformance', 'Api\APIController@listPerformance');
-Route::post('saveperformance', 'Api\APIController@savePerformance');
-Route::post('projectdashboard', 'Api\APIController@projectDashboard');
-Route::post('projectdetail', 'Api\APIController@showProjectDetail');
-
-Route::get('C2BPaymentQueryRequest', 'Api\PaymentController@C2BPaymentQueryRequest');
-Route::get('C2BPaymentValidationRequest', 'Api\PaymentController@C2BPaymentValidationRequest');
-Route::get('C2BPaymentConfirmationRequest', 'Api\PaymentController@C2BPaymentConfirmationRequest');
+});*/
 
 Route::get('/data', 'GanttController@get');
 Route::resource('task', 'TaskController');
 Route::resource('link', 'LinkController');
-
-Route::post('budget_request/listgrid', 'Api\PmsbudgetrequestController@listgrid');
-Route::post('budget_request/insertgrid', 'Api\PmsbudgetrequestController@insertgrid');
-Route::post('budget_request/updategrid', 'Api\PmsbudgetrequestController@updategrid');
-Route::post('budget_request/deletegrid', 'Api\PmsbudgetrequestController@deletegrid');
-Route::post('budget_request/search', 'PmsbudgetrequestController@search');
-Route::resource('project_contractor', 'PmsprojectcontractorController');
-Route::post('project_contractor/listgrid', 'Api\PmsprojectcontractorController@listgrid');
-Route::post('project_contractor/insertgrid', 'Api\PmsprojectcontractorController@insertgrid');
-Route::post('project_contractor/updategrid', 'Api\PmsprojectcontractorController@updategrid');
-Route::post('project_contractor/deletegrid', 'Api\PmsprojectcontractorController@deletegrid');
-Route::post('project_contractor/search', 'PmsprojectcontractorController@search');
-
-
-
-Route::post('project_document/listgrid', 'Api\PmsprojectdocumentController@listgrid');
-Route::post('project_document/insertgrid', 'Api\PmsprojectdocumentController@insertgrid');
-Route::post('project_document/updategrid', 'Api\PmsprojectdocumentController@updategrid');
-Route::post('project_document/deletegrid', 'Api\PmsprojectdocumentController@deletegrid');
-Route::post('project_document/search', 'PmsprojectdocumentController@search');
-
-Route::post('project_payment/listgrid', 'Api\PmsprojectpaymentController@listgrid');
-Route::post('project_payment/insertgrid', 'Api\PmsprojectpaymentController@insertgrid');
-Route::post('project_payment/updategrid', 'Api\PmsprojectpaymentController@updategrid');
-Route::post('project_payment/deletegrid', 'Api\PmsprojectpaymentController@deletegrid');
-Route::post('project_payment/search', 'PmsprojectpaymentController@search');
-
-Route::post('project_stakeholder/listgrid', 'Api\PmsprojectstakeholderController@listgrid');
-Route::post('project_stakeholder/insertgrid', 'Api\PmsprojectstakeholderController@insertgrid');
-Route::post('project_stakeholder/updategrid', 'Api\PmsprojectstakeholderController@updategrid');
-Route::post('project_stakeholder/deletegrid', 'Api\PmsprojectstakeholderController@deletegrid');
-Route::post('project_stakeholder/search', 'PmsprojectstakeholderController@search');
-
-Route::post('project_status/listgrid', 'Api\PmsprojectstatusController@listgrid');
-Route::post('project_status/insertgrid', 'Api\PmsprojectstatusController@insertgrid');
-Route::post('project_status/updategrid', 'Api\PmsprojectstatusController@updategrid');
-Route::post('project_status/deletegrid', 'Api\PmsprojectstatusController@deletegrid');
-Route::post('project_status/search', 'PmsprojectstatusController@search');
-
-Route::post('access_log/listgrid', 'Api\TblaccesslogController@listgrid');
-Route::post('access_log/insertgrid', 'Api\TblaccesslogController@insertgrid');
-Route::post('access_log/updategrid', 'Api\TblaccesslogController@updategrid');
-Route::post('access_log/deletegrid', 'Api\TblaccesslogController@deletegrid');
-Route::post('access_log/search', 'TblaccesslogController@search');
-
-Route::post('pages/listgrid', 'Api\TblpagesController@listgrid');
-Route::post('pages/insertgrid', 'Api\TblpagesController@insertgrid');
-Route::post('pages/updategrid', 'Api\TblpagesController@updategrid');
-Route::post('pages/deletegrid', 'Api\TblpagesController@deletegrid');
-Route::post('pages/search', 'TblpagesController@search');
-
-Route::post('permission/listgrid', 'Api\TblpermissionController@listgrid');
-Route::post('permission/insertgrid', 'Api\TblpermissionController@insertgrid');
-Route::post('permission/updategrid', 'Api\TblpermissionController@updategrid');
-Route::post('permission/deletegrid', 'Api\TblpermissionController@deletegrid');
-Route::post('permission/search', 'TblpermissionController@search');
-
-Route::post('roles/insertgrid', 'Api\TblrolesController@insertgrid');
-Route::post('roles/deletegrid', 'Api\TblrolesController@deletegrid');
-Route::post('roles/search', 'TblrolesController@search');
-
-Route::post('user_role/listgrid', 'Api\TbluserroleController@listgrid');
-Route::post('user_role/insertgrid', 'Api\TbluserroleController@insertgrid');
-Route::post('user_role/updategrid', 'Api\TbluserroleController@updategrid');
-Route::post('user_role/deletegrid', 'Api\TbluserroleController@deletegrid');
-Route::post('user_role/search', 'TbluserroleController@search');
- 
-Route::post('users/insertgrid', 'Api\TblusersController@insertgrid');
-Route::post('users/updategrid', 'Api\TblusersController@updategrid');
-Route::post('users/deletegrid', 'Api\TblusersController@deletegrid');
-Route::post('users/search', 'TblusersController@search');
-Route::post('users/changeuserstatus', 'Api\TblusersController@changeuserstatus');
-
-Route::post('addressbyparent', 'Api\GenaddressstructureController@addressByParent');
-Route::resource('address_structure', 'GenaddressstructureController');
-//Route::post('address_structure/listgrid', 'Api\GenaddressstructureController@listgrid');
-Route::post('address_structure/insertgrid', 'Api\GenaddressstructureController@insertgrid');
-Route::post('address_structure/updategrid', 'Api\GenaddressstructureController@updategrid');
-Route::post('address_structure/deletegrid', 'Api\GenaddressstructureController@deletegrid');
-Route::post('address_structure/search', 'GenaddressstructureController@search');
-
-Route::post('notification', 'Api\GennotificationController@listgrid');
-Route::post('updatenotification', 'Api\GennotificationController@updategrid');
 Route::post('login', 'AuthController@login');
-Route::post('user/change_password', 'AuthController@changePassword');
-
-
-Route::post('users/listgrid', 'Api\TblusersController@listgrid');
-//NEWLY ADDED
- 
-    Route::post('expenditure_code/listgrid', 'Api\PmsexpenditurecodeController@listgrid');
-    Route::post('expenditure_code/insertgrid', 'Api\PmsexpenditurecodeController@insertgrid');
-    Route::post('expenditure_code/updategrid', 'Api\PmsexpenditurecodeController@updategrid');
-    Route::post('expenditure_code/deletegrid', 'Api\PmsexpenditurecodeController@deletegrid');
-    Route::post('expenditure_code/search', 'PmsexpenditurecodeController@search');
-    
-    Route::post('project_budget_expenditure/listgrid', 'Api\PmsprojectbudgetexpenditureController@listgrid');
-    Route::post('project_budget_expenditure/insertgrid', 'Api\PmsprojectbudgetexpenditureController@insertgrid');
-    Route::post('project_budget_expenditure/updategrid', 'Api\PmsprojectbudgetexpenditureController@updategrid');
-    Route::post('project_budget_expenditure/deletegrid', 'Api\PmsprojectbudgetexpenditureController@deletegrid');
-    Route::post('project_budget_expenditure/search', 'PmsprojectbudgetexpenditureController@search');
-    
-    Route::post('project_budget_source/listgrid', 'Api\PmsprojectbudgetsourceController@listgrid');
-    Route::post('project_budget_source/insertgrid', 'Api\PmsprojectbudgetsourceController@insertgrid');
-    Route::post('project_budget_source/updategrid', 'Api\PmsprojectbudgetsourceController@updategrid');
-    Route::post('project_budget_source/deletegrid', 'Api\PmsprojectbudgetsourceController@deletegrid');
-    Route::post('project_budget_source/search', 'PmsprojectbudgetsourceController@search');
-    
-    Route::post('project_employee/listgrid', 'Api\PmsprojectemployeeController@listgrid');
-    Route::post('project_employee/insertgrid', 'Api\PmsprojectemployeeController@insertgrid');
-    Route::post('project_employee/updategrid', 'Api\PmsprojectemployeeController@updategrid');
-    Route::post('project_employee/deletegrid', 'Api\PmsprojectemployeeController@deletegrid');
-    Route::post('project_employee/search', 'PmsprojectemployeeController@search');
-    
-    Route::post('project_handover/listgrid', 'Api\PmsprojecthandoverController@listgrid');
-    Route::post('project_handover/insertgrid', 'Api\PmsprojecthandoverController@insertgrid');
-    Route::post('project_handover/updategrid', 'Api\PmsprojecthandoverController@updategrid');
-    Route::post('project_handover/deletegrid', 'Api\PmsprojecthandoverController@deletegrid');
-    Route::post('project_handover/search', 'PmsprojecthandoverController@search');
-    
-    Route::post('project_performance/listgrid', 'Api\PmsprojectperformanceController@listgrid');
-    Route::post('project_performance/insertgrid', 'Api\PmsprojectperformanceController@insertgrid');
-    Route::post('project_performance/updategrid', 'Api\PmsprojectperformanceController@updategrid');
-    Route::post('project_performance/deletegrid', 'Api\PmsprojectperformanceController@deletegrid');
-    Route::post('project_performance/search', 'PmsprojectperformanceController@search');
-    
-    Route::post('project_plan/listgrid', 'Api\PmsprojectplanController@listgrid');
-    Route::post('project_plan/insertgrid', 'Api\PmsprojectplanController@insertgrid');
-    Route::post('project_plan/updategrid', 'Api\PmsprojectplanController@updategrid');
-    Route::post('project_plan/deletegrid', 'Api\PmsprojectplanController@deletegrid');
-    Route::post('project_plan/search', 'PmsprojectplanController@search');
-    
-    Route::post('project_supplimentary/listgrid', 'Api\PmsprojectsupplimentaryController@listgrid');
-    Route::post('project_supplimentary/insertgrid', 'Api\PmsprojectsupplimentaryController@insertgrid');
-    Route::post('project_supplimentary/updategrid', 'Api\PmsprojectsupplimentaryController@updategrid');
-    Route::post('project_supplimentary/deletegrid', 'Api\PmsprojectsupplimentaryController@deletegrid');
-    Route::post('project_supplimentary/search', 'PmsprojectsupplimentaryController@search');
-    
-    Route::post('project_variation/listgrid', 'Api\PmsprojectvariationController@listgrid');
-    Route::post('project_variation/insertgrid', 'Api\PmsprojectvariationController@insertgrid');
-    Route::post('project_variation/updategrid', 'Api\PmsprojectvariationController@updategrid');
-    Route::post('project_variation/deletegrid', 'Api\PmsprojectvariationController@deletegrid');
-    Route::post('project_variation/search', 'PmsprojectvariationController@search');
-    
-    Route::post('project_budget_plan/listgrid', 'Api\PmsprojectbudgetplanController@listgrid');
-    Route::post('project_budget_plan/insertgrid', 'Api\PmsprojectbudgetplanController@insertgrid');
-    Route::post('project_budget_plan/updategrid', 'Api\PmsprojectbudgetplanController@updategrid');
-    Route::post('project_budget_plan/deletegrid', 'Api\PmsprojectbudgetplanController@deletegrid');
-    Route::post('project_budget_plan/search', 'PmsprojectbudgetplanController@search');
-
-
-
-    //END NEWLY ADDED
-Route::post('statistics/getprojectstatistics', 'Api\StatisticalReportController@getprojectstatistics');
-Route::post('statistical_report/getstatistics', 'Api\StatisticalReportController@getStatistics');
-Route::post('report/getreport', 'Api\ReportController@getReport');
-Route::post('me', 'TokenController@validateToken');
-Route::post('refreshToken', 'TokenController@refreshToken');
+Route::post('addressbyparent', 'Api\GenaddressstructureController@addressByParent');
    // Route::post('department/listgrid', [\Api\GendepartmentController::class, 'listgrid'])->middleware('apilogin');
 Route::group(['middleware' => [\App\Http\Middleware\JwtMiddleware::class], 'except' => ['api/login', 'api/register']], function () {
     Route::resource('project', 'Api\PmsprojectController');
@@ -204,8 +36,7 @@ Route::post('project/search', 'PmsprojectController@search');
 
  Route::post('dashboard_builder', 'Api\GendashboardbuilderController@dashboardData');
 Route::post('menus', 'Api\GenmenubuilderController@listgrid');
-Route::post('address_structure/listgrid', 'Api\GenaddressstructureController@listgrid');
-Route::post('address_structure/listaddress', 'Api\GenaddressstructureController@listaddress');
+
 
        Route::post('roles/updategrid', 'Api\TblrolesController@updategrid');
        Route::post('roles/listgrid', 'Api\TblrolesController@listgrid');
@@ -338,4 +169,162 @@ Route::post('expenditure_code/insertgrid', 'Api\PmsexpenditurecodeController@ins
 Route::post('expenditure_code/updategrid', 'Api\PmsexpenditurecodeController@updategrid');
 Route::post('expenditure_code/deletegrid', 'Api\PmsexpenditurecodeController@deletegrid');
 Route::post('expenditure_code/search', 'PmsexpenditurecodeController@search');
+
+Route::post('pages/listgrid', 'Api\TblpagesController@listgrid');
+Route::post('pages/insertgrid', 'Api\TblpagesController@insertgrid');
+Route::post('pages/updategrid', 'Api\TblpagesController@updategrid');
+Route::post('pages/deletegrid', 'Api\TblpagesController@deletegrid');
+Route::post('pages/search', 'TblpagesController@search');
+
+Route::post('permission/listgrid', 'Api\TblpermissionController@listgrid');
+Route::post('permission/insertgrid', 'Api\TblpermissionController@insertgrid');
+Route::post('permission/updategrid', 'Api\TblpermissionController@updategrid');
+Route::post('permission/deletegrid', 'Api\TblpermissionController@deletegrid');
+Route::post('permission/search', 'TblpermissionController@search');
+
+Route::post('roles/insertgrid', 'Api\TblrolesController@insertgrid');
+Route::post('roles/deletegrid', 'Api\TblrolesController@deletegrid');
+Route::post('roles/search', 'TblrolesController@search');
+
+Route::post('user_role/listgrid', 'Api\TbluserroleController@listgrid');
+Route::post('user_role/insertgrid', 'Api\TbluserroleController@insertgrid');
+Route::post('user_role/updategrid', 'Api\TbluserroleController@updategrid');
+Route::post('user_role/deletegrid', 'Api\TbluserroleController@deletegrid');
+Route::post('user_role/search', 'TbluserroleController@search');
+
+Route::post('users/listgrid', 'Api\TblusersController@listgrid');
+Route::post('users/insertgrid', 'Api\TblusersController@insertgrid');
+Route::post('users/updategrid', 'Api\TblusersController@updategrid');
+Route::post('users/deletegrid', 'Api\TblusersController@deletegrid');
+Route::post('users/search', 'TblusersController@search');
+Route::post('users/changeuserstatus', 'Api\TblusersController@changeuserstatus');
+
+Route::resource('address_structure', 'GenaddressstructureController');
+//Route::post('address_structure/listgrid', 'Api\GenaddressstructureController@listgrid');
+Route::post('address_structure/insertgrid', 'Api\GenaddressstructureController@insertgrid');
+Route::post('address_structure/updategrid', 'Api\GenaddressstructureController@updategrid');
+Route::post('address_structure/deletegrid', 'Api\GenaddressstructureController@deletegrid');
+Route::post('address_structure/search', 'GenaddressstructureController@search');
+Route::post('address_structure/listgrid', 'Api\GenaddressstructureController@listgrid');
+Route::post('address_structure/listaddress', 'Api\GenaddressstructureController@listaddress');
+
+Route::post('budget_request/listgrid', 'Api\PmsbudgetrequestController@listgrid');
+Route::post('budget_request/insertgrid', 'Api\PmsbudgetrequestController@insertgrid');
+Route::post('budget_request/updategrid', 'Api\PmsbudgetrequestController@updategrid');
+Route::post('budget_request/deletegrid', 'Api\PmsbudgetrequestController@deletegrid');
+Route::post('budget_request/search', 'PmsbudgetrequestController@search');
+Route::resource('project_contractor', 'PmsprojectcontractorController');
+Route::post('project_contractor/listgrid', 'Api\PmsprojectcontractorController@listgrid');
+Route::post('project_contractor/insertgrid', 'Api\PmsprojectcontractorController@insertgrid');
+Route::post('project_contractor/updategrid', 'Api\PmsprojectcontractorController@updategrid');
+Route::post('project_contractor/deletegrid', 'Api\PmsprojectcontractorController@deletegrid');
+Route::post('project_contractor/search', 'PmsprojectcontractorController@search');
+
+
+
+Route::post('project_document/listgrid', 'Api\PmsprojectdocumentController@listgrid');
+Route::post('project_document/insertgrid', 'Api\PmsprojectdocumentController@insertgrid');
+Route::post('project_document/updategrid', 'Api\PmsprojectdocumentController@updategrid');
+Route::post('project_document/deletegrid', 'Api\PmsprojectdocumentController@deletegrid');
+Route::post('project_document/search', 'PmsprojectdocumentController@search');
+
+Route::post('project_payment/listgrid', 'Api\PmsprojectpaymentController@listgrid');
+Route::post('project_payment/insertgrid', 'Api\PmsprojectpaymentController@insertgrid');
+Route::post('project_payment/updategrid', 'Api\PmsprojectpaymentController@updategrid');
+Route::post('project_payment/deletegrid', 'Api\PmsprojectpaymentController@deletegrid');
+Route::post('project_payment/search', 'PmsprojectpaymentController@search');
+
+Route::post('project_stakeholder/listgrid', 'Api\PmsprojectstakeholderController@listgrid');
+Route::post('project_stakeholder/insertgrid', 'Api\PmsprojectstakeholderController@insertgrid');
+Route::post('project_stakeholder/updategrid', 'Api\PmsprojectstakeholderController@updategrid');
+Route::post('project_stakeholder/deletegrid', 'Api\PmsprojectstakeholderController@deletegrid');
+Route::post('project_stakeholder/search', 'PmsprojectstakeholderController@search');
+
+Route::post('project_status/listgrid', 'Api\PmsprojectstatusController@listgrid');
+Route::post('project_status/insertgrid', 'Api\PmsprojectstatusController@insertgrid');
+Route::post('project_status/updategrid', 'Api\PmsprojectstatusController@updategrid');
+Route::post('project_status/deletegrid', 'Api\PmsprojectstatusController@deletegrid');
+Route::post('project_status/search', 'PmsprojectstatusController@search');
+
+Route::post('access_log/listgrid', 'Api\TblaccesslogController@listgrid');
+Route::post('access_log/insertgrid', 'Api\TblaccesslogController@insertgrid');
+Route::post('access_log/updategrid', 'Api\TblaccesslogController@updategrid');
+Route::post('access_log/deletegrid', 'Api\TblaccesslogController@deletegrid');
+Route::post('access_log/search', 'TblaccesslogController@search');
+
+Route::post('notification', 'Api\GennotificationController@listgrid');
+Route::post('updatenotification', 'Api\GennotificationController@updategrid');
+
+Route::post('user/change_password', 'AuthController@changePassword');
+
+//NEWLY ADDED
+ 
+    Route::post('expenditure_code/listgrid', 'Api\PmsexpenditurecodeController@listgrid');
+    Route::post('expenditure_code/insertgrid', 'Api\PmsexpenditurecodeController@insertgrid');
+    Route::post('expenditure_code/updategrid', 'Api\PmsexpenditurecodeController@updategrid');
+    Route::post('expenditure_code/deletegrid', 'Api\PmsexpenditurecodeController@deletegrid');
+    Route::post('expenditure_code/search', 'PmsexpenditurecodeController@search');
+    
+    Route::post('project_budget_expenditure/listgrid', 'Api\PmsprojectbudgetexpenditureController@listgrid');
+    Route::post('project_budget_expenditure/insertgrid', 'Api\PmsprojectbudgetexpenditureController@insertgrid');
+    Route::post('project_budget_expenditure/updategrid', 'Api\PmsprojectbudgetexpenditureController@updategrid');
+    Route::post('project_budget_expenditure/deletegrid', 'Api\PmsprojectbudgetexpenditureController@deletegrid');
+    Route::post('project_budget_expenditure/search', 'PmsprojectbudgetexpenditureController@search');
+    
+    Route::post('project_budget_source/listgrid', 'Api\PmsprojectbudgetsourceController@listgrid');
+    Route::post('project_budget_source/insertgrid', 'Api\PmsprojectbudgetsourceController@insertgrid');
+    Route::post('project_budget_source/updategrid', 'Api\PmsprojectbudgetsourceController@updategrid');
+    Route::post('project_budget_source/deletegrid', 'Api\PmsprojectbudgetsourceController@deletegrid');
+    Route::post('project_budget_source/search', 'PmsprojectbudgetsourceController@search');
+    
+    Route::post('project_employee/listgrid', 'Api\PmsprojectemployeeController@listgrid');
+    Route::post('project_employee/insertgrid', 'Api\PmsprojectemployeeController@insertgrid');
+    Route::post('project_employee/updategrid', 'Api\PmsprojectemployeeController@updategrid');
+    Route::post('project_employee/deletegrid', 'Api\PmsprojectemployeeController@deletegrid');
+    Route::post('project_employee/search', 'PmsprojectemployeeController@search');
+    
+    Route::post('project_handover/listgrid', 'Api\PmsprojecthandoverController@listgrid');
+    Route::post('project_handover/insertgrid', 'Api\PmsprojecthandoverController@insertgrid');
+    Route::post('project_handover/updategrid', 'Api\PmsprojecthandoverController@updategrid');
+    Route::post('project_handover/deletegrid', 'Api\PmsprojecthandoverController@deletegrid');
+    Route::post('project_handover/search', 'PmsprojecthandoverController@search');
+    
+    Route::post('project_performance/listgrid', 'Api\PmsprojectperformanceController@listgrid');
+    Route::post('project_performance/insertgrid', 'Api\PmsprojectperformanceController@insertgrid');
+    Route::post('project_performance/updategrid', 'Api\PmsprojectperformanceController@updategrid');
+    Route::post('project_performance/deletegrid', 'Api\PmsprojectperformanceController@deletegrid');
+    Route::post('project_performance/search', 'PmsprojectperformanceController@search');
+    
+    Route::post('project_plan/listgrid', 'Api\PmsprojectplanController@listgrid');
+    Route::post('project_plan/insertgrid', 'Api\PmsprojectplanController@insertgrid');
+    Route::post('project_plan/updategrid', 'Api\PmsprojectplanController@updategrid');
+    Route::post('project_plan/deletegrid', 'Api\PmsprojectplanController@deletegrid');
+    Route::post('project_plan/search', 'PmsprojectplanController@search');
+    
+    Route::post('project_supplimentary/listgrid', 'Api\PmsprojectsupplimentaryController@listgrid');
+    Route::post('project_supplimentary/insertgrid', 'Api\PmsprojectsupplimentaryController@insertgrid');
+    Route::post('project_supplimentary/updategrid', 'Api\PmsprojectsupplimentaryController@updategrid');
+    Route::post('project_supplimentary/deletegrid', 'Api\PmsprojectsupplimentaryController@deletegrid');
+    Route::post('project_supplimentary/search', 'PmsprojectsupplimentaryController@search');
+    
+    Route::post('project_variation/listgrid', 'Api\PmsprojectvariationController@listgrid');
+    Route::post('project_variation/insertgrid', 'Api\PmsprojectvariationController@insertgrid');
+    Route::post('project_variation/updategrid', 'Api\PmsprojectvariationController@updategrid');
+    Route::post('project_variation/deletegrid', 'Api\PmsprojectvariationController@deletegrid');
+    Route::post('project_variation/search', 'PmsprojectvariationController@search');
+    
+    Route::post('project_budget_plan/listgrid', 'Api\PmsprojectbudgetplanController@listgrid');
+    Route::post('project_budget_plan/insertgrid', 'Api\PmsprojectbudgetplanController@insertgrid');
+    Route::post('project_budget_plan/updategrid', 'Api\PmsprojectbudgetplanController@updategrid');
+    Route::post('project_budget_plan/deletegrid', 'Api\PmsprojectbudgetplanController@deletegrid');
+    Route::post('project_budget_plan/search', 'PmsprojectbudgetplanController@search');
+
+
+
+    //END NEWLY ADDED
+Route::post('statistics/getprojectstatistics', 'Api\StatisticalReportController@getprojectstatistics');
+Route::post('statistical_report/getstatistics', 'Api\StatisticalReportController@getStatistics');
+Route::post('report/getreport', 'Api\ReportController@getReport');
+Route::post('me', 'TokenController@validateToken');
+Route::post('refreshToken', 'TokenController@refreshToken');
 });

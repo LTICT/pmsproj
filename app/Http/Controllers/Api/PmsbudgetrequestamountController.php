@@ -131,7 +131,7 @@ $query .=' AND bra_approved_date="'.$braapproveddate.'"';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
+    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 //Update Data
@@ -164,18 +164,6 @@ public function updategrid(Request $request)
     ];
     $rules= [
         'bra_expenditure_code_id'=> 'max:200',
-'bra_current_year_expense'=> 'numeric', 
-'bra_requested_amount'=> 'numeric', 
-'bra_approved_amount'=> 'numeric', 
-'bra_source_government_requested'=> 'numeric', 
-'bra_source_government_approved'=> 'numeric', 
-'bra_source_internal_requested'=> 'numeric', 
-'bra_source_internal_approved'=> 'numeric', 
-'bra_source_support_requested'=> 'numeric', 
-'bra_source_support_approved'=> 'numeric', 
-'bra_source_support_code'=> 'max:10', 
-'bra_source_credit_requested'=> 'numeric', 
-'bra_source_credit_approved'=> 'numeric', 
 'bra_source_credit_code'=> 'max:10', 
 'bra_requested_date'=> 'max:200', 
 'bra_approved_date'=> 'max:10', 
@@ -269,24 +257,11 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-        'bra_expenditure_code_id'=> 'max:200', 
-'bra_current_year_expense'=> 'numeric',
-'bra_requested_amount'=> 'numeric', 
-'bra_approved_amount'=> 'numeric', 
-'bra_source_government_requested'=> 'numeric', 
-'bra_source_government_approved'=> 'numeric', 
-'bra_source_internal_requested'=> 'numeric', 
-'bra_source_internal_approved'=> 'numeric', 
-'bra_source_support_requested'=> 'numeric', 
-'bra_source_support_approved'=> 'numeric', 
-'bra_source_support_code'=> 'max:10', 
-'bra_source_credit_requested'=> 'numeric', 
-'bra_source_credit_approved'=> 'numeric', 
+        'bra_expenditure_code_id'=> 'max:200',
 'bra_source_credit_code'=> 'max:10', 
 'bra_requested_date'=> 'max:200', 
 'bra_approved_date'=> 'max:10', 
-'bra_description'=> 'max:425', 
-
+'bra_description'=> 'max:425'
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -337,12 +312,5 @@ public function deletegrid(Request $request)
         "errorMsg"=>""
     );
     return response()->json($resultObject);
-}
-function listRoutes(){
-    Route::resource('budget_request_amount', 'PmsbudgetrequestamountController');
-    Route::post('budget_request_amount/listgrid', 'Api\PmsbudgetrequestamountController@listgrid');
-    Route::post('budget_request_amount/insertgrid', 'Api\PmsbudgetrequestamountController@insertgrid');
-    Route::post('budget_request_amount/updategrid', 'Api\PmsbudgetrequestamountController@updategrid');
-    Route::post('budget_request_amount/deletegrid', 'Api\PmsbudgetrequestamountController@deletegrid');
 }
 }
