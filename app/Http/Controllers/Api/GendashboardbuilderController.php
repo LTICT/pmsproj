@@ -132,11 +132,12 @@ if(isset($data_info1) && !empty($data_info1)){
 $combinedArray[] = $resultObject1; 
 }
 
-$query="SELECT prp_type, SUM(prp_payment_amount) AS prp_payment_amount
+$query="SELECT pyc_name_or AS prp_type, SUM(prp_payment_amount) AS prp_payment_amount
 FROM pms_project 
-INNER JOIN pms_project_payment ON pms_project_payment.prp_project_id = pms_project.prj_id WHERE 1=1 ";
+INNER JOIN pms_project_payment ON pms_project_payment.prp_project_id = pms_project.prj_id 
+ INNER JOIN pms_payment_category ON pms_payment_category.pyc_id=pms_project_payment.prp_project_id WHERE 1=1 ";
 $query=$this->getSearchParam($request,$query);
-$query .=" GROUP BY prp_type";
+$query .=" GROUP BY pyc_name_or";
 $data_info1=DB::select($query);
 $resultObject1= array("data" =>$data_info1,"name"=>"dash_project_payment", "type"=>'group_count',"column_list"=>"prp_type,prp_payment_amount","dashboard_type"=>"group_count","class_name"=>"col-sm-4");
 if(isset($data_info1) && !empty($data_info1)){

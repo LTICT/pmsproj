@@ -245,9 +245,22 @@ function getListForm(Request $request)
         return redirect('project_performance')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT prj_name,prj_code,prp_id,prp_project_id,prp_project_status_id,prp_record_date_ec,prp_record_date_gc,prp_total_budget_used,prp_physical_performance,prp_description,prp_status,prp_created_by,prp_created_date,prp_create_time,prp_update_time,prp_termination_reason_id,1 AS is_editable, 1 AS is_deletable FROM pms_project_performance ';       
+     $query='SELECT prj_name,prj_code,prp_id,prp_project_id,prp_project_status_id,prp_record_date_ec,prp_record_date_gc,prp_total_budget_used,prp_physical_performance,prp_description,prp_status,prp_created_by,prp_created_date,prp_create_time,prp_update_time,prp_termination_reason_id,1 AS is_editable, 1 AS is_deletable,prp_budget_year_id,prp_budget_month_id,
+     bdy_name AS year_name,bdm_month AS month_name,prs_status_name_or AS status_name FROM pms_project_performance ';       
      $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_performance.prp_project_id';
+     $query .=' LEFT JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_project_performance.prp_budget_year_id';
+     $query .=' LEFT JOIN pms_budget_month ON pms_budget_month.bdm_id=pms_project_performance.prp_budget_month_id';
+     $query .=' LEFT JOIN pms_project_status ON pms_project_status.prs_id=pms_project_performance.prp_project_status_id';
      $query .=' WHERE 1=1';
+$budgetmonth=$request->input('budget_month');
+    if(isset($budgetmonth) && isset($budgetmonth)){
+    $query .=" AND prp_budget_month_id='".$budgetmonth."'"; 
+    }
+    $budgetyear=$request->input('budget_year');
+    if(isset($budgetyear) && isset($budgetyear)){
+    $query .=" AND prp_budget_year_id='".$budgetyear."'"; 
+    }
+
 $prjName=$request->input('prj_name');
 if(isset($prjName) && isset($prjName)){
 $query .=" AND prj_name LIKE '%".$prjName."%'"; 

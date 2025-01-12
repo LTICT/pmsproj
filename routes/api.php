@@ -25,6 +25,7 @@ Route::resource('task', 'TaskController');
 Route::resource('link', 'LinkController');
 Route::post('login', 'AuthController@login');
 Route::post('addressbyparent', 'Api\GenaddressstructureController@addressByParent');
+Route::post('project_document/insertgrid', 'Api\PmsprojectdocumentController@insertgrid');
    // Route::post('department/listgrid', [\Api\GendepartmentController::class, 'listgrid'])->middleware('apilogin');
 Route::group(['middleware' => [\App\Http\Middleware\JwtMiddleware::class], 'except' => ['api/login', 'api/register']], function () {
     Route::resource('project', 'Api\PmsprojectController');
@@ -223,7 +224,7 @@ Route::post('project_contractor/search', 'PmsprojectcontractorController@search'
 
 
 Route::post('project_document/listgrid', 'Api\PmsprojectdocumentController@listgrid');
-Route::post('project_document/insertgrid', 'Api\PmsprojectdocumentController@insertgrid');
+
 Route::post('project_document/updategrid', 'Api\PmsprojectdocumentController@updategrid');
 Route::post('project_document/deletegrid', 'Api\PmsprojectdocumentController@deletegrid');
 Route::post('project_document/search', 'PmsprojectdocumentController@search');

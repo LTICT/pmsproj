@@ -30,7 +30,7 @@ $bdycode=$request->input('bdy_code');
 if(isset($bdycode) && isset($bdycode)){
 $query .=" AND bdy_code LIKE '%".$bdycode."%'"; 
 }
-$query.=' ORDER BY bdy_name';
+$query.=' ORDER BY bdy_name DESC';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,

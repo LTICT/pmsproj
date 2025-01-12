@@ -13,233 +13,7 @@ class PmsprojectvariationController extends MyController
     parent::__construct();
     //$this->middleware('auth');
 }
- /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\View\View
-     */
- public function index(Request $request)
- {
-    $selectedLanguage=app()->getLocale();
-    if($selectedLanguage=="or"){
-        $filepath = base_path() .'\resources\lang\or\ag_grid.php';
-    }else if($selectedLanguage=="en"){
-        $filepath = base_path() .'\resources\lang\en\ag_grid.php';
-    }else if($selectedLanguage=="am"){
-        $filepath = base_path() .'\resources\lang\am\ag_grid.php';
-    }
-    $filepath = base_path() .'\resources\lang\en\ag_grid.php';
-    $txt = file_get_contents($filepath);
-    $data['ag_grid_lang']=$txt;
-    $searchParams= $this->getSearchSetting('pms_project_variation');
-    $dataInfo = Modelpmsprojectvariation::latest();
-    $this->searchQuery($searchParams, $request,$dataInfo);
-    $perPage = 20;
-    $dataInfo =$dataInfo->paginate($perPage);
-    $data['pms_project_variation_data']=$dataInfo;
-    $generatedSearchInfo= $this->displaySearchForm($searchParams, $request,false, 1, true);
-    $generatedSearchInfo=explode("@", $generatedSearchInfo);
-    $generatedSearchForm=$generatedSearchInfo[0];
-    $generatedSearchTitle=$generatedSearchInfo[1];
-    $data['searchForm']=$generatedSearchForm;
-    $data['searchTitle']=$generatedSearchTitle;
-    $data['page_title']=trans("form_lang.pms_project_variation");
-    return view('project_variation.list_pms_project_variation', $data);
-}
-function getForm(Request $request)
-{
-    $id=$request->get('id');
-    
-    
-    $data['is_editable']=1;
-    if(isset($id) && !empty($id)){
-       $data_info = Modelpmsprojectvariation::findOrFail($id);                
-       if(isset($data_info) && !empty($data_info)){
-        $controllerName="PmsprojectvariationController";
-        $data= $this->validateEdit($data, $data_info['prv_create_time'], $controllerName);
-        $data['pms_project_variation_data']=$data_info;
-    }
-}
-$data['page_title']=trans("form_lang.pms_project_variation");
-$form= view('project_variation.form_popup_pms_project_variation', $data)->render();
-$resultObject = array(
-    "" => "", "form" => $form, 'pageTitle'=>trans('form_lang.pms_project_variation'));
-return response()->json($resultObject);
-}
-function getListForm(Request $request)
-{
-    $id=$request->get('id');
-    $data['page_title']='';
-    $form= view('project_variation.editable_list_pms_project_variation', $data)->render();
-    $resultObject = array(
-        "" => "", "form" => $form, 'page_info'=>trans('form_lang.pms_project_variation'));
-    return response()->json($resultObject);
-    //echo json_encode($resultObject, JSON_NUMERIC_CHECK);
-}
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
-    {
-        
-        
-        $data['page_title']=trans("form_lang.pms_project_variation");
-        $data['action_mode']="create";
-        return view('project_variation.form_pms_project_variation', $data);
-    }
-    /**`
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function store(Request $request)
-    {
-       $attributeNames = [
-        'prv_requested_amount'=> trans('form_lang.prv_requested_amount'), 
-'prv_released_amount'=> trans('form_lang.prv_released_amount'), 
-'prv_project_id'=> trans('form_lang.prv_project_id'), 
-'prv_requested_date_ec'=> trans('form_lang.prv_requested_date_ec'), 
-'prv_requested_date_gc'=> trans('form_lang.prv_requested_date_gc'), 
-'prv_released_date_ec'=> trans('form_lang.prv_released_date_ec'), 
-'prv_released_date_gc'=> trans('form_lang.prv_released_date_gc'), 
-'prv_description'=> trans('form_lang.prv_description'), 
-'prv_status'=> trans('form_lang.prv_status'), 
-
-    ];
-    $rules= [
-        'prv_requested_amount'=> 'max:200', 
-'prv_released_amount'=> 'numeric', 
-'prv_project_id'=> 'max:200', 
-'prv_requested_date_ec'=> 'max:200', 
-'prv_requested_date_gc'=> 'max:200', 
-'prv_released_date_ec'=> 'max:10', 
-'prv_released_date_gc'=> 'max:10', 
-'prv_description'=> 'max:425', 
-'prv_status'=> 'integer', 
-
-    ]; 
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if (!$validator->fails()) {
-        $requestData = $request->all();
-        $requestData['prv_created_by']=auth()->user()->usr_Id;
-        Modelpmsprojectvariation::create($requestData);
-        return redirect('project_variation')->with('flash_message',  trans('form_lang.insert_success'));
-    }else{
-        return redirect('project_variation/create')
-        ->withErrors($validator)
-        ->withInput();
-    }
-}
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\View\View
-     */
-    public function show($id)
-    {
-        $query='SELECT prv_id,prv_requested_amount,prv_released_amount,prv_project_id,prv_requested_date_ec,prv_requested_date_gc,prv_released_date_ec,prv_released_date_gc,prv_description,prv_create_time,prv_update_time,prv_delete_time,prv_created_by,prv_status FROM pms_project_variation ';       
-        
-        $query .=' WHERE prv_id='.$id.' ';
-        $data_info=DB::select(DB::raw($query));
-        if(isset($data_info) && !empty($data_info)){
-            $data['pms_project_variation_data']=$data_info[0];
-        }
-        //$data_info = Modelpmsprojectvariation::findOrFail($id);
-        //$data['pms_project_variation_data']=$data_info;
-        $data['page_title']=trans("form_lang.pms_project_variation");
-        return view('project_variation.show_pms_project_variation', $data);
-    }
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\View\View
-     */
-    public function edit($id)
-    {
-        
-        
-        $data_info = Modelpmsprojectvariation::find($id);
-        $data['pms_project_variation_data']=$data_info;
-        $data['page_title']=trans("form_lang.pms_project_variation");
-        $data['action_mode']="edit";
-        $data['record_id']=$id;
-        return view('project_variation.form_pms_project_variation', $data);
-    }
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function update(Request $request, $id)
-    {
-     $attributeNames = [
-        'prv_requested_amount'=> trans('form_lang.prv_requested_amount'), 
-'prv_released_amount'=> trans('form_lang.prv_released_amount'), 
-'prv_project_id'=> trans('form_lang.prv_project_id'), 
-'prv_requested_date_ec'=> trans('form_lang.prv_requested_date_ec'), 
-'prv_requested_date_gc'=> trans('form_lang.prv_requested_date_gc'), 
-'prv_released_date_ec'=> trans('form_lang.prv_released_date_ec'), 
-'prv_released_date_gc'=> trans('form_lang.prv_released_date_gc'), 
-'prv_description'=> trans('form_lang.prv_description'), 
-'prv_status'=> trans('form_lang.prv_status'), 
-
-    ];
-    $rules= [
-        'prv_requested_amount'=> 'max:200', 
-'prv_released_amount'=> 'numeric', 
-'prv_project_id'=> 'max:200', 
-'prv_requested_date_ec'=> 'max:200', 
-'prv_requested_date_gc'=> 'max:200', 
-'prv_released_date_ec'=> 'max:10', 
-'prv_released_date_gc'=> 'max:10', 
-'prv_description'=> 'max:425', 
-'prv_status'=> 'integer', 
-
-    ];     
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if (!$validator->fails()) {
-     $requestData = $request->all();
-     $data_info = Modelpmsprojectvariation::findOrFail($id);
-     $data_info->update($requestData);
-     $ischanged=$data_info->wasChanged();
-     if($ischanged){
-         return redirect('project_variation')->with('flash_message',  trans('form_lang.update_success'));
-     }else{
-        return redirect('project_variation/'.$id.'/edit')
-        ->with('flash_message',trans('form_lang.not_changed') )
-        ->withInput();
-    }
-}else{
-    return redirect('project_variation/'.$id.'/edit')
-    ->withErrors($validator)
-    ->withInput();
-}
-}
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function destroy($id)
-    {
-        Modelpmsprojectvariation::destroy($id);
-        return redirect('project_variation')->with('flash_message',  trans('form_lang.delete_success'));
-    }
+ 
     public function listgrid(Request $request){
      $query='SELECT prj_name,prj_code,prv_id,prv_requested_amount,prv_released_amount,prv_project_id,prv_requested_date_ec,prv_requested_date_gc,prv_released_date_ec,prv_released_date_gc,prv_description,prv_create_time,prv_update_time,prv_delete_time,prv_created_by,prv_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_variation ';       
      $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_variation.prv_project_id';      
@@ -280,46 +54,7 @@ $prvreleaseddategc=$request->input('prv_released_date_gc');
 if(isset($prvreleaseddategc) && isset($prvreleaseddategc)){
 $query .=' AND prv_released_date_gc="'.$prvreleaseddategc.'"'; 
 }
-$prvdescription=$request->input('prv_description');
-if(isset($prvdescription) && isset($prvdescription)){
-$query .=' AND prv_description="'.$prvdescription.'"'; 
-}
-$prvcreatetime=$request->input('prv_create_time');
-if(isset($prvcreatetime) && isset($prvcreatetime)){
-$query .=' AND prv_create_time="'.$prvcreatetime.'"'; 
-}
-$prvupdatetime=$request->input('prv_update_time');
-if(isset($prvupdatetime) && isset($prvupdatetime)){
-$query .=' AND prv_update_time="'.$prvupdatetime.'"'; 
-}
-$prvdeletetime=$request->input('prv_delete_time');
-if(isset($prvdeletetime) && isset($prvdeletetime)){
-$query .=' AND prv_delete_time="'.$prvdeletetime.'"'; 
-}
-$prvcreatedby=$request->input('prv_created_by');
-if(isset($prvcreatedby) && isset($prvcreatedby)){
-$query .=' AND prv_created_by="'.$prvcreatedby.'"'; 
-}
-$prvstatus=$request->input('prv_status');
-if(isset($prvstatus) && isset($prvstatus)){
-$query .=' AND prv_status="'.$prvstatus.'"'; 
-}
-
-     $masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
-        //set foreign key field name
-        //$query .=' AND add_name="'.$masterId.'"'; 
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
-        $query.=' AND (add_name LIKE "%'.$search.'%")  ';
-    }
-}
-//$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
+$query.=' ORDER BY prv_id DESC';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
@@ -341,7 +76,6 @@ public function updategrid(Request $request)
     $rules= [
         'prv_requested_amount'=> 'max:200', 
 'prv_released_amount'=> 'numeric', 
-'prv_project_id'=> 'max:200', 
 'prv_requested_date_ec'=> 'max:200', 
 'prv_requested_date_gc'=> 'max:200', 
 'prv_released_date_ec'=> 'max:10', 
@@ -427,7 +161,6 @@ public function insertgrid(Request $request)
     $rules= [
         'prv_requested_amount'=> 'max:200', 
 'prv_released_amount'=> 'numeric', 
-'prv_project_id'=> 'max:200', 
 'prv_requested_date_ec'=> 'max:200', 
 'prv_requested_date_gc'=> 'max:200', 
 'prv_released_date_ec'=> 'max:10', 

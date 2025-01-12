@@ -331,50 +331,7 @@ $empenddategc=$request->input('emp_end_date_gc');
 if(isset($empenddategc) && isset($empenddategc)){
 $query .=' AND emp_end_date_gc="'.$empenddategc.'"'; 
 }
-$empaddress=$request->input('emp_address');
-if(isset($empaddress) && isset($empaddress)){
-$query .=' AND emp_address="'.$empaddress.'"'; 
-}
-$empdescription=$request->input('emp_description');
-if(isset($empdescription) && isset($empdescription)){
-$query .=' AND emp_description="'.$empdescription.'"'; 
-}
-$empcreatetime=$request->input('emp_create_time');
-if(isset($empcreatetime) && isset($empcreatetime)){
-$query .=' AND emp_create_time="'.$empcreatetime.'"'; 
-}
-$empupdatetime=$request->input('emp_update_time');
-if(isset($empupdatetime) && isset($empupdatetime)){
-$query .=' AND emp_update_time="'.$empupdatetime.'"'; 
-}
-$empdeletetime=$request->input('emp_delete_time');
-if(isset($empdeletetime) && isset($empdeletetime)){
-$query .=' AND emp_delete_time="'.$empdeletetime.'"'; 
-}
-$empcreatedby=$request->input('emp_created_by');
-if(isset($empcreatedby) && isset($empcreatedby)){
-$query .=' AND emp_created_by="'.$empcreatedby.'"'; 
-}
-$empcurrentstatus=$request->input('emp_current_status');
-if(isset($empcurrentstatus) && isset($empcurrentstatus)){
-$query .=' AND emp_current_status="'.$empcurrentstatus.'"'; 
-}
-
-     $masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
-        //set foreign key field name
-        //$query .=' AND add_name="'.$masterId.'"'; 
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
-        $query.=' AND (add_name LIKE "%'.$search.'%")  ';
-    }
-}
-//$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
+$query.=' ORDER BY emp_id DESC';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
@@ -403,8 +360,7 @@ public function updategrid(Request $request)
 'emp_full_name'=> 'max:200', 
 'emp_email'=> 'max:50', 
 'emp_phone_num'=> 'max:200', 
-'emp_role'=> 'max:200', 
-
+'emp_role'=> 'max:200',
 'emp_start_date_ec'=> 'max:200', 
 'emp_start_date_gc'=> 'max:200', 
 'emp_end_date_ec'=> 'max:10', 
@@ -491,7 +447,6 @@ public function insertgrid(Request $request)
 'emp_end_date_gc'=> trans('form_lang.emp_end_date_gc'), 
 'emp_address'=> trans('form_lang.emp_address'), 
 'emp_description'=> trans('form_lang.emp_description'), 
-
     ];
     $rules= [
         'emp_id_no'=> 'max:200', 
@@ -505,7 +460,6 @@ public function insertgrid(Request $request)
 'emp_end_date_gc'=> 'max:10', 
 'emp_address'=> 'max:50', 
 'emp_description'=> 'max:425', 
-
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);

@@ -269,48 +269,15 @@ $prdname=$request->input('prd_name');
 if(isset($prdname) && isset($prdname)){
 $query .=' AND prd_name="'.$prdname.'"'; 
 }
-$prdfilepath=$request->input('prd_file_path');
-if(isset($prdfilepath) && isset($prdfilepath)){
-$query .=' AND prd_file_path="'.$prdfilepath.'"'; 
+$fileOwnerType=$request->input('prd_owner_type_id');
+if(isset($fileOwnerType) && isset($fileOwnerType)){
+$query .=" AND prd_owner_type_id='".$fileOwnerType."'"; 
 }
-$prdsize=$request->input('prd_size');
-if(isset($prdsize) && isset($prdsize)){
-$query .=' AND prd_size="'.$prdsize.'"'; 
-}
-$prdfileextension=$request->input('prd_file_extension');
-if(isset($prdfileextension) && isset($prdfileextension)){
-$query .=' AND prd_file_extension="'.$prdfileextension.'"'; 
-}
-$prduploadeddate=$request->input('prd_uploaded_date');
-if(isset($prduploadeddate) && isset($prduploadeddate)){
-$query .=' AND prd_uploaded_date="'.$prduploadeddate.'"'; 
-}
-$prddescription=$request->input('prd_description');
-if(isset($prddescription) && isset($prddescription)){
-$query .=' AND prd_description="'.$prddescription.'"'; 
-}
-$prdcreatetime=$request->input('prd_create_time');
-if(isset($prdcreatetime) && isset($prdcreatetime)){
-$query .=' AND prd_create_time="'.$prdcreatetime.'"'; 
-}
-$prdupdatetime=$request->input('prd_update_time');
-if(isset($prdupdatetime) && isset($prdupdatetime)){
-$query .=' AND prd_update_time="'.$prdupdatetime.'"'; 
-}
-$prddeletetime=$request->input('prd_delete_time');
-if(isset($prddeletetime) && isset($prddeletetime)){
-$query .=' AND prd_delete_time="'.$prddeletetime.'"'; 
-}
-$prdcreatedby=$request->input('prd_created_by');
-if(isset($prdcreatedby) && isset($prdcreatedby)){
-$query .=' AND prd_created_by="'.$prdcreatedby.'"'; 
-}
-$prdstatus=$request->input('prd_status');
-if(isset($prdstatus) && isset($prdstatus)){
-$query .=' AND prd_status="'.$prdstatus.'"'; 
+$fileOwnerId=$request->input('prd_owner_id');
+if(isset($fileOwnerId) && isset($fileOwnerId)){
+$query .=" AND prd_owner_id='".$fileOwnerId."'"; 
 }
 
-  
      $search=$request->input('search');
      if(isset($search) && !empty($search)){
        $advanced= $request->input('adva-search');
@@ -342,7 +309,6 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'prd_project_id'=> 'max:200', 
 'prd_document_type_id'=> 'max:200', 
 'prd_name'=> 'max:200', 
 'prd_file_path'=> 'max:200', 
@@ -443,7 +409,6 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-        'prd_project_id'=> 'max:200', 
 'prd_document_type_id'=> 'max:200', 
 'prd_name'=> 'max:200', 
 'prd_file_path'=> 'max:200', 
