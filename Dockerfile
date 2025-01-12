@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y software-properties-common \
        php8.2-xml \
        php8.2-mbstring \
        php8.2-bcmath \
+       php8.2-pgsql \
        nginx \
        git \
        curl \
@@ -39,6 +40,8 @@ WORKDIR $DEPLOY_DIR
 # Copy your application code into the container
 # (Assumes your Dockerfile is at the root of your project)
 COPY . $DEPLOY_DIR
+
+COPY .env /app/.env
 
 # (Optional) If you store .env somewhere else, or only want to copy it from your host:
 # COPY path/to/local/env/backend/.env $DEPLOY_DIR/.env
