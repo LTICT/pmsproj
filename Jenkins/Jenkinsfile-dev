@@ -1,79 +1,167 @@
 pipeline {
     agent any
 
+    // --------------------------
+    // Global Configuration
+    // --------------------------
     environment {
-        PHP_VERSION = '8.2' 
-        COMPOSER_CACHE = "$HOME/.composer"
-        DEPLOY_DIR = '/var/www/dev_app_backend'
-        NGINX_CONF = '/etc/nginx/sites-available/dev_app_backend'
+        // Docker image details
+        DOCKER_IMAGE         = 'otecpms/laravel-app-dev'
+        DOCKER_TAG           = 'latest'
+        FULL_DOCKER_IMAGE    = "${DOCKER_IMAGE}:${DOCKER_TAG}"
+        
+        // Docker Registry
+        REGISTRY_URL         = 'https://registry.hub.docker.com'
+        REGISTRY_CREDENTIALS = 'dockerhub-credentials'  // Jenkins credentials ID
+        
+        // Environment / Ports
+        ENV_FILE_PATH        = '/home/testthree/pms_files/dev-backend.env'
+        PORT_EXT             = '1235'
+        PORT_INT             = '1155'
+        
+        // Container name
+        CONTAINER_NAME       = 'laravel_app'
     }
 
+    // --------------------------
+    // Pipeline-Level Options
+    // --------------------------
+    options {
+        retry(3)  // Retry failed stages up to 3 times if they fail
+    }
+
+    // --------------------------
+    // Stages
+    // --------------------------
     stages {
-        stage('Pull Code') {
-            steps {
-                git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/LTICT/pmsproj.git'
-            }
-        }
 
-        stage('Copy .env File') {
-            steps {
-                sh 'cp /home/testthree/env/backend/.env .'
-            }
-        }
-
-        stage('Install Dependencies') {
+        /*
+        stage('Clean Workspace and Pull') {
             steps {
                 script {
                     sh '''
-                    echo "Downloading Composer from a mirror..."
-                    curl -sS https://mirrors.aliyun.com/composer/composer.phar -o composer.phar
-                    php composer.phar install --no-interaction --prefer-dist --no-progress
+                        echo "Cleaning the workspace..."
+                        git clean -fdx         # Remove all untracked files and directories
+                        git reset --hard       # Reset any changes to tracked files
+                        
+                        echo "Pulling the latest code from the repository..."
+                        git pull origin main
                     '''
                 }
             }
         }
 
-        stage('Deploy to Development Environment') {
+        stage('Clean Docker Cache') {
             steps {
                 script {
                     sh '''
-                    echo "Deploying application to ${DEPLOY_DIR}..."
-
-                    # Sync workspace to deployment directory
-                    sudo rsync -av --delete --exclude=".git" --exclude="node_modules" "${WORKSPACE}/" "${DEPLOY_DIR}/"
-
-                    # Ensure proper ownership and permissions
-                    sudo chown -R www-data:www-data ${DEPLOY_DIR}
-                    sudo chmod -R 775 ${DEPLOY_DIR}/storage ${DEPLOY_DIR}/bootstrap/cache
+                        echo "Cleaning up Docker cache..."
+                        # Remove dangling images
+                        docker image prune -f
+                        
+                        # Remove unused volumes
+                        docker volume prune -f
+                        
+                        # Remove unused networks
+                        docker network prune -f
+                        
+                        # Remove stopped containers
+                        docker container prune -f
+                        
+                        echo "Docker cache cleanup completed."
                     '''
                 }
             }
         }
-stage('Configure Nginx') {
-    steps {
-        script {
-            sh '''
-            echo "Configuring Nginx for Laravel application on port 1144..."
+        */
 
-           
-            # Reload Nginx
-            sudo systemctl reload nginx || (echo "Nginx reload failed!" && exit 1)
-            '''
+        stage('Checkout') {
+            steps {
+                git branch: 'main', 
+                    credentialsId: 'github-token', 
+                    url: 'https://github.com/LTICT/pmsproj.git'
+            }
+        }
+
+        stage('Prepare Environment File') {
+            steps {
+                script {
+                    sh """
+                        echo "Copying environment file to workspace..."
+                        cp ${ENV_FILE_PATH} .env
+                        echo "Environment file copied successfully."
+                    """
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh """
+                        echo "Building Docker image..."
+                        docker build -t ${FULL_DOCKER_IMAGE} .
+                        echo "Docker image built successfully."
+                    """
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry("${REGISTRY_URL}", "${REGISTRY_CREDENTIALS}") {
+                        // Push the versioned image
+                        docker.image("${FULL_DOCKER_IMAGE}").push()
+                        
+                        // Push again to ensure the :latest tag is also updated
+                        docker.image("${DOCKER_IMAGE}").push("${DOCKER_TAG}")
+                    }
+                }
+            }
+        }
+
+        stage('Deploy Docker Container') {
+            steps {
+                script {
+                    // Stop and remove the existing container if it’s running
+                    sh """
+                        if [ \$(docker ps -a -q -f name=${CONTAINER_NAME}) ]; then
+                            echo "Stopping and removing existing container (${CONTAINER_NAME})..."
+                            docker stop ${CONTAINER_NAME} || true
+                            docker rm ${CONTAINER_NAME} || true
+                        fi
+                    """
+
+                    // Run the new container with --env-file to load environment variables
+                    sh """
+                        echo "Starting a new Docker container..."
+                        docker run -d \\
+                            -p ${PORT_EXT}:${PORT_INT} \\
+                            --name ${CONTAINER_NAME} \\
+                            --restart always \\
+                            --env-file ${ENV_FILE_PATH} \\
+                            ${FULL_DOCKER_IMAGE}
+                            
+                        echo "Container started successfully on port ${PORT_EXT}."
+                    """
+                }
+            }
         }
     }
-}
 
-    }
-
+    // --------------------------
+    // Post Actions
+    // --------------------------
     post {
         always {
-            echo 'Pipeline finished, cleaning up if necessary...'
+            echo 'Pipeline execution finished.'
         }
         success {
-            echo 'Build and deploy were successful!'
+            echo 'Build and deployment were successful!'
         }
         failure {
-            echo 'Build or deploy failed!'
+            echo 'Build or deployment failed.'
         }
     }
 }
