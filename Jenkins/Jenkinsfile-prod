@@ -1,0 +1,84 @@
+pipeline {
+    agent any
+
+    environment {
+        // Docker image details for Prod environment derived from QA
+        QA_DOCKER_IMAGE = 'otecpms/laravel-app-qa:latest'
+        PROD_DOCKER_IMAGE = 'otecpms/laravel-app-prod:latest'
+        REGISTRY_CREDENTIALS = 'dockerhub-credentials' // Jenkins credentials ID for Docker registry
+        ENV_FILE_PATH = '/home/testthree/pms_files/prod-backend.env'
+        PORT_EXT  = 1111
+        PORT_INT  = 1155
+    }
+
+    options {
+        retry(3) // Retry up to 3 times
+    }
+ 
+
+    stages {
+        stage('Pull QA Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', REGISTRY_CREDENTIALS) {
+                        sh "docker pull ${QA_DOCKER_IMAGE}"
+                    }
+                }
+            }
+        }
+
+        stage('Tag for Prod') {
+            steps {
+                script {
+                    sh """
+                        docker tag ${QA_DOCKER_IMAGE} ${PROD_DOCKER_IMAGE}
+                    """
+                }
+            }
+        }
+
+        stage('Push Prod Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', REGISTRY_CREDENTIALS) {
+                        docker.image("${PROD_DOCKER_IMAGE}").push()
+                        docker.image("${PROD_DOCKER_IMAGE}").push('latest')
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Prod Server') {
+            steps {
+                script {
+                    // Stop and remove any existing Prod container
+                    sh """
+                        if [ \$(docker ps -a -q -f name=laravel_app_prod) ]; then
+                            docker stop laravel_app_prod
+                            docker rm laravel_app_prod
+                        fi
+                    """
+
+                    // Run a new container from the built image
+                    sh """
+                        docker run -d -p ${PORT_EXT }:${PORT_INT } --name laravel_app_prod \
+                            --env-file ${ENV_FILE_PATH} \
+                            --restart always \
+                            ${PROD_DOCKER_IMAGE}
+                    """
+                }
+            }
+        }
+ 
+    }
+
+    post {
+   
+        success {
+            echo 'Production pipeline executed successfully!'
+        }
+        failure {
+            echo 'Production pipeline execution failed!'
+        }
+    }
+}
