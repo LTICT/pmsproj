@@ -16,7 +16,7 @@ pipeline {
         
         // Environment / Ports
         ENV_FILE_PATH        = '/home/testthree/pms_files/dev-backend.env'
-        PORT_EXT             = '1235'
+        PORT_EXT             = '1213'
         PORT_INT             = '1155'
         
         // Container name
