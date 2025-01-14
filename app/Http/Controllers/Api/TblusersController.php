@@ -377,46 +377,7 @@ $usrnotified=$request->input('usr_notified');
 if(isset($usrnotified) && isset($usrnotified)){
 $query .=' AND usr_notified="'.$usrnotified.'"'; 
 }
-$usrdescription=$request->input('usr_description');
-if(isset($usrdescription) && isset($usrdescription)){
-$query .=' AND usr_description="'.$usrdescription.'"'; 
-}
-$usrcreatetime=$request->input('usr_create_time');
-if(isset($usrcreatetime) && isset($usrcreatetime)){
-$query .=' AND usr_create_time="'.$usrcreatetime.'"'; 
-}
-$usrupdatetime=$request->input('usr_update_time');
-if(isset($usrupdatetime) && isset($usrupdatetime)){
-$query .=' AND usr_update_time="'.$usrupdatetime.'"'; 
-}
-$usrdeletetime=$request->input('usr_delete_time');
-if(isset($usrdeletetime) && isset($usrdeletetime)){
-$query .=' AND usr_delete_time="'.$usrdeletetime.'"'; 
-}
-$usrcreatedby=$request->input('usr_created_by');
-if(isset($usrcreatedby) && isset($usrcreatedby)){
-$query .=' AND usr_created_by="'.$usrcreatedby.'"'; 
-}
-$usrstatus=$request->input('usr_status');
-if(isset($usrstatus) && isset($usrstatus)){
-$query .=' AND usr_status="'.$usrstatus.'"'; 
-}
-
-     $masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
-        //set foreign key field name
-        //$query .=' AND add_name="'.$masterId.'"'; 
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
-        $query.=' AND (add_name LIKE "%'.$search.'%")  ';
-    }
-}
-//$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
+$query.=' ORDER BY usr_id DESC';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
