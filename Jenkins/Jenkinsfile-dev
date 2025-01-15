@@ -20,7 +20,7 @@ pipeline {
         PORT_INT             = '1155'
         
         // Container name
-        CONTAINER_NAME       = 'laravel_app'
+        CONTAINER_NAME       = 'laravel_app_dev'
     }
 
     // --------------------------
