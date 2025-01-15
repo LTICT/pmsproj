@@ -302,54 +302,17 @@ $prpphysicalperformance=$request->input('prp_physical_performance');
 if(isset($prpphysicalperformance) && isset($prpphysicalperformance)){
 $query .=' AND prp_physical_performance="'.$prpphysicalperformance.'"'; 
 }
-$prpdescription=$request->input('prp_description');
-if(isset($prpdescription) && isset($prpdescription)){
-$query .=' AND prp_description="'.$prpdescription.'"'; 
-}
-$prpstatus=$request->input('prp_status');
-if(isset($prpstatus) && isset($prpstatus)){
-$query .=' AND prp_status="'.$prpstatus.'"'; 
-}
-$prpcreatedby=$request->input('prp_created_by');
-if(isset($prpcreatedby) && isset($prpcreatedby)){
-$query .=' AND prp_created_by="'.$prpcreatedby.'"'; 
-}
-$prpcreateddate=$request->input('prp_created_date');
-if(isset($prpcreateddate) && isset($prpcreateddate)){
-$query .=' AND prp_created_date="'.$prpcreateddate.'"'; 
-}
-$prpcreatetime=$request->input('prp_create_time');
-if(isset($prpcreatetime) && isset($prpcreatetime)){
-$query .=' AND prp_create_time="'.$prpcreatetime.'"'; 
-}
-$prpupdatetime=$request->input('prp_update_time');
-if(isset($prpupdatetime) && isset($prpupdatetime)){
-$query .=' AND prp_update_time="'.$prpupdatetime.'"'; 
-}
-$prpterminationreasonid=$request->input('prp_termination_reason_id');
-if(isset($prpterminationreasonid) && isset($prpterminationreasonid)){
-$query .=' AND prp_termination_reason_id="'.$prpterminationreasonid.'"'; 
-}
-
-     $masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
-        //set foreign key field name
-        //$query .=' AND add_name="'.$masterId.'"'; 
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
-        $query.=' AND (add_name LIKE "%'.$search.'%")  ';
-    }
-}
 //$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
 $data_info=DB::select($query);
+$previledge=array('is_role_editable'=>0,'is_role_deletable'=>0,'is_role_can_add'=>0);
+$permission=$this->ownsProject($request,$prpprojectid);
+if($permission !=null)
+{
+   $previledge=array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1); 
+}
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+    "previledge"=>$previledge);
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)

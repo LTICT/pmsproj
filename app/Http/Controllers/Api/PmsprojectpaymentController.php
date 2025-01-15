@@ -17,7 +17,7 @@ class PmsprojectpaymentController extends MyController
     public function listgrid(Request $request){
      $query='SELECT pyc_name_or AS payment_category, prj_name,prj_code,prp_id,prp_project_id,prp_type,prp_payment_date_et,prp_payment_date_gc,prp_payment_amount,prp_payment_percentage,prp_description,prp_create_time,prp_update_time,prp_delete_time,prp_created_by,prp_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_payment 
      INNER JOIN pms_project ON pms_project.prj_id=pms_project_payment.prp_project_id
-     INNER JOIN pms_payment_category ON pms_payment_category.pyc_id=pms_project_payment.prp_project_id';
+     LEFT JOIN pms_payment_category ON pms_payment_category.pyc_id=pms_project_payment.prp_project_id';
      $query .=' WHERE 1=1';
     $prjName=$request->input('prj_name');
 if(isset($prjName) && isset($prjName)){
@@ -67,9 +67,19 @@ $query .=' AND prp_payment_date_gc="'.$prppaymentdategc.'"';
 }
 $query.=' ORDER BY prp_id DESC';
 $data_info=DB::select($query);
+
+$previledge=array('is_role_editable'=>0,'is_role_deletable'=>0,'is_role_can_add'=>0);
+//dd($this->ownsProject($request,$prpprojectid));
+$permission=$this->ownsProject($request,$prpprojectid);
+//dd($permission);
+if($permission !=null)
+{
+   $previledge=array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1); 
+}
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+    "previledge"=>$previledge);
+
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
@@ -153,7 +163,7 @@ public function updategrid(Request $request)
             "errorMsg"=>""
         );
         return response()->json($resultObject);
-    }        
+    }
 }
 }
 public function insertgrid(Request $request)

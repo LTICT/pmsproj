@@ -144,6 +144,7 @@ if(isset($data_info1) && !empty($data_info1)){
 $combinedArray[] = $resultObject1; 
 }
 
+if(1==2){
 $query="SELECT COUNT(usr_id) as count_result FROM tbl_users ";
 $data_info1=DB::select($query);
 $resultObject1= array("data" =>$data_info1,"name"=>"dash_users_count", "type"=>'chart',"column_list"=>"sci_name_or,count_result","dashboard_type"=>"total_count","class_name"=>"col-sm-4");
@@ -157,6 +158,7 @@ $data_info1=DB::select($query);
 $resultObject1= array("data" =>$data_info1,"name"=>"dash_released_budget", "type"=>'chart',"column_list"=>"sci_name_or,count_result","dashboard_type"=>"total_count","class_name"=>"col-sm-4");
 if(isset($data_info1) && !empty($data_info1) && $data_info1 !=="" && $data_info1[0]->count_result !==null){
 $combinedArray[] = $resultObject1; 
+}
 }
 $resultObject= array("data" =>$combinedArray);
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);

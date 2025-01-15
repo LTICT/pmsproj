@@ -580,7 +580,8 @@ public function insertgrid(Request $request)
         }
         $requestData['usr_status']=1;
         $requestData['email']=$request->input('usr_email');
-        $requestData['password']=bcrypt($request->get('usr_password'));        
+        $requestData['password']=bcrypt($request->get('usr_password'));
+        $requestData['usr_password']=bcrypt($request->get('usr_password'));        
         $requestData['usr_created_by']=1;
         $data_info=Modeltblusers::create($requestData);
         //START ADD DEFAULT ROLE

@@ -37,7 +37,8 @@ class MyController extends Controller
         }
 return $query;
 }
-	public function getPagePermission($request,$pageId){
+
+public function getPagePermission($request,$pageId){
 		$authenticatedUser = $request->authUser;
         $userId=$authenticatedUser->usr_id;
         $query="SELECT tbl_permission.*
@@ -65,7 +66,19 @@ return $query;
 }, $data_info);
      return $pagIds;
 	}
-
+public function ownsProject($request,$projectId){
+	$authenticatedUser = $request->authUser;
+    $userId=$authenticatedUser->usr_id;
+    $query="SELECT usr_id,usr_zone_id,usr_woreda_id,usr_department_id,usr_sector_id
+     FROM tbl_users INNER JOIN pms_project ON pms_project.prj_owner_zone_id=usr_zone_id 
+      AND prj_id =".$projectId." WHERE usr_id=".$userId." ";
+      //AND prj_owner_woreda_id=usr_woreda_id WHERE usr_id=".$userId."
+     $data_info=DB::select($query);
+      if(isset($data_info) && !empty($data_info)){
+     	return $data_info[0];
+     }
+     return null;
+}
 	public function getUserInfo(Request $request){
 		 $authenticatedUser = $request->authUser;
         $userId=$authenticatedUser->usr_id;
