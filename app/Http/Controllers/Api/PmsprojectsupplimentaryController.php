@@ -18,17 +18,9 @@ class PmsprojectsupplimentaryController extends MyController
      $query='SELECT prj_name,prj_code,prs_id,prs_requested_amount,prs_released_amount,prs_project_id,prs_requested_date_ec,prs_requested_date_gc,prs_released_date_ec,prs_released_date_gc,prs_description,prs_create_time,prs_update_time,prs_delete_time,prs_created_by,prs_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_supplimentary '; 
      $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_supplimentary.prs_project_id';    
      $query .=' WHERE 1=1';
-    $prjName=$request->input('prj_name');
-if(isset($prjName) && isset($prjName)){
-$query .=" AND prj_name LIKE '%".$prjName."%'"; 
-}
-$prjCode=$request->input('prj_code');
-if(isset($prjCode) && isset($prjCode)){
-$query .=" AND prj_code='".$prjCode."'"; 
-}
 $startTime=$request->input('supplimentary_dateStart');
 if(isset($startTime) && isset($startTime)){
-$query .=" AND prs_released_date_gc >='".$startTime." 00 00 00'"; 
+$query .=" AND prs_released_date_gc >='".$startTime."'"; 
 }
 $endTime=$request->input('supplimentary_dateEnd');
 if(isset($endTime) && isset($endTime)){
@@ -54,11 +46,18 @@ $prsreleaseddategc=$request->input('prs_released_date_gc');
 if(isset($prsreleaseddategc) && isset($prsreleaseddategc)){
 $query .=' AND prs_released_date_gc="'.$prsreleaseddategc.'"'; 
 }
+$query=$this->getSearchParam($request,$query);
 $query.=' ORDER BY prs_id DESC';
 $data_info=DB::select($query);
+$previledge=array('is_role_editable'=>0,'is_role_deletable'=>0,'is_role_can_add'=>0);
+$permission=$this->ownsProject($request,$prsprojectid);
+if($permission !=null)
+{
+   $previledge=array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1); 
+}
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+    "previledge"=>$previledge);
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)

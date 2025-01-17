@@ -18,17 +18,9 @@ class PmsprojectvariationController extends MyController
      $query='SELECT prj_name,prj_code,prv_id,prv_requested_amount,prv_released_amount,prv_project_id,prv_requested_date_ec,prv_requested_date_gc,prv_released_date_ec,prv_released_date_gc,prv_description,prv_create_time,prv_update_time,prv_delete_time,prv_created_by,prv_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_variation ';       
      $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_variation.prv_project_id';      
      $query .=' WHERE 1=1';
-$prjName=$request->input('prj_name');
-if(isset($prjName) && isset($prjName)){
-$query .=" AND prj_name LIKE '%".$prjName."%'"; 
-}
-$prjCode=$request->input('prj_code');
-if(isset($prjCode) && isset($prjCode)){
-$query .=" AND prj_code='".$prjCode."'"; 
-}
 $startTime=$request->input('variation_dateStart');
 if(isset($startTime) && isset($startTime)){
-$query .=" AND prv_released_date_gc >='".$startTime." 00 00 00'"; 
+$query .=" AND prv_released_date_gc >='".$startTime."'"; 
 }
 $endTime=$request->input('variation_dateEnd');
 if(isset($endTime) && isset($endTime)){
@@ -54,11 +46,19 @@ $prvreleaseddategc=$request->input('prv_released_date_gc');
 if(isset($prvreleaseddategc) && isset($prvreleaseddategc)){
 $query .=' AND prv_released_date_gc="'.$prvreleaseddategc.'"'; 
 }
+
+$query=$this->getSearchParam($request,$query);
 $query.=' ORDER BY prv_id DESC';
 $data_info=DB::select($query);
+$previledge=array('is_role_editable'=>0,'is_role_deletable'=>0,'is_role_can_add'=>0);
+$permission=$this->ownsProject($request,$prvprojectid);
+if($permission !=null)
+{
+   $previledge=array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1); 
+}
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+    "previledge"=>$previledge);
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)

@@ -24,8 +24,7 @@ class PmsprojectstakeholderController extends MyController
     public function show($id)
     {
         $query='SELECT psh_id,psh_project_id,psh_name,pms_stakeholder_type.sht_type_name_or AS psh_stakeholder_type,psh_representative_name,psh_representative_phone,psh_role,psh_description,psh_create_time,psh_update_time,psh_delete_time,psh_created_by,psh_status FROM pms_project_stakeholder ';       
-        $query .= ' INNER JOIN pms_stakeholder_type ON pms_project_stakeholder.psh_stakeholder_type = pms_stakeholder_type.sht_id'; 
-
+        $query .= ' INNER JOIN pms_stakeholder_type ON pms_project_stakeholder.psh_stakeholder_type = pms_stakeholder_type.sht_id';
         $query .=' WHERE psh_id='.$id.' ';
         $data_info=DB::select(DB::raw($query));
         if(isset($data_info) && !empty($data_info)){
@@ -38,13 +37,13 @@ class PmsprojectstakeholderController extends MyController
     }
 
     public function listgrid(Request $request){
-     $query='SELECT psh_id,psh_project_id,psh_name,pms_stakeholder_type.sht_type_name_or AS psh_stakeholder_type,psh_representative_name,psh_representative_phone,psh_role,psh_description,psh_create_time,psh_update_time,psh_delete_time,psh_created_by,psh_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_stakeholder ';       
+     $query='SELECT  prj_name,prj_code,psh_id,psh_project_id,psh_name,pms_stakeholder_type.sht_type_name_or AS psh_stakeholder_type,psh_representative_name,psh_representative_phone,psh_role,psh_description,psh_create_time,psh_update_time,psh_delete_time,psh_created_by,psh_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_stakeholder ';       
      $query .= ' INNER JOIN pms_stakeholder_type ON pms_project_stakeholder.psh_stakeholder_type = pms_stakeholder_type.sht_id'; 
-
+$query .= ' INNER JOIN pms_project ON pms_project.prj_id=pms_project_stakeholder.psh_project_id';
      $query .=' WHERE 1=1';
      $pshid=$request->input('psh_id');
 if(isset($pshid) && isset($pshid)){
-$query .=' AND psh_id="'.$pshid.'"'; 
+$query .=' AND psh_id="'.$pshid.'"';
 }
 $pshprojectid=$request->input('project_id');
 if(isset($pshprojectid) && isset($pshprojectid)){
@@ -69,26 +68,20 @@ $query .=' AND psh_representative_phone="'.$pshrepresentativephone.'"';
 $pshrole=$request->input('psh_role');
 if(isset($pshrole) && isset($pshrole)){
 $query .=' AND psh_role="'.$pshrole.'"'; 
-}    
-$masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
-        //set foreign key field name
-        //$query .=' AND add_name="'.$masterId.'"'; 
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
-        $query.=' AND (add_name LIKE "%'.$search.'%")  ';
-    }
 }
-//$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
+$query=$this->getSearchParam($request,$query);
+$query.=' ORDER BY psh_id DESC';
 $data_info=DB::select($query);
+$previledge=array('is_role_editable'=>0,'is_role_deletable'=>0,'is_role_can_add'=>0);
+$permission=$this->ownsProject($request,$pshprojectid);
+if($permission !=null)
+{
+   $previledge=array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1); 
+}
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+    "previledge"=>$previledge);
+
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)

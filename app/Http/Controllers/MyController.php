@@ -15,12 +15,21 @@ class MyController extends Controller
 	}
 	public function getSearchParam($request,$query){
     $userInfo=$this->getUserInfo($request);
-        if(isset($userInfo) && $userInfo->usr_id !=9){
+    //&& $userInfo->usr_id !=9
+        if(isset($userInfo)){
             $zoneId=$userInfo->usr_zone_id;
             $woredaId=$userInfo->usr_woreda_id;
             $sectorId=$userInfo->usr_sector_id;
             $prjownerzoneid=$request->input('prj_location_zone_id');
             $prjownerworedaid=$request->input('prj_location_woreda_id');
+            $prjName=$request->input('prj_name');
+			if(isset($prjName) && isset($prjName)){
+				$query .=" AND prj_name LIKE '%".$prjName."%'"; 
+			}
+			$prjCode=$request->input('prj_code');
+			if(isset($prjCode) && isset($prjCode)){
+				$query .=" AND prj_code LIKE '%".$prjCode."%'"; 
+			}
             if(isset($zoneId) && !empty($zoneId) && $zoneId > 0){
               $query .=" AND prj_owner_zone_id='".$zoneId."'";   
             }else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $prjownerzoneid>0){
@@ -31,7 +40,7 @@ class MyController extends Controller
             }else if(isset($prjownerworedaid) && isset($prjownerworedaid) && $prjownerworedaid>0){
             	$query .=" AND prj_owner_woreda_id='".$prjownerworedaid."'";   
             }
-            if(isset($sectorId) && !empty($sectorId)){
+            if(isset($sectorId) && !empty($sectorId) && $sectorId > 0){
               $query .=" AND prj_sector_id='".$sectorId."'";   
             }
         }
@@ -67,6 +76,7 @@ public function getPagePermission($request,$pageId){
      return $pagIds;
 	}
 public function ownsProject($request,$projectId){
+	if(isset($projectId)){
 	$authenticatedUser = $request->authUser;
     $userId=$authenticatedUser->usr_id;
     $query="SELECT usr_id,usr_zone_id,usr_woreda_id,usr_department_id,usr_sector_id
@@ -78,6 +88,7 @@ public function ownsProject($request,$projectId){
      	return $data_info[0];
      }
      return null;
+ }
 }
 	public function getUserInfo(Request $request){
 		 $authenticatedUser = $request->authUser;

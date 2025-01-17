@@ -34,7 +34,7 @@ $query .=" AND sht_type_name_or LIKE '%".$shttypenameor."%'";
 }
 $shttypenameam=$request->input('sht_type_name_am');
 if(isset($shttypenameam) && isset($shttypenameam)){
-$query .=' AND sht_type_name_am="'.$shttypenameam.'"'; 
+$query .=" AND sht_type_name_am LIKE '%".$shttypenameam."%'"; 
 }
 $shttypenameen=$request->input('sht_type_name_en');
 if(isset($shttypenameen) && isset($shttypenameen)){

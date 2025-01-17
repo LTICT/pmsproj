@@ -13,28 +13,21 @@ class PmsprojectpaymentController extends MyController
     parent::__construct();
     //$this->middleware('auth');
 }
- 
     public function listgrid(Request $request){
      $query='SELECT pyc_name_or AS payment_category, prj_name,prj_code,prp_id,prp_project_id,prp_type,prp_payment_date_et,prp_payment_date_gc,prp_payment_amount,prp_payment_percentage,prp_description,prp_create_time,prp_update_time,prp_delete_time,prp_created_by,prp_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_payment 
      INNER JOIN pms_project ON pms_project.prj_id=pms_project_payment.prp_project_id
      LEFT JOIN pms_payment_category ON pms_payment_category.pyc_id=pms_project_payment.prp_project_id';
      $query .=' WHERE 1=1';
-    $prjName=$request->input('prj_name');
-if(isset($prjName) && isset($prjName)){
-$query .=" AND prj_name LIKE '%".$prjName."%'"; 
-}
+    
 $startTime=$request->input('payment_dateStart');
 if(isset($startTime) && isset($startTime)){
-$query .=" AND prp_payment_date_gc >='".$startTime." 00 00 00'"; 
+$query .=" AND prp_payment_date_gc >='".$startTime."'"; 
 }
 $endTime=$request->input('payment_dateEnd');
 if(isset($endTime) && isset($endTime)){
 $query .=" AND prp_payment_date_gc <='".$endTime." 23 59 59'"; 
 }
-$prjCode=$request->input('prj_code');
-if(isset($prjCode) && isset($prjCode)){
-$query .=" AND prj_code='".$prjCode."'"; 
-}
+/*
 $prjlocationregionid=$request->input('prj_location_region_id');
 if(isset($prjlocationregionid) && isset($prjlocationregionid)){
 //$query .=" AND prj_location_region_id='".$prjlocationregionid."'"; 
@@ -46,32 +39,21 @@ $query .=" AND prj_location_zone_id='".$prjlocationzoneid."'";
 $prjlocationworedaid=$request->input('prj_location_woreda_id');
 if(isset($prjlocationworedaid) && isset($prjlocationworedaid)){
 $query .=" AND prj_location_woreda_id='".$prjlocationworedaid."'"; 
-}
+}*/
 
 $prpprojectid=$request->input('project_id');
 if(isset($prpprojectid) && isset($prpprojectid)){
 $query .= " AND prp_project_id = '".$prpprojectid."'";
-
 }
 $prptype=$request->input('prp_type');
 if(isset($prptype) && isset($prptype)){
 $query .=" AND prp_type='".$prptype."'"; 
 }
-$prppaymentdateet=$request->input('prp_payment_date_et');
-if(isset($prppaymentdateet) && isset($prppaymentdateet)){
-$query .=' AND prp_payment_date_et="'.$prppaymentdateet.'"'; 
-}
-$prppaymentdategc=$request->input('prp_payment_date_gc');
-if(isset($prppaymentdategc) && isset($prppaymentdategc)){
-$query .=' AND prp_payment_date_gc="'.$prppaymentdategc.'"'; 
-}
+$query=$this->getSearchParam($request,$query);
 $query.=' ORDER BY prp_id DESC';
 $data_info=DB::select($query);
-
 $previledge=array('is_role_editable'=>0,'is_role_deletable'=>0,'is_role_can_add'=>0);
-//dd($this->ownsProject($request,$prpprojectid));
 $permission=$this->ownsProject($request,$prpprojectid);
-//dd($permission);
 if($permission !=null)
 {
    $previledge=array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1); 

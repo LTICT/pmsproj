@@ -282,18 +282,6 @@ $data['related_gen_department']= $gen_department_set ;
     ->withInput();
 }
 }
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function destroy($id)
-    {
-        Modeltblusers::destroy($id);
-        return redirect('users')->with('flash_message',  trans('form_lang.delete_success'));
-    }
     public function listgrid(Request $request){
      $query='SELECT usr_id,usr_email,usr_password,usr_full_name,usr_phone_number,sci_name_or AS sector_name,
      usr_role_id,usr_region_id, usr_zone_id,usr_woreda_id,usr_kebele_id,usr_sector_id,
@@ -305,17 +293,9 @@ $query .= ' LEFT JOIN gen_address_structure ON tbl_users.usr_zone_id = gen_addre
 $query .= ' LEFT JOIN gen_department ON tbl_users.usr_department_id = gen_department.dep_id';
 $query .= ' LEFT JOIN pms_sector_information ON tbl_users.usr_sector_id = pms_sector_information.sci_id';
      $query .=' WHERE 1=1';
-     $usrid=$request->input('usr_id');
-if(isset($usrid) && isset($usrid)){
-$query .=' AND usr_id="'.$usrid.'"'; 
-}
 $usremail=$request->input('usr_email');
 if(isset($usremail) && isset($usremail)){
 $query .=" AND usr_email='".$usremail."'"; 
-}
-$usrpassword=$request->input('usr_password');
-if(isset($usrpassword) && isset($usrpassword)){
-$query .=' AND usr_password="'.$usrpassword.'"'; 
 }
 $usrfullname=$request->input('usr_full_name');
 if(isset($usrfullname) && isset($usrfullname)){
@@ -323,7 +303,7 @@ $query .=" AND usr_full_name='".$usrfullname."'";
 }
 $usrphonenumber=$request->input('usr_phone_number');
 if(isset($usrphonenumber) && isset($usrphonenumber)){
-$query .=" AND usr_phone_number='".$usrphonenumber."'"; 
+$query .=" AND usr_phone_number LIKE '%".$usrphonenumber."%'"; 
 }
 $usrroleid=$request->input('usr_role_id');
 if(isset($usrroleid) && isset($usrroleid)){
