@@ -1,0 +1,105 @@
+pipeline {
+    agent any
+
+    environment {
+        // Docker image repository (without a tag)
+        PROD_DOCKER_IMAGE = 'otecpms/laravel-app-prod'
+        // Credentials for Docker Hub (must have push/pull access)
+        REGISTRY_CREDENTIALS = 'dockerhub-credentials'
+        // Docker Hub registry URL for pull operations
+        DOCKER_REGISTRY_URL = 'https://index.docker.io/v1/'
+        // Docker Hub API URL for repository tags (first page only)
+        PROD_DOCKER_API_URL = 'https://registry.hub.docker.com/v2/repositories/otecpms/laravel-app-prod/tags/'
+        // Production deployment settings
+        ENV_FILE_PATH = '/home/testthree/pms_files/prod-backend.env'
+        PORT_EXT  = 1111
+        PORT_INT  = 1155
+    }
+
+    stages {
+        stage('Fetch Available Tags') {
+            steps {
+                script {
+                    // Use curl to fetch available tags from the Docker Hub API
+                    def response = sh (
+                        script: "curl -s '${PROD_DOCKER_API_URL}'",
+                        returnStdout: true
+                    ).trim()
+
+                    // Parse the JSON response (requires the Pipeline Utility Steps Plugin)
+                    def json = readJSON text: response
+
+                    // Extract tag names from the JSON response (assuming the API returns an object with 'results')
+                    def tags = []
+                    for (item in json.results) {
+                        tags.add(item.name)
+                    }
+
+                    if (tags.isEmpty()) {
+                        error "No tags found for ${PROD_DOCKER_IMAGE}!"
+                    }
+
+                    echo "Available tags: ${tags.join(', ')}"
+
+                    // Use the input step to let the user select a tag
+                    // When using a single parameter input, the return value is the string itself.
+                    def selectedTag = input(
+                        id: 'tagInput', 
+                        message: 'Select a Docker tag for rollback',
+                        parameters: [
+                            choice(
+                                name: 'SELECTED_TAG',
+                                choices: tags.join("\n"),
+                                description: 'Choose one of the available tags'
+                            )
+                        ]
+                    )
+
+                    // Assign the selected value directly to env.SELECTED_TAG
+                    env.SELECTED_TAG = selectedTag
+                    echo "User selected tag: ${env.SELECTED_TAG}"
+                }
+            }
+        }
+
+        stage('Pull and Deploy Selected Image') {
+            steps {
+                script {
+                    // Construct the full Docker image reference including the selected tag
+                    def imageToDeploy = "${PROD_DOCKER_IMAGE}:${env.SELECTED_TAG}"
+
+                    // Log in and pull the image from Docker Hub using the Docker Hub v1 endpoint
+                    docker.withRegistry(DOCKER_REGISTRY_URL, REGISTRY_CREDENTIALS) {
+                        echo "Pulling image: ${imageToDeploy}"
+                        sh "docker pull ${imageToDeploy}"
+                    }
+
+                    // Stop and remove any existing container named 'laravel_app_prod'
+                    sh '''
+                        if [ $(docker ps -a -q -f name=laravel_app_prod) ]; then
+                            docker stop laravel_app_prod || true
+                            docker rm laravel_app_prod || true
+                        fi
+                    '''
+
+                    // Run a new container using the selected image
+                    sh """
+                        docker run -d -p ${PORT_EXT}:${PORT_INT} --name laravel_app_prod \\
+                        --env-file ${ENV_FILE_PATH} \\
+                        --restart always \\
+                        ${imageToDeploy}
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Rollback deployment successful! Deployed tag: ${env.SELECTED_TAG}"
+        }
+        failure {
+            echo "Rollback deployment failed!"
+        }
+    }
+}
