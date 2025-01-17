@@ -39,18 +39,18 @@ pipeline {
                         error "No tags found for ${PROD_DOCKER_IMAGE}!"
                     }
 
-                    echo "Available tags: ${tags.join(', ')}"
+                    echo "Available Deployment Version: ${tags.join(', ')}"
 
                     // Use the input step to let the user select a tag
                     // When using a single parameter input, the return value is the string itself.
                     def selectedTag = input(
                         id: 'tagInput', 
-                        message: 'Select a Docker tag for rollback',
+                        message: 'Select a Deployment Version for rollback',
                         parameters: [
                             choice(
                                 name: 'SELECTED_TAG',
                                 choices: tags.join("\n"),
-                                description: 'Choose one of the available tags'
+                                description: 'Choose one of the available Deployment Version'
                             )
                         ]
                     )
