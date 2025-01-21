@@ -48,6 +48,7 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
         }
     }
     public function listgrid(Request $request){
+        $permissionData=$this->getPagePermission($request,9);
 $query='SELECT add_name_or, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id, prj_project_budget_source_id,prj_total_estimate_budget,prj_total_actual_budget,
 prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,prj_location_kebele_id,
 prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_kebele_id,prj_owner_description,
@@ -57,7 +58,6 @@ prj_update_time,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number,1 AS is_e
 $query .=' LEFT JOIN gen_address_structure ON gen_address_structure.add_id= pms_project.prj_owner_zone_id';
  $query .=' WHERE 1=1';
  $query=$this->getSearchParam($request,$query);
-
 $prjprojectstatusid=$request->input('prj_project_status_id');
 if(isset($prjprojectstatusid) && isset($prjprojectstatusid)){
 $query .=' AND prj_project_status_id="'.$prjprojectstatusid.'"'; 
@@ -122,15 +122,10 @@ $query.=' ORDER BY prj_id DESC';
 $data_info=DB::select($query);
 $authenticatedUser = $request->authUser;
 $userId=$authenticatedUser->usr_id;
-/*if($userId==79){
-$resultObject= array(
-    "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1),
-'allowedTabs'=> [2,4,3,6,7]);
-}else{*/
+//dd($permissionData);
     $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1),
+    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 2,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0),
 'allowedTabs'=> $this->getTabPermission($request));
 //}
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);

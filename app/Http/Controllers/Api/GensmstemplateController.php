@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\DB;
 //PROPERTY OF LT ICT SOLUTION PLC
 class GensmstemplateController extends MyController
 {
-   public function __construct()
-   {
+ public function __construct()
+ {
     parent::__construct();
     //$this->middleware('auth');
 }
@@ -23,7 +23,6 @@ class GensmstemplateController extends MyController
     public function show($id)
     {
         $query='SELECT smt_id,smt_template_name,smt_template_content,smt_description,smt_create_time,smt_update_time,smt_delete_time,smt_created_by,smt_status FROM gen_sms_template ';       
-        
         $query .=' WHERE smt_id='.$id.' ';
         $data_info=DB::select(DB::raw($query));
         if(isset($data_info) && !empty($data_info)){
@@ -36,42 +35,40 @@ class GensmstemplateController extends MyController
     }
     //Get List
     public function listgrid(Request $request){
-     $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
-     $permissionData=$this->getPagePermission($request,45);
-      if(isset($permissionData) && !empty($permissionData)){
+       $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+       $permissionData=$this->getPagePermission($request,45);
+       if(isset($permissionData) && !empty($permissionData)){
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
-     }
-     $query="SELECT smt_template_content_en,smt_template_content_am,smt_id,smt_template_name,smt_template_content,smt_description,smt_create_time,smt_update_time,smt_delete_time,smt_created_by,smt_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM gen_sms_template ";
-     
-     $query .=' WHERE 1=1';
-     $smtid=$request->input('smt_id');
-if(isset($smtid) && isset($smtid)){
-$query .=' AND smt_id="'.$smtid.'"'; 
-}
-$smttemplatename=$request->input('smt_template_name');
-if(isset($smttemplatename) && isset($smttemplatename)){
-$query .=" AND smt_template_name LIKE '%".$smttemplatename."%'"; 
-}
-$smtcreatedby=$request->input('smt_created_by');
-if(isset($smtcreatedby) && isset($smtcreatedby)){
-$query .=' AND smt_created_by="'.$smtcreatedby.'"'; 
-}
-$smtstatus=$request->input('smt_status');
-if(isset($smtstatus) && isset($smtstatus)){
-$query .=' AND smt_status="'.$smtstatus.'"'; 
-}
-
-     $masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
+    }
+    $query="SELECT smt_template_content_en,smt_template_content_am,smt_id,smt_template_name,smt_template_content,smt_description,smt_create_time,smt_update_time,smt_delete_time,smt_created_by,smt_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM gen_sms_template ";
+    $query .=' WHERE 1=1';
+    $smtid=$request->input('smt_id');
+    if(isset($smtid) && isset($smtid)){
+        $query .=' AND smt_id="'.$smtid.'"'; 
+    }
+    $smttemplatename=$request->input('smt_template_name');
+    if(isset($smttemplatename) && isset($smttemplatename)){
+        $query .=" AND smt_template_name LIKE '%".$smttemplatename."%'"; 
+    }
+    $smtcreatedby=$request->input('smt_created_by');
+    if(isset($smtcreatedby) && isset($smtcreatedby)){
+        $query .=' AND smt_created_by="'.$smtcreatedby.'"'; 
+    }
+    $smtstatus=$request->input('smt_status');
+    if(isset($smtstatus) && isset($smtstatus)){
+        $query .=' AND smt_status="'.$smtstatus.'"'; 
+    }
+    $masterId=$request->input('master_id');
+    if(isset($masterId) && !empty($masterId)){
         //set foreign key field name
         //$query .=' AND add_name="'.$masterId.'"'; 
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
+    }
+    $search=$request->input('search');
+    if(isset($search) && !empty($search)){
+     $advanced= $request->input('adva-search');
+     if(isset($advanced) && $advanced =='on'){
+         $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
+     }else{
         $query.=' AND (add_name LIKE "%'.$search.'%")  ';
     }
 }
@@ -87,17 +84,15 @@ public function updategrid(Request $request)
 {
     $attributeNames = [
         'smt_template_name'=> trans('form_lang.smt_template_name'), 
-'smt_template_content'=> trans('form_lang.smt_template_content'), 
-'smt_description'=> trans('form_lang.smt_description'), 
-'smt_status'=> trans('form_lang.smt_status'), 
-
+        'smt_template_content'=> trans('form_lang.smt_template_content'), 
+        'smt_description'=> trans('form_lang.smt_description'), 
+        'smt_status'=> trans('form_lang.smt_status'), 
     ];
     $rules= [
         'smt_template_name'=> 'max:200', 
-'smt_template_content'=> 'max:200', 
-'smt_description'=> 'max:425', 
+        'smt_template_content'=> 'max:200', 
+        'smt_description'=> 'max:425', 
 //'smt_status'=> 'integer', 
-
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -125,19 +120,19 @@ public function updategrid(Request $request)
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
-               $resultObject= array(
+             $resultObject= array(
                 "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "is_updated"=>true,
+                "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+                "is_updated"=>true,
                 "status_code"=>200,
                 "type"=>"update",
                 "errorMsg"=>""
             );
-           }else{
+         }else{
             $resultObject= array(
                 "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "is_updated"=>true,
+                "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+                "is_updated"=>true,
                 "status_code"=>200,
                 "type"=>"update",
                 "errorMsg"=>""
@@ -164,15 +159,14 @@ public function insertgrid(Request $request)
 {
     $attributeNames = [
         'smt_template_name'=> trans('form_lang.smt_template_name'), 
-'smt_template_content'=> trans('form_lang.smt_template_content'), 
-'smt_description'=> trans('form_lang.smt_description'), 
-'smt_status'=> trans('form_lang.smt_status'), 
-
+        'smt_template_content'=> trans('form_lang.smt_template_content'), 
+        'smt_description'=> trans('form_lang.smt_description'), 
+        'smt_status'=> trans('form_lang.smt_status'), 
     ];
     $rules= [
         'smt_template_name'=> 'max:200', 
-'smt_template_content'=> 'max:200', 
-'smt_description'=> 'max:425'
+        'smt_template_content'=> 'max:200', 
+        'smt_description'=> 'max:425'
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);

@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\DB;
 //PROPERTY OF LT ICT SOLUTION PLC
 class GensmsinformationController extends MyController
 {
-   public function __construct()
-   {
+ public function __construct()
+ {
     parent::__construct();
     //$this->middleware('auth');
 }
@@ -35,50 +35,48 @@ class GensmsinformationController extends MyController
     }
     //Get List
     public function listgrid(Request $request){
-     $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
-     $permissionData=$this->getPagePermission($request,45);
-      if(isset($permissionData) && !empty($permissionData)){
+       $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+       $permissionData=$this->getPagePermission($request,45);
+       if(isset($permissionData) && !empty($permissionData)){
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
-     }
-     $query="SELECT smi_id,smi_sms_template_id,smi_sent_to,smi_sent_date,smi_sms_content,smi_description,smi_create_time,smi_update_time,smi_delete_time,smi_created_by,smi_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM gen_sms_information ";
-     
-     $query .=' WHERE 1=1';
-     $smiid=$request->input('smi_id');
-if(isset($smiid) && isset($smiid)){
-$query .=' AND smi_id="'.$smiid.'"'; 
-}
-$smismstemplateid=$request->input('smi_sms_template_id');
-if(isset($smismstemplateid) && isset($smismstemplateid)){
-$query .=' AND smi_sms_template_id="'.$smismstemplateid.'"'; 
-}
-$smisentto=$request->input('smi_sent_to');
-if(isset($smisentto) && isset($smisentto)){
-$query .=" AND smi_sent_to LIKE '%".$smisentto."%'"; 
-}
-$smisentdate=$request->input('smi_sent_date');
-if(isset($smisentdate) && isset($smisentdate)){
-$query .=' AND smi_sent_date="'.$smisentdate.'"'; 
-}
-$smicreatedby=$request->input('smi_created_by');
-if(isset($smicreatedby) && isset($smicreatedby)){
-$query .=' AND smi_created_by="'.$smicreatedby.'"'; 
-}
-$smistatus=$request->input('smi_status');
-if(isset($smistatus) && isset($smistatus)){
-$query .=' AND smi_status="'.$smistatus.'"'; 
-}
-
-     $masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
+    }
+    $query="SELECT smi_id,smi_sms_template_id,smi_sent_to,smi_sent_date,smi_sms_content,smi_description,smi_create_time,smi_update_time,smi_delete_time,smi_created_by,smi_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM gen_sms_information ";
+    $query .=' WHERE 1=1';
+    $smiid=$request->input('smi_id');
+    if(isset($smiid) && isset($smiid)){
+        $query .=' AND smi_id="'.$smiid.'"'; 
+    }
+    $smismstemplateid=$request->input('smi_sms_template_id');
+    if(isset($smismstemplateid) && isset($smismstemplateid)){
+        $query .=' AND smi_sms_template_id="'.$smismstemplateid.'"'; 
+    }
+    $smisentto=$request->input('smi_sent_to');
+    if(isset($smisentto) && isset($smisentto)){
+        $query .=" AND smi_sent_to LIKE '%".$smisentto."%'"; 
+    }
+    $smisentdate=$request->input('smi_sent_date');
+    if(isset($smisentdate) && isset($smisentdate)){
+        $query .=' AND smi_sent_date="'.$smisentdate.'"'; 
+    }
+    $smicreatedby=$request->input('smi_created_by');
+    if(isset($smicreatedby) && isset($smicreatedby)){
+        $query .=' AND smi_created_by="'.$smicreatedby.'"'; 
+    }
+    $smistatus=$request->input('smi_status');
+    if(isset($smistatus) && isset($smistatus)){
+        $query .=' AND smi_status="'.$smistatus.'"'; 
+    }
+    $masterId=$request->input('master_id');
+    if(isset($masterId) && !empty($masterId)){
         //set foreign key field name
         //$query .=' AND add_name="'.$masterId.'"'; 
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
+    }
+    $search=$request->input('search');
+    if(isset($search) && !empty($search)){
+     $advanced= $request->input('adva-search');
+     if(isset($advanced) && $advanced =='on'){
+         $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
+     }else{
         $query.=' AND (add_name LIKE "%'.$search.'%")  ';
     }
 }
@@ -94,19 +92,17 @@ public function updategrid(Request $request)
 {
     $attributeNames = [
         'smi_sms_template_id'=> trans('form_lang.smi_sms_template_id'), 
-'smi_sent_to'=> trans('form_lang.smi_sent_to'), 
-'smi_sent_date'=> trans('form_lang.smi_sent_date'), 
-'smi_sms_content'=> trans('form_lang.smi_sms_content'), 
-'smi_description'=> trans('form_lang.smi_description'), 
-'smi_status'=> trans('form_lang.smi_status'), 
-
+        'smi_sent_to'=> trans('form_lang.smi_sent_to'), 
+        'smi_sent_date'=> trans('form_lang.smi_sent_date'), 
+        'smi_sms_content'=> trans('form_lang.smi_sms_content'), 
+        'smi_description'=> trans('form_lang.smi_description'), 
+        'smi_status'=> trans('form_lang.smi_status'), 
     ];
     $rules= [
-'smi_sent_to'=> 'max:200', 
-'smi_sent_date'=> 'max:200', 
-'smi_sms_content'=> 'max:200', 
-'smi_description'=> 'max:425'
-
+        'smi_sent_to'=> 'max:200', 
+        'smi_sent_date'=> 'max:200', 
+        'smi_sms_content'=> 'max:200', 
+        'smi_description'=> 'max:425'
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -134,19 +130,19 @@ public function updategrid(Request $request)
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
-               $resultObject= array(
+             $resultObject= array(
                 "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "is_updated"=>true,
+                "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+                "is_updated"=>true,
                 "status_code"=>200,
                 "type"=>"update",
                 "errorMsg"=>""
             );
-           }else{
+         }else{
             $resultObject= array(
                 "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "is_updated"=>true,
+                "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+                "is_updated"=>true,
                 "status_code"=>200,
                 "type"=>"update",
                 "errorMsg"=>""
@@ -173,18 +169,17 @@ public function insertgrid(Request $request)
 {
     $attributeNames = [
         'smi_sms_template_id'=> trans('form_lang.smi_sms_template_id'), 
-'smi_sent_to'=> trans('form_lang.smi_sent_to'), 
-'smi_sent_date'=> trans('form_lang.smi_sent_date'), 
-'smi_sms_content'=> trans('form_lang.smi_sms_content'), 
-'smi_description'=> trans('form_lang.smi_description'), 
-'smi_status'=> trans('form_lang.smi_status'), 
+        'smi_sent_to'=> trans('form_lang.smi_sent_to'), 
+        'smi_sent_date'=> trans('form_lang.smi_sent_date'), 
+        'smi_sms_content'=> trans('form_lang.smi_sms_content'), 
+        'smi_description'=> trans('form_lang.smi_description'), 
+        'smi_status'=> trans('form_lang.smi_status'), 
     ];
     $rules= [
-'smi_sent_to'=> 'max:200', 
-'smi_sent_date'=> 'max:200', 
-'smi_sms_content'=> 'max:200', 
-'smi_description'=> 'max:425',
-
+        'smi_sent_to'=> 'max:200', 
+        'smi_sent_date'=> 'max:200', 
+        'smi_sms_content'=> 'max:200', 
+        'smi_description'=> 'max:425',
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);

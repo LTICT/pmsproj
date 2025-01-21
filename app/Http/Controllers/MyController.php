@@ -14,15 +14,15 @@ class MyController extends Controller
 		echo "something";
 	}
 	public function getSearchParam($request,$query){
-    $userInfo=$this->getUserInfo($request);
+		$userInfo=$this->getUserInfo($request);
     //&& $userInfo->usr_id !=9
-        if(isset($userInfo)){
-            $zoneId=$userInfo->usr_zone_id;
-            $woredaId=$userInfo->usr_woreda_id;
-            $sectorId=$userInfo->usr_sector_id;
-            $prjownerzoneid=$request->input('prj_location_zone_id');
-            $prjownerworedaid=$request->input('prj_location_woreda_id');
-            $prjName=$request->input('prj_name');
+		if(isset($userInfo)){
+			$zoneId=$userInfo->usr_zone_id;
+			$woredaId=$userInfo->usr_woreda_id;
+			$sectorId=$userInfo->usr_sector_id;
+			$prjownerzoneid=$request->input('prj_location_zone_id');
+			$prjownerworedaid=$request->input('prj_location_woreda_id');
+			$prjName=$request->input('prj_name');
 			if(isset($prjName) && isset($prjName)){
 				$query .=" AND prj_name LIKE '%".$prjName."%'"; 
 			}
@@ -30,107 +30,80 @@ class MyController extends Controller
 			if(isset($prjCode) && isset($prjCode)){
 				$query .=" AND prj_code LIKE '%".$prjCode."%'"; 
 			}
-            if(isset($zoneId) && !empty($zoneId) && $zoneId > 0){
-              $query .=" AND prj_owner_zone_id='".$zoneId."'";   
-            }else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $prjownerzoneid>0){
-            	$query .=" AND prj_owner_zone_id='".$prjownerzoneid."'";   
-            }
-            if(isset($woredaId) && !empty($woredaId) && $woredaId > 0){
-              $query .=" AND prj_owner_woreda_id='".$woredaId."'"; 
-            }else if(isset($prjownerworedaid) && isset($prjownerworedaid) && $prjownerworedaid>0){
-            	$query .=" AND prj_owner_woreda_id='".$prjownerworedaid."'";   
-            }
-            if(isset($sectorId) && !empty($sectorId) && $sectorId > 0){
-              $query .=" AND prj_sector_id='".$sectorId."'";   
-            }
-        }
-return $query;
-}
-
-public function getPagePermission($request,$pageId){
-		$authenticatedUser = $request->authUser;
-        $userId=$authenticatedUser->usr_id;
-        $query="SELECT tbl_permission.*
-     FROM tbl_permission 
-     INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id 
-     WHERE url_user_id=".$userId." AND pem_page_id=".$pageId."";
-     $data_info=DB::select($query);
-     if(isset($data_info) && !empty($data_info)){
-     	return $data_info[0];
-     }
-     return null;
+			if(isset($zoneId) && !empty($zoneId) && $zoneId > 0){
+				$query .=" AND prj_owner_zone_id='".$zoneId."'";   
+			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $prjownerzoneid>0){
+				$query .=" AND prj_owner_zone_id='".$prjownerzoneid."'";   
+			}
+			if(isset($woredaId) && !empty($woredaId) && $woredaId > 0){
+				$query .=" AND prj_owner_woreda_id='".$woredaId."'"; 
+			}else if(isset($prjownerworedaid) && isset($prjownerworedaid) && $prjownerworedaid>0){
+				$query .=" AND prj_owner_woreda_id='".$prjownerworedaid."'";   
+			}
+			if(isset($sectorId) && !empty($sectorId) && $sectorId > 0){
+				$query .=" AND prj_sector_id='".$sectorId."'";   
+			}
+		}
+		return $query;
 	}
-
+	public function getPagePermission($request,$pageId){
+		$authenticatedUser = $request->authUser;
+		$userId=$authenticatedUser->usr_id;
+		$query="SELECT tbl_permission.*
+		FROM tbl_permission 
+		INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id 
+		WHERE url_user_id=".$userId." AND pem_page_id=".$pageId."";
+		$data_info=DB::select($query);
+		if(isset($data_info) && !empty($data_info)){
+			return $data_info[0];
+		}
+		return null;
+	}
 	public function getTabPermission($request){
 		$authenticatedUser = $request->authUser;
-        $userId=$authenticatedUser->usr_id;
-        $query="SELECT pag_id
-     FROM tbl_permission 
-     INNER JOIN tbl_pages ON tbl_pages.pag_id=tbl_permission.pem_page_id
-     INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id 
-     WHERE url_user_id=".$userId." AND pag_appear_tab=1 AND pem_view='1'";
-     $data_info=DB::select($query);
-     $pagIds = array_map(function ($item) {
-    return $item->pag_id;
-}, $data_info);
-     return $pagIds;
+		$userId=$authenticatedUser->usr_id;
+		$query="SELECT pag_id
+		FROM tbl_permission 
+		INNER JOIN tbl_pages ON tbl_pages.pag_id=tbl_permission.pem_page_id
+		INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id 
+		WHERE url_user_id=".$userId." AND pag_appear_tab=1 AND pem_view='1'";
+		$data_info=DB::select($query);
+		$pagIds = array_map(function ($item) {
+			return $item->pag_id;
+		}, $data_info);
+		return $pagIds;
 	}
-public function ownsProject($request,$projectId){
-	if(isset($projectId)){
-	$authenticatedUser = $request->authUser;
-    $userId=$authenticatedUser->usr_id;
-    $query="SELECT usr_id,usr_zone_id,usr_woreda_id,usr_department_id,usr_sector_id
-     FROM tbl_users INNER JOIN pms_project ON pms_project.prj_owner_zone_id=usr_zone_id 
-      AND prj_id =".$projectId." WHERE usr_id=".$userId." ";
+	public function ownsProject($request,$projectId){
+		if(isset($projectId)){
+			$authenticatedUser = $request->authUser;
+			$userId=$authenticatedUser->usr_id;
+			$query="SELECT usr_id,usr_zone_id,usr_woreda_id,usr_department_id,usr_sector_id
+			FROM tbl_users INNER JOIN pms_project ON pms_project.prj_owner_zone_id=usr_zone_id 
+			AND prj_id =".$projectId." WHERE usr_id=".$userId." ";
       //AND prj_owner_woreda_id=usr_woreda_id WHERE usr_id=".$userId."
-     $data_info=DB::select($query);
-      if(isset($data_info) && !empty($data_info)){
-     	return $data_info[0];
-     }
-     return null;
- }
-}
+			$data_info=DB::select($query);
+			if(isset($data_info) && !empty($data_info)){
+				return $data_info[0];
+			}
+			return null;
+		}
+	}
 	public function getUserInfo(Request $request){
-		 $authenticatedUser = $request->authUser;
-        $userId=$authenticatedUser->usr_id;
-        $query="SELECT usr_id,usr_zone_id,usr_woreda_id,usr_department_id,usr_sector_id
-     FROM tbl_users 
-     WHERE usr_id=".$userId."";
-     $data_info=DB::select($query);
-     if(isset($data_info) && !empty($data_info)){
-     	return $data_info[0];
-     }
-     return null;
-	}
-	function extract_type( $field_type )
-	{
-		$ret = explode( '(', $field_type );
-		return $ret[0];
-	}
-	function extract_length( $field_type )
-	{
-		preg_match( '/\((.*)\)/', $field_type, $matches );
-		settype( $matches[1], 'int' );
-		return ( substr( $field_type, 0, 4 ) == 'enum' ) ? NULL : $matches[1];
-	}
-	function extract_values( $field_type )
-	{
-		preg_match( '/\((.*)\)/', $field_type, $matches );
-		if( !empty( $matches ) ) 
-		{
-			$matches[1] = explode( ',', str_replace(  "'", '', $matches[1] ) );
-			return $matches[1];
+		$authenticatedUser = $request->authUser;
+		$userId=$authenticatedUser->usr_id;
+		$query="SELECT usr_id,usr_zone_id,usr_woreda_id,usr_department_id,usr_sector_id
+		FROM tbl_users 
+		WHERE usr_id=".$userId."";
+		$data_info=DB::select($query);
+		if(isset($data_info) && !empty($data_info)){
+			return $data_info[0];
 		}
-		else
-		{
-			return array();
-		}
+		return null;
 	}
 	public function receipents(){
 		$users = \App\Modeltblusers::where('usr_notified','=',1)->latest()->pluck('mobile')->implode(', ');	
 		return $users;
 	}
-	
 	public function sendSms($message, $objectId=false){
  //START SMS
 		$recipients ="+251912000013";
@@ -160,11 +133,11 @@ public function ownsProject($request,$projectId){
 				echo " MessageId: " .$response->messageId;
 				echo " Cost: "   .$response->cost."\n";
 			}
-			}
-			catch ( AfricasTalkingGatewayException $e )
-			{
-				echo "Encountered an error while sending: ".$e->getMessage();
-			}
-		//}
 		}
+		catch ( AfricasTalkingGatewayException $e )
+		{
+			echo "Encountered an error while sending: ".$e->getMessage();
+		}
+		//}
 	}
+}

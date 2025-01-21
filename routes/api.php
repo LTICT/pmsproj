@@ -36,6 +36,7 @@ Route::post('project/deletegrid', 'Api\PmsprojectController@deletegrid');
 Route::post('project/search', 'PmsprojectController@search');
 
  Route::post('dashboard_builder', 'Api\GendashboardbuilderController@dashboardData');
+ Route::post('superset_dashboard', 'Api\GendashboardbuilderController@supersetData');
 Route::post('menus', 'Api\GenmenubuilderController@listgrid');
 
 

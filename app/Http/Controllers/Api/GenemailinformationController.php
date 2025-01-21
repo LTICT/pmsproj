@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\DB;
 //PROPERTY OF LT ICT SOLUTION PLC
 class GenemailinformationController extends MyController
 {
-   public function __construct()
-   {
+ public function __construct()
+ {
     parent::__construct();
     //$this->middleware('auth');
 }
@@ -23,7 +23,6 @@ class GenemailinformationController extends MyController
     public function show($id)
     {
         $query='SELECT emi_id,emi_email_template_id,emi_sent_to,emi_sent_date,emi_email_content,emi_description,emi_create_time,emi_update_time,emi_delete_time,emi_created_by,emi_status FROM gen_email_information ';       
-        
         $query .=' WHERE emi_id='.$id.' ';
         $data_info=DB::select(DB::raw($query));
         if(isset($data_info) && !empty($data_info)){
@@ -36,46 +35,44 @@ class GenemailinformationController extends MyController
     }
     //Get List
     public function listgrid(Request $request){
-     $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
-     $permissionData=$this->getPagePermission($request,45);
-      if(isset($permissionData) && !empty($permissionData)){
+       $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+       $permissionData=$this->getPagePermission($request,45);
+       if(isset($permissionData) && !empty($permissionData)){
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
-     }
-     $query="SELECT emi_id,emi_email_template_id,emi_sent_to,emi_sent_date,emi_email_content,emi_description,emi_create_time,emi_update_time,emi_delete_time,emi_created_by,emi_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM gen_email_information ";
-     
-     $query .=' WHERE 1=1';
-     $emiid=$request->input('emi_id');
-if(isset($emiid) && isset($emiid)){
-$query .=' AND emi_id="'.$emiid.'"'; 
-}
-$emiemailtemplateid=$request->input('emi_email_template_id');
-if(isset($emiemailtemplateid) && isset($emiemailtemplateid)){
-$query .=' AND emi_email_template_id="'.$emiemailtemplateid.'"'; 
-}
-$emisentto=$request->input('emi_sent_to');
-if(isset($emisentto) && isset($emisentto)){
-$query .=" AND emi_sent_to='".$emisentto."'"; 
-}
-$emisentdate=$request->input('emi_sent_date');
-if(isset($emisentdate) && isset($emisentdate)){
-$query .=" AND emi_sent_date LIKE '".$emisentdate."'"; 
-}
-$emistatus=$request->input('emi_status');
-if(isset($emistatus) && isset($emistatus)){
-$query .=' AND emi_status="'.$emistatus.'"'; 
-}
-
-     $masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
+    }
+    $query="SELECT emi_id,emi_email_template_id,emi_sent_to,emi_sent_date,emi_email_content,emi_description,emi_create_time,emi_update_time,emi_delete_time,emi_created_by,emi_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM gen_email_information ";
+    $query .=' WHERE 1=1';
+    $emiid=$request->input('emi_id');
+    if(isset($emiid) && isset($emiid)){
+        $query .=' AND emi_id="'.$emiid.'"'; 
+    }
+    $emiemailtemplateid=$request->input('emi_email_template_id');
+    if(isset($emiemailtemplateid) && isset($emiemailtemplateid)){
+        $query .=' AND emi_email_template_id="'.$emiemailtemplateid.'"'; 
+    }
+    $emisentto=$request->input('emi_sent_to');
+    if(isset($emisentto) && isset($emisentto)){
+        $query .=" AND emi_sent_to='".$emisentto."'"; 
+    }
+    $emisentdate=$request->input('emi_sent_date');
+    if(isset($emisentdate) && isset($emisentdate)){
+        $query .=" AND emi_sent_date LIKE '".$emisentdate."'"; 
+    }
+    $emistatus=$request->input('emi_status');
+    if(isset($emistatus) && isset($emistatus)){
+        $query .=' AND emi_status="'.$emistatus.'"'; 
+    }
+    $masterId=$request->input('master_id');
+    if(isset($masterId) && !empty($masterId)){
         //set foreign key field name
         //$query .=' AND add_name="'.$masterId.'"'; 
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
+    }
+    $search=$request->input('search');
+    if(isset($search) && !empty($search)){
+     $advanced= $request->input('adva-search');
+     if(isset($advanced) && $advanced =='on'){
+         $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
+     }else{
         $query.=' AND (add_name LIKE "%'.$search.'%")  ';
     }
 }
@@ -91,17 +88,17 @@ public function updategrid(Request $request)
 {
     $attributeNames = [
         'emi_email_template_id'=> trans('form_lang.emi_email_template_id'), 
-'emi_sent_to'=> trans('form_lang.emi_sent_to'), 
-'emi_sent_date'=> trans('form_lang.emi_sent_date'), 
-'emi_email_content'=> trans('form_lang.emi_email_content'), 
-'emi_description'=> trans('form_lang.emi_description'),
+        'emi_sent_to'=> trans('form_lang.emi_sent_to'), 
+        'emi_sent_date'=> trans('form_lang.emi_sent_date'), 
+        'emi_email_content'=> trans('form_lang.emi_email_content'), 
+        'emi_description'=> trans('form_lang.emi_description'),
     ];
     $rules= [
         'emi_email_template_id'=> 'max:200', 
-'emi_sent_to'=> 'max:200', 
-'emi_sent_date'=> 'max:200', 
-'emi_email_content'=> 'max:200', 
-'emi_description'=> 'max:425'
+        'emi_sent_to'=> 'max:200', 
+        'emi_sent_date'=> 'max:200', 
+        'emi_email_content'=> 'max:200', 
+        'emi_description'=> 'max:425'
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -129,19 +126,19 @@ public function updategrid(Request $request)
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
-               $resultObject= array(
+             $resultObject= array(
                 "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "is_updated"=>true,
+                "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+                "is_updated"=>true,
                 "status_code"=>200,
                 "type"=>"update",
                 "errorMsg"=>""
             );
-           }else{
+         }else{
             $resultObject= array(
                 "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "is_updated"=>true,
+                "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+                "is_updated"=>true,
                 "status_code"=>200,
                 "type"=>"update",
                 "errorMsg"=>""
@@ -168,18 +165,17 @@ public function insertgrid(Request $request)
 {
     $attributeNames = [
         'emi_email_template_id'=> trans('form_lang.emi_email_template_id'), 
-'emi_sent_to'=> trans('form_lang.emi_sent_to'), 
-'emi_sent_date'=> trans('form_lang.emi_sent_date'), 
-'emi_email_content'=> trans('form_lang.emi_email_content'), 
-'emi_description'=> trans('form_lang.emi_description')
+        'emi_sent_to'=> trans('form_lang.emi_sent_to'), 
+        'emi_sent_date'=> trans('form_lang.emi_sent_date'), 
+        'emi_email_content'=> trans('form_lang.emi_email_content'), 
+        'emi_description'=> trans('form_lang.emi_description')
     ];
     $rules= [
         'emi_email_template_id'=> 'max:200', 
-'emi_sent_to'=> 'max:200', 
-'emi_sent_date'=> 'max:200', 
-'emi_email_content'=> 'max:200', 
-'emi_description'=> 'max:425',
-
+        'emi_sent_to'=> 'max:200', 
+        'emi_sent_date'=> 'max:200', 
+        'emi_email_content'=> 'max:200', 
+        'emi_description'=> 'max:425',
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);

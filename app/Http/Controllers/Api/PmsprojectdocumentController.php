@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\DB;
 //PROPERTY OF LT ICT SOLUTION PLC
 class PmsprojectdocumentController extends MyController
 {
-   public function __construct()
-   {
+ public function __construct()
+ {
     parent::__construct();
     //$this->middleware('auth');
 }
@@ -50,13 +50,11 @@ function getForm(Request $request)
 {
     $id=$request->get('id');
     $pms_document_type_set=\App\Modelpmsdocumenttype::latest()->get();
-
     $data['related_pms_document_type']= $pms_document_type_set ;
-
     $data['is_editable']=1;
     if(isset($id) && !empty($id)){
-       $data_info = Modelpmsprojectdocument::findOrFail($id);                
-       if(isset($data_info) && !empty($data_info)){
+     $data_info = Modelpmsprojectdocument::findOrFail($id);                
+     if(isset($data_info) && !empty($data_info)){
         $controllerName="PmsprojectdocumentController";
         $data= $this->validateEdit($data, $data_info['prd_create_time'], $controllerName);
         $data['pms_project_document_data']=$data_info;
@@ -86,9 +84,7 @@ function getListForm(Request $request)
     public function create()
     {
         $pms_document_type_set=\App\Modelpmsdocumenttype::latest()->get();
-
         $data['related_pms_document_type']= $pms_document_type_set ;
-
         $data['page_title']=trans("form_lang.pms_project_document");
         $data['action_mode']="create";
         return view('project_document.form_pms_project_document', $data);
@@ -102,29 +98,27 @@ function getListForm(Request $request)
      */
     public function store(Request $request)
     {
-       $attributeNames = [
+     $attributeNames = [
         'prd_project_id'=> trans('form_lang.prd_project_id'), 
-'prd_document_type_id'=> trans('form_lang.prd_document_type_id'), 
-'prd_name'=> trans('form_lang.prd_name'), 
-'prd_file_path'=> trans('form_lang.prd_file_path'), 
-'prd_size'=> trans('form_lang.prd_size'), 
-'prd_file_extension'=> trans('form_lang.prd_file_extension'), 
-'prd_uploaded_date'=> trans('form_lang.prd_uploaded_date'), 
-'prd_description'=> trans('form_lang.prd_description'), 
-'prd_status'=> trans('form_lang.prd_status'), 
-
+        'prd_document_type_id'=> trans('form_lang.prd_document_type_id'), 
+        'prd_name'=> trans('form_lang.prd_name'), 
+        'prd_file_path'=> trans('form_lang.prd_file_path'), 
+        'prd_size'=> trans('form_lang.prd_size'), 
+        'prd_file_extension'=> trans('form_lang.prd_file_extension'), 
+        'prd_uploaded_date'=> trans('form_lang.prd_uploaded_date'), 
+        'prd_description'=> trans('form_lang.prd_description'), 
+        'prd_status'=> trans('form_lang.prd_status'), 
     ];
     $rules= [
         'prd_project_id'=> 'max:200', 
-'prd_document_type_id'=> 'max:200', 
-'prd_name'=> 'max:200', 
-'prd_file_path'=> 'max:200', 
-'prd_size'=> 'max:200', 
-'prd_file_extension'=> 'max:200', 
-'prd_uploaded_date'=> 'max:10', 
-'prd_description'=> 'max:425', 
-'prd_status'=> 'integer', 
-
+        'prd_document_type_id'=> 'max:200', 
+        'prd_name'=> 'max:200', 
+        'prd_file_path'=> 'max:200', 
+        'prd_size'=> 'max:200', 
+        'prd_file_extension'=> 'max:200', 
+        'prd_uploaded_date'=> 'max:10', 
+        'prd_description'=> 'max:425', 
+        'prd_status'=> 'integer', 
     ]; 
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -150,7 +144,6 @@ function getListForm(Request $request)
     {
         $query='SELECT prd_id,prd_project_id,pms_document_type.pdt_doc_name_or AS prd_document_type_id,prd_name,prd_file_path,prd_size,prd_file_extension,prd_uploaded_date,prd_description,prd_create_time,prd_update_time,prd_delete_time,prd_created_by,prd_status FROM pms_project_document ';       
         $query .= ' INNER JOIN pms_document_type ON pms_project_document.prd_document_type_id = pms_document_type.pdt_id'; 
-
         $query .=' WHERE prd_id='.$id.' ';
         $data_info=DB::select(DB::raw($query));
         if(isset($data_info) && !empty($data_info)){
@@ -171,9 +164,7 @@ function getListForm(Request $request)
     public function edit($id)
     {
         $pms_document_type_set=\App\Modelpmsdocumenttype::latest()->get();
-
         $data['related_pms_document_type']= $pms_document_type_set ;
-
         $data_info = Modelpmsprojectdocument::find($id);
         $data['pms_project_document_data']=$data_info;
         $data['page_title']=trans("form_lang.pms_project_document");
@@ -191,40 +182,38 @@ function getListForm(Request $request)
      */
     public function update(Request $request, $id)
     {
-     $attributeNames = [
+       $attributeNames = [
         'prd_project_id'=> trans('form_lang.prd_project_id'), 
-'prd_document_type_id'=> trans('form_lang.prd_document_type_id'), 
-'prd_name'=> trans('form_lang.prd_name'), 
-'prd_file_path'=> trans('form_lang.prd_file_path'), 
-'prd_size'=> trans('form_lang.prd_size'), 
-'prd_file_extension'=> trans('form_lang.prd_file_extension'), 
-'prd_uploaded_date'=> trans('form_lang.prd_uploaded_date'), 
-'prd_description'=> trans('form_lang.prd_description'), 
-'prd_status'=> trans('form_lang.prd_status'), 
-
+        'prd_document_type_id'=> trans('form_lang.prd_document_type_id'), 
+        'prd_name'=> trans('form_lang.prd_name'), 
+        'prd_file_path'=> trans('form_lang.prd_file_path'), 
+        'prd_size'=> trans('form_lang.prd_size'), 
+        'prd_file_extension'=> trans('form_lang.prd_file_extension'), 
+        'prd_uploaded_date'=> trans('form_lang.prd_uploaded_date'), 
+        'prd_description'=> trans('form_lang.prd_description'), 
+        'prd_status'=> trans('form_lang.prd_status'), 
     ];
     $rules= [
         'prd_project_id'=> 'max:200', 
-'prd_document_type_id'=> 'max:200', 
-'prd_name'=> 'max:200', 
-'prd_file_path'=> 'max:200', 
-'prd_size'=> 'max:200', 
-'prd_file_extension'=> 'max:200', 
-'prd_uploaded_date'=> 'max:10', 
-'prd_description'=> 'max:425', 
-'prd_status'=> 'integer', 
-
+        'prd_document_type_id'=> 'max:200', 
+        'prd_name'=> 'max:200', 
+        'prd_file_path'=> 'max:200', 
+        'prd_size'=> 'max:200', 
+        'prd_file_extension'=> 'max:200', 
+        'prd_uploaded_date'=> 'max:10', 
+        'prd_description'=> 'max:425', 
+        'prd_status'=> 'integer', 
     ];     
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
     if (!$validator->fails()) {
-     $requestData = $request->all();
-     $data_info = Modelpmsprojectdocument::findOrFail($id);
-     $data_info->update($requestData);
-     $ischanged=$data_info->wasChanged();
-     if($ischanged){
-         return redirect('project_document')->with('flash_message',  trans('form_lang.update_success'));
-     }else{
+       $requestData = $request->all();
+       $data_info = Modelpmsprojectdocument::findOrFail($id);
+       $data_info->update($requestData);
+       $ischanged=$data_info->wasChanged();
+       if($ischanged){
+           return redirect('project_document')->with('flash_message',  trans('form_lang.update_success'));
+       }else{
         return redirect('project_document/'.$id.'/edit')
         ->with('flash_message',trans('form_lang.not_changed') )
         ->withInput();
@@ -248,42 +237,40 @@ function getListForm(Request $request)
         return redirect('project_document')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-     $query='SELECT prd_id,prd_project_id, prd_document_type_id,prd_name,prd_file_path,prd_size,prd_file_extension, prd_uploaded_date,prd_description,prd_create_time,prd_update_time,prd_delete_time,prd_created_by,
-     1 AS is_editable, 1 AS is_deletable,COUNT(*) OVER () AS total_count FROM pms_project_document ';       
+       $query='SELECT prd_id,prd_project_id, prd_document_type_id,prd_name,prd_file_path,prd_size,prd_file_extension, prd_uploaded_date,prd_description,prd_create_time,prd_update_time,prd_delete_time,prd_created_by,
+       1 AS is_editable, 1 AS is_deletable,COUNT(*) OVER () AS total_count FROM pms_project_document ';       
      //$query .= ' INNER JOIN pms_document_type ON pms_project_document.prd_document_type_id = pms_document_type.pdt_id';
-     $query .=' WHERE 1=1';
-     $prdid=$request->input('prd_id');
-if(isset($prdid) && isset($prdid)){
-$query .=' AND prd_id="'.$prdid.'"'; 
-}
-$prdprojectid=$request->input('project_id');
-if(isset($prdprojectid) && isset($prdprojectid)){
-$query .=" AND prd_project_id='$prdprojectid'"; 
-
-}
-$prddocumenttypeid=$request->input('prd_document_type_id');
-if(isset($prddocumenttypeid) && isset($prddocumenttypeid)){
-$query .=' AND prd_document_type_id="'.$prddocumenttypeid.'"'; 
-}
-$prdname=$request->input('prd_name');
-if(isset($prdname) && isset($prdname)){
-$query .=' AND prd_name="'.$prdname.'"'; 
-}
-$fileOwnerType=$request->input('prd_owner_type_id');
-if(isset($fileOwnerType) && isset($fileOwnerType)){
-$query .=" AND prd_owner_type_id='".$fileOwnerType."'"; 
-}
-$fileOwnerId=$request->input('prd_owner_id');
-if(isset($fileOwnerId) && isset($fileOwnerId)){
-$query .=" AND prd_owner_id='".$fileOwnerId."'"; 
-}
-
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
+       $query .=' WHERE 1=1';
+       $prdid=$request->input('prd_id');
+       if(isset($prdid) && isset($prdid)){
+        $query .=' AND prd_id="'.$prdid.'"'; 
+    }
+    $prdprojectid=$request->input('project_id');
+    if(isset($prdprojectid) && isset($prdprojectid)){
+        $query .=" AND prd_project_id='$prdprojectid'"; 
+    }
+    $prddocumenttypeid=$request->input('prd_document_type_id');
+    if(isset($prddocumenttypeid) && isset($prddocumenttypeid)){
+        $query .=' AND prd_document_type_id="'.$prddocumenttypeid.'"'; 
+    }
+    $prdname=$request->input('prd_name');
+    if(isset($prdname) && isset($prdname)){
+        $query .=' AND prd_name="'.$prdname.'"'; 
+    }
+    $fileOwnerType=$request->input('prd_owner_type_id');
+    if(isset($fileOwnerType) && isset($fileOwnerType)){
+        $query .=" AND prd_owner_type_id='".$fileOwnerType."'"; 
+    }
+    $fileOwnerId=$request->input('prd_owner_id');
+    if(isset($fileOwnerId) && isset($fileOwnerId)){
+        $query .=" AND prd_owner_id='".$fileOwnerId."'"; 
+    }
+    $search=$request->input('search');
+    if(isset($search) && !empty($search)){
+     $advanced= $request->input('adva-search');
+     if(isset($advanced) && $advanced =='on'){
+         $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
+     }else{
         $query.=' AND (add_name LIKE "%'.$search.'%")  ';
     }
 }
@@ -298,26 +285,24 @@ public function updategrid(Request $request)
 {
     $attributeNames = [
         'prd_project_id'=> trans('form_lang.prd_project_id'), 
-'prd_document_type_id'=> trans('form_lang.prd_document_type_id'), 
-'prd_name'=> trans('form_lang.prd_name'), 
-'prd_file_path'=> trans('form_lang.prd_file_path'), 
-'prd_size'=> trans('form_lang.prd_size'), 
-'prd_file_extension'=> trans('form_lang.prd_file_extension'), 
-'prd_uploaded_date'=> trans('form_lang.prd_uploaded_date'), 
-'prd_description'=> trans('form_lang.prd_description'), 
-'prd_status'=> trans('form_lang.prd_status'), 
-
+        'prd_document_type_id'=> trans('form_lang.prd_document_type_id'), 
+        'prd_name'=> trans('form_lang.prd_name'), 
+        'prd_file_path'=> trans('form_lang.prd_file_path'), 
+        'prd_size'=> trans('form_lang.prd_size'), 
+        'prd_file_extension'=> trans('form_lang.prd_file_extension'), 
+        'prd_uploaded_date'=> trans('form_lang.prd_uploaded_date'), 
+        'prd_description'=> trans('form_lang.prd_description'), 
+        'prd_status'=> trans('form_lang.prd_status'), 
     ];
     $rules= [
-'prd_document_type_id'=> 'max:200', 
-'prd_name'=> 'max:200', 
-'prd_file_path'=> 'max:200', 
-'prd_size'=> 'max:200', 
-'prd_file_extension'=> 'max:200', 
-'prd_uploaded_date'=> 'max:10', 
-'prd_description'=> 'max:425', 
+        'prd_document_type_id'=> 'max:200', 
+        'prd_name'=> 'max:200', 
+        'prd_file_path'=> 'max:200', 
+        'prd_size'=> 'max:200', 
+        'prd_file_extension'=> 'max:200', 
+        'prd_uploaded_date'=> 'max:10', 
+        'prd_description'=> 'max:425', 
 //'prd_status'=> 'integer', 
-
     ];
     $uploadedFile = $request->file('prd_file'); 
     $validator = Validator::make ( $request->all(), $rules );
@@ -338,16 +323,16 @@ public function updategrid(Request $request)
             //assign data from of foreign key
         $requestData = $request->all();
         $hasFile=$request->hasFile('prd_file');
-                if($hasFile && $uploadedFile->isValid()){
-                    $fileName = $uploadedFile->getClientOriginalName();
-                    $fileExtension=$uploadedFile->getClientOriginalExtension();
-                    $fileSize=$uploadedFile->getSize();
-                    $uploadedFile->move(public_path('uploads/projectfiles'), $fileName);
-                    $requestData['prd_file_extension']=$fileExtension;
-                    $requestData['prd_size']=$fileSize;
+        if($hasFile && $uploadedFile->isValid()){
+            $fileName = $uploadedFile->getClientOriginalName();
+            $fileExtension=$uploadedFile->getClientOriginalExtension();
+            $fileSize=$uploadedFile->getSize();
+            $uploadedFile->move(public_path('uploads/projectfiles'), $fileName);
+            $requestData['prd_file_extension']=$fileExtension;
+            $requestData['prd_size']=$fileSize;
                     //dd($fileName);
-                    $requestData['prd_file_path']=$fileName;
-                }           
+            $requestData['prd_file_path']=$fileName;
+        }           
         $status= $request->input('prd_status');
         if($status=="true"){
             $requestData['prd_status']=1;
@@ -359,19 +344,19 @@ public function updategrid(Request $request)
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
-               $resultObject= array(
+             $resultObject= array(
                 "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "is_updated"=>true,
+                "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+                "is_updated"=>true,
                 "status_code"=>200,
                 "type"=>"update",
                 "errorMsg"=>""
             );
-           }else{
+         }else{
             $resultObject= array(
                 "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "is_updated"=>true,
+                "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+                "is_updated"=>true,
                 "status_code"=>200,
                 "type"=>"update",
                 "errorMsg"=>""
@@ -398,26 +383,24 @@ public function insertgrid(Request $request)
 {
     $attributeNames = [
         'prd_project_id'=> trans('form_lang.prd_project_id'), 
-'prd_document_type_id'=> trans('form_lang.prd_document_type_id'), 
-'prd_name'=> trans('form_lang.prd_name'), 
-'prd_file_path'=> trans('form_lang.prd_file_path'), 
-'prd_size'=> trans('form_lang.prd_size'), 
-'prd_file_extension'=> trans('form_lang.prd_file_extension'), 
-'prd_uploaded_date'=> trans('form_lang.prd_uploaded_date'), 
-'prd_description'=> trans('form_lang.prd_description'), 
-'prd_status'=> trans('form_lang.prd_status'), 
-
+        'prd_document_type_id'=> trans('form_lang.prd_document_type_id'), 
+        'prd_name'=> trans('form_lang.prd_name'), 
+        'prd_file_path'=> trans('form_lang.prd_file_path'), 
+        'prd_size'=> trans('form_lang.prd_size'), 
+        'prd_file_extension'=> trans('form_lang.prd_file_extension'), 
+        'prd_uploaded_date'=> trans('form_lang.prd_uploaded_date'), 
+        'prd_description'=> trans('form_lang.prd_description'), 
+        'prd_status'=> trans('form_lang.prd_status'), 
     ];
     $rules= [
-'prd_document_type_id'=> 'max:200', 
-'prd_name'=> 'max:200', 
-'prd_file_path'=> 'max:200', 
-'prd_size'=> 'max:200', 
-'prd_file_extension'=> 'max:200', 
-'prd_uploaded_date'=> 'max:10', 
-'prd_description'=> 'max:425', 
+        'prd_document_type_id'=> 'max:200', 
+        'prd_name'=> 'max:200', 
+        'prd_file_path'=> 'max:200', 
+        'prd_size'=> 'max:200', 
+        'prd_file_extension'=> 'max:200', 
+        'prd_uploaded_date'=> 'max:10', 
+        'prd_description'=> 'max:425', 
 //'prd_status'=> 'integer', 
-
     ];
     $uploadedFile = $request->file('prd_file');
     $validator = Validator::make ( $request->all(), $rules );
@@ -434,18 +417,17 @@ public function insertgrid(Request $request)
         return response()->json($resultObject);
     }else{
         $requestData = $request->all();
-       $hasFile=$request->hasFile('prd_file');
-                if($hasFile && $uploadedFile->isValid()){
-                    $fileName = $uploadedFile->getClientOriginalName();
-                    $fileExtension=$uploadedFile->getClientOriginalExtension();
-                    $fileSize=$uploadedFile->getSize();
-                    $uploadedFile->move(public_path('uploads/projectfiles'), $fileName);
-                    $requestData['prd_file_extension']=$fileExtension;
-                    $requestData['prd_size']=$fileSize;
+        $hasFile=$request->hasFile('prd_file');
+        if($hasFile && $uploadedFile->isValid()){
+            $fileName = $uploadedFile->getClientOriginalName();
+            $fileExtension=$uploadedFile->getClientOriginalExtension();
+            $fileSize=$uploadedFile->getSize();
+            $uploadedFile->move(public_path('uploads/projectfiles'), $fileName);
+            $requestData['prd_file_extension']=$fileExtension;
+            $requestData['prd_size']=$fileSize;
                     //dd($fileName);
-                    $requestData['prd_file_path']=$fileName;
-                } 
-
+            $requestData['prd_file_path']=$fileName;
+        } 
         $status= $request->input('prd_status');
         if($status=="true"){
             $requestData['prd_status']=1;

@@ -8,93 +8,76 @@ use Illuminate\Support\Facades\DB;
 //PROPERTY OF LT ICT SOLUTION PLC
 class PmssectorinformationController extends MyController
 {
-   public function __construct()
-   {
+ public function __construct()
+ {
     parent::__construct();
     //$this->middleware('auth');
 }
- 
-    public function listgrid(Request $request){
- $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
-  $permissionData=$this->getPagePermission($request,20);
-  if(isset($permissionData) && !empty($permissionData)){
-        $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
-     }
-
-    $query="SELECT sci_id,sci_name_or,sci_name_am,sci_name_en,sci_code,prj_sector_category.psc_name AS sector_name, sci_sector_category_id, sci_available_at_region, sci_available_at_zone,sci_available_at_woreda,sci_description,sci_create_time,sci_update_time,sci_delete_time,sci_created_by,sci_status ".$permissionIndex." FROM pms_sector_information ";   
-     $query .= ' LEFT JOIN prj_sector_category ON pms_sector_information.sci_sector_category_id = prj_sector_category.psc_id'; 
-
-     $query .=' WHERE 1=1';
-     $sciid=$request->input('sci_id');
+public function listgrid(Request $request){
+   $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+   $permissionData=$this->getPagePermission($request,20);
+   if(isset($permissionData) && !empty($permissionData)){
+    $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
+}
+$query="SELECT sci_id,sci_name_or,sci_name_am,sci_name_en,sci_code,prj_sector_category.psc_name AS sector_name, sci_sector_category_id, sci_available_at_region, sci_available_at_zone,sci_available_at_woreda,sci_description,sci_create_time,sci_update_time,sci_delete_time,sci_created_by,sci_status ".$permissionIndex." FROM pms_sector_information ";   
+$query .= ' LEFT JOIN prj_sector_category ON pms_sector_information.sci_sector_category_id = prj_sector_category.psc_id'; 
+$query .=' WHERE 1=1';
+$sciid=$request->input('sci_id');
 if(isset($sciid) && isset($sciid)){
-$query .=' AND sci_id="'.$sciid.'"'; 
+    $query .=' AND sci_id="'.$sciid.'"'; 
 }
 $scinameor=$request->input('sci_name_or');
 if(isset($scinameor) && isset($scinameor)){
-$query .=" AND sci_name_or LIKE '%".$scinameor."%'"; 
+    $query .=" AND sci_name_or LIKE '%".$scinameor."%'"; 
 }
 $scinameam=$request->input('sci_name_am');
 if(isset($scinameam) && isset($scinameam)){
-$query .=" AND sci_name_am LIKE '%".$scinameam."%'"; 
+    $query .=" AND sci_name_am LIKE '%".$scinameam."%'"; 
 }
 $scinameen=$request->input('sci_name_en');
 if(isset($scinameen) && isset($scinameen)){
-$query .=" AND sci_name_en LIKE '%".$scinameen."%'"; 
+    $query .=" AND sci_name_en LIKE '%".$scinameen."%'"; 
 }
 $scicode=$request->input('sci_code');
 if(isset($scicode) && isset($scicode)){
-$query .=' AND sci_code="'.$scicode.'"'; 
+    $query .=' AND sci_code="'.$scicode.'"'; 
 }
 $scisectorcategoryid=$request->input('sci_sector_category_id');
 if(isset($scisectorcategoryid) && isset($scisectorcategoryid)){
-$query .=' AND sci_sector_category_id="'.$scisectorcategoryid.'"'; 
-}
-$sciavailableatregion=$request->input('sci_available_at_region');
-if(isset($sciavailableatregion) && isset($sciavailableatregion)){
-$query .=' AND sci_available_at_region="'.$sciavailableatregion.'"'; 
-}
-$sciavailableatzone=$request->input('sci_available_at_zone');
-if(isset($sciavailableatzone) && isset($sciavailableatzone)){
-$query .=' AND sci_available_at_zone="'.$sciavailableatzone.'"'; 
-}
-$sciavailableatworeda=$request->input('sci_available_at_woreda');
-if(isset($sciavailableatworeda) && isset($sciavailableatworeda)){
-$query .=' AND sci_available_at_woreda="'.$sciavailableatworeda.'"'; 
+    $query .=' AND sci_sector_category_id="'.$scisectorcategoryid.'"'; 
 }
 $query.=' ORDER BY sci_name_or';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-"previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0));
+    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
 {
     $attributeNames = [
         'sci_name_or'=> trans('form_lang.sci_name_or'), 
-'sci_name_am'=> trans('form_lang.sci_name_am'), 
-'sci_name_en'=> trans('form_lang.sci_name_en'), 
-'sci_code'=> trans('form_lang.sci_code'), 
-'sci_sector_category_id'=> trans('form_lang.sci_sector_category_id'), 
-'sci_available_at_region'=> trans('form_lang.sci_available_at_region'), 
-'sci_available_at_zone'=> trans('form_lang.sci_available_at_zone'), 
-'sci_available_at_woreda'=> trans('form_lang.sci_available_at_woreda'), 
-'sci_description'=> trans('form_lang.sci_description'), 
-'sci_status'=> trans('form_lang.sci_status'), 
-
+        'sci_name_am'=> trans('form_lang.sci_name_am'), 
+        'sci_name_en'=> trans('form_lang.sci_name_en'), 
+        'sci_code'=> trans('form_lang.sci_code'), 
+        'sci_sector_category_id'=> trans('form_lang.sci_sector_category_id'), 
+        'sci_available_at_region'=> trans('form_lang.sci_available_at_region'), 
+        'sci_available_at_zone'=> trans('form_lang.sci_available_at_zone'), 
+        'sci_available_at_woreda'=> trans('form_lang.sci_available_at_woreda'), 
+        'sci_description'=> trans('form_lang.sci_description'), 
+        'sci_status'=> trans('form_lang.sci_status'), 
     ];
     $rules= [
         'sci_name_or'=> 'max:200', 
-'sci_name_am'=> 'max:100', 
-'sci_name_en'=> 'max:100', 
-'sci_code'=> 'max:20', 
+        'sci_name_am'=> 'max:100', 
+        'sci_name_en'=> 'max:100', 
+        'sci_code'=> 'max:20', 
 //'sci_sector_category_id'=> 'max:200', 
-'sci_available_at_region'=> 'integer', 
-'sci_available_at_zone'=> 'integer', 
-'sci_available_at_woreda'=> 'integer', 
-'sci_description'=> 'max:425', 
+        'sci_available_at_region'=> 'integer', 
+        'sci_available_at_zone'=> 'integer', 
+        'sci_available_at_woreda'=> 'integer', 
+        'sci_description'=> 'max:425', 
 //'sci_status'=> 'integer', 
-
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -124,19 +107,19 @@ public function updategrid(Request $request)
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
-               $resultObject= array(
+             $resultObject= array(
                 "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "is_updated"=>true,
+                "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+                "is_updated"=>true,
                 "status_code"=>200,
                 "type"=>"update",
                 "errorMsg"=>""
             );
-           }else{
+         }else{
             $resultObject= array(
                 "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "is_updated"=>true,
+                "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+                "is_updated"=>true,
                 "status_code"=>200,
                 "type"=>"update",
                 "errorMsg"=>""
@@ -163,29 +146,27 @@ public function insertgrid(Request $request)
 {
     $attributeNames = [
         'sci_name_or'=> trans('form_lang.sci_name_or'), 
-'sci_name_am'=> trans('form_lang.sci_name_am'), 
-'sci_name_en'=> trans('form_lang.sci_name_en'), 
-'sci_code'=> trans('form_lang.sci_code'), 
-'sci_sector_category_id'=> trans('form_lang.sci_sector_category_id'), 
-'sci_available_at_region'=> trans('form_lang.sci_available_at_region'), 
-'sci_available_at_zone'=> trans('form_lang.sci_available_at_zone'), 
-'sci_available_at_woreda'=> trans('form_lang.sci_available_at_woreda'), 
-'sci_description'=> trans('form_lang.sci_description'), 
-'sci_status'=> trans('form_lang.sci_status'), 
-
+        'sci_name_am'=> trans('form_lang.sci_name_am'), 
+        'sci_name_en'=> trans('form_lang.sci_name_en'), 
+        'sci_code'=> trans('form_lang.sci_code'), 
+        'sci_sector_category_id'=> trans('form_lang.sci_sector_category_id'), 
+        'sci_available_at_region'=> trans('form_lang.sci_available_at_region'), 
+        'sci_available_at_zone'=> trans('form_lang.sci_available_at_zone'), 
+        'sci_available_at_woreda'=> trans('form_lang.sci_available_at_woreda'), 
+        'sci_description'=> trans('form_lang.sci_description'), 
+        'sci_status'=> trans('form_lang.sci_status'), 
     ];
     $rules= [
         'sci_name_or'=> 'max:200', 
-'sci_name_am'=> 'max:100', 
-'sci_name_en'=> 'max:100', 
-'sci_code'=> 'max:20', 
+        'sci_name_am'=> 'max:100', 
+        'sci_name_en'=> 'max:100', 
+        'sci_code'=> 'max:20', 
 //'sci_sector_category_id'=> 'max:200', 
-'sci_available_at_region'=> 'integer', 
-'sci_available_at_zone'=> 'integer', 
-'sci_available_at_woreda'=> 'integer', 
-'sci_description'=> 'max:425', 
+        'sci_available_at_region'=> 'integer', 
+        'sci_available_at_zone'=> 'integer', 
+        'sci_available_at_woreda'=> 'integer', 
+        'sci_description'=> 'max:425', 
 //'sci_status'=> 'integer', 
-
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);

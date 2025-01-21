@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\DB;
 //PROPERTY OF LT ICT SOLUTION PLC
 class PmsbudgetexipdetailController extends MyController
 {
-   public function __construct()
-   {
+ public function __construct()
+ {
     parent::__construct();
     //$this->middleware('auth');
 }
@@ -23,7 +23,6 @@ class PmsbudgetexipdetailController extends MyController
     public function show($id)
     {
         $query='SELECT bed_id,bed_budget_expenditure_id,bed_budget_expenditure_code_id,bed_amount,bed_description,bed_create_time,bed_update_time,bed_delete_time,bed_created_by,bed_status FROM pms_budget_exip_detail ';       
-        
         $query .=' WHERE bed_id='.$id.' ';
         $data_info=DB::select(DB::raw($query));
         if(isset($data_info) && !empty($data_info)){
@@ -36,37 +35,36 @@ class PmsbudgetexipdetailController extends MyController
     }
     //Get List
     public function listgrid(Request $request){
-     $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
-     $permissionData=$this->getPagePermission($request,45);
-      if(isset($permissionData) && !empty($permissionData)){
+       $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+       $permissionData=$this->getPagePermission($request,45);
+       if(isset($permissionData) && !empty($permissionData)){
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
-     }
-     $query="SELECT bed_id,bed_budget_expenditure_id,bed_budget_expenditure_code_id,bed_amount,bed_description,bed_create_time,bed_update_time,bed_delete_time,bed_created_by,bed_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM pms_budget_exip_detail ";
-     
-     $query .=' WHERE 1=1';
-     $bedid=$request->input('bed_id');
-if(isset($bedid) && isset($bedid)){
-$query .=' AND bed_id="'.$bedid.'"'; 
-}
-$bedbudgetexpenditureid=$request->input('budget_expend_id');
-if(isset($bedbudgetexpenditureid) && isset($bedbudgetexpenditureid)){
-$query .=" AND bed_budget_expenditure_id='".$bedbudgetexpenditureid."'"; 
-}
-$bedbudgetexpenditurecodeid=$request->input('bed_budget_expenditure_code_id');
-if(isset($bedbudgetexpenditurecodeid) && isset($bedbudgetexpenditurecodeid)){
-$query .=' AND bed_budget_expenditure_code_id="'.$bedbudgetexpenditurecodeid.'"'; 
-}
-     $masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
+    }
+    $query="SELECT bed_id,bed_budget_expenditure_id,bed_budget_expenditure_code_id,bed_amount,bed_description,bed_create_time,bed_update_time,bed_delete_time,bed_created_by,bed_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM pms_budget_exip_detail ";
+    $query .=' WHERE 1=1';
+    $bedid=$request->input('bed_id');
+    if(isset($bedid) && isset($bedid)){
+        $query .=' AND bed_id="'.$bedid.'"'; 
+    }
+    $bedbudgetexpenditureid=$request->input('budget_expend_id');
+    if(isset($bedbudgetexpenditureid) && isset($bedbudgetexpenditureid)){
+        $query .=" AND bed_budget_expenditure_id='".$bedbudgetexpenditureid."'"; 
+    }
+    $bedbudgetexpenditurecodeid=$request->input('bed_budget_expenditure_code_id');
+    if(isset($bedbudgetexpenditurecodeid) && isset($bedbudgetexpenditurecodeid)){
+        $query .=' AND bed_budget_expenditure_code_id="'.$bedbudgetexpenditurecodeid.'"'; 
+    }
+    $masterId=$request->input('master_id');
+    if(isset($masterId) && !empty($masterId)){
         //set foreign key field name
         //$query .=' AND add_name="'.$masterId.'"'; 
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
+    }
+    $search=$request->input('search');
+    if(isset($search) && !empty($search)){
+     $advanced= $request->input('adva-search');
+     if(isset($advanced) && $advanced =='on'){
+         $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
+     }else{
         $query.=' AND (add_name LIKE "%'.$search.'%")  ';
     }
 }
@@ -82,16 +80,15 @@ public function updategrid(Request $request)
 {
     $attributeNames = [
         'bed_budget_expenditure_id'=> trans('form_lang.bed_budget_expenditure_id'), 
-'bed_budget_expenditure_code_id'=> trans('form_lang.bed_budget_expenditure_code_id'), 
-'bed_amount'=> trans('form_lang.bed_amount'), 
-'bed_description'=> trans('form_lang.bed_description'), 
-'bed_status'=> trans('form_lang.bed_status'), 
-
+        'bed_budget_expenditure_code_id'=> trans('form_lang.bed_budget_expenditure_code_id'), 
+        'bed_amount'=> trans('form_lang.bed_amount'), 
+        'bed_description'=> trans('form_lang.bed_description'), 
+        'bed_status'=> trans('form_lang.bed_status'), 
     ];
     $rules= [
-'bed_budget_expenditure_code_id'=> 'max:200', 
-'bed_amount'=> 'max:200', 
-'bed_description'=> 'max:425'
+        'bed_budget_expenditure_code_id'=> 'max:200', 
+        'bed_amount'=> 'max:200', 
+        'bed_description'=> 'max:425'
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -119,19 +116,19 @@ public function updategrid(Request $request)
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
-               $resultObject= array(
+             $resultObject= array(
                 "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "is_updated"=>true,
+                "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+                "is_updated"=>true,
                 "status_code"=>200,
                 "type"=>"update",
                 "errorMsg"=>""
             );
-           }else{
+         }else{
             $resultObject= array(
                 "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "is_updated"=>true,
+                "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+                "is_updated"=>true,
                 "status_code"=>200,
                 "type"=>"update",
                 "errorMsg"=>""
@@ -158,17 +155,15 @@ public function insertgrid(Request $request)
 {
     $attributeNames = [
         'bed_budget_expenditure_id'=> trans('form_lang.bed_budget_expenditure_id'), 
-'bed_budget_expenditure_code_id'=> trans('form_lang.bed_budget_expenditure_code_id'), 
-'bed_amount'=> trans('form_lang.bed_amount'), 
-'bed_description'=> trans('form_lang.bed_description'), 
-'bed_status'=> trans('form_lang.bed_status'), 
-
+        'bed_budget_expenditure_code_id'=> trans('form_lang.bed_budget_expenditure_code_id'), 
+        'bed_amount'=> trans('form_lang.bed_amount'), 
+        'bed_description'=> trans('form_lang.bed_description'), 
+        'bed_status'=> trans('form_lang.bed_status'), 
     ];
     $rules= [
-'bed_budget_expenditure_code_id'=> 'max:200', 
-'bed_amount'=> 'max:200', 
-'bed_description'=> 'max:425'
-
+        'bed_budget_expenditure_code_id'=> 'max:200', 
+        'bed_amount'=> 'max:200', 
+        'bed_description'=> 'max:425'
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);

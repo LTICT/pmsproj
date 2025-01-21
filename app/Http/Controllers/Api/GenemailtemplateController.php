@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\DB;
 //PROPERTY OF LT ICT SOLUTION PLC
 class GenemailtemplateController extends MyController
 {
-   public function __construct()
-   {
+ public function __construct()
+ {
     parent::__construct();
     //$this->middleware('auth');
 }
@@ -23,7 +23,6 @@ class GenemailtemplateController extends MyController
     public function show($id)
     {
         $query='SELECT emt_id,emt_template_name,emt_template_content,emt_description,emt_create_time,emt_update_time,emt_delete_time,emt_created_by,emt_status FROM gen_email_template ';       
-        
         $query .=' WHERE emt_id='.$id.' ';
         $data_info=DB::select(DB::raw($query));
         if(isset($data_info) && !empty($data_info)){
@@ -36,34 +35,32 @@ class GenemailtemplateController extends MyController
     }
     //Get List
     public function listgrid(Request $request){
-     $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
-     $permissionData=$this->getPagePermission($request,45);
-      if(isset($permissionData) && !empty($permissionData)){
+       $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+       $permissionData=$this->getPagePermission($request,45);
+       if(isset($permissionData) && !empty($permissionData)){
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
-     }
-     $query="SELECT emt_template_content_en,emt_template_content_am,emt_id,emt_template_name,emt_template_content,emt_description,emt_create_time,emt_update_time,emt_delete_time,emt_created_by,emt_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM gen_email_template ";
-     
-     $query .=' WHERE 1=1';
-     $emtid=$request->input('emt_id');
-if(isset($emtid) && isset($emtid)){
-$query .=' AND emt_id="'.$emtid.'"'; 
-}
-$emttemplatename=$request->input('emt_template_name');
-if(isset($emttemplatename) && isset($emttemplatename)){
-$query .=" AND emt_template_name LIKE '%".$emttemplatename."%'"; 
-}
-
-     $masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
+    }
+    $query="SELECT emt_template_content_en,emt_template_content_am,emt_id,emt_template_name,emt_template_content,emt_description,emt_create_time,emt_update_time,emt_delete_time,emt_created_by,emt_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM gen_email_template ";
+    $query .=' WHERE 1=1';
+    $emtid=$request->input('emt_id');
+    if(isset($emtid) && isset($emtid)){
+        $query .=' AND emt_id="'.$emtid.'"'; 
+    }
+    $emttemplatename=$request->input('emt_template_name');
+    if(isset($emttemplatename) && isset($emttemplatename)){
+        $query .=" AND emt_template_name LIKE '%".$emttemplatename."%'"; 
+    }
+    $masterId=$request->input('master_id');
+    if(isset($masterId) && !empty($masterId)){
         //set foreign key field name
         //$query .=' AND add_name="'.$masterId.'"'; 
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
+    }
+    $search=$request->input('search');
+    if(isset($search) && !empty($search)){
+     $advanced= $request->input('adva-search');
+     if(isset($advanced) && $advanced =='on'){
+         $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
+     }else{
         $query.=' AND (add_name LIKE "%'.$search.'%")  ';
     }
 }
@@ -79,16 +76,14 @@ public function updategrid(Request $request)
 {
     $attributeNames = [
         'emt_template_name'=> trans('form_lang.emt_template_name'), 
-'emt_template_content'=> trans('form_lang.emt_template_content'), 
-'emt_description'=> trans('form_lang.emt_description'), 
-'emt_status'=> trans('form_lang.emt_status'), 
-
+        'emt_template_content'=> trans('form_lang.emt_template_content'), 
+        'emt_description'=> trans('form_lang.emt_description'), 
+        'emt_status'=> trans('form_lang.emt_status'), 
     ];
     $rules= [
         'emt_template_name'=> 'max:200', 
-'emt_template_content'=> 'max:200', 
-'emt_description'=> 'max:425'
-
+        'emt_template_content'=> 'max:200', 
+        'emt_description'=> 'max:425'
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -116,19 +111,19 @@ public function updategrid(Request $request)
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
-               $resultObject= array(
+             $resultObject= array(
                 "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "is_updated"=>true,
+                "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+                "is_updated"=>true,
                 "status_code"=>200,
                 "type"=>"update",
                 "errorMsg"=>""
             );
-           }else{
+         }else{
             $resultObject= array(
                 "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "is_updated"=>true,
+                "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+                "is_updated"=>true,
                 "status_code"=>200,
                 "type"=>"update",
                 "errorMsg"=>""
@@ -155,15 +150,14 @@ public function insertgrid(Request $request)
 {
     $attributeNames = [
         'emt_template_name'=> trans('form_lang.emt_template_name'), 
-'emt_template_content'=> trans('form_lang.emt_template_content'), 
-'emt_description'=> trans('form_lang.emt_description'), 
-'emt_status'=> trans('form_lang.emt_status'), 
-
+        'emt_template_content'=> trans('form_lang.emt_template_content'), 
+        'emt_description'=> trans('form_lang.emt_description'), 
+        'emt_status'=> trans('form_lang.emt_status'), 
     ];
     $rules= [
         'emt_template_name'=> 'max:200', 
-'emt_template_content'=> 'max:200', 
-'emt_description'=> 'max:425', 
+        'emt_template_content'=> 'max:200', 
+        'emt_description'=> 'max:425', 
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
