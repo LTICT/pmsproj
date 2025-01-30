@@ -6,7 +6,7 @@ pipeline {
         DEV_DOCKER_IMAGE = 'otecpms/laravel-app-dev:latest'
         QA_DOCKER_IMAGE = 'otecpms/laravel-app-qa:latest'
         REGISTRY_CREDENTIALS = 'dockerhub-credentials' // Jenkins credentials ID for Docker registry
-        ENV_FILE_PATH = '/home/testthree/pms_files/qa-backend.env'
+        ENV_FILE_PATH = '/var/jenkins_home/pms_files/qa-backend.env'
         PORT_EXT  = 1235
         PORT_INT  = 1155
     }
