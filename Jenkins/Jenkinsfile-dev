@@ -15,7 +15,7 @@ pipeline {
         REGISTRY_CREDENTIALS = 'dockerhub-credentials'  // Jenkins credentials ID
         
         // Environment / Ports
-        ENV_FILE_PATH        = '/home/testthree/pms_files/dev-backend.env'
+        ENV_FILE_PATH        = '/home/pms_files/dev-backend.env'
         PORT_EXT             = '1213'
         PORT_INT             = '1155'
         
