@@ -11,7 +11,7 @@ pipeline {
         // Docker Hub API URL for repository tags (first page only)
         PROD_DOCKER_API_URL = 'https://registry.hub.docker.com/v2/repositories/otecpms/laravel-app-prod/tags/'
         // Production deployment settings
-        ENV_FILE_PATH = '/home/testthree/pms_files/prod-backend.env'
+        ENV_FILE_PATH = '/var/jenkins_home/pms_files/prod-backend.env'
         PORT_EXT  = 1111
         PORT_INT  = 1155
     }
