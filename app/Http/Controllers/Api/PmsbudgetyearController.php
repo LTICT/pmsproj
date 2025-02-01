@@ -147,9 +147,14 @@ public function insertgrid(Request $request)
         $requestData = $request->all();
         $requestData['bdy_created_by']=auth()->user()->usr_id;
         $status= $request->input('bdy_status');
+        try {
         $data_info=Modelpmsbudgetyear::create($requestData);
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;
+        
+        } catch (\Exception $e) {
+            $data_info=array();
+        }
         $resultObject= array(
             "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),

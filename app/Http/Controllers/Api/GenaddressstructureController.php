@@ -315,7 +315,7 @@ public function listaddress(Request $request){
     add_id AS id,
     add_name_or AS name,
     add_name_am AS add_name_am,
-    add_name_or AS add_name_or,
+    add_name_en AS add_name_en,
     add_parent_id AS "rootId",
         ARRAY[]::json[] AS children -- Initialize children as empty array
         FROM gen_address_structure 
@@ -326,7 +326,7 @@ public function listaddress(Request $request){
         g.add_id AS id,
         g.add_name_or AS name,
         g.add_name_am AS add_name_am,
-        g.add_name_or AS add_name_or,
+        g.add_name_en AS add_name_en,
         g.add_parent_id AS "rootId",
         ARRAY[]::json[] AS children
         FROM gen_address_structure g
@@ -339,7 +339,7 @@ public function listaddress(Request $request){
     add_id AS id,
     add_name_or AS name,
     add_name_am AS add_name_am,
-    add_name_or AS add_name_or,
+    add_name_en AS add_name_en,
     add_parent_id AS "rootId",
         ARRAY[]::json[] AS children -- Initialize children as empty array
         FROM gen_address_structure 
@@ -349,7 +349,7 @@ public function listaddress(Request $request){
         g.add_id AS id,
         g.add_name_or AS name,
         g.add_name_am AS add_name_am,
-        g.add_name_or AS add_name_or,
+        g.add_name_en AS add_name_en,
         g.add_parent_id AS "rootId",
         ARRAY[]::json[] AS children
         FROM gen_address_structure g

@@ -20,18 +20,21 @@ class MyController extends Controller
 			$zoneId=$userInfo->usr_zone_id;
 			$woredaId=$userInfo->usr_woreda_id;
 			$sectorId=$userInfo->usr_sector_id;
+			$departmentId=$userInfo->usr_department_id;
 			$prjownerzoneid=$request->input('prj_location_zone_id');
 			$prjownerworedaid=$request->input('prj_location_woreda_id');
 			$prjName=$request->input('prj_name');
+			$prjCode=$request->input('prj_code');
+			$include=$request->input('include');
+
 			if(isset($prjName) && isset($prjName)){
 				$query .=" AND prj_name LIKE '%".$prjName."%'"; 
 			}
-			$prjCode=$request->input('prj_code');
 			if(isset($prjCode) && isset($prjCode)){
 				$query .=" AND prj_code LIKE '%".$prjCode."%'"; 
 			}
 			if(isset($zoneId) && !empty($zoneId) && $zoneId > 0){
-				$query .=" AND prj_owner_zone_id='".$zoneId."'";   
+				$query .=" AND prj_owner_zone_id='".$zoneId."'";
 			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $prjownerzoneid>0){
 				$query .=" AND prj_owner_zone_id='".$prjownerzoneid."'";   
 			}
@@ -42,6 +45,9 @@ class MyController extends Controller
 			}
 			if(isset($sectorId) && !empty($sectorId) && $sectorId > 0){
 				$query .=" AND prj_sector_id='".$sectorId."'";   
+			}
+			if(isset($departmentId) && !empty($departmentId) && $departmentId > 0){
+				//$query .=" AND prj_department_id='".$departmentId."'";   
 			}
 		}
 		return $query;

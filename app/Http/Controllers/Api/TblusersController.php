@@ -80,7 +80,7 @@ class TblusersController extends MyController
     }
     $usrsectorid=$request->input('usr_sector_id');
     if(isset($usrsectorid) && isset($usrsectorid)){
-        $query .=' AND usr_sector_id="'.$usrsectorid.'"'; 
+        $query .=" AND usr_sector_id='".$usrsectorid."'"; 
     }
     $usrdepartmentid=$request->input('usr_department_id');
     if(isset($usrdepartmentid) && isset($usrdepartmentid)){

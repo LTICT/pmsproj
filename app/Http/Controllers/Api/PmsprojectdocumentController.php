@@ -251,7 +251,7 @@ function getListForm(Request $request)
     }
     $prddocumenttypeid=$request->input('prd_document_type_id');
     if(isset($prddocumenttypeid) && isset($prddocumenttypeid)){
-        $query .=' AND prd_document_type_id="'.$prddocumenttypeid.'"'; 
+        $query .=" AND prd_document_type_id='".$prddocumenttypeid."'"; 
     }
     $prdname=$request->input('prd_name');
     if(isset($prdname) && isset($prdname)){
@@ -274,6 +274,27 @@ function getListForm(Request $request)
         $query.=' AND (add_name LIKE "%'.$search.'%")  ';
     }
 }
+//$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
+$data_info=DB::select($query);
+$resultObject= array(
+    "data" =>$data_info,
+    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
+}
+public function listdocumentbytype(Request $request){
+       $query='SELECT prd_id,prd_project_id, prd_document_type_id,prd_name,prd_file_path,prd_size,prd_file_extension, prd_uploaded_date,prd_description,prd_create_time,prd_update_time,prd_delete_time,prd_created_by,
+       1 AS is_editable, 1 AS is_deletable FROM pms_project_document ';       
+     //$query .= ' INNER JOIN pms_document_type ON pms_project_document.prd_document_type_id = pms_document_type.pdt_id';
+       $query .=' WHERE 1=1';
+    $prdprojectid=$request->input('project_id');
+    if(isset($prdprojectid) && isset($prdprojectid)){
+        $query .=" AND prd_project_id='$prdprojectid'"; 
+    }
+    $prddocumenttypeid=$request->input('document_type_id');
+    if(isset($prddocumenttypeid) && isset($prddocumenttypeid)){
+        $query .=' AND prd_document_type_id="'.$prddocumenttypeid.'"'; 
+    }
+    
 //$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
 $data_info=DB::select($query);
 $resultObject= array(

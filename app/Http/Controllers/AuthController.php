@@ -9,7 +9,7 @@ use App\Models\User;
 use App\Models\Modeltblusers;
 use Illuminate\Support\Facades\Validator;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
-
+use Illuminate\Support\Facades\DB;
 class AuthController extends Controller
 {
     public function __construct()
@@ -33,15 +33,15 @@ class AuthController extends Controller
        // dd($cridentials);
         //$token = Auth::attempt($cridentials);
         try{
-        $data_info['is_editable']=1;
-        $data_info['is_deletable']=1;
-        $token = auth('api')->attempt($cridentials);
-        if(!$token){
-            return response()->json([
-                'status'=>'error',
-                'message'=>'Incorrect email/Password'
-            ], 401);
-        }
+            $data_info['is_editable']=1;
+            $data_info['is_deletable']=1;
+            $token = auth('api')->attempt($cridentials);
+            if(!$token){
+                return response()->json([
+                    'status'=>'error',
+                    'message'=>'Incorrect email/Password'
+                ], 401);
+            }
         } catch (JWTException $e) {
             return response()->json(['error' => 'Could not create token'], 500);
         }
@@ -52,7 +52,25 @@ class AuthController extends Controller
 
        // return response()->json(['access_token' => $token])->withCookie($cookie);
         //END TEST
-        $user = auth('api')->user();
+         $user = auth('api')->user();
+        //START USER INFO
+        $query='SELECT sci_name_or AS sector_name,
+        gen_address_structure.add_name_or AS zone_name, 
+        gen_department.dep_name_or as dep_name 
+        FROM tbl_users ';   
+        $query .= ' LEFT JOIN gen_address_structure ON tbl_users.usr_zone_id = gen_address_structure.add_id'; 
+        $query .= ' LEFT JOIN gen_department ON tbl_users.usr_department_id = gen_department.dep_id';
+        $query .= ' LEFT JOIN pms_sector_information ON tbl_users.usr_sector_id = pms_sector_information.sci_id';
+        $query .=" WHERE usr_id=".$user->usr_id." ";
+        $user_detail_data=DB::select($query);
+        $text="";
+        if( isset($user_detail_data) && !empty($user_detail_data)){
+            $text .=(isset($user_detail_data[0]->sector_name) && !empty($user_detail_data[0]->sector_name)) ? "Sector - ".  $user_detail_data[0]->sector_name : '';
+            $text .=(isset($user_detail_data[0]->zone_name) && !empty($user_detail_data[0]->zone_name)) ? " : Zone - ".  $user_detail_data[0]->zone_name : '';
+            $text .=(isset($user_detail_data[0]->dep_name) && !empty($user_detail_data[0]->dep_name)) ? " : Department - ".  $user_detail_data[0]->dep_name : '';
+        }
+        $user['user_detail']=$text;
+        //END USER INFO
         return response()->json([
             'status'=> 'success',
             'user'=> $user,
@@ -103,7 +121,7 @@ class AuthController extends Controller
         return response()->json(auth()->user());
     }
     
- public function me() 
+    public function me() 
     {
         // use auth()->user() to get authenticated user data
 
@@ -119,7 +137,7 @@ class AuthController extends Controller
         ]);
     }
 
-     public function logout()
+    public function logout()
     {
         // get token
         $token = JWTAuth::getToken();
@@ -138,41 +156,41 @@ class AuthController extends Controller
     }
     public function changePassword(Request $request)
     {
-     $attributeNames = [ 
-      'password'=> trans('form_lang.password'), 
-      'name'=> trans('form_lang.name'), 
-      'mobile'=> trans('form_lang.mobile'), 
-      'roleId'=> trans('form_lang.roleId')
-    ];
-    $rules= [       
-      'password'=> 'required|max:10',
-      'user_id'=> 'required'
-    ];
-    $userId=$request->get('user_id');
-    $request_data=['password'=>bcrypt($request->get('password'))]; 
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if (!$validator->fails()) {
-      $data_info = Modeltblusers::findOrFail($userId);
-      $data_info->update($request_data);
-     $resultObject= array(
-                "data" =>$data_info,
+       $attributeNames = [ 
+          'password'=> trans('form_lang.password'), 
+          'name'=> trans('form_lang.name'), 
+          'mobile'=> trans('form_lang.mobile'), 
+          'roleId'=> trans('form_lang.roleId')
+      ];
+      $rules= [       
+          'password'=> 'required|max:10',
+          'user_id'=> 'required'
+      ];
+      $userId=$request->get('user_id');
+      $request_data=['password'=>bcrypt($request->get('password'))]; 
+      $validator = Validator::make ( $request->all(), $rules );
+      $validator->setAttributeNames($attributeNames);
+      if (!$validator->fails()) {
+          $data_info = Modeltblusers::findOrFail($userId);
+          $data_info->update($request_data);
+          $resultObject= array(
+            "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
             "is_updated"=>true,
-                "status_code"=>200,
-                "type"=>"update",
-                "errorMsg"=>""
-            );
-        return response()->json($resultObject);
-     
-    }else{
-     $resultObject= array(
-            "is_updated"=>false,
-                "status_code"=>200,
-                "type"=>"update",
-                "errorMsg"=>""
-            );
-        return response()->json($resultObject);
-    }
-  }
+            "status_code"=>200,
+            "type"=>"update",
+            "errorMsg"=>""
+        );
+          return response()->json($resultObject);
+
+      }else{
+       $resultObject= array(
+        "is_updated"=>false,
+        "status_code"=>200,
+        "type"=>"update",
+        "errorMsg"=>""
+    );
+       return response()->json($resultObject);
+   }
+}
 }

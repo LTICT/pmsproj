@@ -15,7 +15,7 @@ class GendepartmentController extends MyController
 }
 public function listgrid(Request $request){
    $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
-   $permissionData=$this->getPagePermission($request,11);
+   $permissionData=$this->getPagePermission($request,12);
    if(isset($permissionData) && !empty($permissionData)){
     $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
 }
