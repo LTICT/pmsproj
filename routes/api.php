@@ -201,6 +201,8 @@ Route::post('users/updategrid', 'Api\TblusersController@updategrid');
 Route::post('users/deletegrid', 'Api\TblusersController@deletegrid');
 Route::post('users/search', 'TblusersController@search');
 Route::post('users/changeuserstatus', 'Api\TblusersController@changeuserstatus');
+Route::post('users/getuserinfo', 'Api\TblusersController@getUserInfo');
+Route::post('users/updateprofile', 'Api\TblusersController@updateUserProfile');
 
 Route::resource('address_structure', 'GenaddressstructureController');
 //Route::post('address_structure/listgrid', 'Api\GenaddressstructureController@listgrid');
