@@ -309,7 +309,12 @@ public function listaddress(Request $request){
   $authenticatedUser = $request->authUser;
   $userId=$authenticatedUser->usr_id;
         //$userId=79;
-  if($userId!=9){
+  $userInfo=$this->getUserInfo($request);
+  if($userInfo !=null){
+            $zoneId=$userInfo->usr_zone_id;
+            $woredaId=$userInfo->usr_woreda_id;
+  if($zoneId > 0 || $woredaId > 0){
+   // if(){
    $query='WITH RECURSIVE address_hierarchy AS (
     SELECT 
     add_id AS id,
@@ -357,6 +362,7 @@ public function listaddress(Request $request){
 )
  SELECT * FROM address_hierarchy';
 }
+
 $masterId=$request->input('master_id');
 if(isset($masterId) && !empty($masterId)){
         //set foreign key field name
@@ -374,6 +380,9 @@ if(isset($search) && !empty($search)){
 //$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
 $data_info=DB::select($query);
 $hierarchicalData = $this->buildHierarchy(json_decode(json_encode($data_info), true));
+}else{
+    $hierarchicalData=array("");
+}
 $resultObject= array(
     "data" =>$hierarchicalData,
     "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));

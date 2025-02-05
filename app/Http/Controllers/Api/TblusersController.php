@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\MyController;
 use App\Models\Modeltblusers;
 use App\Models\ModelUserProfile;
+use App\Models\Modeltblupdateusers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -206,10 +207,8 @@ public function updategrid(Request $request)
         'usr_status'=> trans('form_lang.usr_status'), 
     ];
     $rules= [
-       'usr_email'=> 'max:200', 
        'usr_email' => 'required|max:200',
 //'usr_email' => 'required|max:200|unique:tbl_users',
-       'usr_password'=> 'max:200', 
        'usr_full_name'=> 'max:128', 
        'usr_phone_number'=> 'max:20',
        'usr_region_id'=> 'integer', 
@@ -241,14 +240,14 @@ public function updategrid(Request $request)
         //$requestData['foreign_field_name']=$request->get('master_id');
             //assign data from of foreign key
     $requestData = $request->all();            
-    $status= $request->input('usr_status');
+  /*  $status= $request->input('usr_status');
     if($status=="true"){
         $requestData['usr_status']=1;
     }else{
         $requestData['usr_status']=0;
-    }
+    }*/
     if(isset($id) && !empty($id)){
-        $data_info = Modeltblusers::findOrFail($id);
+        $data_info = \App\Models\Modeltblupdateusers::findOrFail($id);
         $uploadedFile = $request->file('usr_picture'); 
         $hasFile=$request->hasFile('usr_picture');
         if($hasFile && $uploadedFile->isValid()){
@@ -259,7 +258,10 @@ public function updategrid(Request $request)
                     //$requestData['prd_file_extension']=$fileExtension;
                     //$requestData['prd_size']=$fileSize;
             $requestData['usr_picture']=$fileName;
-        } 
+        }
+        $requestData['email']=$request->input('usr_email');
+        $requestData['password']=bcrypt($request->get('usr_password'));
+        $requestData['usr_password']=bcrypt($request->get('usr_password'));
         $data_info->update($requestData);
         $ischanged=$data_info->wasChanged();
         if($ischanged){
