@@ -332,4 +332,31 @@ Route::post('statistical_report/getstatistics', 'Api\StatisticalReportController
 Route::post('report/getreport', 'Api\ReportController@getReport');
 Route::post('me', 'TokenController@validateToken');
 Route::post('refreshToken', 'TokenController@refreshToken');
+
+Route::resource('conversation_information', 'GenconversationinformationController');
+    Route::post('conversation_information/listgrid', 'Api\GenconversationinformationController@listgrid');
+    Route::post('conversation_information/insertgrid', 'Api\GenconversationinformationController@insertgrid');
+    Route::post('conversation_information/updategrid', 'Api\GenconversationinformationController@updategrid');
+    Route::post('conversation_information/deletegrid', 'Api\GenconversationinformationController@deletegrid');
+     Route::resource('request_information', 'GenrequestinformationController');
+    Route::post('request_information/listgrid', 'Api\GenrequestinformationController@listgrid');
+    Route::post('request_information/insertgrid', 'Api\GenrequestinformationController@insertgrid');
+    Route::post('request_information/updategrid', 'Api\GenrequestinformationController@updategrid');
+    Route::post('request_information/deletegrid', 'Api\GenrequestinformationController@deletegrid');
+Route::resource('request_status', 'GenrequeststatusController');
+    Route::post('request_status/listgrid', 'Api\GenrequeststatusController@listgrid');
+    Route::post('request_status/insertgrid', 'Api\GenrequeststatusController@insertgrid');
+    Route::post('request_status/updategrid', 'Api\GenrequeststatusController@updategrid');
+    Route::post('request_status/deletegrid', 'Api\GenrequeststatusController@deletegrid');
+
+     Route::resource('proposal_request', 'PmsproposalrequestController');
+    Route::post('proposal_request/listgrid', 'Api\PmsproposalrequestController@listgrid');
+    Route::post('proposal_request/insertgrid', 'Api\PmsproposalrequestController@insertgrid');
+    Route::post('proposal_request/updategrid', 'Api\PmsproposalrequestController@updategrid');
+    Route::post('proposal_request/deletegrid', 'Api\PmsproposalrequestController@deletegrid');
+    Route::resource('request_category', 'PmsrequestcategoryController');
+    Route::post('request_category/listgrid', 'Api\PmsrequestcategoryController@listgrid');
+    Route::post('request_category/insertgrid', 'Api\PmsrequestcategoryController@insertgrid');
+    Route::post('request_category/updategrid', 'Api\PmsrequestcategoryController@updategrid');
+    Route::post('request_category/deletegrid', 'Api\PmsrequestcategoryController@deletegrid');
 });

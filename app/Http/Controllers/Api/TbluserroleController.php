@@ -302,8 +302,8 @@ public function updategrid(Request $request)
 
     ];
     $rules= [
-        'url_role_id'=> 'max:200', 
-'url_user_id'=> 'max:200', 
+//'url_role_id'=> 'max:200', 
+//'url_user_id'=> 'max:200', 
 'url_description'=> 'max:425', 
 //'url_status'=> 'integer',
     ];
@@ -380,8 +380,8 @@ public function insertgrid(Request $request)
 
     ];
     $rules= [
-        'url_role_id'=> 'max:200', 
-'url_user_id'=> 'max:200', 
+        //'url_role_id'=> 'max:100', 
+//'url_user_id'=> 'max:200', 
 'url_description'=> 'max:425', 
 //'url_status'=> 'integer', 
     ];
