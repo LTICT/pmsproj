@@ -77,10 +77,13 @@ pipeline {
 
                     // Run a new container using the versioned production image
                     sh """
-                        docker run -d -v /var/www/html/public/uploads/projectfiles:/var/www/dev_app_backend/public/uploads/projectfiles \ -p ${PORT_EXT}:${PORT_INT} --name laravel_app_prod \\
-                            --env-file ${ENV_FILE_PATH} \\
-                            --restart always \\
-                            ${imageToDeploy}
+                        docker run -d \
+    -v /var/www/html/public/uploads/projectfiles:/var/www/dev_app_backend/public/uploads/projectfiles \
+    -p ${PORT_EXT}:${PORT_INT} \
+    --name laravel_app_prod \
+    --env-file ${ENV_FILE_PATH} \
+    --restart always \
+    ${imageToDeploy}
                     """
                 }
             }
