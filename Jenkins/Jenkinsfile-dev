@@ -140,8 +140,8 @@ pipeline {
                             --name ${CONTAINER_NAME} \\
                             --restart always \\
                             --env-file ${ENV_FILE_PATH} \\
-                             -e PHP_INI_UPLOAD_MAX_FILESIZE=100M \
-                             -e PHP_INI_POST_MAX_SIZE=101M \ 
+                             -e PHP_INI_UPLOAD_MAX_FILESIZE=100M \\
+                             -e PHP_INI_POST_MAX_SIZE=101M \\
                             ${FULL_DOCKER_IMAGE}
                             
                         echo "Container started successfully on port ${PORT_EXT}."
