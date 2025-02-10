@@ -44,6 +44,11 @@ $pctcode=$request->input('pct_code');
 if(isset($pctcode) && isset($pctcode)){
 $query .=' AND pct_code="'.$pctcode.'"'; 
 }
+$pctStatus=$request->input('pct_status');
+if(isset($pctStatus) && isset($pctStatus)){
+$query .=" AND pct_status='".$pctStatus."'"; 
+}
+
 $query.=' ORDER BY pct_name_or';
 $data_info=DB::select($query);
 $resultObject= array(
@@ -87,13 +92,7 @@ public function updategrid(Request $request)
         $id=$request->get("pct_id");
         //$requestData['foreign_field_name']=$request->get('master_id');
             //assign data from of foreign key
-        $requestData = $request->all();            
-        $status= $request->input('pct_status');
-        if($status=="true"){
-            $requestData['pct_status']=1;
-        }else{
-            $requestData['pct_status']=0;
-        }
+        $requestData = $request->all();
         if(isset($id) && !empty($id)){
             $data_info = Modelpmsprojectcategory::findOrFail($id);
             $data_info->update($requestData);
@@ -169,12 +168,6 @@ public function insertgrid(Request $request)
     }else{
         $requestData = $request->all();
         $requestData['pct_created_by']=auth()->user()->usr_id;
-        $status= $request->input('pct_status');
-        if($status=="true"){
-            $requestData['pct_status']=1;
-        }else{
-            $requestData['pct_status']=0;
-        }
         $data_info=Modelpmsprojectcategory::create($requestData);
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;

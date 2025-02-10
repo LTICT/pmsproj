@@ -60,6 +60,10 @@ $pycnameen=$request->input('pyc_name_en');
 if(isset($pycnameen) && isset($pycnameen)){
 $query .=' AND pyc_name_en="'.$pycnameen.'"'; 
 }
+$pycStatus=$request->input('pyc_status');
+if(isset($pycStatus) && isset($pycStatus)){
+$query .=" AND pyc_status='".$pycStatus."'"; 
+}
 
      $masterId=$request->input('master_id');
      if(isset($masterId) && !empty($masterId)){
@@ -114,13 +118,7 @@ public function updategrid(Request $request)
         return response()->json($resultObject);
     }else{
         $id=$request->get("pyc_id");
-        $requestData = $request->all();            
-        $status= $request->input('pyc_status');
-        if($status=="true"){
-            $requestData['pyc_status']=1;
-        }else{
-            $requestData['pyc_status']=0;
-        }
+        $requestData = $request->all();
         if(isset($id) && !empty($id)){
             $data_info = Modelpmspaymentcategory::findOrFail($id);
             $data_info->update($requestData);
@@ -192,13 +190,7 @@ public function insertgrid(Request $request)
         return response()->json($resultObject);
     }else{
         $requestData = $request->all();
-        //$requestData['pyc_created_by']=auth()->user()->usr_Id;
-        $status= $request->input('pyc_status');
-        if($status=="true"){
-            $requestData['pyc_status']=1;
-        }else{
-            $requestData['pyc_status']=0;
-        }
+        $requestData['pyc_created_by']=auth()->user()->usr_Id;
         $requestData['pyc_created_by']=1;
         $data_info=Modelpmspaymentcategory::create($requestData);
         $data_info['is_editable']=1;

@@ -33,16 +33,65 @@ class MyController extends Controller
 			if(isset($prjCode) && isset($prjCode)){
 				$query .=" AND prj_code LIKE '%".$prjCode."%'"; 
 			}
+
+			if(isset($zoneId) && !empty($zoneId) && $zoneId > 0){
+				$query .=" AND prj_owner_zone_id='".$zoneId."'";
+			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $prjownerzoneid>0){
+				$query .=" AND prj_owner_zone_id='".$prjownerzoneid."'";   
+			}else if($include ==0){
+				$query .=" AND prj_owner_zone_id=0"; 
+				$query .=" AND prj_owner_woreda_id=0"; 
+			}
+
+			if(isset($woredaId) && !empty($woredaId) && $woredaId > 0){
+				$query .=" AND prj_owner_woreda_id='".$woredaId."'"; 
+			}else if(isset($prjownerworedaid) && isset($prjownerworedaid) && $prjownerworedaid>0){
+				$query .=" AND prj_owner_woreda_id='".$prjownerworedaid."'";   
+			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $include ==0 && $prjownerzoneid > 0){
+				$query .=" AND prj_owner_woreda_id=0"; 
+			}			
+			if(isset($sectorId) && !empty($sectorId) && $sectorId > 0){
+				$query .=" AND prj_sector_id='".$sectorId."'";   
+			}
+			if(isset($departmentId) && !empty($departmentId) && $departmentId > 0){
+				//$query .=" AND prj_department_id='".$departmentId."'";   
+			}
+		}
+		return $query;
+	}
+	public function getSearchParamOld($request,$query){
+		$userInfo=$this->getUserInfo($request);
+    //&& $userInfo->usr_id !=9
+		if(isset($userInfo)){
+			$zoneId=$userInfo->usr_zone_id;
+			$woredaId=$userInfo->usr_woreda_id;
+			$sectorId=$userInfo->usr_sector_id;
+			$departmentId=$userInfo->usr_department_id;
+			$prjownerzoneid=$request->input('prj_location_zone_id');
+			$prjownerworedaid=$request->input('prj_location_woreda_id');
+			$prjName=$request->input('prj_name');
+			$prjCode=$request->input('prj_code');
+			$include=$request->input('include');
+
+			if(isset($prjName) && isset($prjName)){
+				$query .=" AND prj_name LIKE '%".$prjName."%'"; 
+			}
+			if(isset($prjCode) && isset($prjCode)){
+				$query .=" AND prj_code LIKE '%".$prjCode."%'"; 
+			}
+
 			if(isset($zoneId) && !empty($zoneId) && $zoneId > 0){
 				$query .=" AND prj_owner_zone_id='".$zoneId."'";
 			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $prjownerzoneid>0){
 				$query .=" AND prj_owner_zone_id='".$prjownerzoneid."'";   
 			}
+
 			if(isset($woredaId) && !empty($woredaId) && $woredaId > 0){
 				$query .=" AND prj_owner_woreda_id='".$woredaId."'"; 
 			}else if(isset($prjownerworedaid) && isset($prjownerworedaid) && $prjownerworedaid>0){
 				$query .=" AND prj_owner_woreda_id='".$prjownerworedaid."'";   
 			}
+
 			if(isset($sectorId) && !empty($sectorId) && $sectorId > 0){
 				$query .=" AND prj_sector_id='".$sectorId."'";   
 			}

@@ -42,7 +42,6 @@ class GenconversationinformationController extends MyController
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
      }
      $query="SELECT cvi_id,cvi_title,cvi_object_id,cvi_object_type_id,cvi_request_date_et,cvi_request_date_gc,cvi_description,cvi_create_time,cvi_update_time,cvi_delete_time,cvi_created_by,cvi_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM gen_conversation_information ";
-     
      $query .=' WHERE 1=1';
      $cviid=$request->input('cvi_id');
 if(isset($cviid) && isset($cviid)){
@@ -54,15 +53,11 @@ $query .=' AND cvi_title="'.$cvititle.'"';
 }
 $cviobjectid=$request->input('cvi_object_id');
 if(isset($cviobjectid) && isset($cviobjectid)){
-$query .=' AND cvi_object_id="'.$cviobjectid.'"'; 
+$query .=" AND cvi_object_id='".$cviobjectid."'"; 
 }
 $cviobjecttypeid=$request->input('cvi_object_type_id');
 if(isset($cviobjecttypeid) && isset($cviobjecttypeid)){
-$query .=' AND cvi_object_type_id="'.$cviobjecttypeid.'"'; 
-}
-$cvirequestdateet=$request->input('cvi_request_date_et');
-if(isset($cvirequestdateet) && isset($cvirequestdateet)){
-$query .=' AND cvi_request_date_et="'.$cvirequestdateet.'"'; 
+$query .=" AND cvi_object_type_id='".$cviobjecttypeid."'"; 
 }
 $cvirequestdategc=$request->input('cvi_request_date_gc');
 if(isset($cvirequestdategc) && isset($cvirequestdategc)){
@@ -72,42 +67,7 @@ $cvidescription=$request->input('cvi_description');
 if(isset($cvidescription) && isset($cvidescription)){
 $query .=' AND cvi_description="'.$cvidescription.'"'; 
 }
-$cvicreatetime=$request->input('cvi_create_time');
-if(isset($cvicreatetime) && isset($cvicreatetime)){
-$query .=' AND cvi_create_time="'.$cvicreatetime.'"'; 
-}
-$cviupdatetime=$request->input('cvi_update_time');
-if(isset($cviupdatetime) && isset($cviupdatetime)){
-$query .=' AND cvi_update_time="'.$cviupdatetime.'"'; 
-}
-$cvideletetime=$request->input('cvi_delete_time');
-if(isset($cvideletetime) && isset($cvideletetime)){
-$query .=' AND cvi_delete_time="'.$cvideletetime.'"'; 
-}
-$cvicreatedby=$request->input('cvi_created_by');
-if(isset($cvicreatedby) && isset($cvicreatedby)){
-$query .=' AND cvi_created_by="'.$cvicreatedby.'"'; 
-}
-$cvistatus=$request->input('cvi_status');
-if(isset($cvistatus) && isset($cvistatus)){
-$query .=' AND cvi_status="'.$cvistatus.'"'; 
-}
-
-     $masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
-        //set foreign key field name
-        //$query .=' AND add_name="'.$masterId.'"'; 
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
-        $query.=' AND (add_name LIKE "%'.$search.'%")  ';
-    }
-}
-//$query.=' ORDER BY emp_first_name';
+$query.=' ORDER BY cvi_id DESC';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
