@@ -37,10 +37,10 @@ class GenconversationinformationController extends MyController
     //Get List
     public function listgrid(Request $request){
      $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
-     $permissionData=$this->getPagePermission($request,57);
+     /*$permissionData=$this->getPagePermission($request,57);
       if(isset($permissionData) && !empty($permissionData)){
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
-     }
+     }*/
      $query="SELECT cvi_id,cvi_title,cvi_object_id,cvi_object_type_id,cvi_request_date_et,cvi_request_date_gc,cvi_description,cvi_create_time,cvi_update_time,cvi_delete_time,cvi_created_by,cvi_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM gen_conversation_information ";
      $query .=' WHERE 1=1';
      $cviid=$request->input('cvi_id');
@@ -71,7 +71,7 @@ $query.=' ORDER BY cvi_id DESC';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
+    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 //Update Data
