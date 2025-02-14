@@ -71,6 +71,9 @@ class AuthController extends Controller
         }
         $user['user_detail']=$text;
         //END USER INFO
+        unset($user->email);
+        unset($user->password);
+        unset($user->usr_password);
         return response()->json([
             'status'=> 'success',
             'user'=> $user,

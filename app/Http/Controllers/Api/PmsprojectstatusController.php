@@ -266,7 +266,7 @@ if(isset($prsordernumber) && isset($prsordernumber)){
 $query .=' AND prs_order_number="'.$prsordernumber.'"'; 
 }
 
-$query.=' ORDER BY prs_status_name_or';
+$query.=' ORDER BY prs_id';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,

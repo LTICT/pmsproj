@@ -33,7 +33,7 @@ class PmsprojectController extends MyController
             $authenticatedUser = $request->authUser;
             $userId=$authenticatedUser->usr_id;
             if($userId==9){
-                $request_role='approver';
+                $request_role='requester';
             }
             $resultObject= array(
                 "data" =>$data,
@@ -113,20 +113,14 @@ class PmsprojectController extends MyController
         if(isset($prjenddateplangc) && isset($prjenddateplangc)){
             $query .=' AND prj_end_date_plan_gc="'.$prjenddateplangc.'"'; 
         }
-        $prjenddateplanet=$request->input('prj_end_date_plan_et');
-        if(isset($prjenddateplanet) && isset($prjenddateplanet)){
-            $query .=' AND prj_end_date_plan_et="'.$prjenddateplanet.'"'; 
-        }
         $query.=' ORDER BY prj_id DESC';
         $data_info=DB::select($query);
         $authenticatedUser = $request->authUser;
         $userId=$authenticatedUser->usr_id;
-//dd($permissionData);
         $resultObject= array(
             "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 2,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0),
             'allowedTabs'=> $this->getTabPermission($request));
-//}
         return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
     }
     public function updategrid(Request $request)
@@ -353,6 +347,8 @@ public function insertgrid(Request $request)
             $requestData['prj_owner_woreda_id']=$userInfo->usr_woreda_id;
             $requestData['prj_sector_id']=$userInfo->usr_sector_id;
         }
+        //set project status to 1 - Draft when a new project is created
+        $requestData['prj_project_status_id']=1;
         $data_info=Modelpmsproject::create($requestData);
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;

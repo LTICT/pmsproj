@@ -15,16 +15,22 @@ class PmsbudgetrequestController extends MyController
 }
  
     public function listgrid(Request $request){
-    $query='SELECT bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
+    $query='SELECT rqs_description AS color_code, rqs_name_en AS status_name, bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
      bdr_released_amount,bdr_project_id,bdr_requested_date_ec,bdr_requested_date_gc,
      bdr_released_date_ec,bdr_released_date_gc,bdr_description,bdr_create_time,bdr_update_time,
      bdr_delete_time,bdr_created_by,bdr_status,bdr_action_remark,1 AS is_editable, 1 AS is_deletable 
      FROM pms_budget_request 
      INNER JOIN pms_project ON pms_project.prj_id=pms_budget_request.bdr_project_id
-     INNER JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_budget_request.bdr_budget_year_id'; 
-
+     INNER JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_budget_request.bdr_budget_year_id
+     LEFT JOIN gen_request_status ON gen_request_status.rqs_id=pms_budget_request.bdr_request_status';
      $query .=' WHERE 1=1';
-    $prjName=$request->input('prj_name');
+     
+$requestStatus=$request->input('bdr_request_status');
+if(isset($requestStatus) && isset($requestStatus)){
+$query .=" AND bdr_request_status='".$requestStatus."'"; 
+}
+
+$prjName=$request->input('prj_name');
 if(isset($prjName) && isset($prjName)){
 $query .=" AND prj_name LIKE '%".$prjName."%'"; 
 }
