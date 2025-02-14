@@ -218,15 +218,15 @@ Route::post('budget_request/insertgrid', 'Api\PmsbudgetrequestController@insertg
 Route::post('budget_request/updategrid', 'Api\PmsbudgetrequestController@updategrid');
 Route::post('budget_request/deletegrid', 'Api\PmsbudgetrequestController@deletegrid');
 Route::post('budget_request/search', 'PmsbudgetrequestController@search');
+Route::post('budget_request_approval/listgrid', 'Api\PmsbudgetrequestapprovalController@listgrid');
+Route::post('budget_request_approval/updategrid', 'Api\PmsbudgetrequestapprovalController@updategrid');
+
 Route::resource('project_contractor', 'PmsprojectcontractorController');
 Route::post('project_contractor/listgrid', 'Api\PmsprojectcontractorController@listgrid');
 Route::post('project_contractor/insertgrid', 'Api\PmsprojectcontractorController@insertgrid');
 Route::post('project_contractor/updategrid', 'Api\PmsprojectcontractorController@updategrid');
 Route::post('project_contractor/deletegrid', 'Api\PmsprojectcontractorController@deletegrid');
 Route::post('project_contractor/search', 'PmsprojectcontractorController@search');
-
-
-
 Route::post('project_document/listgrid', 'Api\PmsprojectdocumentController@listgrid');
 
 Route::post('project_document/updategrid', 'Api\PmsprojectdocumentController@updategrid');
