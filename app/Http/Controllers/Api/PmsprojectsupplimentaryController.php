@@ -15,7 +15,7 @@ class PmsprojectsupplimentaryController extends MyController
 }
  
     public function listgrid(Request $request){
-     $query='SELECT prj_name,prj_code,prs_id,prs_requested_amount,prs_released_amount,prs_project_id,prs_requested_date_ec,prs_requested_date_gc,prs_released_date_ec,prs_released_date_gc,prs_description,prs_create_time,prs_update_time,prs_delete_time,prs_created_by,prs_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_supplimentary '; 
+     $query='SELECT prs_budget_year_id, prj_name,prj_code,prs_id,prs_requested_amount,prs_released_amount,prs_project_id,prs_requested_date_ec,prs_requested_date_gc,prs_released_date_ec,prs_released_date_gc,prs_description,prs_create_time,prs_update_time,prs_delete_time,prs_created_by,prs_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_supplimentary '; 
      $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_supplimentary.prs_project_id';    
      $query .=' WHERE 1=1';
 $startTime=$request->input('supplimentary_dateStart');

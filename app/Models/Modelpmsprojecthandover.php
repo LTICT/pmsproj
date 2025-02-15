@@ -25,7 +25,7 @@ class Modelpmsprojecthandover extends Model
      *
      * @var array
      */
-    protected $fillable = ['prh_id','prh_project_id','prh_handover_date_ec','prh_handover_date_gc','prh_description','prh_create_time','prh_update_time','prh_delete_time','prh_created_by','prh_status',];
+    protected $fillable = ['prh_id','prh_project_id','prh_handover_date_ec','prh_handover_date_gc','prh_description','prh_create_time','prh_update_time','prh_delete_time','prh_created_by','prh_status','prh_budget_year_id'];
 
     
 

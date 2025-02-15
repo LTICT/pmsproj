@@ -25,7 +25,7 @@ class Modelpmsprojectvariation extends Model
      *
      * @var array
      */
-    protected $fillable = ['prv_id','prv_requested_amount','prv_released_amount','prv_project_id','prv_requested_date_ec','prv_requested_date_gc','prv_released_date_ec','prv_released_date_gc','prv_description','prv_create_time','prv_update_time','prv_delete_time','prv_created_by','prv_status'];
+    protected $fillable = ['prv_id','prv_requested_amount','prv_released_amount','prv_project_id','prv_requested_date_ec','prv_requested_date_gc','prv_released_date_ec','prv_released_date_gc','prv_description','prv_create_time','prv_update_time','prv_delete_time','prv_created_by','prv_status','prv_budget_year_id'];
 
     /**
      * Change activity log event description

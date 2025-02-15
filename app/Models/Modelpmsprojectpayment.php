@@ -25,7 +25,7 @@ class Modelpmsprojectpayment extends Model
      *
      * @var array
      */
-    protected $fillable = ['prp_id','prp_project_id','prp_type','prp_payment_date_et','prp_payment_date_gc','prp_payment_amount','prp_payment_percentage','prp_description','prp_create_time','prp_update_time','prp_delete_time','prp_created_by','prp_status',];
+    protected $fillable = ['prp_id','prp_project_id','prp_type','prp_payment_date_et','prp_payment_date_gc','prp_payment_amount','prp_payment_percentage','prp_description','prp_create_time','prp_update_time','prp_delete_time','prp_created_by','prp_status','prp_budget_year_id'];
 
     
 

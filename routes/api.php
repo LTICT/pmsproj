@@ -119,6 +119,7 @@ Route::post('budget_year/insertgrid', 'Api\PmsbudgetyearController@insertgrid');
 Route::post('budget_year/updategrid', 'Api\PmsbudgetyearController@updategrid');
 Route::post('budget_year/deletegrid', 'Api\PmsbudgetyearController@deletegrid');
 Route::post('budget_year/search', 'PmsbudgetyearController@search');
+Route::post('budget_year/listdropdown', 'Api\PmsbudgetyearController@listdropdown');
 
 Route::resource('department', 'GendepartmentController');
 Route::post('department/insertgrid', 'Api\GendepartmentController@insertgrid');

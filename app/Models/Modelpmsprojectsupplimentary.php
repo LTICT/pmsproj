@@ -25,7 +25,7 @@ class Modelpmsprojectsupplimentary extends Model
      *
      * @var array
      */
-    protected $fillable = ['prs_id','prs_requested_amount','prs_released_amount','prs_project_id','prs_requested_date_ec','prs_requested_date_gc','prs_released_date_ec','prs_released_date_gc','prs_description','prs_create_time','prs_update_time','prs_delete_time','prs_created_by','prs_status',];
+    protected $fillable = ['prs_id','prs_requested_amount','prs_released_amount','prs_project_id','prs_requested_date_ec','prs_requested_date_gc','prs_released_date_ec','prs_released_date_gc','prs_description','prs_create_time','prs_update_time','prs_delete_time','prs_created_by','prs_status','prs_budget_year_id'];
 
     
 

@@ -5,6 +5,7 @@ use App\Models\Modelpmsdocumenttype;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 //PROPERTY OF LT ICT SOLUTION PLC
 class PmsdocumenttypeController extends MyController
 {
@@ -19,7 +20,8 @@ class PmsdocumenttypeController extends MyController
      if(isset($permissionData) && !empty($permissionData)){
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
      }
-
+$cacheKey = 'document_type';
+$data_info = Cache::rememberForever($cacheKey, function () use ($permissionIndex,$request) {
      $query="SELECT pdt_id,pdt_doc_name_or,pdt_doc_name_am,pdt_doc_name_en,pdt_code,pdt_description,pdt_create_time,pdt_update_time,pdt_delete_time,pdt_created_by
             ".$permissionIndex."  FROM pms_document_type ";       
      
@@ -45,7 +47,8 @@ if(isset($pdtcode) && isset($pdtcode)){
 $query .=' AND pdt_code="'.$pdtcode.'"'; 
 }
 $query.=' ORDER BY pdt_doc_name_or';
-$data_info=DB::select($query);
+return DB::select($query);
+});
 $resultObject= array(
     "data" =>$data_info,
 "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0));
@@ -99,6 +102,7 @@ public function updategrid(Request $request)
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
+                Cache::forget('document_type');
                $resultObject= array(
                 "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
@@ -176,6 +180,7 @@ public function insertgrid(Request $request)
             $requestData['pdt_status']=0;
         }
         $data_info=Modelpmsdocumenttype::create($requestData);
+        Cache::forget('document_type');
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;
         $resultObject= array(

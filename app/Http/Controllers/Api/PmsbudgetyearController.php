@@ -5,6 +5,7 @@ use App\Models\Modelpmsbudgetyear;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 //PROPERTY OF LT ICT SOLUTION PLC
 class PmsbudgetyearController extends MyController
 {
@@ -19,6 +20,8 @@ class PmsbudgetyearController extends MyController
      if(isset($permissionData) && !empty($permissionData)){
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
      }
+     $cacheKey = 'all_budget_year';
+$data_info = Cache::rememberForever($cacheKey, function () use ($permissionIndex,$request) {
      $query="SELECT bdy_id,bdy_name,bdy_code,bdy_description,bdy_create_time,bdy_update_time,bdy_delete_time,bdy_created_by,bdy_status ".$permissionIndex."  FROM pms_budget_year";       
      $query .=' WHERE 1=1';
 $bdyname=$request->input('bdy_name');
@@ -31,13 +34,29 @@ if(isset($bdycode) && isset($bdycode)){
 $query .=" AND bdy_code LIKE '%".$bdycode."%'"; 
 }
 $query.=' ORDER BY bdy_name DESC';
-$data_info=DB::select($query);
+return DB::select($query);
+});
 $resultObject= array(
     "data" =>$data_info,
 "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0));
-
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
+//to populate dropdowns
+public function listdropdown(Request $request){
+$cacheKey = 'active_budget_year';
+$cacheDuration = 60; // Cache for 60 minutes
+$data_info = Cache::rememberForever($cacheKey, function () {
+$query="SELECT bdy_id,bdy_name,bdy_code FROM pms_budget_year";  
+$query .=' WHERE bdy_status=0';
+$query.=' ORDER BY bdy_name DESC';
+ return DB::select($query);
+});
+$resultObject= array(
+    "data" =>$data_info,
+"previledge"=>array());
+return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
+}
+
 public function updategrid(Request $request)
 {
     $attributeNames = [
@@ -68,18 +87,14 @@ public function updategrid(Request $request)
         $id=$request->get("bdy_id");
         //$requestData['foreign_field_name']=$request->get('master_id');
             //assign data from of foreign key
-        $requestData = $request->all();            
-        $status= $request->input('bdy_status');
-      /*  if($status=="true"){
-            $requestData['bdy_status']=1;
-        }else{
-            $requestData['bdy_status']=0;
-        }*/
+        $requestData = $request->all();  
         if(isset($id) && !empty($id)){
             $data_info = Modelpmsbudgetyear::findOrFail($id);
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
+        Cache::forget('all_budget_year');
+        Cache::forget('active_budget_year');
                $resultObject= array(
                 "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
@@ -151,7 +166,8 @@ public function insertgrid(Request $request)
         $data_info=Modelpmsbudgetyear::create($requestData);
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;
-        
+        Cache::forget('all_budget_year');
+        Cache::forget('active_budget_year');
         } catch (\Exception $e) {
             $data_info=array();
         }
@@ -169,6 +185,7 @@ public function deletegrid(Request $request)
 {
     $id=$request->get("bdy_id");
     Modelpmsbudgetyear::destroy($id);
+    Cache::forget('budget_years');
     $resultObject= array(
         "odata.metadata"=>"",
         "value" =>"",

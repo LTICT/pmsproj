@@ -5,6 +5,7 @@ use App\Models\Modelgendepartment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 //PROPERTY OF LT ICT SOLUTION PLC
 class GendepartmentController extends MyController
 {
@@ -19,6 +20,8 @@ public function listgrid(Request $request){
    if(isset($permissionData) && !empty($permissionData)){
     $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
 }
+$cacheKey = 'department';
+$data_info = Cache::rememberForever($cacheKey, function () use ($permissionIndex,$request) {
 $query="SELECT dep_id,dep_name_or,dep_name_am,dep_name_en,dep_code,dep_available_at_region,dep_available_at_zone,dep_available_at_woreda,dep_description,dep_create_time,dep_update_time,dep_delete_time,dep_created_by,dep_status ".$permissionIndex." FROM gen_department ";
 $query .=' WHERE 1=1';
 $depid=$request->input('dep_id');
@@ -42,7 +45,8 @@ if(isset($depcode) && isset($depcode)){
     $query .=' AND dep_code="'.$depcode.'"'; 
 }
 $query.=' ORDER BY dep_name_or';
-$data_info=DB::select($query);
+return DB::select($query);
+});
 $resultObject= array(
     "data" =>$data_info,
     "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0));
@@ -100,6 +104,7 @@ public function updategrid(Request $request)
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
+                Cache::forget('department');
              $resultObject= array(
                 "data" =>$data_info,
                 "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
@@ -181,6 +186,7 @@ public function insertgrid(Request $request)
         $requestData['dep_status']=0;
     }
     $data_info=Modelgendepartment::create($requestData);
+    Cache::forget('department');
     $data_info['is_editable']=1;
     $data_info['is_deletable']=1;
     $resultObject= array(

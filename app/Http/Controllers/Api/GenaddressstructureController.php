@@ -5,6 +5,7 @@ use App\Models\Modelgenaddressstructure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 //PROPERTY OF LT ICT SOLUTION PLC
 class GenaddressstructureController extends MyController
 {
@@ -185,6 +186,7 @@ public function updategrid(Request $request)
         //$new_data_info['add_name_or']= $request->input('add_name_or');
         $ischanged=$data_info->wasChanged();
         if($ischanged){
+            Cache::forget('address');
          $resultObject= array(
             "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
@@ -250,6 +252,7 @@ public function insertgrid(Request $request)
         //$requestData['add_name_or']= $request->input('name');
         //$requestData['add_parent_id']= $request->input('rootId');
         $data_info=Modelgenaddressstructure::create($requestData);
+        Cache::forget('address');
         /*$new_data_info['add']= $data_info->add_id;
         $new_data_info['name']= $request->input('add_name_or');
         $new_data_info['rootId']= $request->input('rootId');
@@ -313,6 +316,7 @@ public function listaddress(Request $request){
   if($userInfo !=null){
             $zoneId=$userInfo->usr_zone_id;
             $woredaId=$userInfo->usr_woreda_id;
+            //if user is zone or woreda user
   if($zoneId > 0 || $woredaId > 0){
    // if(){
    $query='WITH RECURSIVE address_hierarchy AS (
@@ -378,7 +382,15 @@ if(isset($search) && !empty($search)){
 }
 }
 //$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
-$data_info=DB::select($query);
+
+$cacheKey = 'address';
+if($zoneId == 0  && $woredaId == 0){
+$data_info = Cache::rememberForever($cacheKey, function () use ($query) {
+return DB::select($query);
+});
+}else{
+    $data_info= DB::select($query);
+}
 $hierarchicalData = $this->buildHierarchy(json_decode(json_encode($data_info), true));
 }else{
     $hierarchicalData=array("");

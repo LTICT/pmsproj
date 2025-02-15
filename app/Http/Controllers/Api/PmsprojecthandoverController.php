@@ -15,7 +15,7 @@ class PmsprojecthandoverController extends MyController
 }
 
     public function listgrid(Request $request){
-     $query='SELECT prj_name,prj_code, prh_id,prh_project_id,prh_handover_date_ec,prh_handover_date_gc,prh_description,prh_create_time,prh_update_time,prh_delete_time,prh_created_by,prh_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_handover ';       
+     $query='SELECT prh_budget_year_id, prj_name,prj_code, prh_id,prh_project_id,prh_handover_date_ec,prh_handover_date_gc,prh_description,prh_create_time,prh_update_time,prh_delete_time,prh_created_by,prh_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_handover ';       
       $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_handover.prh_project_id';
      $query .=' WHERE 1=1';
 $startTime=$request->input('handover_dateStart');
