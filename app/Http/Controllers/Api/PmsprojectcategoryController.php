@@ -16,11 +16,18 @@ class PmsprojectcategoryController extends MyController
 }
     public function listgrid(Request $request){
         //dd(config('constants.PROJ_INFORMATION'));
-        $cacheKey = 'project_category';
+
+        
 $cacheDuration = 60; // Cache for 60 minutes
 $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
         $pageId=config('constants.LU_CATEGORY');
+$pctStatus=$request->input('pct_status');
+$cacheKey = 'project_category';
+if(isset($pctStatus) && !empty($pctStatus) && $pctStatus==0){
+    $cacheKey = 'project_category_active';
+}
           $permissionData=$this->getPagePermission($request,$pageId);
+          //dd($permissionData);
           if(isset($permissionData) && !empty($permissionData)){
                 $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
              }
@@ -104,6 +111,8 @@ public function updategrid(Request $request)
             $ischanged=$data_info->wasChanged();
             if($ischanged){
                 Cache::forget('project_category');
+                Cache::forget('project_category_active');
+                
                $resultObject= array(
                 "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
@@ -176,6 +185,7 @@ public function insertgrid(Request $request)
         $requestData['pct_created_by']=auth()->user()->usr_id;
         $data_info=Modelpmsprojectcategory::create($requestData);
         Cache::forget('project_category');
+        Cache::forget('project_category_active');
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;
         $resultObject= array(

@@ -20,7 +20,7 @@ class PmsbudgetyearController extends MyController
      if(isset($permissionData) && !empty($permissionData)){
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
      }
-     $cacheKey = 'all_budget_year';
+$cacheKey = 'all_budget_year';
 $data_info = Cache::rememberForever($cacheKey, function () use ($permissionIndex,$request) {
      $query="SELECT bdy_id,bdy_name,bdy_code,bdy_description,bdy_create_time,bdy_update_time,bdy_delete_time,bdy_created_by,bdy_status ".$permissionIndex."  FROM pms_budget_year";       
      $query .=' WHERE 1=1';

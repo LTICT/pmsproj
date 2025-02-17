@@ -13,6 +13,16 @@ class MyController extends Controller
 	function test(){
 		echo "something";
 	}
+	public function getQueryInfo($query){
+		DB::listen(function ($query) {
+    // Display the executed query
+    dump($query->sql);
+    // Display the query bindings (parameters)
+    //dump($query->bindings);
+    // Display the query execution time
+    dump($query->time);
+});
+	}
 	public function getSearchParam($request,$query){
 		$userInfo=$this->getUserInfo($request);
     //&& $userInfo->usr_id !=9

@@ -5,6 +5,7 @@ use App\Models\Modeltblpermission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 //PROPERTY OF LT ICT SOLUTION PLC
 class TblpermissionController extends MyController
 {
@@ -402,6 +403,7 @@ public function updategrid(Request $request)
             $data_info['is_editable']=1;
             $data_info['is_deletable']=1;
             if($ischanged){
+                Cache::flush();
                $resultObject= array(
                 "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
@@ -426,6 +428,7 @@ public function updategrid(Request $request)
         //$requestData['ins_vehicle_id']=$request->get('master_id');
         //$requestData['pem_created_by']=auth()->user()->usr_Id;
         $data_info=Modeltblpermission::create($requestData);
+        Cache::flush();
         $data_info['pag_id']=$request->get('pag_id');
         $data_info['pag_name']=$request->get('pag_name');
         $data_info['is_editable']=1;

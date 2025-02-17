@@ -5,6 +5,7 @@ use App\Models\Modelpmsprojectstatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 //PROPERTY OF LT ICT SOLUTION PLC
 class PmsprojectstatusController extends MyController
 {
@@ -237,6 +238,9 @@ function getListForm(Request $request)
         return redirect('project_status')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
+    $cacheKey = 'project_status';
+$data_info = Cache::rememberForever($cacheKey, function () use ($request) {
+
      $query='SELECT prs_id,prs_status_name_or,prs_status_name_am,prs_status_name_en,prs_color_code,prs_order_number,prs_description,prs_create_time,prs_update_time,prs_delete_time,prs_created_by,prs_status,prs_spare_column,1 AS is_editable, 1 AS is_deletable FROM pms_project_status ';       
      
      $query .=' WHERE 1=1';
@@ -267,7 +271,8 @@ $query .=' AND prs_order_number="'.$prsordernumber.'"';
 }
 
 $query.=' ORDER BY prs_id';
-$data_info=DB::select($query);
+return DB::select($query);
+});
 $resultObject= array(
     "data" =>$data_info,
     "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
@@ -323,6 +328,7 @@ public function updategrid(Request $request)
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
+                Cache::forget('project_status');
                $resultObject= array(
                 "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
@@ -403,6 +409,7 @@ public function insertgrid(Request $request)
             $requestData['prs_status']=0;
         }
         $data_info=Modelpmsprojectstatus::create($requestData);
+        Cache::forget('project_status');
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;
         $resultObject= array(

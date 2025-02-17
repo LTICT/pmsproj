@@ -5,6 +5,7 @@ use App\Models\Modelpmspaymentcategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 //PROPERTY OF LT ICT SOLUTION PLC
 class PmspaymentcategoryController extends MyController
 {
@@ -41,6 +42,8 @@ class PmspaymentcategoryController extends MyController
       if(isset($permissionData) && !empty($permissionData)){
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
      }
+     $cacheKey = 'payment_category';
+$data_info = Cache::rememberForever($cacheKey, function () use ($permissionIndex,$request) {
      $query="SELECT pyc_id,pyc_name_or,pyc_name_am,pyc_name_en,pyc_description,pyc_create_time,pyc_update_time,pyc_delete_time,pyc_created_by,pyc_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM pms_payment_category ";
      
      $query .=' WHERE 1=1';
@@ -81,6 +84,8 @@ $query .=" AND pyc_status='".$pycStatus."'";
 }
 //$query.=' ORDER BY emp_first_name';
 $data_info=DB::select($query);
+return DB::select($query);
+});
 $resultObject= array(
     "data" =>$data_info,
     "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0));
@@ -124,6 +129,7 @@ public function updategrid(Request $request)
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
+                Cache::forget('payment_category');
                $resultObject= array(
                 "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
@@ -191,8 +197,8 @@ public function insertgrid(Request $request)
     }else{
         $requestData = $request->all();
         $requestData['pyc_created_by']=auth()->user()->usr_Id;
-        $requestData['pyc_created_by']=1;
         $data_info=Modelpmspaymentcategory::create($requestData);
+        Cache::forget('payment_category');
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;
         $resultObject= array(

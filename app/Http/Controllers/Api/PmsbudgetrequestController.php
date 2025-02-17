@@ -29,15 +29,6 @@ $requestStatus=$request->input('bdr_request_status');
 if(isset($requestStatus) && isset($requestStatus)){
 $query .=" AND bdr_request_status='".$requestStatus."'"; 
 }
-
-$prjName=$request->input('prj_name');
-if(isset($prjName) && isset($prjName)){
-$query .=" AND prj_name LIKE '%".$prjName."%'"; 
-}
-$prjCode=$request->input('prj_code');
-if(isset($prjCode) && isset($prjCode)){
-$query .=" AND prj_code='".$prjCode."'"; 
-}
 $startTime=$request->input('budget_request_dateStart');
 if(isset($startTime) && isset($startTime)){
 $query .=" AND bdr_requested_date_gc >='".$startTime." 00 00 00'"; 
@@ -46,19 +37,6 @@ $endTime=$request->input('budget_request_dateEnd');
 if(isset($endTime) && isset($endTime)){
 $query .=" AND bdr_requested_date_gc <='".$endTime." 23 59 59'"; 
 }
-$prjlocationregionid=$request->input('prj_location_region_id');
-if(isset($prjlocationregionid) && isset($prjlocationregionid)){
-$query .=" AND prj_location_region_id='".$prjlocationregionid."'"; 
-}
-$prjlocationzoneid=$request->input('prj_location_zone_id');
-if(isset($prjlocationzoneid) && isset($prjlocationzoneid)){
-$query .=" AND prj_location_zone_id='".$prjlocationzoneid."'"; 
-}
-$prjlocationworedaid=$request->input('prj_location_woreda_id');
-if(isset($prjlocationworedaid) && isset($prjlocationworedaid)){
-$query .=" AND prj_location_woreda_id='".$prjlocationworedaid."'"; 
-}
-
 $bdrbudgetyearid=$request->input('bdr_budget_year_id');
 if(isset($bdrbudgetyearid) && isset($bdrbudgetyearid)){
 $query .=" AND bdr_budget_year_id='".$bdrbudgetyearid."'"; 
@@ -92,6 +70,8 @@ $bdrreleaseddategc=$request->input('bdr_released_date_gc');
 if(isset($bdrreleaseddategc) && isset($bdrreleaseddategc)){
 $query .=' AND bdr_released_date_gc="'.$bdrreleaseddategc.'"'; 
 }
+$query =$this->getSearchParam($request,$query);
+//$this->getQueryInfo($query);
 $query.=' ORDER BY bdy_name DESC, bdr_id DESC';
 $data_info=DB::select($query);
 $resultObject= array(

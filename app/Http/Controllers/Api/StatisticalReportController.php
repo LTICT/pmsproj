@@ -18,8 +18,8 @@ class StatisticalReportController extends MyController
  
 public function getStatistics(Request $request){
 $reportType=$request->input('report_type');
-
-$locale = Session::get('app_locale', 'en');
+$locale=$request->input('locale');
+//$locale = Session::get('app_locale', 'en');
 App::setLocale($locale);
 
 //project Information
@@ -87,6 +87,7 @@ $query .= " INNER JOIN pms_sector_information ON pms_project.prj_sector_id = pms
 $query .= " INNER JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id";
 $query .= " INNER JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id";
 $query .= " LEFT JOIN gen_address_structure ON pms_project.prj_location_zone_id = gen_address_structure.add_id";
+$query .= " WHERE 1=1";
 }
 //Project employees
 else if($reportType==2){
@@ -103,6 +104,7 @@ $query .= " INNER JOIN pms_sector_information ON pms_project.prj_sector_id = pms
 $query .= " INNER JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id";
 $query .= " INNER JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id";
 $query .= " LEFT JOIN gen_address_structure ON pms_project.prj_location_zone_id = gen_address_structure.add_id";
+$query .= " WHERE 1=1";
 }
 //Project budget plan
 else if($reportType==3){
@@ -122,6 +124,7 @@ else if($reportType==3){
 $query .= " INNER JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id";
 $query .= " INNER JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id";
 $query .= " LEFT JOIN gen_address_structure ON pms_project.prj_location_zone_id = gen_address_structure.add_id";
+$query .= " WHERE 1=1";
 }
 //project budget expenditure
 else if($reportType==4){
@@ -143,6 +146,7 @@ $query .= " INNER JOIN pms_budget_month ON pms_budget_month.bdm_id = pms_project
 $query .= " INNER JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id";
 $query .= " INNER JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id";
 $query .= " LEFT JOIN gen_address_structure ON pms_project.prj_location_zone_id = gen_address_structure.add_id";
+$query .= " WHERE 1=1";
 } 
 //project budget source
 else if($reportType==5){
@@ -160,6 +164,7 @@ $query .= " INNER JOIN pms_budget_source ON pms_budget_source.pbs_id = pms_proje
 $query .= " INNER JOIN gen_address_structure zone_add ON pms_project.prj_location_zone_id = zone_add.add_id";
 $query .= " INNER JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id";
 $query .= " LEFT JOIN pms_sector_information ON pms_sector_information.sci_id = pms_project.prj_sector_id";
+$query .= " WHERE 1=1";
  //project contractor
 }else if($reportType==6){
 $query="SELECT prs_status_name_or AS \"$projectStatus\",
@@ -179,6 +184,7 @@ $query .= " INNER JOIN pms_sector_information ON pms_project.prj_sector_id = pms
 $query .= " INNER JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id";
 $query .= " INNER JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id";
 $query .= " LEFT JOIN gen_address_structure ON pms_project.prj_location_zone_id = gen_address_structure.add_id";
+$query .= " WHERE 1=1";
 }
 //project payment
 else if($reportType==7){
@@ -189,8 +195,7 @@ else if($reportType==7){
         prj_name || prj_code AS \"$projectname\",
         prp_type AS \"$paymentType\",
         prp_payment_date_gc AS \"$paymentDate\",
-        prp_payment_amount AS \"$paymentAmount\",
-        prp_payment_percentage AS \"$paymentPercentage\"
+        prp_payment_amount AS \"$paymentAmount\"
     FROM pms_project_payment";
 $query .= " INNER JOIN pms_project ON pms_project.prj_id = pms_project_payment.prp_project_id";
 $query .= " INNER JOIN pms_sector_information ON pms_project.prj_sector_id = pms_sector_information.sci_id";
@@ -331,7 +336,6 @@ $query .= " INNER JOIN pms_project_category ON pms_project.prj_project_category_
 $query .= " INNER JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id";
 $query .= " LEFT JOIN gen_address_structure ON pms_project.prj_location_zone_id = gen_address_structure.add_id";
 $query .= " WHERE 1=1";
-
 $startTime = $request->input('handover_dateStart');
 if (isset($startTime) && !empty($startTime)) {
     $query .= " AND prh_handover_date_gc >= '".$startTime." 00 00 00'"; 
@@ -346,16 +350,8 @@ if (isset($endTime) && !empty($endTime)) {
 else if($reportType==13){
 
 }
-
-//START COMMON PARAMETERS
-$prjlocationzoneid=$request->input('prj_location_zone_id');
-if(isset($prjlocationzoneid) && isset($prjlocationzoneid)){
-$query .=" AND prj_location_zone_id='".$prjlocationzoneid."'"; 
-}
-$prjlocationworedaid=$request->input('prj_location_woreda_id');
-if(isset($prjlocationworedaid) && isset($prjlocationworedaid)){
-$query .=" AND prj_location_woreda_id='".$prjlocationworedaid."'"; 
-}
+$query =$this->getSearchParam($request,$query);
+//$this->getQueryInfo($query);
 //END COMMON PARAMETERS
  $data_info=DB::select($query);
 $resultObject= array(
