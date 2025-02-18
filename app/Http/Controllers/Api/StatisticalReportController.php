@@ -69,13 +69,28 @@ $requestedDate = trans("form_lang.requested_date");
 $releasedDate = trans("form_lang.released_date");
 $handoverDate = trans("form_lang.handover_date");
 $projectStatus = trans("form_lang.prs_status_name_or");
+$projectStatus = trans("form_lang.prs_status_name_or");
+$requestStatus = trans("form_lang.request_status");
+$requestAmount = trans("form_lang.bdr_requested_amount");
+$approvedAmount = trans("form_lang.bdr_released_amount");
+
+
+// Determine column suffix based on locale
+if ($locale == "or") {
+    $suffix = "_or";
+} elseif ($locale == "am") {
+    $suffix = "_am";
+} else {
+    $suffix = "_en";
+}
+
 if($reportType==1){
     //Project information
 $query = "SELECT 
-    prs_status_name_or AS \"$projectStatus\",
-    pct_name_or AS \"$projectcategory\",
-    sci_name_or AS \"$sectorname\",
-    gen_address_structure.add_name_or AS \"$zone\",
+    prs_status_name{$suffix} AS \"$projectStatus\",
+    pct_name{$suffix} AS \"$projectcategory\",
+    sci_name{$suffix} AS \"$sectorname\",
+    gen_address_structure.add_name{$suffix} AS \"$zone\",
     prj_name || prj_code AS \"$projectname\",     
     prj_total_estimate_budget AS \"$totalestimatebudget\",
     prj_total_actual_budget AS \"$totalactualbudget\",    
@@ -91,10 +106,10 @@ $query .= " WHERE 1=1";
 }
 //Project employees
 else if($reportType==2){
-    $query="SELECT prs_status_name_or AS \"$projectStatus\",
-    pct_name_or AS \"$projectcategory\",
-    sci_name_or AS \"$sectorname\",
-    gen_address_structure.add_name_or AS \"$zone\",
+    $query="SELECT prs_status_name{$suffix} AS \"$projectStatus\",
+    pct_name{$suffix} AS \"$projectcategory\",
+    sci_name{$suffix} AS \"$sectorname\",
+    gen_address_structure.add_name{$suffix} AS \"$zone\",
     prj_name || prj_code AS \"$projectname\",
     emp_start_date_gc AS \"$emp_start_date_gc\", 
     emp_end_date_gc AS \"$emp_end_date_gc\" 
@@ -108,10 +123,10 @@ $query .= " WHERE 1=1";
 }
 //Project budget plan
 else if($reportType==3){
- $query="SELECT prs_status_name_or AS \"$projectStatus\",
-    pct_name_or AS \"$projectcategory\",
-    sci_name_or AS \"$sectorname\",
-    gen_address_structure.add_name_or AS \"$zone\",
+ $query="SELECT prs_status_name{$suffix} AS \"$projectStatus\",
+    pct_name{$suffix} AS \"$projectcategory\",
+    sci_name{$suffix} AS \"$sectorname\",
+    gen_address_structure.add_name{$suffix} AS \"$zone\",
      prj_name || prj_code AS \"$projectname\", 
      bdy_name AS \"$budgetYear\", 
       pec_name  As \"$budgetExpenditureCode\",
@@ -128,10 +143,10 @@ $query .= " WHERE 1=1";
 }
 //project budget expenditure
 else if($reportType==4){
-$query="SELECT prs_status_name_or AS \"$projectStatus\",
-    pct_name_or AS \"$projectcategory\",
-    sci_name_or AS \"$sectorname\",
-    gen_address_structure.add_name_or AS \"$zone\",
+$query="SELECT prs_status_name{$suffix} AS \"$projectStatus\",
+    pct_name{$suffix} AS \"$projectcategory\",
+    sci_name{$suffix} AS \"$sectorname\",
+    gen_address_structure.add_name{$suffix} AS \"$zone\",
     prj_name || prj_code AS \"$projectname\",
     pec_name AS \"$budgetExpenditureCode\",
     bdy_name AS \"$budgetYear\",
@@ -151,11 +166,11 @@ $query .= " WHERE 1=1";
 //project budget source
 else if($reportType==5){
 $query = "SELECT 
-    pct_name_or AS \"$projectcategory\", 
-    zone_Add.add_name_or AS \"$zone\", 
-    sci_name_or AS \"$sectorname\", 
+    pct_name{$suffix} AS \"$projectcategory\", 
+    zone_Add.add_name{$suffix} AS \"$zone\", 
+    sci_name{$suffix} AS \"$sectorname\", 
     prj_name || prj_code AS \"$projectname\", 
-    pbs_name_or AS \"$budgetSource\", 
+    pbs_name{$suffix} AS \"$budgetSource\", 
     bsr_amount AS \"$budgetAmount\" 
 FROM pms_project_budget_source";
 
@@ -167,12 +182,12 @@ $query .= " LEFT JOIN pms_sector_information ON pms_sector_information.sci_id = 
 $query .= " WHERE 1=1";
  //project contractor
 }else if($reportType==6){
-$query="SELECT prs_status_name_or AS \"$projectStatus\",
-    pct_name_or AS \"$projectcategory\",
-    sci_name_or AS \"$sectorname\",
-    gen_address_structure.add_name_or AS \"$zone\",
+$query="SELECT prs_status_name{$suffix} AS \"$projectStatus\",
+    pct_name{$suffix} AS \"$projectcategory\",
+    sci_name{$suffix} AS \"$sectorname\",
+    gen_address_structure.add_name{$suffix} AS \"$zone\",
     prj_name || prj_code AS \"$projectname\",
-    cnt_type_name_or AS \"$contractorType\",
+    cnt_type_name{$suffix} AS \"$contractorType\",
     cni_total_contract_price AS \"$contractPrice\",
     cni_contract_start_date_gc AS \"$contractStartDate\",
     cni_contract_end_date_gc AS \"$contractEndDate\",
@@ -188,10 +203,10 @@ $query .= " WHERE 1=1";
 }
 //project payment
 else if($reportType==7){
-   $query="SELECT prs_status_name_or AS \"$projectStatus\",
-    pct_name_or AS \"$projectcategory\",
-    sci_name_or AS \"$sectorname\",
-    gen_address_structure.add_name_or AS \"$zone\",
+   $query="SELECT prs_status_name{$suffix} AS \"$projectStatus\",
+    pct_name{$suffix} AS \"$projectcategory\",
+    sci_name{$suffix} AS \"$sectorname\",
+    gen_address_structure.add_name{$suffix} AS \"$zone\",
         prj_name || prj_code AS \"$projectname\",
         prp_type AS \"$paymentType\",
         prp_payment_date_gc AS \"$paymentDate\",
@@ -217,10 +232,10 @@ if (isset($endTime) && !empty($endTime)) {
 }
 //project performance
 else if($reportType==8){
-   $query="SELECT prs_status_name_or AS \"$projectStatus\",
-    pct_name_or AS \"$projectcategory\",
-    sci_name_or AS \"$sectorname\",
-    gen_address_structure.add_name_or AS \"$zone\",
+   $query="SELECT prs_status_name{$suffix} AS \"$projectStatus\",
+    pct_name{$suffix} AS \"$projectcategory\",
+    sci_name{$suffix} AS \"$sectorname\",
+    gen_address_structure.add_name{$suffix} AS \"$zone\",
             prj_name || prj_code AS \"$projectname\",
             prp_record_date_gc AS \"$recordDate\",
             prp_total_budget_used AS \"$totalBudgetUsed\",
@@ -239,13 +254,13 @@ $query .= " LEFT JOIN gen_address_structure ON pms_project.prj_location_zone_id 
 }
 //project stakeholder
 else if($reportType==9){
-$query="SELECT prs_status_name_or AS \"$projectStatus\",
-    pct_name_or AS \"$projectcategory\",
-    sci_name_or AS \"$sectorname\",
-    gen_address_structure.add_name_or AS \"$zone\",
+$query="SELECT prs_status_name{$suffix} AS \"$projectStatus\",
+    pct_name{$suffix} AS \"$projectcategory\",
+    sci_name{$suffix} AS \"$sectorname\",
+    gen_address_structure.add_name{$suffix} AS \"$zone\",
     prj_name || prj_code AS \"$projectname\",
     psh_name AS \"$stakeholderName\",
-    sht_type_name_or AS \"$stakeholderType\",
+    sht_type_name{$suffix} AS \"$stakeholderType\",
     psh_representative_name AS \"$representativeName\",
     psh_role AS \"$stakeholderRole\"
 FROM pms_project_stakeholder";
@@ -260,17 +275,19 @@ $query .= " WHERE 1=1";
 }
 //project supplimentary
 else if($reportType==10){
- $query="SELECT prs_status_name_or AS \"$projectStatus\",
-    pct_name_or AS \"$projectcategory\",
-    sci_name_or AS \"$sectorname\",
-    gen_address_structure.add_name_or AS \"$zone\",
+ $query="SELECT prs_status_name{$suffix} AS \"$projectStatus\",
+    pct_name{$suffix} AS \"$projectcategory\",
+    sci_name{$suffix} AS \"$sectorname\",
+    gen_address_structure.add_name{$suffix} AS \"$zone\",
     prj_name || prj_code AS \"$projectname\",
     prs_requested_amount AS \"$requestedAmount\", 
     prs_released_amount AS \"$releasedAmount\", 
     prs_requested_date_gc AS \"$requestedDate\", 
-    prs_released_date_gc AS \"$releasedDate\"
+    prs_released_date_gc AS \"$releasedDate\",
+    bdy_name AS \"$budgetYear\"
 FROM pms_project_supplimentary";
 $query .= " INNER JOIN pms_project ON pms_project.prj_id = pms_project_supplimentary.prs_project_id";
+$query .= " INNER JOIN pms_budget_year ON pms_budget_year.bdy_id = pms_project_supplimentary.prs_budget_year_id";
 $query .= " INNER JOIN pms_sector_information ON pms_project.prj_sector_id = pms_sector_information.sci_id";
 $query .= " INNER JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id";
 $query .= " INNER JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id";
@@ -300,9 +317,11 @@ else if($reportType==11){
           prv_requested_amount AS \"$requestedAmount\", 
           prv_released_amount AS \"$releasedAmount\", 
           prv_requested_date_gc AS \"$requestedDate\", 
-          prv_released_date_gc AS \"$releasedDate\"
+          prv_released_date_gc AS \"$releasedDate\",
+          bdy_name AS \"$budgetYear\"
           FROM pms_project_variation";
 $query .= " INNER JOIN pms_project ON pms_project.prj_id = pms_project_variation.prv_project_id";
+$query .= " INNER JOIN pms_budget_year ON pms_budget_year.bdy_id = pms_project_variation.prv_budget_year_id";
 $query .= " INNER JOIN pms_sector_information ON pms_project.prj_sector_id = pms_sector_information.sci_id";
 $query .= " INNER JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id";
 $query .= " INNER JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id";
@@ -328,10 +347,12 @@ else if($reportType==12){
     sci_name_or AS \"$sectorname\",
     gen_address_structure.add_name_or AS \"$zone\",  
           prj_name || prj_code AS \"$projectname\",
-          prh_handover_date_gc AS \"$handoverDate\" 
+          prh_handover_date_gc AS \"$handoverDate\",
+          bdy_name AS \"$budgetYear\"
           FROM pms_project_handover";
 $query .= " INNER JOIN pms_project ON pms_project.prj_id = pms_project_handover.prh_project_id";
 $query .= " INNER JOIN pms_sector_information ON pms_project.prj_sector_id = pms_sector_information.sci_id";
+$query .= " INNER JOIN pms_budget_year ON pms_budget_year.bdy_id = pms_project_handover.prh_budget_year_id";
 $query .= " INNER JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id";
 $query .= " INNER JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id";
 $query .= " LEFT JOIN gen_address_structure ON pms_project.prj_location_zone_id = gen_address_structure.add_id";
@@ -346,11 +367,41 @@ if (isset($endTime) && !empty($endTime)) {
     $query .= " AND prh_handover_date_gc <= '".$endTime." 23 59 59'"; 
 }
 }
+else if($reportType==13){
+ $query="SELECT prs_status_name_or AS \"$projectStatus\",
+    pct_name_or AS \"$projectcategory\",
+    sci_name_or AS \"$sectorname\",
+    gen_address_structure.add_name_or AS \"$zone\",  
+          prj_name || prj_code AS \"$projectname\",
+          rqs_name{$suffix} AS \"$requestStatus\",
+          bdr_requested_amount AS \"$requestAmount\",
+          bdr_released_amount AS \"$releasedAmount\",
+          bdy_name AS \"$budgetYear\"
+          FROM pms_budget_request";
+$query .= " INNER JOIN pms_project ON pms_project.prj_id = pms_budget_request.bdr_project_id";
+$query .= " INNER JOIN pms_budget_year ON pms_budget_year.bdy_id = pms_budget_request.bdr_budget_year_id";
+$query .= " INNER JOIN gen_request_status ON gen_request_status.rqs_id = pms_budget_request.bdr_request_status";
+$query .= " INNER JOIN pms_sector_information ON pms_project.prj_sector_id = pms_sector_information.sci_id";
+$query .= " INNER JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id";
+$query .= " INNER JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id";
+$query .= " LEFT JOIN gen_address_structure ON pms_project.prj_location_zone_id = gen_address_structure.add_id";
+$query .= " WHERE 1=1";
+/*$startTime = $request->input('handover_dateStart');
+if (isset($startTime) && !empty($startTime)) {
+    $query .= " AND prh_handover_date_gc >= '".$startTime." 00 00 00'"; 
+}
+
+$endTime = $request->input('handover_dateEnd');
+if (isset($endTime) && !empty($endTime)) {
+    $query .= " AND prh_handover_date_gc <= '".$endTime." 23 59 59'"; 
+}*/
+}
 //project document
 else if($reportType==13){
 
 }
-$query =$this->getSearchParam($request,$query);
+//$query =$this->getSearchParam($request,$query);
+
 //$this->getQueryInfo($query);
 //END COMMON PARAMETERS
  $data_info=DB::select($query);

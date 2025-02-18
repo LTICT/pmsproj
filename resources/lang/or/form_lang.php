@@ -15,7 +15,7 @@ return [
 'emp_end_date_gc' => 'Guyyaa Xumura Hojjetaa (GC)',
 'reason' => 'Sababa',
 'budget_expenditure_code' => 'Koodii Baasii Baajataa',
-'budget_year' => 'Waggaa Baajataa',
+'budget_year' => 'Bara Baajataa',
 'budget_month' => 'Ji’a Baajataa',
 'date' => 'Guyyaa',
 'budget_amount' => 'Hanga Baajataa',
@@ -47,4 +47,7 @@ return [
 'released_date' => 'Guyyaa Baase',
 'handover_date' => 'Guyyaa Kenniinsa',
 'prs_status_name_or'=>'Haala Proojektii',
+'request_status'=>'Haalaa Gaafffi Irra Jiru',
+"bdr_requested_amount"=>"Hanga Gaafatame",
+"bdr_approved_amount"=>"Hanga Deggarame"
  ];

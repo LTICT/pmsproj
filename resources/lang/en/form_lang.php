@@ -45,5 +45,8 @@ return [
 'requested_date' => 'Requested Date',
 'released_date' => 'Released Date',
 'handover_date' => 'Handover Date',
-'prs_status_name_or'=>'Project Status'
+'prs_status_name_or'=>'Project Status',
+'request_status'=>'Request Status',
+"bdr_requested_amount"=>"Request Amount",
+"bdr_approved_amount"=>"Approved Amount"
  ];

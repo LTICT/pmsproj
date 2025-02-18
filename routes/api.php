@@ -185,6 +185,8 @@ Route::post('permission/insertgrid', 'Api\TblpermissionController@insertgrid');
 Route::post('permission/updategrid', 'Api\TblpermissionController@updategrid');
 Route::post('permission/deletegrid', 'Api\TblpermissionController@deletegrid');
 Route::post('permission/search', 'TblpermissionController@search');
+Route::post('permission/listroleassignedpermission', 'Api\TblpermissionController@listroleassignedpermission');
+Route::post('permission/listuserassignedpermission', 'Api\TblpermissionController@listuserassignedpermission');
 
 Route::post('roles/insertgrid', 'Api\TblrolesController@insertgrid');
 Route::post('roles/deletegrid', 'Api\TblrolesController@deletegrid');

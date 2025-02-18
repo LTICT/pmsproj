@@ -67,26 +67,6 @@ $pemsearch=$request->input('pem_search');
 if(isset($pemsearch) && isset($pemsearch)){
     $query .=' AND pem_search="'.$pemsearch.'"'; 
 }
-$pemdescription=$request->input('pem_description');
-if(isset($pemdescription) && isset($pemdescription)){
-    $query .=' AND pem_description="'.$pemdescription.'"'; 
-}
-$pemcreatetime=$request->input('pem_create_time');
-if(isset($pemcreatetime) && isset($pemcreatetime)){
-    $query .=' AND pem_create_time="'.$pemcreatetime.'"'; 
-}
-$pemupdatetime=$request->input('pem_update_time');
-if(isset($pemupdatetime) && isset($pemupdatetime)){
-    $query .=' AND pem_update_time="'.$pemupdatetime.'"'; 
-}
-$pemdeletetime=$request->input('pem_delete_time');
-if(isset($pemdeletetime) && isset($pemdeletetime)){
-    $query .=' AND pem_delete_time="'.$pemdeletetime.'"'; 
-}
-$pemcreatedby=$request->input('pem_created_by');
-if(isset($pemcreatedby) && isset($pemcreatedby)){
-    $query .=' AND pem_created_by="'.$pemcreatedby.'"'; 
-}
 $pemstatus=$request->input('pem_status');
 if(isset($pemstatus) && isset($pemstatus)){
     $query .=' AND pem_status="'.$pemstatus.'"'; 

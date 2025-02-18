@@ -133,10 +133,29 @@ class MyController extends Controller
 		INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id 
 		WHERE url_user_id=".$userId." AND pag_appear_tab=1 AND pem_view='1'";
 		$data_info=DB::select($query);
-		$pagIds = array_map(function ($item) {
+		//STAR TEST
+	  $allowedLinks = [];
+    $allowedTabs = [];
+
+    foreach ($data_info as $item) {
+        if (in_array($item->pag_id, [34, 39, 61])) {
+            // Add to allowedLinks if page_id matches the specified values
+            $allowedLinks[] = $item->pag_id;
+        } else {
+            // Add to allowedTabs if page_id does not match the specified values
+            $allowedTabs[] = $item->pag_id;
+        }
+    }
+    // Return both arrays
+    return [
+        'allowedLinks' => $allowedLinks,
+        'allowedTabs' => $allowedTabs,
+    ];
+		//END TEST
+		/*$pagIds = array_map(function ($item) {
 			return $item->pag_id;
 		}, $data_info);
-		return $pagIds;
+		return $pagIds;*/
 	}
 	public function ownsProject($request,$projectId){
 		if(isset($projectId)){

@@ -271,68 +271,36 @@ $pemenabled=$request->input('pem_enabled');
 if(isset($pemenabled) && isset($pemenabled)){
 $query .=' AND pem_enabled="'.$pemenabled.'"'; 
 }
-$pemedit=$request->input('pem_edit');
-if(isset($pemedit) && isset($pemedit)){
-$query .=' AND pem_edit="'.$pemedit.'"'; 
-}
-$peminsert=$request->input('pem_insert');
-if(isset($peminsert) && isset($peminsert)){
-$query .=' AND pem_insert="'.$peminsert.'"'; 
-}
-$pemview=$request->input('pem_view');
-if(isset($pemview) && isset($pemview)){
-$query .=' AND pem_view="'.$pemview.'"'; 
-}
-$pemdelete=$request->input('pem_delete');
-if(isset($pemdelete) && isset($pemdelete)){
-$query .=' AND pem_delete="'.$pemdelete.'"'; 
-}
-$pemshow=$request->input('pem_show');
-if(isset($pemshow) && isset($pemshow)){
-$query .=' AND pem_show="'.$pemshow.'"'; 
-}
-$pemsearch=$request->input('pem_search');
-if(isset($pemsearch) && isset($pemsearch)){
-$query .=' AND pem_search="'.$pemsearch.'"'; 
-}
-$pemdescription=$request->input('pem_description');
-if(isset($pemdescription) && isset($pemdescription)){
-$query .=' AND pem_description="'.$pemdescription.'"'; 
-}
-$pemcreatetime=$request->input('pem_create_time');
-if(isset($pemcreatetime) && isset($pemcreatetime)){
-$query .=' AND pem_create_time="'.$pemcreatetime.'"'; 
-}
-$pemupdatetime=$request->input('pem_update_time');
-if(isset($pemupdatetime) && isset($pemupdatetime)){
-$query .=' AND pem_update_time="'.$pemupdatetime.'"'; 
-}
-$pemdeletetime=$request->input('pem_delete_time');
-if(isset($pemdeletetime) && isset($pemdeletetime)){
-$query .=' AND pem_delete_time="'.$pemdeletetime.'"'; 
-}
-$pemcreatedby=$request->input('pem_created_by');
-if(isset($pemcreatedby) && isset($pemcreatedby)){
-$query .=' AND pem_created_by="'.$pemcreatedby.'"'; 
-}
-$pemstatus=$request->input('pem_status');
-if(isset($pemstatus) && isset($pemstatus)){
-$query .=' AND pem_status="'.$pemstatus.'"'; 
+$query.=' ORDER BY pem_id';
+$data_info=DB::select($query);
+$resultObject= array(
+    "data" =>$data_info,
+    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 
-     $masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
-        //set foreign key field name
-        //$query .=' AND add_name="'.$masterId.'"'; 
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
-        $query.=' AND (add_name LIKE "%'.$search.'%")  ';
-    }
+public function listroleassignedpermission(Request $request){
+        $pemroleid=$request->input('pem_role_id');
+     $query='SELECT pag_id,pag_name,pem_page_id,pem_id,pem_role_id,pem_enabled,pem_edit,pem_insert,pem_view,pem_delete,pem_show,pem_search,pem_description,
+     1 AS is_editable, 1 AS is_deletable FROM tbl_pages
+     INNER JOIN tbl_permission ON tbl_pages.pag_id=tbl_permission.pem_page_id 
+     WHERE pem_role_id='.$pemroleid.'';       
+     //$query .=' WHERE 1=1';
+     $pemid=$request->input('pem_id');
+if(isset($pemid) && isset($pemid)){
+$query .=' AND pem_id="'.$pemid.'"'; 
+}
+
+if(isset($pempageid) && isset($pempageid)){
+//$query .=' AND pem_page_id="'.$pempageid.'"'; 
+}
+$pemroleid=$request->input('pem_role_id');
+if(isset($pemroleid) && isset($pemroleid)){
+$query .=" AND pem_role_id='".$pemroleid."'"; 
+}
+$pemenabled=$request->input('pem_enabled');
+if(isset($pemenabled) && isset($pemenabled)){
+$query .=' AND pem_enabled="'.$pemenabled.'"'; 
 }
 $query.=' ORDER BY pem_id';
 $data_info=DB::select($query);
@@ -341,6 +309,38 @@ $resultObject= array(
     "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
+
+public function listuserassignedpermission(Request $request){
+        $pemroleid=$request->input('pem_role_id');
+     $query='SELECT pag_id,pag_name,pem_page_id,pem_id,pem_role_id,pem_enabled,pem_edit,pem_insert,pem_view,pem_delete,pem_show,pem_search,pem_description,
+     1 AS is_editable, 1 AS is_deletable 
+     FROM tbl_pages
+     INNER JOIN tbl_permission ON tbl_pages.pag_id=tbl_permission.pem_page_id AND pem_role_id='.$pemroleid.'';       
+     //$query .=' WHERE 1=1';
+     $pemid=$request->input('pem_id');
+if(isset($pemid) && isset($pemid)){
+$query .=' AND pem_id="'.$pemid.'"'; 
+}
+
+if(isset($pempageid) && isset($pempageid)){
+//$query .=' AND pem_page_id="'.$pempageid.'"'; 
+}
+$pemroleid=$request->input('pem_role_id');
+if(isset($pemroleid) && isset($pemroleid)){
+$query .=" AND pem_role_id='".$pemroleid."'"; 
+}
+$pemenabled=$request->input('pem_enabled');
+if(isset($pemenabled) && isset($pemenabled)){
+$query .=' AND pem_enabled="'.$pemenabled.'"'; 
+}
+$query.=' ORDER BY pem_id';
+$data_info=DB::select($query);
+$resultObject= array(
+    "data" =>$data_info,
+    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
+}
+
 public function updategrid(Request $request)
 {
     $attributeNames = [

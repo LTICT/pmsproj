@@ -46,6 +46,8 @@ return [
 'requested_date' => 'የተጠየቀ ቀን',
 'released_date' => 'የተሰጠ ቀን',
 'handover_date' => 'የተላለፈበት ቀን',
-'prs_status_name_or'=>'የፕሮጀክት ሁኔታ'
-
+'prs_status_name_or'=>'የፕሮጀክት ሁኔታ',
+'request_status'=>'ጥያቄ ያለበት ሁኔታ',
+"bdr_requested_amount"=>"የተጠየ መጠን",
+"bdr_approved_amount"=>"የጸደቀ መጠን"
  ];

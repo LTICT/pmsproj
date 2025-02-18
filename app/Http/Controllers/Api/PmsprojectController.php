@@ -22,8 +22,9 @@ class PmsprojectController extends MyController
      */
     public function show(Request $request,$id)
     {
-        $query='SELECT prj_id,prj_name,prj_code,prj_project_status_id,
+        $query='SELECT prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,prj_id,prj_name,prj_code,prj_project_status_id,
         pms_project_category.pct_name_or AS prj_project_category_id,prj_project_budget_source_id,prj_total_estimate_budget,prj_total_actual_budget,prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,prj_location_kebele_id,prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_kebele_id,prj_owner_description,prj_start_date_et,prj_start_date_gc,prj_start_date_plan_et,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,prj_end_date_plan_gc,prj_end_date_plan_et,prj_outcome,prj_deleted,prj_remark,prj_created_by,prj_created_date,prj_create_time,prj_update_time,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number FROM pms_project ';
+        $query .=' LEFT JOIN pms_project_status ON pms_project_status.prs_id= pms_project.prj_project_status_id';
         $query .= ' LEFT JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id';
         $query .=" WHERE prj_id=".$id." ";
         $data_info=DB::select($query);
@@ -48,6 +49,7 @@ class PmsprojectController extends MyController
     }
     public function listgrid(Request $request){
         $permissionData=$this->getPagePermission($request,9);
+        //dump($permissionData);
         $query='SELECT prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,add_name_or, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
         prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,prj_location_kebele_id,
         prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_description,
@@ -116,12 +118,12 @@ class PmsprojectController extends MyController
         }
         $query.=' ORDER BY prj_id DESC';
         $data_info=DB::select($query);
-        $authenticatedUser = $request->authUser;
-        $userId=$authenticatedUser->usr_id;
+        $tabInfo=$this->getTabPermission($request);
         $resultObject= array(
             "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 2,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0),
-            'allowedTabs'=> $this->getTabPermission($request));
+            'allowedTabs'=>$tabInfo['allowedTabs'],
+            'allowedLinks'=>$tabInfo['allowedLinks'] );
         return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
     }
     public function updategrid(Request $request)

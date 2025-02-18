@@ -72,7 +72,7 @@ $query .=' AND bdr_released_date_gc="'.$bdrreleaseddategc.'"';
 }
 $query =$this->getSearchParam($request,$query);
 //$this->getQueryInfo($query);
-$query.=' ORDER BY bdy_name DESC, bdr_id DESC';
+$query.=' ORDER BY bdr_id DESC';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
@@ -98,7 +98,6 @@ public function updategrid(Request $request)
     'bdr_budget_year_id'=> 'max:200', 
 'bdr_requested_amount'=> 'max:200', 
 //'bdr_released_amount'=> 'numeric', 
-'bdr_project_id'=> 'max:200', 
 'bdr_requested_date_ec'=> 'max:200', 
 'bdr_requested_date_gc'=> 'max:200', 
 'bdr_released_date_ec'=> 'max:10', 
