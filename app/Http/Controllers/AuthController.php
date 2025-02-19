@@ -68,6 +68,11 @@ class AuthController extends Controller
             $text .=(isset($user_detail_data[0]->sector_name) && !empty($user_detail_data[0]->sector_name)) ? "Sector - ".  $user_detail_data[0]->sector_name : '';
             $text .=(isset($user_detail_data[0]->zone_name) && !empty($user_detail_data[0]->zone_name)) ? " : Zone - ".  $user_detail_data[0]->zone_name : '';
             $text .=(isset($user_detail_data[0]->dep_name) && !empty($user_detail_data[0]->dep_name)) ? " : Department - ".  $user_detail_data[0]->dep_name : '';
+            //Update last login data 
+
+            $data_info = Modeltblusers::findOrFail($user->usr_id);
+            $data['usr_last_logged_in']=date('Y-m-d H:i:s');
+            $data_info->update($data);
         }
         $user['user_detail']=$text;
         //END USER INFO

@@ -15,6 +15,13 @@ class PmsbudgetrequestapprovalController extends MyController
 }
  
     public function listgrid(Request $request){
+    $userInfo=$this->getUserInfo($request);
+        //if(isset($userInfo)){
+            $zoneId=$userInfo->usr_zone_id;
+            $woredaId=$userInfo->usr_woreda_id;
+            $sectorId=$userInfo->usr_sector_id;
+            $departmentId=$userInfo->usr_department_id;
+if($zoneId==0 && $woredaId==0 && $sectorId==1){
     $query='SELECT rqs_description AS color_code, rqs_name_en AS status_name, bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
      bdr_released_amount,bdr_project_id,bdr_requested_date_ec,bdr_requested_date_gc,
      bdr_released_date_ec,bdr_released_date_gc,bdr_description,bdr_create_time,bdr_update_time,
@@ -92,8 +99,15 @@ $bdrreleaseddategc=$request->input('bdr_released_date_gc');
 if(isset($bdrreleaseddategc) && isset($bdrreleaseddategc)){
 $query .=' AND bdr_released_date_gc="'.$bdrreleaseddategc.'"'; 
 }
+//if user is assinged to a department
+if($departmentId > 1){
+    $query .=" AND prj_department_id='".$departmentId."'"; 
+}
 $query.=' ORDER BY bdr_id DESC';
 $data_info=DB::select($query);
+}else{
+    $data_info=array();
+}
 $resultObject= array(
     "data" =>$data_info,
     "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));

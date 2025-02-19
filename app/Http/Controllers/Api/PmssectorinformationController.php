@@ -46,7 +46,7 @@ $scisectorcategoryid=$request->input('sci_sector_category_id');
 if(isset($scisectorcategoryid) && isset($scisectorcategoryid)){
     $query .=' AND sci_sector_category_id="'.$scisectorcategoryid.'"'; 
 }
-$query.=' ORDER BY sci_name_or';
+$query.=' ORDER BY sci_id ASC';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,

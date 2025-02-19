@@ -315,7 +315,10 @@ public function listuserassignedpermission(Request $request){
      $query='SELECT pag_id,pag_name,pem_page_id,pem_id,pem_role_id,pem_enabled,pem_edit,pem_insert,pem_view,pem_delete,pem_show,pem_search,pem_description,
      1 AS is_editable, 1 AS is_deletable 
      FROM tbl_pages
-     INNER JOIN tbl_permission ON tbl_pages.pag_id=tbl_permission.pem_page_id AND pem_role_id='.$pemroleid.'';       
+     INNER JOIN tbl_permission ON tbl_pages.pag_id=tbl_permission.pem_page_id 
+     INNER JOIN tbl_roles ON tbl_roles.rol_id=tbl_permission.pem_role_id 
+     INNER JOIN tbl_roles ON tbl_roles.rol_id=tbl_permission.pem_role_id 
+     WHERE pem_role_id='.$pemroleid.'';       
      //$query .=' WHERE 1=1';
      $pemid=$request->input('pem_id');
 if(isset($pemid) && isset($pemid)){

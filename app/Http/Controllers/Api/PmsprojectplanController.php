@@ -253,11 +253,11 @@ $prjCode=$request->input('prj_code');
 if(isset($prjCode) && isset($prjCode)){
 $query .=" AND prj_code='".$prjCode."'"; 
 }
-$startTime=$request->input('projectplan_dateStart');
+$startTime=$request->input('pld_start_date_gcStart');
 if(isset($startTime) && isset($startTime)){
 $query .=" AND pld_start_date_gc >='".$startTime." 00 00 00'"; 
 }
-$endTime=$request->input('projectplan_dateEnd');
+$endTime=$request->input('pld_start_date_gcEnd');
 if(isset($endTime) && isset($endTime)){
 $query .=" AND pld_start_date_gc <='".$endTime." 23 59 59'"; 
 }
@@ -301,46 +301,8 @@ $pldenddategc=$request->input('pld_end_date_gc');
 if(isset($pldenddategc) && isset($pldenddategc)){
 $query .=' AND pld_end_date_gc="'.$pldenddategc.'"'; 
 }
-$plddescription=$request->input('pld_description');
-if(isset($plddescription) && isset($plddescription)){
-$query .=' AND pld_description="'.$plddescription.'"'; 
-}
-$pldcreatetime=$request->input('pld_create_time');
-if(isset($pldcreatetime) && isset($pldcreatetime)){
-$query .=' AND pld_create_time="'.$pldcreatetime.'"'; 
-}
-$pldupdatetime=$request->input('pld_update_time');
-if(isset($pldupdatetime) && isset($pldupdatetime)){
-$query .=' AND pld_update_time="'.$pldupdatetime.'"'; 
-}
-$plddeletetime=$request->input('pld_delete_time');
-if(isset($plddeletetime) && isset($plddeletetime)){
-$query .=' AND pld_delete_time="'.$plddeletetime.'"'; 
-}
-$pldcreatedby=$request->input('pld_created_by');
-if(isset($pldcreatedby) && isset($pldcreatedby)){
-$query .=' AND pld_created_by="'.$pldcreatedby.'"'; 
-}
-$pldstatus=$request->input('pld_status');
-if(isset($pldstatus) && isset($pldstatus)){
-$query .=' AND pld_status="'.$pldstatus.'"'; 
-}
-
-     $masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
-        //set foreign key field name
-        //$query .=' AND add_name="'.$masterId.'"'; 
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
-        $query.=' AND (add_name LIKE "%'.$search.'%")  ';
-    }
-}
-//$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
+$query =$this->getSearchParam($request,$query);
+$query.=' ORDER BY pld_id';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,

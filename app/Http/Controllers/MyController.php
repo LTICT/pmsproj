@@ -37,6 +37,9 @@ class MyController extends Controller
 			$prjCode=$request->input('prj_code');
 			$include=$request->input('include');
 
+			$projectDepartmentID=$request->input('prj_department_id');
+			$projectSectorID=$request->input('prj_sector_id');
+
 			if(isset($prjName) && isset($prjName)){
 				$query .=" AND prj_name LIKE '%".$prjName."%'"; 
 			}
@@ -59,12 +62,17 @@ class MyController extends Controller
 				$query .=" AND prj_owner_woreda_id='".$prjownerworedaid."'";   
 			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $include ==0 && $prjownerzoneid > 0){
 				$query .=" AND prj_owner_woreda_id=0"; 
-			}			
-			if(isset($sectorId) && !empty($sectorId) && $sectorId > 0){
-				$query .=" AND prj_sector_id='".$sectorId."'";   
 			}
-			if(isset($departmentId) && !empty($departmentId) && $departmentId > 0){
-				//$query .=" AND prj_department_id='".$departmentId."'";   
+
+			if(isset($sectorId) && !empty($sectorId) && $sectorId > 1){
+				$query .=" AND prj_sector_id='".$sectorId."'";   
+			}else if(isset($projectSectorID) && isset($projectSectorID) && $projectSectorID>1){
+				$query .=" AND prj_sector_id='".$projectSectorID."'";   
+			}
+			if(isset($departmentId) && !empty($departmentId) && $departmentId > 1){
+				$query .=" AND prj_department_id='".$departmentId."'";   
+			}else if(isset($projectDepartmentID) && isset($projectDepartmentID) && $projectDepartmentID>1){
+				$query .=" AND prj_department_id='".$projectSectorID."'";   
 			}
 		}
 		return $query;
@@ -82,7 +90,7 @@ class MyController extends Controller
 			$prjName=$request->input('prj_name');
 			$prjCode=$request->input('prj_code');
 			$include=$request->input('include');
-
+			$departmentID=$request->input('prj_department_id');
 			if(isset($prjName) && isset($prjName)){
 				$query .=" AND prj_name LIKE '%".$prjName."%'"; 
 			}
@@ -104,16 +112,36 @@ class MyController extends Controller
 
 			if(isset($sectorId) && !empty($sectorId) && $sectorId > 0){
 				$query .=" AND prj_sector_id='".$sectorId."'";   
+			}else if(isset($prjownerworedaid) && isset($prjownerworedaid) && $prjownerworedaid>0){
+				$query .=" AND prj_owner_woreda_id='".$prjownerworedaid."'";   
 			}
+
 			if(isset($departmentId) && !empty($departmentId) && $departmentId > 0){
 				//$query .=" AND prj_department_id='".$departmentId."'";   
 			}
 		}
 		return $query;
 	}
-	public function getPagePermission($request,$pageId){
+	public function getPagePermission($request,$pageId, $PageInfo=false){
 		$authenticatedUser = $request->authUser;
 		$userId=$authenticatedUser->usr_id;
+		$sectorId=$authenticatedUser->usr_sector_id;
+		$departmentId=$authenticatedUser->usr_department_id;
+
+		$zoneId=$authenticatedUser->usr_zone_id;
+		$woredaId=$authenticatedUser->usr_woreda_id;
+
+		//dd($sectorId);
+	if($zoneId==0 && $woredaId==0 && $sectorId==1){
+		if($PageInfo=="project_info"){
+			return null;
+		}
+	}else if($zoneId==0 && $woredaId==0){
+		
+	}
+		/*if($PageInfo=="project_info" && ($sectorId==1 || $departmentId==1) && $zoneId==0 && $woredaId==0){
+			return null;
+		}*/
 		$query="SELECT tbl_permission.*
 		FROM tbl_permission 
 		INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id 
@@ -159,11 +187,19 @@ class MyController extends Controller
 	}
 	public function ownsProject($request,$projectId){
 		if(isset($projectId)){
-			$authenticatedUser = $request->authUser;
-			$userId=$authenticatedUser->usr_id;
-			$query="SELECT usr_id,usr_zone_id,usr_woreda_id,usr_department_id,usr_sector_id
-			FROM tbl_users INNER JOIN pms_project ON pms_project.prj_owner_zone_id=usr_zone_id 
-			AND prj_id =".$projectId." WHERE usr_id=".$userId." ";
+			$userInfo = $request->authUser;
+			$zoneId=$userInfo->usr_zone_id;
+			$woredaId=$userInfo->usr_woreda_id;
+			$sectorId=$userInfo->usr_sector_id;
+			$departmentId=$userInfo->usr_department_id;
+
+			$query="SELECT prj_id FROM pms_project 
+			WHERE prj_owner_zone_id=".$zoneId." 
+			AND prj_owner_zone_id=".$zoneId." 
+			AND prj_owner_woreda_id=".$woredaId." 
+			AND prj_department_id=".$departmentId." 
+			AND prj_sector_id=".$sectorId." 
+			AND  prj_id=".$projectId."";
       //AND prj_owner_woreda_id=usr_woreda_id WHERE usr_id=".$userId."
 			$data_info=DB::select($query);
 			if(isset($data_info) && !empty($data_info)){

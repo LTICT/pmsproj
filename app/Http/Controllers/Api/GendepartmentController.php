@@ -22,7 +22,7 @@ public function listgrid(Request $request){
     $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
 }
 $cacheKey = 'department';
-$data_info = Cache::rememberForever($cacheKey, function () use ($permissionIndex,$request) {
+//$data_info = Cache::rememberForever($cacheKey, function () use ($permissionIndex,$request) {
 $query="SELECT dep_id,dep_name_or,dep_name_am,dep_name_en,dep_code,dep_available_at_region,dep_available_at_zone,dep_available_at_woreda,dep_description,dep_create_time,dep_update_time,dep_delete_time,dep_created_by,dep_status ".$permissionIndex." FROM gen_department ";
 $query .=' WHERE 1=1';
 $depid=$request->input('dep_id');
@@ -45,9 +45,9 @@ $depcode=$request->input('dep_code');
 if(isset($depcode) && isset($depcode)){
     $query .=' AND dep_code="'.$depcode.'"'; 
 }
-$query.=' ORDER BY dep_name_or';
-return DB::select($query);
-});
+$query.=' ORDER BY dep_id ASC';
+$data_info =DB::select($query);
+//});
 $resultObject= array(
     "data" =>$data_info,
     "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0));

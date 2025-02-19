@@ -260,8 +260,10 @@ public function updategrid(Request $request)
             $requestData['usr_picture']=$fileName;
         }
         $requestData['email']=$request->input('usr_email');
-        $requestData['password']=bcrypt($request->get('usr_password'));
-        $requestData['usr_password']=bcrypt($request->get('usr_password'));
+        //$password=$request->get('usr_password');
+        //if(isset)
+        //$requestData['password']=bcrypt($request->get('usr_password'));
+        //$requestData['usr_password']=bcrypt($request->get('usr_password'));
         $data_info->update($requestData);
         $ischanged=$data_info->wasChanged();
         if($ischanged){
