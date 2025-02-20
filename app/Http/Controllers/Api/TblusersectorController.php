@@ -41,7 +41,7 @@ class TblusersectorController extends MyController
       if(isset($permissionData) && !empty($permissionData)){
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
      }
-     $query="SELECT usc_id,usc_sector_id,usc_user_id,usc_description,usc_create_time,usc_update_time,usc_delete_time,usc_created_by,usc_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM tbl_user_sector ";
+     $query="SELECT usc_id,usc_sector_id,usc_user_id,usc_description,usc_create_time,usc_update_time,usc_delete_time,usc_created_by,usc_status,1 AS is_editable, 1 AS is_deletable FROM tbl_user_sector ";
      
      $query .=' WHERE 1=1';
      $uscid=$request->input('usc_id');
@@ -54,52 +54,16 @@ $query .=' AND usc_sector_id="'.$uscsectorid.'"';
 }
 $uscuserid=$request->input('usc_user_id');
 if(isset($uscuserid) && isset($uscuserid)){
-$query .=' AND usc_user_id="'.$uscuserid.'"'; 
-}
-$uscdescription=$request->input('usc_description');
-if(isset($uscdescription) && isset($uscdescription)){
-$query .=' AND usc_description="'.$uscdescription.'"'; 
-}
-$usccreatetime=$request->input('usc_create_time');
-if(isset($usccreatetime) && isset($usccreatetime)){
-$query .=' AND usc_create_time="'.$usccreatetime.'"'; 
-}
-$uscupdatetime=$request->input('usc_update_time');
-if(isset($uscupdatetime) && isset($uscupdatetime)){
-$query .=' AND usc_update_time="'.$uscupdatetime.'"'; 
-}
-$uscdeletetime=$request->input('usc_delete_time');
-if(isset($uscdeletetime) && isset($uscdeletetime)){
-$query .=' AND usc_delete_time="'.$uscdeletetime.'"'; 
-}
-$usccreatedby=$request->input('usc_created_by');
-if(isset($usccreatedby) && isset($usccreatedby)){
-$query .=' AND usc_created_by="'.$usccreatedby.'"'; 
+$query .=" AND usc_user_id='".$uscuserid."'"; 
 }
 $uscstatus=$request->input('usc_status');
 if(isset($uscstatus) && isset($uscstatus)){
 $query .=' AND usc_status="'.$uscstatus.'"'; 
 }
-
-     $masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
-        //set foreign key field name
-        //$query .=' AND add_name="'.$masterId.'"'; 
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
-        $query.=' AND (add_name LIKE "%'.$search.'%")  ';
-    }
-}
-//$query.=' ORDER BY emp_first_name';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
+    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 //Update Data
