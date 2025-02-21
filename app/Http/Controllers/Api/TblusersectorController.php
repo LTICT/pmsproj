@@ -80,36 +80,26 @@ public function updategrid(Request $request)
         'usc_sector_id'=> 'max:200', 
 'usc_user_id'=> 'max:200', 
 'usc_description'=> 'max:425', 
-'usc_status'=> 'integer', 
+//'usc_status'=> 'integer', 
 
     ];
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if($validator->fails()) {
-        $errorString = implode(",",$validator->messages()->all());
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>"",
-            "statusCode"=>"error",
-            "type"=>"update",
-            "errorMsg"=>$errorString
-        );
-        return response()->json($resultObject);
-    }else{
-        $id=$request->get("usc_id");
-        $requestData = $request->all();            
-        $status= $request->input('usc_status');
-        if($status=="true"){
-            $requestData['usc_status']=1;
+    $data = $request->all();
+    //dump(count($data));
+    $userId=0;
+    foreach ($data as $key => $value) {
+        $value['usc_created_by']=1;
+        $userSectorId=$value['usc_id'];
+        $userId=$value['usc_user_id'];
+       if(isset($userSectorId) && !empty($userSectorId) && $userSectorId > 0){
+            //update
+            //$data_info=Modeltblusersector::create($value);
+             $data_info = Modeltblusersector::findOrFail($userSectorId);
+            $data_info->update($value);
         }else{
-            $requestData['usc_status']=0;
+            unset($value['usc_id']);
+            $data_info=Modeltblusersector::create($value);
         }
-        if(isset($id) && !empty($id)){
-            $data_info = Modeltblusersector::findOrFail($id);
-            $data_info->update($requestData);
-            $ischanged=$data_info->wasChanged();
-            if($ischanged){
-               $resultObject= array(
+$resultObject= array(
                 "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
             "is_updated"=>true,
@@ -117,31 +107,10 @@ public function updategrid(Request $request)
                 "type"=>"update",
                 "errorMsg"=>""
             );
-           }else{
-            $resultObject= array(
-                "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "is_updated"=>true,
-                "status_code"=>200,
-                "type"=>"update",
-                "errorMsg"=>""
-            );
-        }
-        return response()->json($resultObject);
-    }else{
-        //Parent Id Assigment
-        //$requestData['ins_vehicle_id']=$request->get('master_id');
-        $data_info=Modeltblusersector::create($requestData);
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>$data_info,
-            "statusCode"=>200,
-            "type"=>"save",
-            "errorMsg"=>""
-        );
-        return response()->json($resultObject);
-    }        
-}
+return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
+        //END RETURN
+    }
+
 }
 //Insert Data
 public function insertgrid(Request $request)
