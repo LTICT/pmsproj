@@ -86,6 +86,7 @@ public function updategrid(Request $request)
     $data = $request->all();
     //dump(count($data));
     $userId=0;
+    $data_info=array();
     foreach ($data as $key => $value) {
         $value['usc_created_by']=1;
         $userSectorId=$value['usc_id'];
@@ -99,6 +100,9 @@ public function updategrid(Request $request)
             unset($value['usc_id']);
             $data_info=Modeltblusersector::create($value);
         }
+
+        //END RETURN
+    }
 $resultObject= array(
                 "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
@@ -108,9 +112,6 @@ $resultObject= array(
                 "errorMsg"=>""
             );
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
-        //END RETURN
-    }
-
 }
 //Insert Data
 public function insertgrid(Request $request)
