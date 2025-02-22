@@ -35,7 +35,7 @@ public function handleLaravelException($request, $attributeNames,$rules, $action
             "type"=>$actionType,
             "errorMsg"=>$errorString
         );
-        return response()->json($resultObject);
+        return response()->json($resultObject,455);
 }
 return false;
 }
@@ -65,7 +65,7 @@ public function handleDatabaseException($e, $actionType){
         "type" => $actionType,
         "errorMsg" => $errorMsg,
         "column"=>$column
-    ]);
+    ],$statusCode);
 	}
 	public function getSearchParam($request,$query){
 		$userInfo=$this->getUserInfo($request);
