@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 class MyController extends Controller
 {
 	public function __construct()
@@ -22,6 +23,48 @@ class MyController extends Controller
     // Display the query execution time
     dump($query->time);
 });
+}
+public function handleLaravelException($request, $attributeNames,$rules, $actionType){
+    $validator = Validator::make ( $request->all(), $rules );
+    $validator->setAttributeNames($attributeNames);
+    if($validator->fails()) {
+	$errorString = implode(",",$validator->messages()->all());
+        $resultObject= array(
+            "value" =>"",
+            "status_code"=>454,
+            "type"=>$actionType,
+            "errorMsg"=>$errorString
+        );
+        return response()->json($resultObject);
+}
+return false;
+}
+public function handleDatabaseException($e, $actionType){
+    $errorMsg = "database_error";
+    $statusCode=$e->errorInfo[0];
+    $column="";
+    if ($e->errorInfo[0] == '23505') { // Unique key constraint violation in PostgreSQL
+        preg_match('/Key \((.*?)\)=/', $e->errorInfo[2], $matches);
+        $column = $matches[1] ?? 'not_known';
+        //$errorMsg = "Duplicate entry found in column '$column'. Please use a unique value.";
+        $statusCode=452;
+    } elseif ($e->errorInfo[0] == '23502') { // Not-null constraint violation in PostgreSQL
+        preg_match('/null value in column "(.*?)"/', $e->errorInfo[2], $matches);
+        $column = $matches[1] ?? 'not_known';
+        //$errorMsg = "Column '$column' cannot be null. Please provide a valid value.";
+        $statusCode=453;
+    }elseif ($statusCode == '23503') { // Foreign key constraint violation in PostgreSQL
+        //$errorMsg = "Foreign key constraint violation. Please check related records.";
+         $column = $matches[1] ?? 'not_known';
+         $statusCode=454;
+    }
+    return response()->json([
+        "value" => "",
+        "status_code" => $statusCode,
+        "type" => $actionType,
+        "errorMsg" => $errorMsg,
+        "column"=>$column
+    ]);
 	}
 	public function getSearchParam($request,$query){
 		$userInfo=$this->getUserInfo($request);
@@ -137,7 +180,7 @@ class MyController extends Controller
 			return null;
 		}
 	}else if($zoneId==0 && $woredaId==0){
-		
+
 	}
 		/*if($PageInfo=="project_info" && ($sectorId==1 || $departmentId==1) && $zoneId==0 && $woredaId==0){
 			return null;

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\QueryException;
 //PROPERTY OF LT ICT SOLUTION PLC
 class PmspaymentcategoryController extends MyController
 {
@@ -23,8 +24,7 @@ class PmspaymentcategoryController extends MyController
      */
     public function show($id)
     {
-        $query='SELECT pyc_id,pyc_name_or,pyc_name_am,pyc_name_en,pyc_description,pyc_create_time,pyc_update_time,pyc_delete_time,pyc_created_by,pyc_status FROM pms_payment_category ';       
-        
+        $query='SELECT pyc_id,pyc_name_or,pyc_name_am,pyc_name_en,pyc_description,pyc_create_time,pyc_update_time,pyc_delete_time,pyc_created_by,pyc_status FROM pms_payment_category ';
         $query .=' WHERE pyc_id='.$id.' ';
         $data_info=DB::select(DB::raw($query));
         if(isset($data_info) && !empty($data_info)){
@@ -100,28 +100,18 @@ public function updategrid(Request $request)
 'pyc_name_en'=> trans('form_lang.pyc_name_en'), 
 'pyc_description'=> trans('form_lang.pyc_description'), 
 'pyc_status'=> trans('form_lang.pyc_status'), 
-
     ];
     $rules= [
-        'pyc_name_or'=> 'max:200', 
-'pyc_name_am'=> 'max:200', 
-'pyc_name_en'=> 'max:200', 
+'pyc_name_or'=> 'required|max:200', 
+'pyc_name_am'=> 'required|max:200', 
+'pyc_name_en'=> 'required|max:200', 
 'pyc_description'=> 'max:425'
-
     ];
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if($validator->fails()) {
-        $errorString = implode(",",$validator->messages()->all());
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>"",
-            "statusCode"=>"error",
-            "type"=>"update",
-            "errorMsg"=>$errorString
-        );
-        return response()->json($resultObject);
-    }else{
+$validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update");
+if ($validationResult !== false) {
+    return $validationResult;
+}
+    try{
         $id=$request->get("pyc_id");
         $requestData = $request->all();
         if(isset($id) && !empty($id)){
@@ -149,67 +139,55 @@ public function updategrid(Request $request)
             );
         }
         return response()->json($resultObject);
-    }else{
-        //Parent Id Assigment
-        //$requestData['ins_vehicle_id']=$request->get('master_id');
-        $data_info=Modelpmspaymentcategory::create($requestData);
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>$data_info,
-            "statusCode"=>200,
-            "type"=>"save",
-            "errorMsg"=>""
-        );
-        return response()->json($resultObject);
-    }        
+    }       
+}catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"update");
 }
 }
 //Insert Data
 public function insertgrid(Request $request)
 {
-    $attributeNames = [
-        'pyc_name_or'=> trans('form_lang.pyc_name_or'), 
-'pyc_name_am'=> trans('form_lang.pyc_name_am'), 
-'pyc_name_en'=> trans('form_lang.pyc_name_en'), 
-'pyc_description'=> trans('form_lang.pyc_description'), 
-'pyc_status'=> trans('form_lang.pyc_status'), 
+$attributeNames = [
+    'pyc_name_or' => trans('form_lang.pyc_name_or'), 
+    'pyc_name_am' => trans('form_lang.pyc_name_am'), 
+    'pyc_name_en' => trans('form_lang.pyc_name_en'), 
+    'pyc_description' => trans('form_lang.pyc_description'), 
+    'pyc_status' => trans('form_lang.pyc_status'),
+];
 
-    ];
-    $rules= [
-        'pyc_name_or'=> 'max:200', 
-'pyc_name_am'=> 'max:200', 
-'pyc_name_en'=> 'max:200', 
-'pyc_description'=> 'max:425',
+$rules = [
+    'pyc_name_or' => 'required|max:200', 
+    'pyc_name_am' => 'max:200', 
+    'pyc_name_en' => 'max:200', 
+    'pyc_description' => 'max:425',
+];
+$validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "save");
+if ($validationResult !== false) {
+    return $validationResult;
+}
+try {
+    $requestData = $request->all();
+    $requestData['pyc_created_by'] = auth()->user()->usr_Id;
+    $requestData['pyc_created_by'] = 1;
+    //dd($requestData); 
+    $data_info = Modelpmspaymentcategory::create($requestData);
+    Cache::forget('payment_category');    
+    $data_info['is_editable'] = 1;
+    $data_info['is_deletable'] = 1;    
+    return response()->json([
+        "data" => $data_info,
+        "previledge" => [
+            'is_role_editable' => 1,
+            'is_role_deletable' => 1
+        ],
+        "status_code" => 200,
+        "type" => "save",
+        "errorMsg" => ""
+    ]);
+}catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"save");
+}
 
-    ];
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if($validator->fails()) {
-        $errorString = implode(",",$validator->messages()->all());
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>"",
-            "statusCode"=>"error",
-            "type"=>"update",
-            "errorMsg"=>$errorString
-        );
-        return response()->json($resultObject);
-    }else{
-        $requestData = $request->all();
-        $requestData['pyc_created_by']=auth()->user()->usr_Id;
-        $data_info=Modelpmspaymentcategory::create($requestData);
-        Cache::forget('payment_category');
-        $data_info['is_editable']=1;
-        $data_info['is_deletable']=1;
-        $resultObject= array(
-            "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "status_code"=>200,
-            "type"=>"save",
-            "errorMsg"=>""
-        );
-    }  
-    return response()->json($resultObject);
 }
 //Delete Data
 public function deletegrid(Request $request)
