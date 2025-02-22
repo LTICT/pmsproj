@@ -31,7 +31,7 @@ public function handleLaravelException($request, $attributeNames,$rules, $action
 	$errorString = implode(",",$validator->messages()->all());
         $resultObject= array(
             "value" =>"",
-            "status_code"=>454,
+            "status_code"=>455,
             "type"=>$actionType,
             "errorMsg"=>$errorString
         );
@@ -39,6 +39,7 @@ public function handleLaravelException($request, $attributeNames,$rules, $action
 }
 return false;
 }
+
 public function handleDatabaseException($e, $actionType){
     $errorMsg = "database_error";
     $statusCode=$e->errorInfo[0];
