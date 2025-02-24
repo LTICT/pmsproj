@@ -34,7 +34,7 @@ class TblusersectorController extends MyController
         $data['page_title']=trans("form_lang.tbl_user_sector");
         return view('user_sector.show_tbl_user_sector', $data);
     }
-    //Get List
+    //Get List of sectors
     public function listgrid(Request $request){
      $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
      $permissionData=$this->getPagePermission($request,45);
@@ -66,6 +66,22 @@ $resultObject= array(
     "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
+
+ //Get List of sectors
+public function getUserSectors(Request $request){
+    $query="SELECT sci_name_or,sci_name_am,sci_name_en,sci_id, 1 AS is_editable, 1 AS is_deletable FROM tbl_user_sector ";
+$query .=' WHERE 1=1';
+$sectorCategoryID=$request->input('sector__category_id');
+if(isset($sectorCategoryID) && isset($sectorCategoryID)){
+$query .=' AND sci_sector_category_id="'.$sectorCategoryID.'"'; 
+}
+$data_info=DB::select($query);
+$resultObject= array(
+    "data" =>$data_info,
+    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
+}
+
 //Update Data
 public function updategrid(Request $request)
 {

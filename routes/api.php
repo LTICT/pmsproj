@@ -362,9 +362,17 @@ Route::resource('request_status', 'GenrequeststatusController');
     Route::post('request_category/insertgrid', 'Api\PmsrequestcategoryController@insertgrid');
     Route::post('request_category/updategrid', 'Api\PmsrequestcategoryController@updategrid');
     Route::post('request_category/deletegrid', 'Api\PmsrequestcategoryController@deletegrid');
-    
+
     Route::post('user_sector/listgrid', 'Api\TblusersectorController@listgrid');
     Route::post('user_sector/insertgrid', 'Api\TblusersectorController@insertgrid');
     Route::post('user_sector/updategrid', 'Api\TblusersectorController@updategrid');
     Route::post('user_sector/deletegrid', 'Api\TblusersectorController@deletegrid');
+
+    Route::post('user_sector/listusersectors', 'Api\TblusersectorController@getUserSectors');
+      Route::post('program_info/listgrid', 'Api\PmsprograminfoController@listgrid');
+    Route::post('program_info/insertgrid', 'Api\PmsprograminfoController@insertgrid');
+    Route::post('program_info/updategrid', 'Api\PmsprograminfoController@updategrid');
+    Route::post('program_info/deletegrid', 'Api\PmsprograminfoController@deletegrid');
+
 });
+

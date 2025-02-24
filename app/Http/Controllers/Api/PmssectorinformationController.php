@@ -42,9 +42,9 @@ $scicode=$request->input('sci_code');
 if(isset($scicode) && isset($scicode)){
     $query .=' AND sci_code="'.$scicode.'"'; 
 }
-$scisectorcategoryid=$request->input('sci_sector_category_id');
+$scisectorcategoryid=$request->input('sector_category_id');
 if(isset($scisectorcategoryid) && isset($scisectorcategoryid)){
-    $query .=' AND sci_sector_category_id="'.$scisectorcategoryid.'"'; 
+    $query .=" AND sci_sector_category_id='".$scisectorcategoryid."'"; 
 }
 $query.=' ORDER BY sci_id ASC';
 $data_info=DB::select($query);

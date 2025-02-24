@@ -68,7 +68,7 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_description,
         prj_start_date_et,prj_start_date_gc,prj_start_date_plan_et,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,
         prj_end_date_plan_gc,prj_end_date_plan_et,prj_outcome,prj_remark,prj_created_by
-        ,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number,1 AS is_editable, 1 AS is_deletable FROM pms_project ';
+        ,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number,1 AS is_editable, 1 AS is_deletable,prj_program_id FROM pms_project ';
         $query .=' LEFT JOIN pms_project_status ON pms_project_status.prs_id= pms_project.prj_project_status_id';
         $query .=' LEFT JOIN gen_address_structure ON gen_address_structure.add_id= pms_project.prj_owner_zone_id';
         $query .=' WHERE 1=1';
@@ -128,6 +128,10 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         $prjenddateplangc=$request->input('prj_end_date_plan_gc');
         if(isset($prjenddateplangc) && isset($prjenddateplangc)){
             $query .=' AND prj_end_date_plan_gc="'.$prjenddateplangc.'"'; 
+        }
+         $programID=$request->input('program_id');
+        if(isset($programID) && isset($programID)){
+            $query .=" AND prj_program_id='".$programID."'"; 
         }
         $query.=' ORDER BY prj_id DESC';
         $data_info=DB::select($query);
@@ -257,6 +261,7 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         //Parent Id Assigment
         //$requestData['ins_vehicle_id']=$request->get('master_id');
         //$requestData['prj_created_by']=auth()->user()->usr_Id;
+            $requestData['prj_program_id']=$request->get('program_id');
             $data_info=Modelpmsproject::create($requestData);
             $resultObject= array(
                 "odata.metadata"=>"",
