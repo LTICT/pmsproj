@@ -229,6 +229,31 @@ public function handleDatabaseException($e, $actionType){
 		}, $data_info);
 		return $pagIds;*/
 	}
+	public function getAllTabPermission($request){
+		$authenticatedUser = $request->authUser;
+		$userId=$authenticatedUser->usr_id;
+		$query="SELECT pag_id
+		FROM tbl_permission 
+		INNER JOIN tbl_pages ON tbl_pages.pag_id=tbl_permission.pem_page_id
+		INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id 
+		WHERE url_user_id=".$userId." AND pag_appear_tab=1 AND pem_view='1'";
+		$data_info=DB::select($query);
+    $allowedTabs = [];
+
+    foreach ($data_info as $item) {
+            // Add to allowedTabs if page_id does not match the specified values
+            $allowedTabs[] = $item->pag_id;
+    }
+    // Return both arrays
+    return [
+        'allowedTabs' => $allowedTabs,
+    ];
+		//END TEST
+		/*$pagIds = array_map(function ($item) {
+			return $item->pag_id;
+		}, $data_info);
+		return $pagIds;*/
+	}
 	public function ownsProject($request,$projectId){
 		if(isset($projectId)){
 			$userInfo = $request->authUser;

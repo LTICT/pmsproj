@@ -26,6 +26,7 @@ Route::resource('task', 'TaskController');
 Route::resource('link', 'LinkController');
 Route::post('login', 'AuthController@login');
 Route::post('addressbyparent', 'Api\GenaddressstructureController@addressByParent');
+Route::post('departmentbyparent', 'Api\GendepartmentController@departmentByParent');
 Route::post('project_document/insertgrid', 'Api\PmsprojectdocumentController@insertgrid');
    // Route::post('department/listgrid', [\Api\GendepartmentController::class, 'listgrid'])->middleware('apilogin');
 Route::group(['middleware' => [\App\Http\Middleware\JwtMiddleware::class], 'except' => ['api/login', 'api/register']], function () {
@@ -43,6 +44,7 @@ Route::post('menus', 'Api\GenmenubuilderController@listgrid');
 
        Route::post('roles/updategrid', 'Api\TblrolesController@updategrid');
        Route::post('roles/listgrid', 'Api\TblrolesController@listgrid');
+    Route::post('departmentbyparent', 'Api\GendepartmentController@departmentByParent');
     Route::post('department/listgrid', 'Api\GendepartmentController@listgrid');
     Route::post('department/insertgrid', 'Api\GendepartmentController@insertgrid');
     Route::post('department/updategrid', 'Api\GendepartmentController@updategrid');
@@ -374,5 +376,15 @@ Route::resource('request_status', 'GenrequeststatusController');
     Route::post('program_info/updategrid', 'Api\PmsprograminfoController@updategrid');
     Route::post('program_info/deletegrid', 'Api\PmsprograminfoController@deletegrid');
 
+    Route::resource('date_setting', 'GendatesettingController');
+    Route::post('date_setting/listgrid', 'Api\GendatesettingController@listgrid');
+    Route::post('date_setting/insertgrid', 'Api\GendatesettingController@insertgrid');
+    Route::post('date_setting/updategrid', 'Api\GendatesettingController@updategrid');
+    Route::post('date_setting/deletegrid', 'Api\GendatesettingController@deletegrid');
+     Route::resource('request_followup', 'GenrequestfollowupController');
+    Route::post('request_followup/listgrid', 'Api\GenrequestfollowupController@listgrid');
+    Route::post('request_followup/insertgrid', 'Api\GenrequestfollowupController@insertgrid');
+    Route::post('request_followup/updategrid', 'Api\GenrequestfollowupController@updategrid');
+    Route::post('request_followup/deletegrid', 'Api\GenrequestfollowupController@deletegrid');
 });
 

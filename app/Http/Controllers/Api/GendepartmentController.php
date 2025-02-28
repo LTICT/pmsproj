@@ -14,6 +14,21 @@ class GendepartmentController extends MyController
     parent::__construct();
     //$this->middleware('auth');
 }
+
+public function departmentByParent(Request $request){
+   $query='SELECT dep_id AS id,dep_name_or AS name,dep_parent_id AS rootId,0 AS selected, dep_category AS dep_category FROM gen_department ';
+   $query .=' WHERE 1=1';
+   $departmentparentid=$request->input('parent_id');
+   if(isset($departmentparentid) && isset($departmentparentid)){
+    $query .= " AND dep_parent_id = '$departmentparentid'";
+}
+$data_info=DB::select($query);
+$resultObject= array(
+    "data" =>$data_info,
+    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
+}
+
 public function listgrid(Request $request){
    $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
    $permissionData=$this->getPagePermission($request,12);

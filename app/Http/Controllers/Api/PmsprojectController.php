@@ -48,7 +48,9 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
             if($userId==9){
                 $request_role='requester';
             }
+            $tabInfo=$this->getAllTabPermission($request);
             $resultObject= array(
+                'allowedTabs'=>$tabInfo['allowedTabs'],
                 "data" =>$data,
                 "data_available"=>"1",
                 "request_role"=>$request_role);
@@ -64,10 +66,10 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         //dd($permissionData);
         //dump($permissionData);
         $query='SELECT prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,add_name_or, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
-        prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,prj_location_kebele_id,
+        prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,
         prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_description,
-        prj_start_date_et,prj_start_date_gc,prj_start_date_plan_et,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,
-        prj_end_date_plan_gc,prj_end_date_plan_et,prj_outcome,prj_remark,prj_created_by
+        prj_start_date_gc,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,
+        prj_end_date_plan_gc,prj_outcome,prj_remark
         ,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number,1 AS is_editable, 1 AS is_deletable,prj_program_id FROM pms_project ';
         $query .=' LEFT JOIN pms_project_status ON pms_project_status.prs_id= pms_project.prj_project_status_id';
         $query .=' LEFT JOIN gen_address_structure ON gen_address_structure.add_id= pms_project.prj_owner_zone_id';
@@ -80,46 +82,14 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         $prjprojectcategoryid=$request->input('prj_project_category_id');
         if(isset($prjprojectcategoryid) && isset($prjprojectcategoryid)){
             $query .=" AND prj_project_category_id='".$prjprojectcategoryid."'"; 
-        }
-        $prjsectorid=$request->input('prj_sector_id');
-        if(isset($prjsectorid) && isset($prjsectorid)){
-            $query .=' AND prj_sector_id="'.$prjsectorid.'"'; 
-        }
-        $prjownerregionid=$request->input('prj_owner_region_id');
-        if(isset($prjownerregionid) && isset($prjownerregionid)){
-//$query .=' AND prj_owner_region_id="'.$prjownerregionid.'"'; 
-        }
-        $prjownerzoneid=$request->input('prj_owner_zone_id');
-        if(isset($prjownerzoneid) && isset($prjownerzoneid)){
-//$query .=' AND prj_owner_zone_id="'.$prjownerzoneid.'"'; 
-        }
-        $prjownerworedaid=$request->input('prj_owner_woreda_id');
-        if(isset($prjownerworedaid) && isset($prjownerworedaid)){
-//$query .=' AND prj_owner_woreda_id="'.$prjownerworedaid.'"'; 
-        }
-        $prjownerkebeleid=$request->input('prj_owner_kebele_id');
-        if(isset($prjownerkebeleid) && isset($prjownerkebeleid)){
-            $query .=' AND prj_owner_kebele_id="'.$prjownerkebeleid.'"'; 
-        }
-        $prjstartdateet=$request->input('prj_start_date_et');
-        if(isset($prjstartdateet) && isset($prjstartdateet)){
-            $query .=' AND prj_start_date_et="'.$prjstartdateet.'"'; 
-        }
+        }        
         $prjstartdategc=$request->input('prj_start_date_gc');
         if(isset($prjstartdategc) && isset($prjstartdategc)){
             $query .=' AND prj_start_date_gc="'.$prjstartdategc.'"'; 
         }
-        $prjstartdateplanet=$request->input('prj_start_date_plan_et');
-        if(isset($prjstartdateplanet) && isset($prjstartdateplanet)){
-            $query .=' AND prj_start_date_plan_et="'.$prjstartdateplanet.'"'; 
-        }
         $prjstartdateplangc=$request->input('prj_start_date_plan_gc');
         if(isset($prjstartdateplangc) && isset($prjstartdateplangc)){
             $query .=' AND prj_start_date_plan_gc="'.$prjstartdateplangc.'"'; 
-        }
-        $prjenddateactualet=$request->input('prj_end_date_actual_et');
-        if(isset($prjenddateactualet) && isset($prjenddateactualet)){
-            $query .=' AND prj_end_date_actual_et="'.$prjenddateactualet.'"'; 
         }
         $prjenddateactualgc=$request->input('prj_end_date_actual_gc');
         if(isset($prjenddateactualgc) && isset($prjenddateactualgc)){

@@ -20,14 +20,12 @@ class Modelgendepartment extends Model
     */
     protected $primaryKey = 'dep_id';
 
-    /**
+/**
      * Attributes that should be mass-assignable.
      *
      * @var array
      */
-    protected $fillable = ['dep_id','dep_name_or','dep_name_am','dep_name_en','dep_code','dep_available_at_region','dep_available_at_zone','dep_available_at_woreda','dep_description','dep_create_time','dep_update_time','dep_delete_time','dep_created_by','dep_status',];
-
-    
+    protected $fillable = ['dep_id','dep_name_or','dep_name_am','dep_name_en','dep_code','dep_available_at_region','dep_available_at_zone','dep_available_at_woreda','dep_description','dep_create_time','dep_update_time','dep_delete_time','dep_created_by','dep_status','dep_parent_id','dep_category'];
 
     /**
      * Change activity log event description
