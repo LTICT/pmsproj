@@ -177,6 +177,9 @@ public function updategrid(Request $request)
             //$requestData['add_name_or']= $request->input('name');
         //$requestData['add_parent_id']= $request->input('rootId');
         //$requestData['add_id']= $request->input('id');
+        $requestData['usr_directorate_id'] = $request->input('usr_directorate_id') ?: 0;
+        $requestData['usr_team_id'] = $request->input('usr_team_id') ?: 0;
+        $requestData['usr_officer_id'] = $request->input('usr_officer_id') ?: 0;
         $data_info->update($requestData);
              //$new_data_info['id']= $request->input('id');
         //$new_data_info['name']= $request->input('name');
@@ -251,6 +254,9 @@ public function insertgrid(Request $request)
         //$requestData['add_name_or']= $request->input('name');
         //$requestData['add_name_or']= $request->input('name');
         //$requestData['add_parent_id']= $request->input('rootId');
+        $requestData['usr_directorate_id'] = $request->input('usr_directorate_id') ?: 0;
+        $requestData['usr_team_id'] = $request->input('usr_team_id') ?: 0;
+        $requestData['usr_officer_id'] = $request->input('usr_officer_id') ?: 0;
         $data_info=Modelgenaddressstructure::create($requestData);
         Cache::forget('address');
         /*$new_data_info['add']= $data_info->add_id;

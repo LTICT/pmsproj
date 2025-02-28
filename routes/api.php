@@ -44,7 +44,7 @@ Route::post('menus', 'Api\GenmenubuilderController@listgrid');
 
        Route::post('roles/updategrid', 'Api\TblrolesController@updategrid');
        Route::post('roles/listgrid', 'Api\TblrolesController@listgrid');
-    Route::post('departmentbyparent', 'Api\GendepartmentController@departmentByParent');
+    Route::post('department/departmentbyparent', 'Api\GendepartmentController@departmentByParent');
     Route::post('department/listgrid', 'Api\GendepartmentController@listgrid');
     Route::post('department/insertgrid', 'Api\GendepartmentController@insertgrid');
     Route::post('department/updategrid', 'Api\GendepartmentController@updategrid');

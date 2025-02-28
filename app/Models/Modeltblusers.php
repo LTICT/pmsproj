@@ -27,9 +27,7 @@ class Modeltblusers extends Model
      */
     protected $fillable = ['usr_id','usr_email','usr_password','usr_full_name','usr_phone_number','usr_role_id','usr_region_id','usr_zone_id','usr_woreda_id',
     'usr_kebele_id','usr_sector_id','usr_department_id','usr_is_active','usr_picture','usr_last_logged_in','usr_ip','usr_remember_token','usr_notified',
-    'usr_description','usr_create_time','usr_update_time','usr_delete_time','usr_created_by','usr_status','email','password'];
-
-    
+    'usr_description','usr_create_time','usr_update_time','usr_delete_time','usr_created_by','usr_status','email','password','usr_directorate_id','usr_team_id','usr_officer_id'];
 
     /**
      * Change activity log event description
