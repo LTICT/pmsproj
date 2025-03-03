@@ -41,4 +41,3 @@ class Modeltblusers extends Model
         return __CLASS__ . " model has been {$eventName}";
     }
 }
-

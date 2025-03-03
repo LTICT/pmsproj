@@ -265,6 +265,8 @@ public function updategrid(Request $request)
         //$requestData['password']=bcrypt($request->get('usr_password'));
         //$requestData['usr_password']=bcrypt($request->get('usr_password'));
         $data_info->update($requestData);
+        unset($data_info['usr_password']);
+        unset($data_info['password']);
         $ischanged=$data_info->wasChanged();
         if($ischanged){
          $resultObject= array(

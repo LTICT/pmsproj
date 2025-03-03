@@ -16,20 +16,36 @@ class PmsbudgetrequestapprovalController extends MyController
  
     public function listgrid(Request $request){
     $userInfo=$this->getUserInfo($request);
+    //dd($userInfo);
         //if(isset($userInfo)){
+    //get user info from logged in user
             $zoneId=$userInfo->usr_zone_id;
             $woredaId=$userInfo->usr_woreda_id;
             $sectorId=$userInfo->usr_sector_id;
             $departmentId=$userInfo->usr_department_id;
-if($zoneId==0 && $woredaId==0 && $sectorId==1){
-    $query='SELECT rqs_description AS color_code, rqs_name_en AS status_name, bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
+            $directorateId=$userInfo->usr_directorate_id;
+            $teamId=$userInfo->usr_team_id;
+            $officerId=$userInfo->usr_officer_id;
+
+            $query='SELECT rqs_description AS color_code, rqs_name_en AS status_name, bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
      bdr_released_amount,bdr_project_id,bdr_requested_date_ec,bdr_requested_date_gc,
      bdr_released_date_ec,bdr_released_date_gc,bdr_description,bdr_create_time,bdr_update_time,
      bdr_delete_time,bdr_created_by,bdr_status,bdr_action_remark,1 AS is_editable, 1 AS is_deletable 
      FROM pms_budget_request 
      INNER JOIN pms_project ON pms_project.prj_id=pms_budget_request.bdr_project_id
      INNER JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_budget_request.bdr_budget_year_id
-     LEFT JOIN gen_request_status ON gen_request_status.rqs_id=pms_budget_request.bdr_request_status';
+     INNER JOIN gen_request_status ON gen_request_status.rqs_id=pms_budget_request.bdr_request_status';
+
+if($directorateId>0 && $teamId==0 && $officerId==0){
+    $query .=" INNER JOIN gen_request_followup ON gen_request_followup.rqf_request_id=pms_budget_request.bdr_id AND
+    rqf_forwarded_to_dep_id=".$directorateId."  ";
+}else if($directorateId>0 && $teamId>0 && $officerId==0){
+    $query .=" INNER JOIN gen_request_followup ON gen_request_followup.rqf_request_id=pms_budget_request.bdr_id AND
+    rqf_forwarded_to_dep_id=".$teamId."  ";
+}else if($directorateId>0 && $teamId>0 && $officerId>0){
+    $query .=" INNER JOIN gen_request_followup ON gen_request_followup.rqf_request_id=pms_budget_request.bdr_id AND
+    rqf_forwarded_to_dep_id=".$officerId."  ";
+}    
      $query .=' WHERE 1=1';
      
 $requestStatus=$request->input('bdr_request_status');
@@ -83,31 +99,17 @@ if(isset($bdrprojectid) && isset($bdrprojectid)){
 $query .= " AND bdr_project_id = '$bdrprojectid'";
 
 }
-$bdrrequesteddateec=$request->input('bdr_requested_date_ec');
-if(isset($bdrrequesteddateec) && isset($bdrrequesteddateec)){
-$query .=' AND bdr_requested_date_ec="'.$bdrrequesteddateec.'"'; 
-}
-$bdrrequesteddategc=$request->input('bdr_requested_date_gc');
-if(isset($bdrrequesteddategc) && isset($bdrrequesteddategc)){
-$query .=' AND bdr_requested_date_gc="'.$bdrrequesteddategc.'"'; 
-}
-$bdrreleaseddateec=$request->input('bdr_released_date_ec');
-if(isset($bdrreleaseddateec) && isset($bdrreleaseddateec)){
-$query .=' AND bdr_released_date_ec="'.$bdrreleaseddateec.'"'; 
-}
-$bdrreleaseddategc=$request->input('bdr_released_date_gc');
-if(isset($bdrreleaseddategc) && isset($bdrreleaseddategc)){
-$query .=' AND bdr_released_date_gc="'.$bdrreleaseddategc.'"'; 
-}
 //if user is assinged to a department
 if($departmentId > 1){
-    $query .=" AND prj_department_id='".$departmentId."'"; 
+    //$query .=" AND prj_department_id='".$departmentId."'"; 
 }
+//dd($query);
 $query.=' ORDER BY bdr_id DESC';
 $data_info=DB::select($query);
-}else{
+$this->getQueryInfo($query);
+/*}else{
     $data_info=array();
-}
+}*/
 $resultObject= array(
     "data" =>$data_info,
     "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));

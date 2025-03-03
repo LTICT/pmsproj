@@ -59,9 +59,11 @@ if(isset($pridescription) && isset($pridescription)){
 $query .=' AND pri_description="'.$pridescription.'"'; 
 }
 $data_info=DB::select($query);
+$permission=$this->getDateParameter(1)==true ? 1 : 0;
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+    "previledge"=>array('is_role_editable'=>$permission,'is_role_deletable'=>$permission,'is_role_can_add'=>$permission)
+);
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 //Update Data

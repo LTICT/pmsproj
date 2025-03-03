@@ -36,6 +36,7 @@ Route::post('project/insertgrid', 'Api\PmsprojectController@insertgrid');
 Route::post('project/updategrid', 'Api\PmsprojectController@updategrid');
 Route::post('project/deletegrid', 'Api\PmsprojectController@deletegrid');
 Route::post('project/search', 'PmsprojectController@search');
+Route::post('project/listgridsearch', 'Api\PmsprojectController@listgridsearch');
 
  Route::post('dashboard_builder', 'Api\GendashboardbuilderController@dashboardData');
  Route::post('superset_dashboard', 'Api\GendashboardbuilderController@supersetData');
@@ -348,7 +349,7 @@ Route::resource('conversation_information', 'GenconversationinformationControlle
     Route::post('request_information/insertgrid', 'Api\GenrequestinformationController@insertgrid');
     Route::post('request_information/updategrid', 'Api\GenrequestinformationController@updategrid');
     Route::post('request_information/deletegrid', 'Api\GenrequestinformationController@deletegrid');
-Route::resource('request_status', 'GenrequeststatusController');
+    Route::resource('request_status', 'GenrequeststatusController');
     Route::post('request_status/listgrid', 'Api\GenrequeststatusController@listgrid');
     Route::post('request_status/insertgrid', 'Api\GenrequeststatusController@insertgrid');
     Route::post('request_status/updategrid', 'Api\GenrequeststatusController@updategrid');
@@ -369,9 +370,10 @@ Route::resource('request_status', 'GenrequeststatusController');
     Route::post('user_sector/insertgrid', 'Api\TblusersectorController@insertgrid');
     Route::post('user_sector/updategrid', 'Api\TblusersectorController@updategrid');
     Route::post('user_sector/deletegrid', 'Api\TblusersectorController@deletegrid');
-
+    Route::post('user_sector/listgridtree', 'Api\TblusersectorController@listgridtree');
+    
     Route::post('user_sector/listusersectors', 'Api\TblusersectorController@getUserSectors');
-      Route::post('program_info/listgrid', 'Api\PmsprograminfoController@listgrid');
+    Route::post('program_info/listgrid', 'Api\PmsprograminfoController@listgrid');
     Route::post('program_info/insertgrid', 'Api\PmsprograminfoController@insertgrid');
     Route::post('program_info/updategrid', 'Api\PmsprograminfoController@updategrid');
     Route::post('program_info/deletegrid', 'Api\PmsprograminfoController@deletegrid');
@@ -381,10 +383,15 @@ Route::resource('request_status', 'GenrequeststatusController');
     Route::post('date_setting/insertgrid', 'Api\GendatesettingController@insertgrid');
     Route::post('date_setting/updategrid', 'Api\GendatesettingController@updategrid');
     Route::post('date_setting/deletegrid', 'Api\GendatesettingController@deletegrid');
-     Route::resource('request_followup', 'GenrequestfollowupController');
+    Route::resource('request_followup', 'GenrequestfollowupController');
     Route::post('request_followup/listgrid', 'Api\GenrequestfollowupController@listgrid');
     Route::post('request_followup/insertgrid', 'Api\GenrequestfollowupController@insertgrid');
     Route::post('request_followup/updategrid', 'Api\GenrequestfollowupController@updategrid');
     Route::post('request_followup/deletegrid', 'Api\GenrequestfollowupController@deletegrid');
+
+    Route::post('cso_info/listgrid', 'Api\PmscsoinfoController@listgrid');
+    Route::post('cso_info/insertgrid', 'Api\PmscsoinfoController@insertgrid');
+    Route::post('cso_info/updategrid', 'Api\PmscsoinfoController@updategrid');
+    Route::post('cso_info/deletegrid', 'Api\PmscsoinfoController@deletegrid');
 });
 

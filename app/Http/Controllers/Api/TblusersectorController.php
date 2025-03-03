@@ -66,6 +66,27 @@ $resultObject= array(
     "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
+//Get List of sectors
+    public function listgridtree(Request $request){
+     $query="SELECT psc_id, psc_name,sci_id, sci_name_or,sci_name_am,sci_name_en FROM tbl_user_sector 
+     INNER JOIN pms_sector_information ON pms_sector_information.sci_id=tbl_user_sector.usc_sector_id";
+     $query .=' INNER JOIN prj_sector_category ON prj_sector_category.psc_id=pms_sector_information.sci_sector_category_id';
+     $query .=' WHERE usc_status=1';
+$authenticatedUser = $request->authUser;
+        $userId=$authenticatedUser->usr_id;
+
+$query .=" AND usc_user_id='".$userId."'"; 
+$sectorcategory=$request->input('sector_category_id');
+if(isset($sectorcategory) && isset($sectorcategory)){
+$query .=" AND sci_sector_category_id='".$sectorcategory."'"; 
+}
+$data_info=DB::select($query);
+//$this->getQueryInfo($query);
+$resultObject= array(
+    "data" =>$data_info,
+    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
+}
 
  //Get List of sectors
 public function getUserSectors(Request $request){

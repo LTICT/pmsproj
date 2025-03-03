@@ -15,8 +15,8 @@ class PmsbudgetrequestController extends MyController
 }
  
     public function listgrid(Request $request){
-    $permissionData=$this->getPagePermission($request,9);
-    $query='SELECT rqs_description AS color_code, rqs_name_en AS status_name, bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
+    $permissionData=$this->getPagePermission($request,34);
+    $query='SELECT sci_name_en AS sector_name, rqs_description AS color_code, rqs_name_en AS status_name, bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
      bdr_released_amount,bdr_project_id,bdr_requested_date_ec,bdr_requested_date_gc,
      bdr_released_date_ec,bdr_released_date_gc,bdr_description,bdr_create_time,bdr_update_time,
      bdr_delete_time,bdr_created_by,bdr_status,bdr_action_remark,1 AS is_editable, 1 AS is_deletable 
@@ -24,6 +24,7 @@ class PmsbudgetrequestController extends MyController
      INNER JOIN pms_project ON pms_project.prj_id=pms_budget_request.bdr_project_id
      INNER JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_budget_request.bdr_budget_year_id
      LEFT JOIN gen_request_status ON gen_request_status.rqs_id=pms_budget_request.bdr_request_status';
+      $query .=' LEFT JOIN pms_sector_information ON pms_sector_information.sci_id= pms_project.prj_sector_id';
      $query .=' WHERE 1=1';
      
 $requestStatus=$request->input('bdr_request_status');
@@ -53,7 +54,6 @@ $query .=' AND bdr_released_amount="'.$bdrreleasedamount.'"';
 $bdrprojectid=$request->input('project_id');
 if(isset($bdrprojectid) && isset($bdrprojectid)){
 $query .= " AND bdr_project_id = '$bdrprojectid'";
-
 }
 $bdrrequesteddateec=$request->input('bdr_requested_date_ec');
 if(isset($bdrrequesteddateec) && isset($bdrrequesteddateec)){
@@ -71,14 +71,22 @@ $bdrreleaseddategc=$request->input('bdr_released_date_gc');
 if(isset($bdrreleaseddategc) && isset($bdrreleaseddategc)){
 $query .=' AND bdr_released_date_gc="'.$bdrreleaseddategc.'"'; 
 }
-$query =$this->getSearchParam($request,$query);
+$requesttype=$request->input('request_type');
+if(isset($requesttype) && !empty($requesttype) && $requesttype=='single'){
+$bdrprojectid=$request->input('project_id');
+if(isset($bdrprojectid) && isset($bdrprojectid)){
+$query .= " AND bdr_project_id = '$bdrprojectid'";
+}
+}else{
+    $query =$this->getSearchParam($request,$query);
+}
+//
 //$this->getQueryInfo($query);
 $query.=' ORDER BY bdr_id DESC';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 2,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0),
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 2,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$this->getDateParameter(2) ? ($permissionData->pem_insert ?? 0) : 0));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
