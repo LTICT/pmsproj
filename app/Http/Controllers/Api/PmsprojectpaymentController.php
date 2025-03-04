@@ -27,20 +27,6 @@ $endTime=$request->input('payment_dateEnd');
 if(isset($endTime) && isset($endTime)){
 $query .=" AND prp_payment_date_gc <='".$endTime." 23 59 59'"; 
 }
-/*
-$prjlocationregionid=$request->input('prj_location_region_id');
-if(isset($prjlocationregionid) && isset($prjlocationregionid)){
-//$query .=" AND prj_location_region_id='".$prjlocationregionid."'"; 
-}
-$prjlocationzoneid=$request->input('prj_location_zone_id');
-if(isset($prjlocationzoneid) && isset($prjlocationzoneid)){
-$query .=" AND prj_location_zone_id='".$prjlocationzoneid."'"; 
-}
-$prjlocationworedaid=$request->input('prj_location_woreda_id');
-if(isset($prjlocationworedaid) && isset($prjlocationworedaid)){
-$query .=" AND prj_location_woreda_id='".$prjlocationworedaid."'"; 
-}*/
-
 $prpprojectid=$request->input('project_id');
 if(isset($prpprojectid) && isset($prpprojectid)){
 $query .= " AND prp_project_id = '".$prpprojectid."'";

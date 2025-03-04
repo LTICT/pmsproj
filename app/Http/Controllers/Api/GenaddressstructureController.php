@@ -323,8 +323,7 @@ public function listaddress(Request $request){
             $zoneId=$userInfo->usr_zone_id;
             $woredaId=$userInfo->usr_woreda_id;
             //if user is zone or woreda user
-  if($zoneId > 0 || $woredaId > 0){
-   // if(){
+  if( $woredaId > 0){
    $query='WITH RECURSIVE address_hierarchy AS (
     SELECT 
     add_id AS id,
@@ -345,10 +344,37 @@ public function listaddress(Request $request){
         g.add_parent_id AS "rootId",
         ARRAY[]::json[] AS children
         FROM gen_address_structure g
-    INNER JOIN address_hierarchy h ON g.add_parent_id::text = h.id::text -- Link child nodes to parents
+    INNER JOIN address_hierarchy h ON g.add_parent_id::text = h.id::text AND add_id::integer = '.$woredaId.'::integer -- Link child nodes to parents
 )
    SELECT * FROM address_hierarchy';
-}else{
+   //AND add_parent_id::text = '.$woredaId.'::text
+}else if($zoneId > 0 ){
+   // if(){
+   $query='WITH RECURSIVE address_hierarchy AS (
+    SELECT 
+    add_id AS id,
+    add_name_or AS name,
+    add_name_am AS add_name_am,
+    add_name_en AS add_name_en,
+    add_parent_id AS "rootId",
+        ARRAY[]::json[] AS children -- Initialize children as empty array
+        FROM gen_address_structure 
+        INNER JOIN tbl_users ON tbl_users.usr_zone_id = gen_address_structure.add_id
+        WHERE usr_id = '.$userId.'
+        UNION ALL
+        SELECT 
+        g.add_id AS id,
+        g.add_name_or AS name,
+        g.add_name_am AS add_name_am,
+        g.add_name_en AS add_name_en,
+        g.add_parent_id AS "rootId",
+        ARRAY[]::json[] AS children
+        FROM gen_address_structure g
+    INNER JOIN address_hierarchy h ON g.add_parent_id::text = h.id::text  -- Link child nodes to parents
+)
+   SELECT * FROM address_hierarchy';
+}
+else{
  $query='WITH RECURSIVE address_hierarchy AS (
     SELECT 
     add_id AS id,

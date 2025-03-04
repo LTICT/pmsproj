@@ -66,7 +66,7 @@ $resultObject= array(
     "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
-//Get List of sectors
+//Get List of sectors along with sector category
     public function listgridtree(Request $request){
      $query="SELECT psc_id, psc_name,sci_id, sci_name_or,sci_name_am,sci_name_en FROM tbl_user_sector 
      INNER JOIN pms_sector_information ON pms_sector_information.sci_id=tbl_user_sector.usc_sector_id";

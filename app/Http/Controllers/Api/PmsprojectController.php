@@ -141,8 +141,9 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
             $query .=" AND prj_program_id='".$programID."'"; 
         }
         $query.=' ORDER BY prj_id DESC';
-        $data_info=DB::select($query);
         //$this->getQueryInfo($query);
+        $data_info=DB::select($query);
+        
         $tabInfo=$this->getTabPermission($request);
         $resultObject= array(
             "data" =>$data_info,

@@ -14,7 +14,7 @@ class PmsprojectperformanceController extends MyController
     //$this->middleware('auth');
 }
     public function listgrid(Request $request){
-        $permissionData=$this->getPagePermission($request,37);
+       // $permissionData=$this->getPagePermission($request,37);
         //dd($permissionData);
      $query='SELECT prj_name,prj_code,prp_id,prp_project_id,prp_project_status_id,prp_record_date_ec,prp_record_date_gc,prp_total_budget_used,prp_physical_performance,prp_description,prp_status,prp_created_by,prp_created_date,prp_create_time,prp_update_time,prp_termination_reason_id,1 AS is_editable, 1 AS is_deletable,prp_budget_year_id,prp_budget_month_id,
      bdy_name AS year_name,bdm_month AS month_name,prs_status_name_or AS status_name FROM pms_project_performance ';       
@@ -52,18 +52,17 @@ $query=$this->getSearchParam($request,$query);
 $query.=' ORDER BY prp_id DESC';
 $data_info=DB::select($query);
 $previledge=array('is_role_editable'=>0,'is_role_deletable'=>0,'is_role_can_add'=>0);
-//$permission=$this->ownsProject($request,$prpprojectid);
-//dump($permissionData);
-if($permissionData !=null)
+$permission=$this->ownsProject($request,$prpprojectid);
+if($permission !=null)
 {
-   $previledge=array('is_role_editable'=>$permissionData->pem_edit ?? 2,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0); 
+   $previledge=array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1); 
 }
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>$previledge
-);
+    "previledge"=>$previledge);
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
+
 public function updategrid(Request $request)
 {
     $attributeNames = [

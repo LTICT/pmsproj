@@ -12,129 +12,7 @@ class PmsprojectplanController extends MyController
    {
     parent::__construct();
     //$this->middleware('auth');
-}
- /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\View\View
-     */
- public function index(Request $request)
- {
-    $selectedLanguage=app()->getLocale();
-    if($selectedLanguage=="or"){
-        $filepath = base_path() .'\resources\lang\or\ag_grid.php';
-    }else if($selectedLanguage=="en"){
-        $filepath = base_path() .'\resources\lang\en\ag_grid.php';
-    }else if($selectedLanguage=="am"){
-        $filepath = base_path() .'\resources\lang\am\ag_grid.php';
-    }
-    $filepath = base_path() .'\resources\lang\en\ag_grid.php';
-    $txt = file_get_contents($filepath);
-    $data['ag_grid_lang']=$txt;
-    $searchParams= $this->getSearchSetting('pms_project_plan');
-    $dataInfo = Modelpmsprojectplan::latest();
-    $this->searchQuery($searchParams, $request,$dataInfo);
-    $perPage = 20;
-    $dataInfo =$dataInfo->paginate($perPage);
-    $data['pms_project_plan_data']=$dataInfo;
-    $generatedSearchInfo= $this->displaySearchForm($searchParams, $request,false, 1, true);
-    $generatedSearchInfo=explode("@", $generatedSearchInfo);
-    $generatedSearchForm=$generatedSearchInfo[0];
-    $generatedSearchTitle=$generatedSearchInfo[1];
-    $data['searchForm']=$generatedSearchForm;
-    $data['searchTitle']=$generatedSearchTitle;
-    $data['page_title']=trans("form_lang.pms_project_plan");
-    return view('project_plan.list_pms_project_plan', $data);
-}
-function getForm(Request $request)
-{
-    $id=$request->get('id');
-    
-    
-    $data['is_editable']=1;
-    if(isset($id) && !empty($id)){
-       $data_info = Modelpmsprojectplan::findOrFail($id);                
-       if(isset($data_info) && !empty($data_info)){
-        $controllerName="PmsprojectplanController";
-        $data= $this->validateEdit($data, $data_info['pld_create_time'], $controllerName);
-        $data['pms_project_plan_data']=$data_info;
-    }
-}
-$data['page_title']=trans("form_lang.pms_project_plan");
-$form= view('project_plan.form_popup_pms_project_plan', $data)->render();
-$resultObject = array(
-    "" => "", "form" => $form, 'pageTitle'=>trans('form_lang.pms_project_plan'));
-return response()->json($resultObject);
-}
-function getListForm(Request $request)
-{
-    $id=$request->get('id');
-    $data['page_title']='';
-    $form= view('project_plan.editable_list_pms_project_plan', $data)->render();
-    $resultObject = array(
-        "" => "", "form" => $form, 'page_info'=>trans('form_lang.pms_project_plan'));
-    return response()->json($resultObject);
-    //echo json_encode($resultObject, JSON_NUMERIC_CHECK);
-}
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
-    {
-        
-        
-        $data['page_title']=trans("form_lang.pms_project_plan");
-        $data['action_mode']="create";
-        return view('project_plan.form_pms_project_plan', $data);
-    }
-    /**`
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function store(Request $request)
-    {
-       $attributeNames = [
-        'pld_name'=> trans('form_lang.pld_name'), 
-'pld_project_id'=> trans('form_lang.pld_project_id'), 
-'pld_budget_year_id'=> trans('form_lang.pld_budget_year_id'), 
-'pld_start_date_ec'=> trans('form_lang.pld_start_date_ec'), 
-'pld_start_date_gc'=> trans('form_lang.pld_start_date_gc'), 
-'pld_end_date_ec'=> trans('form_lang.pld_end_date_ec'), 
-'pld_end_date_gc'=> trans('form_lang.pld_end_date_gc'), 
-'pld_description'=> trans('form_lang.pld_description'), 
-'pld_status'=> trans('form_lang.pld_status'), 
-
-    ];
-    $rules= [
-        'pld_name'=> 'max:200', 
-'pld_project_id'=> 'max:200', 
-'pld_budget_year_id'=> 'max:200', 
-'pld_start_date_ec'=> 'max:200', 
-'pld_start_date_gc'=> 'max:200', 
-'pld_end_date_ec'=> 'max:200', 
-'pld_end_date_gc'=> 'max:200', 
-'pld_description'=> 'max:425', 
-'pld_status'=> 'integer', 
-
-    ]; 
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if (!$validator->fails()) {
-        $requestData = $request->all();
-        $requestData['pld_created_by']=auth()->user()->usr_Id;
-        Modelpmsprojectplan::create($requestData);
-        return redirect('project_plan')->with('flash_message',  trans('form_lang.insert_success'));
-    }else{
-        return redirect('project_plan/create')
-        ->withErrors($validator)
-        ->withInput();
-    }
-}
+} 
     /**
      * Display the specified resource.
      *
@@ -156,91 +34,8 @@ function getListForm(Request $request)
         $data['page_title']=trans("form_lang.pms_project_plan");
         return view('project_plan.show_pms_project_plan', $data);
     }
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\View\View
-     */
-    public function edit($id)
-    {
-        
-        
-        $data_info = Modelpmsprojectplan::find($id);
-        $data['pms_project_plan_data']=$data_info;
-        $data['page_title']=trans("form_lang.pms_project_plan");
-        $data['action_mode']="edit";
-        $data['record_id']=$id;
-        return view('project_plan.form_pms_project_plan', $data);
-    }
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function update(Request $request, $id)
-    {
-     $attributeNames = [
-        'pld_name'=> trans('form_lang.pld_name'), 
-'pld_project_id'=> trans('form_lang.pld_project_id'), 
-'pld_budget_year_id'=> trans('form_lang.pld_budget_year_id'), 
-'pld_start_date_ec'=> trans('form_lang.pld_start_date_ec'), 
-'pld_start_date_gc'=> trans('form_lang.pld_start_date_gc'), 
-'pld_end_date_ec'=> trans('form_lang.pld_end_date_ec'), 
-'pld_end_date_gc'=> trans('form_lang.pld_end_date_gc'), 
-'pld_description'=> trans('form_lang.pld_description'), 
-'pld_status'=> trans('form_lang.pld_status'), 
-
-    ];
-    $rules= [
-        'pld_name'=> 'max:200', 
-'pld_project_id'=> 'max:200', 
-'pld_budget_year_id'=> 'max:200', 
-'pld_start_date_ec'=> 'max:200', 
-'pld_start_date_gc'=> 'max:200', 
-'pld_end_date_ec'=> 'max:200', 
-'pld_end_date_gc'=> 'max:200', 
-'pld_description'=> 'max:425', 
-'pld_status'=> 'integer', 
-
-    ];     
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if (!$validator->fails()) {
-     $requestData = $request->all();
-     $data_info = Modelpmsprojectplan::findOrFail($id);
-     $data_info->update($requestData);
-     $ischanged=$data_info->wasChanged();
-     if($ischanged){
-         return redirect('project_plan')->with('flash_message',  trans('form_lang.update_success'));
-     }else{
-        return redirect('project_plan/'.$id.'/edit')
-        ->with('flash_message',trans('form_lang.not_changed') )
-        ->withInput();
-    }
-}else{
-    return redirect('project_plan/'.$id.'/edit')
-    ->withErrors($validator)
-    ->withInput();
-}
-}
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function destroy($id)
-    {
-        Modelpmsprojectplan::destroy($id);
-        return redirect('project_plan')->with('flash_message',  trans('form_lang.delete_success'));
-    }
     public function listgrid(Request $request){
+    //$permissionData=$this->getPagePermission($request,61);
      $query='SELECT prj_name,prj_code,bdy_name, pld_id,pld_name,pld_project_id,pld_budget_year_id,pld_start_date_ec,pld_start_date_gc,pld_end_date_ec,pld_end_date_gc,pld_description,pld_create_time,pld_update_time,pld_delete_time,pld_created_by,pld_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_plan ';       
      $query .= ' INNER JOIN pms_budget_year ON pms_project_plan.pld_budget_year_id = pms_budget_year.bdy_id';
      $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_plan.pld_project_id';
@@ -304,9 +99,16 @@ $query .=' AND pld_end_date_gc="'.$pldenddategc.'"';
 $query =$this->getSearchParam($request,$query);
 $query.=' ORDER BY pld_id';
 $data_info=DB::select($query);
+$previledge=array('is_role_editable'=>0,'is_role_deletable'=>0,'is_role_can_add'=>0);
+$permission=$this->ownsProject($request,$pldprojectid);
+if($permission !=null)
+{
+   $previledge=array('is_role_can_add'=>$this->getDateParameter(4) ? 1 : 0,'is_role_deletable'=>1,'is_role_can_add'=>1); 
+}
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+    "previledge"=>$previledge);
+
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)

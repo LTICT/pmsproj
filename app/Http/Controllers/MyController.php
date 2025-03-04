@@ -118,9 +118,9 @@ public function handleDatabaseException($e, $actionType){
 			}
 
 			if(isset($sectorId) && !empty($sectorId) && $sectorId > 1){
-				$query .=" AND prj_sector_id='".$sectorId."'";   
+				//$query .=" AND prj_sector_id='".$sectorId."'";   
 			}else if(isset($projectSectorID) && isset($projectSectorID) && $projectSectorID>1){
-				$query .=" AND prj_sector_id='".$projectSectorID."'";   
+				//$query .=" AND prj_sector_id='".$projectSectorID."'";   
 			}
 			if(isset($departmentId) && !empty($departmentId) && $departmentId > 1){
 				//$query .=" AND prj_department_id='".$departmentId."'";   
@@ -271,16 +271,26 @@ public function handleDatabaseException($e, $actionType){
 			$woredaId=$userInfo->usr_woreda_id;
 			$sectorId=$userInfo->usr_sector_id;
 			$departmentId=$userInfo->usr_department_id;
+			$userId=$userInfo->usr_id;
+			$query="SELECT prj_id FROM pms_project ";
+			$query .="WHERE prj_id=".$projectId." ";
+			$query .=" AND prj_owner_zone_id='".$zoneId."'"; 
+			$query .=" AND prj_owner_woreda_id='".$woredaId."'";
 
-			$query="SELECT prj_id FROM pms_project 
-			WHERE prj_owner_zone_id=".$zoneId." 
-			AND prj_owner_zone_id=".$zoneId." 
-			AND prj_owner_woreda_id=".$woredaId." 
-			AND prj_department_id=".$departmentId." 
-			AND prj_sector_id=".$sectorId." 
-			AND  prj_id=".$projectId."";
+			//user sector should be set
+			$query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_user_id=".$userId." )";
+			if(isset($zoneId) && isset($zoneId) && $zoneId > 0){
+				
+			}
+			if(isset($woredaId) && isset($woredaId) && $woredaId > 0){
+				
+			}
       //AND prj_owner_woreda_id=usr_woreda_id WHERE usr_id=".$userId."
+			//AND prj_department_id=
+			//AND prj_sector_id=".$sectorId." 
+			//$this->getQueryInfo($query);
 			$data_info=DB::select($query);
+			//dd($data_info);
 			if(isset($data_info) && !empty($data_info)){
 				return $data_info[0];
 			}
