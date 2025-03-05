@@ -222,10 +222,14 @@ public function handleDatabaseException($e, $actionType){
 		/*if($PageInfo=="project_info" && ($sectorId==1 || $departmentId==1) && $zoneId==0 && $woredaId==0){
 			return null;
 		}*/
-		$query="SELECT tbl_permission.*
+		$query="SELECT MIN(pem_role_id) AS pem_role_id, MIN(pem_page_id) AS pem_page_id,
+    MIN(tbl_permission.pem_insert) AS min_pem_edit,  
+    MIN(tbl_permission.pem_delete) AS min_pem_delete,
+    MIN(tbl_permission.pem_insert) AS pem_insert,  
+    MIN(tbl_permission.pem_enabled) AS pem_enabled
 		FROM tbl_permission 
 		INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id 
-		WHERE url_user_id=".$userId." AND pem_page_id=".$pageId."";
+		WHERE url_user_id=".$userId." AND pem_page_id=".$pageId." GROUP BY url_user_id";
 		$data_info=DB::select($query);
 		// $this->getQueryInfo($query);
 		if(isset($data_info) && !empty($data_info)){
