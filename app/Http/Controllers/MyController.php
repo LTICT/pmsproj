@@ -223,8 +223,8 @@ public function handleDatabaseException($e, $actionType){
 			return null;
 		}*/
 		$query="SELECT MIN(pem_role_id) AS pem_role_id, MIN(pem_page_id) AS pem_page_id,
-    MIN(tbl_permission.pem_insert) AS min_pem_edit,  
-    MIN(tbl_permission.pem_delete) AS min_pem_delete,
+    MIN(tbl_permission.pem_insert) AS pem_edit,  
+    MIN(tbl_permission.pem_delete) AS pem_delete,
     MIN(tbl_permission.pem_insert) AS pem_insert,  
     MIN(tbl_permission.pem_enabled) AS pem_enabled
 		FROM tbl_permission 
