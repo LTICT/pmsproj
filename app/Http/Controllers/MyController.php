@@ -81,6 +81,7 @@ public function handleDatabaseException($e, $actionType){
 		$userInfo=$this->getUserInfo($request);
     //&& $userInfo->usr_id !=9
 		if(isset($userInfo)){
+			$userId=$userInfo->usr_id;
 			$zoneId=$userInfo->usr_zone_id;
 			$woredaId=$userInfo->usr_woreda_id;
 			$sectorId=$userInfo->usr_sector_id;
@@ -117,6 +118,7 @@ public function handleDatabaseException($e, $actionType){
 				$query .=" AND prj_owner_woreda_id=0"; 
 			}
 
+			$query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_user_id=".$userId." )";
 			if(isset($sectorId) && !empty($sectorId) && $sectorId > 1){
 				//$query .=" AND prj_sector_id='".$sectorId."'";   
 			}else if(isset($projectSectorID) && isset($projectSectorID) && $projectSectorID>1){
@@ -300,7 +302,7 @@ public function handleDatabaseException($e, $actionType){
 	public function getUserInfo(Request $request){
 		$authenticatedUser = $request->authUser;
 		$userId=$authenticatedUser->usr_id;
-		$query="SELECT usr_directorate_id,usr_team_id,usr_officer_id,usr_id,usr_zone_id,usr_woreda_id,usr_department_id,usr_sector_id
+		$query="SELECT usr_owner_id, usr_directorate_id,usr_team_id,usr_officer_id,usr_id,usr_zone_id,usr_woreda_id,usr_department_id,usr_sector_id
 		FROM tbl_users 
 		WHERE usr_id=".$userId."";
 		$data_info=DB::select($query);

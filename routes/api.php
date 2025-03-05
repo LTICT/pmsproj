@@ -38,6 +38,11 @@ Route::post('project/deletegrid', 'Api\PmsprojectController@deletegrid');
 Route::post('project/search', 'PmsprojectController@search');
 Route::post('project/listgridsearch', 'Api\PmsprojectController@listgridsearch');
 
+Route::post('project_cso/listgrid', 'Api\PmscsoprojectController@listgrid');
+Route::post('project_cso/insertgrid', 'Api\PmscsoprojectController@insertgrid');
+Route::post('project_cso/updategrid', 'Api\PmscsoprojectController@updategrid');
+Route::post('project_cso/deletegrid', 'Api\PmscsoprojectController@deletegrid');
+
  Route::post('dashboard_builder', 'Api\GendashboardbuilderController@dashboardData');
  Route::post('superset_dashboard', 'Api\GendashboardbuilderController@supersetData');
 Route::post('menus', 'Api\GenmenubuilderController@listgrid');
