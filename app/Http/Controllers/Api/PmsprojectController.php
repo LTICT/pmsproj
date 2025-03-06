@@ -74,7 +74,7 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         ,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number,1 AS is_editable, 1 AS is_deletable,prj_program_id FROM pms_project ';
         $query .=' LEFT JOIN pms_project_status ON pms_project_status.prs_id= pms_project.prj_project_status_id';
         $query .=' LEFT JOIN gen_address_structure ON gen_address_structure.add_id= pms_project.prj_owner_zone_id';
-        $query .=' WHERE 1=1';
+        $query .=' WHERE prj_owner_type =1';
         //$query=$this->getSearchParam($request,$query);
         $prjprojectstatusid=$request->input('prj_project_status_id');
         if(isset($prjprojectstatusid) && isset($prjprojectstatusid)){
@@ -110,7 +110,7 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         $query .=' LEFT JOIN pms_project_status ON pms_project_status.prs_id= pms_project.prj_project_status_id';
         $query .=' LEFT JOIN gen_address_structure zone_info ON zone_info.add_id= pms_project.prj_owner_zone_id';
         $query .=' LEFT JOIN pms_sector_information ON pms_sector_information.sci_id= pms_project.prj_sector_id';
-        $query .=' WHERE 1=1';
+        $query .=' WHERE prj_owner_type =1';
         $query=$this->getSearchParam($request,$query);
         $prjprojectstatusid=$request->input('prj_project_status_id');
         if(isset($prjprojectstatusid) && isset($prjprojectstatusid)){
@@ -380,6 +380,7 @@ public function insertgrid(Request $request)
         }
         //set project status to 1 - Draft when a new project is created
         $requestData['prj_project_status_id']=1;
+        $requestData['prj_owner_type']=1;
         $data_info=Modelpmsproject::create($requestData);
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;

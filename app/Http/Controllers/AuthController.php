@@ -54,6 +54,8 @@ class AuthController extends Controller
         //END TEST
          $user = auth('api')->user();
         //START USER INFO
+         $user['user_detail']="";
+         if(1==2){
         $query='SELECT sci_name_or AS sector_name,
         gen_address_structure.add_name_or AS zone_name, 
         gen_department.dep_name_or as dep_name 
@@ -75,6 +77,12 @@ class AuthController extends Controller
             $data_info->update($data);
         }
         $user['user_detail']=$text;
+    }
+        //START GET USER SECTORS
+        $query ="SELECT STRING_AGG(usc_sector_id::TEXT, ',') AS sector_ids FROM tbl_user_sector WHERE usc_user_id=".$user->usr_id."";
+$user_sector_data=DB::select($query);
+$user['user_sector']=$user_sector_data;
+        //END GET USER SECTORS
         //END USER INFO
         unset($user->email);
         unset($user->password);

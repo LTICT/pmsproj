@@ -42,7 +42,7 @@ $query="SELECT dep_id,dep_name_or,dep_name_am,dep_name_en,dep_code,dep_available
 $query .=' WHERE 1=1';
 $depid=$request->input('dep_id');
 if(isset($depid) && isset($depid)){
-    $query .=' AND dep_id="'.$depid.'"'; 
+    $query .=" AND dep_id='".$depid."'"; 
 }
 $depnameor=$request->input('dep_name_or');
 if(isset($depnameor) && isset($depnameor)){
