@@ -77,6 +77,7 @@ public function handleDatabaseException($e, $actionType){
         "column"=>$column
     ],$statusCode);
 	}
+
 	public function getSearchParam($request,$query){
 		$userInfo=$this->getUserInfo($request);
     //&& $userInfo->usr_id !=9
@@ -117,8 +118,61 @@ public function handleDatabaseException($e, $actionType){
 			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $include ==0 && $prjownerzoneid > 0){
 				$query .=" AND prj_owner_woreda_id=0"; 
 			}
-
 			$query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_user_id=".$userId." )";
+			if(isset($sectorId) && !empty($sectorId) && $sectorId > 1){
+				//$query .=" AND prj_sector_id='".$sectorId."'";   
+			}else if(isset($projectSectorID) && isset($projectSectorID) && $projectSectorID>1){
+				//$query .=" AND prj_sector_id='".$projectSectorID."'";   
+			}
+			if(isset($departmentId) && !empty($departmentId) && $departmentId > 1){
+				//$query .=" AND prj_department_id='".$departmentId."'";   
+			}else if(isset($projectDepartmentID) && isset($projectDepartmentID) && $projectDepartmentID>1){
+				//$query .=" AND prj_department_id='".$projectSectorID."'";   
+			}
+		}
+		return $query;
+	}
+	public function getSearchParamCSO($request,$query){
+		$userInfo=$this->getUserInfo($request);
+    //&& $userInfo->usr_id !=9
+		if(isset($userInfo)){
+			$userId=$userInfo->usr_id;
+			$zoneId=$userInfo->usr_zone_id;
+			$woredaId=$userInfo->usr_woreda_id;
+			$sectorId=$userInfo->usr_sector_id;
+			$departmentId=$userInfo->usr_department_id;
+			$prjownerzoneid=$request->input('prj_location_zone_id');
+			$prjownerworedaid=$request->input('prj_location_woreda_id');
+			$prjName=$request->input('prj_name');
+			$prjCode=$request->input('prj_code');
+			$include=$request->input('include');
+
+			$projectDepartmentID=$request->input('prj_department_id');
+			$projectSectorID=$request->input('prj_sector_id');
+
+			if(isset($prjName) && isset($prjName)){
+				$query .=" AND prj_name LIKE '%".$prjName."%'"; 
+			}
+			if(isset($prjCode) && isset($prjCode)){
+				$query .=" AND prj_code LIKE '%".$prjCode."%'"; 
+			}
+			if(isset($zoneId) && !empty($zoneId) && $zoneId > 0){
+				$query .=" AND prj_owner_zone_id='".$zoneId."'";
+			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $prjownerzoneid>0){
+				$query .=" AND prj_owner_zone_id='".$prjownerzoneid."'";   
+			}else if($include ==0){
+				$query .=" AND prj_owner_zone_id=0"; 
+				$query .=" AND prj_owner_woreda_id=0"; 
+			}
+
+			if(isset($woredaId) && !empty($woredaId) && $woredaId > 0){
+				$query .=" AND prj_owner_woreda_id='".$woredaId."'"; 
+			}else if(isset($prjownerworedaid) && isset($prjownerworedaid) && $prjownerworedaid>0){
+				$query .=" AND prj_owner_woreda_id='".$prjownerworedaid."'";   
+			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $include ==0 && $prjownerzoneid > 0){
+				$query .=" AND prj_owner_woreda_id=0"; 
+			}
+			//$query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_user_id=".$userId." )";
 			if(isset($sectorId) && !empty($sectorId) && $sectorId > 1){
 				//$query .=" AND prj_sector_id='".$sectorId."'";   
 			}else if(isset($projectSectorID) && isset($projectSectorID) && $projectSectorID>1){

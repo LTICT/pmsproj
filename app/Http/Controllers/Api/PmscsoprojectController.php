@@ -28,7 +28,7 @@ class PmscsoprojectController extends MyController
         location_woreda.add_name_or AS woreda_location,
          sci_name_en as sector_name,pct_name_en AS project_category, prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,prj_id,prj_name,prj_code,prj_project_status_id,
         pms_project_category.pct_name_or AS prj_project_category_id,prj_project_budget_source_id,prj_total_estimate_budget,prj_total_actual_budget,prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,prj_location_kebele_id,prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_kebele_id,prj_owner_description,prj_start_date_et,prj_start_date_gc,prj_start_date_plan_et,prj_start_date_plan_gc,prj_outcome,prj_deleted,prj_remark,prj_created_by,prj_created_date,prj_create_time,prj_update_time,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number FROM pms_project ';
-
+$query .= ' LEFT JOIN pms_cso_info ON pms_project.prj_owner_id = pms_cso_info.sco_id';
         $query .= " LEFT JOIN pms_sector_information ON pms_project.prj_sector_id = pms_sector_information.sci_id";
 $query .= " LEFT JOIN gen_address_structure owner_zone ON pms_project.prj_owner_zone_id = owner_zone.add_id";
 $query .= " LEFT JOIN gen_address_structure owner_woreda ON pms_project.prj_owner_woreda_id = owner_woreda.add_id";
@@ -37,6 +37,7 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
 
         $query .=' LEFT JOIN pms_project_status ON pms_project_status.prs_id= pms_project.prj_project_status_id';
         $query .= ' LEFT JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id';
+        
         $query .=" WHERE prj_id=".$id." ";
         $data_info=DB::select($query);
         if(isset($data_info) && !empty($data_info)){
@@ -63,12 +64,13 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
     //to populate projects list based on selected program 
     public function listgrid(Request $request){
         $permissionData=$this->getPagePermission($request,9, "project_info");
-      $query='SELECT sci_name_en AS sector_name,prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,zone_info.add_name_or as zone_name, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
+      $query='SELECT cso_name,sci_name_en AS sector_name,prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,zone_info.add_name_or as zone_name, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
         prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,
         prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_description,
         prj_start_date_gc,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,
         prj_end_date_plan_gc,prj_outcome,prj_remark
         ,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number,1 AS is_editable, 1 AS is_deletable,prj_program_id FROM pms_project ';
+        $query .= ' LEFT JOIN pms_cso_info ON pms_project.prj_owner_id = pms_cso_info.cso_id';
         $query .=' LEFT JOIN pms_project_status ON pms_project_status.prs_id= pms_project.prj_project_status_id';
         $query .=' LEFT JOIN gen_address_structure zone_info ON zone_info.add_id= pms_project.prj_owner_zone_id';
         $query .=' LEFT JOIN pms_sector_information ON pms_sector_information.sci_id= pms_project.prj_sector_id';
@@ -102,7 +104,7 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
             if($userInfo->usr_owner_id > 0){
                 $query .=" AND prj_owner_id='".$userInfo->usr_owner_id."'";
             }else{
-                $query=$this->getSearchParam($request,$query);
+                $query=$this->getSearchParamCSO($request,$query);
             }
         }
         $query.=' ORDER BY prj_id DESC';
@@ -119,17 +121,18 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         $permissionData=$this->getPagePermission($request,9, "project_info");
         //dd($permissionData);
         //dump($permissionData);
-        $query='SELECT sci_name_en AS sector_name,prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,zone_info.add_name_or as zone_name, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
+        $query='SELECT cso_name, sci_name_en AS sector_name,prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,zone_info.add_name_or as zone_name, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
         prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,
         prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_description,
         prj_start_date_gc,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,
         prj_end_date_plan_gc,prj_outcome,prj_remark
         ,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number,1 AS is_editable, 1 AS is_deletable,prj_program_id FROM pms_project ';
+        $query .= ' LEFT JOIN pms_cso_info ON pms_project.prj_owner_id = pms_cso_info.cso_id';
         $query .=' LEFT JOIN pms_project_status ON pms_project_status.prs_id= pms_project.prj_project_status_id';
         $query .=' LEFT JOIN gen_address_structure zone_info ON zone_info.add_id= pms_project.prj_owner_zone_id';
         $query .=' LEFT JOIN pms_sector_information ON pms_sector_information.sci_id= pms_project.prj_sector_id';
         $query .=' WHERE prj_owner_type=2';
-        $query=$this->getSearchParam($request,$query);
+        $query=$this->getSearchParamCSO($request,$query);
         $prjprojectstatusid=$request->input('prj_project_status_id');
         if(isset($prjprojectstatusid) && isset($prjprojectstatusid)){
             $query .=' AND prj_project_status_id="'.$prjprojectstatusid.'"'; 

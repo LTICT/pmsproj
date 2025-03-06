@@ -15,9 +15,7 @@ class PmsprojectcategoryController extends MyController
     //$this->middleware('auth');
 }
     public function listgrid(Request $request){
-        //dd(config('constants.PROJ_INFORMATION'));
-
-        
+        //dd(config('constants.PROJ_INFORMATION'));        
 $cacheDuration = 60; // Cache for 60 minutes
 $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
         $pageId=config('constants.LU_CATEGORY');
