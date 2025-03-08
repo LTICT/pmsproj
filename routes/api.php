@@ -51,6 +51,8 @@ Route::post('menus', 'Api\GenmenubuilderController@listgrid');
        Route::post('roles/updategrid', 'Api\TblrolesController@updategrid');
        Route::post('roles/listgrid', 'Api\TblrolesController@listgrid');
     Route::post('department/departmentbyparent', 'Api\GendepartmentController@departmentByParent');
+
+    Route::post('department/listdepartment', 'Api\GendepartmentController@listdepartment');
     Route::post('department/listgrid', 'Api\GendepartmentController@listgrid');
     Route::post('department/insertgrid', 'Api\GendepartmentController@insertgrid');
     Route::post('department/updategrid', 'Api\GendepartmentController@updategrid');
@@ -401,5 +403,66 @@ Route::resource('conversation_information', 'GenconversationinformationControlle
     Route::post('cso_info/insertgrid', 'Api\PmscsoinfoController@insertgrid');
     Route::post('cso_info/updategrid', 'Api\PmscsoinfoController@updategrid');
     Route::post('cso_info/deletegrid', 'Api\PmscsoinfoController@deletegrid');
+ 
 });
+
+   //START CACHE MANAGEMENT
+    Route::get('/cache-files', function (Request $request) {
+    $search = $request->query('search');
+    $perPage = $request->query('perPage', 10); 
+    $page = $request->query('page', 1); 
+
+    // Recursively get all files in the cache directory
+    $cacheFiles = [];
+    $cachePath = storage_path('framework/cache/data');
+    $files = File::allFiles($cachePath);
+
+    // Extract relative file paths
+    foreach ($files as $file) {
+        $relativePath = str_replace($cachePath . DIRECTORY_SEPARATOR, '', $file->getPathname());
+        $cacheFiles[] = $relativePath;
+    }
+
+    // Filter files based on search term
+    if ($search) {
+        $cacheFiles = array_filter($cacheFiles, function ($file) use ($search) {
+            return str_contains($file, $search);
+        });
+    }
+
+    // Paginate the results
+    $totalFiles = count($cacheFiles);
+    $offset = ($page - 1) * $perPage;
+    $paginatedFiles = array_slice($cacheFiles, $offset, $perPage);
+
+    return response()->json([
+        'data' => $paginatedFiles,
+        'total' => $totalFiles,
+        'perPage' => $perPage,
+        'currentPage' => $page,
+    ]);
+});
+// Delete a specific cached file
+Route::delete('/cache-files/{filename}', function ($filename) {
+    $filePath = storage_path('framework/cache/data/' . $filename);
+    if (file_exists($filePath)) {
+        unlink($filePath);
+        return response()->json(['message' => 'File deleted successfully']);
+    }
+    return response()->json(['message' => 'File not found'], 404);
+});
+
+Route::delete('/cache-files', function () {
+    $cachePath = storage_path('framework/cache/data');
+
+    // Delete all files in the cache directory
+    $files = File::allFiles($cachePath);
+    foreach ($files as $file) {
+        unlink($file->getPathname());
+    }
+
+    return response()->json(['message' => 'All cache files deleted successfully']);
+});
+
+//END CACHE MANAGEMENT
 

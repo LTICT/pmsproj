@@ -229,4 +229,48 @@ public function deletegrid(Request $request)
     );
     return response()->json($resultObject);
 }
+public function listdepartment(Request $request){
+ $query='WITH RECURSIVE department_hierarchy AS (
+    SELECT 
+    dep_id AS id,
+    dep_name_or AS name,
+    dep_name_am AS dep_name_am,
+    dep_name_en AS dep_name_en,
+    dep_parent_id AS "rootId",
+        ARRAY[]::json[] AS children -- Initialize children as empty array
+        FROM gen_department 
+        WHERE dep_id::integer =1 
+        UNION ALL
+        SELECT 
+        g.dep_id AS id,
+        g.dep_name_or AS name,
+        g.dep_name_am AS dep_name_am,
+        g.dep_name_en AS dep_name_en,
+        g.dep_parent_id AS "rootId",
+        ARRAY[]::json[] AS children
+        FROM gen_department g
+    INNER JOIN department_hierarchy h ON g.dep_parent_id::text = h.id::text -- Link child nodes to parents
+)
+ SELECT * FROM department_hierarchy';
+$data_info= DB::select($query);
+$hierarchicalData = $this->buildHierarchy(json_decode(json_encode($data_info), true));
+$resultObject= array(
+    "data" =>$hierarchicalData,
+    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
+}
+
+function buildHierarchy(array $elements, $parentId=1) {
+    $branch = [];
+    //dd($elements);
+    foreach ($elements as $element) {
+        //dd($element);
+        if ($element['rootId'] == $parentId) {
+            $children = $this->buildHierarchy($elements, $element['id']);
+            $element['children'] = $children;
+            $branch[] = $element;
+        }
+    }
+    return $branch;
+}
 }
