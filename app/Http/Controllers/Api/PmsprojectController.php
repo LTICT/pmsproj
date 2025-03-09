@@ -38,7 +38,7 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
 
         $query .=' LEFT JOIN pms_project_status ON pms_project_status.prs_id= pms_project.prj_project_status_id';
         $query .= ' LEFT JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id';
-        $query .=" WHERE prj_id=".$id." ";
+        $query .=" WHERE prj_id=".$id."  AND prj_owner_type=1";
         $data_info=DB::select($query);
         if(isset($data_info) && !empty($data_info)){
             $data=$data_info[0];
@@ -88,9 +88,10 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         $data_info=DB::select($query);
         //$this->getQueryInfo($query);
         $tabInfo=$this->getTabPermission($request);
+        $dateIsValid=$this->getDateParameter(1);
         $resultObject= array(
             "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 2,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$this->getDateParameter(1) ? ($permissionData->pem_insert ?? 0) : 0),
+            "previledge"=>array('is_role_editable'=>$dateIsValid ? ($permissionData->pem_edit ?? 0) : 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$dateIsValid ? ($permissionData->pem_insert ?? 0) : 0),
             'allowedTabs'=>$tabInfo['allowedTabs'],
             'allowedLinks'=>$tabInfo['allowedLinks'] );
         return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);

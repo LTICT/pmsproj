@@ -43,6 +43,12 @@ Route::post('project_cso/insertgrid', 'Api\PmscsoprojectController@insertgrid');
 Route::post('project_cso/updategrid', 'Api\PmscsoprojectController@updategrid');
 Route::post('project_cso/deletegrid', 'Api\PmscsoprojectController@deletegrid');
 
+Route::post('project_citizenship/listgrid', 'Api\PmscitizenshipprojectController@listgrid');
+Route::post('project_citizenship/insertgrid', 'Api\PmscitizenshipprojectController@insertgrid');
+Route::post('project_citizenship/updategrid', 'Api\PmscitizenshipprojectController@updategrid');
+Route::post('project_citizenship/deletegrid', 'Api\PmscitizenshipprojectController@deletegrid');
+Route::post('project_citizenship/listgridsearch', 'Api\PmscitizenshipprojectController@listgridsearch');
+
  Route::post('dashboard_builder', 'Api\GendashboardbuilderController@dashboardData');
  Route::post('superset_dashboard', 'Api\GendashboardbuilderController@supersetData');
 Route::post('menus', 'Api\GenmenubuilderController@listgrid');

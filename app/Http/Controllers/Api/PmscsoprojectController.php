@@ -38,7 +38,7 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         $query .=' LEFT JOIN pms_project_status ON pms_project_status.prs_id= pms_project.prj_project_status_id';
         $query .= ' LEFT JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id';
         
-        $query .=" WHERE prj_id=".$id." ";
+        $query .=" WHERE prj_id=".$id."  AND prj_owner_type=2 ";
         $data_info=DB::select($query);
         if(isset($data_info) && !empty($data_info)){
             $data=$data_info[0];
