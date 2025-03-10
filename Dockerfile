@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y software-properties-common \
        php8.2-mbstring \
        php8.2-bcmath \
        php8.2-pgsql \
+       php8.2-opcache \      # ✅ Install OPcache for performance
        nginx \
        git \
        curl \
@@ -27,49 +28,69 @@ RUN apt-get update && apt-get install -y software-properties-common \
        unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Composer from Aliyun mirror (like your Jenkinsfile does)
+# ---------------------------------------------------------
+# 2. Optimize PHP performance: Enable OPcache
+# ---------------------------------------------------------
+RUN echo "opcache.enable=1" >> /etc/php/8.2/fpm/php.ini \
+    && echo "opcache.enable_cli=1" >> /etc/php/8.2/fpm/php.ini \
+    && echo "opcache.memory_consumption=256" >> /etc/php/8.2/fpm/php.ini \
+    && echo "opcache.interned_strings_buffer=16" >> /etc/php/8.2/fpm/php.ini \
+    && echo "opcache.max_accelerated_files=100000" >> /etc/php/8.2/fpm/php.ini \
+    && echo "opcache.validate_timestamps=0" >> /etc/php/8.2/fpm/php.ini \
+    && echo "opcache.save_comments=1" >> /etc/php/8.2/fpm/php.ini \
+    && echo "opcache.fast_shutdown=1" >> /etc/php/8.2/fpm/php.ini
+
+# ---------------------------------------------------------
+# 3. Optimize PHP-FPM settings for high performance
+# ---------------------------------------------------------
+RUN sed -i 's/pm.max_children = 5/pm.max_children = 20/' /etc/php/8.2/fpm/pool.d/www.conf \
+    && sed -i 's/pm.start_servers = 2/pm.start_servers = 5/' /etc/php/8.2/fpm/pool.d/www.conf \
+    && sed -i 's/pm.min_spare_servers = 1/pm.min_spare_servers = 3/' /etc/php/8.2/fpm/pool.d/www.conf \
+    && sed -i 's/pm.max_spare_servers = 3/pm.max_spare_servers = 10/' /etc/php/8.2/fpm/pool.d/www.conf \
+    && sed -i 's/;pm.process_idle_timeout = 10s/pm.process_idle_timeout = 10s/' /etc/php/8.2/fpm/pool.d/www.conf \
+    && sed -i 's/;pm.max_requests = 500/pm.max_requests = 500/' /etc/php/8.2/fpm/pool.d/www.conf
+
+# ---------------------------------------------------------
+# 4. Install Composer
+# ---------------------------------------------------------
 RUN curl -sS https://mirrors.aliyun.com/composer/composer.phar -o /usr/local/bin/composer \
     && chmod +x /usr/local/bin/composer
 
 # ---------------------------------------------------------
-# 2. Set working directory and copy application files
+# 5. Set working directory and copy application files
 # ---------------------------------------------------------
 ENV DEPLOY_DIR="/var/www/dev_app_backend"
 WORKDIR $DEPLOY_DIR
 
-# Copy your application code into the container
-# (Assumes your Dockerfile is at the root of your project)
 COPY . $DEPLOY_DIR
-
 COPY .env /app/.env
 
-# (Optional) If you store .env somewhere else, or only want to copy it from your host:
-# COPY path/to/local/env/backend/.env $DEPLOY_DIR/.env
-
 # ---------------------------------------------------------
-# 3. Install Laravel dependencies via Composer
+# 6. Install Laravel dependencies via Composer
 # ---------------------------------------------------------
 RUN composer install --no-interaction --prefer-dist --no-progress
 
 # ---------------------------------------------------------
-# 4. Set folder permissions for Laravel
+# 7. Set folder permissions for Laravel
 # ---------------------------------------------------------
 RUN chown -R www-data:www-data $DEPLOY_DIR \
     && chmod -R 775 $DEPLOY_DIR/storage $DEPLOY_DIR/bootstrap/cache
 
 # ---------------------------------------------------------
-# 5. Configure Nginx (assumes you have a custom site conf)
+# 8. Generate cached Laravel config file (config.php)
 # ---------------------------------------------------------
-# Example: you have a dev_app_backend.conf that listens on port 1155
+RUN php artisan config:cache
+
+# ---------------------------------------------------------
+# 9. Configure Nginx (assumes you have a custom site conf)
+# ---------------------------------------------------------
 COPY ngnix_backend.conf /etc/nginx/sites-available/dev_app_backend
 RUN ln -s /etc/nginx/sites-available/dev_app_backend /etc/nginx/sites-enabled/ \
     && rm -f /etc/nginx/sites-enabled/default
 
-
 # ---------------------------------------------------------
-# 6. Expose port 1155 and start Nginx + PHP-FPM
+# 10. Expose port 1155 and start Nginx + PHP-FPM
 # ---------------------------------------------------------
 EXPOSE 1155
 
-# Start both processes in the foreground so Docker can track them.
 CMD service php8.2-fpm start && nginx -g 'daemon off;'
