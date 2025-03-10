@@ -15,7 +15,7 @@ class PmsbudgetrequestController extends MyController
 }
  
     public function listgrid(Request $request){
-    $permissionData=$this->getPagePermission($request,34);
+    $permissionData=$this->getPagePermission($request,70);
     $query='SELECT sci_name_en AS sector_name, rqs_description AS color_code, rqs_name_en AS status_name, bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
      bdr_released_amount,bdr_project_id,bdr_requested_date_ec,bdr_requested_date_gc,
      bdr_released_date_ec,bdr_released_date_gc,bdr_description,bdr_create_time,bdr_update_time,
@@ -86,7 +86,7 @@ $query.=' ORDER BY bdr_id DESC';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 2,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$this->getDateParameter(2) ? ($permissionData->pem_insert ?? 0) : 0));
+    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 2,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)

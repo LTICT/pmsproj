@@ -28,7 +28,6 @@ class PmscitizenshipprojectController extends MyController
         location_woreda.add_name_or AS woreda_location,
          sci_name_en as sector_name,pct_name_en AS project_category, prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,prj_id,prj_name,prj_code,prj_project_status_id,
         pms_project_category.pct_name_or AS prj_project_category_id,prj_project_budget_source_id,prj_total_estimate_budget,prj_total_actual_budget,prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,prj_location_kebele_id,prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_kebele_id,prj_owner_description,prj_start_date_et,prj_start_date_gc,prj_start_date_plan_et,prj_start_date_plan_gc,prj_outcome,prj_deleted,prj_remark,prj_created_by,prj_created_date,prj_create_time,prj_update_time,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number FROM pms_project ';
-$query .= ' LEFT JOIN pms_cso_info ON pms_project.prj_owner_id = pms_cso_info.sco_id';
         $query .= " LEFT JOIN pms_sector_information ON pms_project.prj_sector_id = pms_sector_information.sci_id";
 $query .= " LEFT JOIN gen_address_structure owner_zone ON pms_project.prj_owner_zone_id = owner_zone.add_id";
 $query .= " LEFT JOIN gen_address_structure owner_woreda ON pms_project.prj_owner_woreda_id = owner_woreda.add_id";
