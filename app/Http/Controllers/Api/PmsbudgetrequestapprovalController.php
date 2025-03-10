@@ -46,8 +46,7 @@ if($directorateId>0 && $teamId==0 && $officerId==0){
     $query .=" INNER JOIN gen_request_followup ON gen_request_followup.rqf_request_id=pms_budget_request.bdr_id AND
     rqf_forwarded_to_dep_id=".$officerId."  ";
 }    
-     $query .=' WHERE prj_owner_type=2';
-     
+     $query .=' WHERE prj_owner_type=1';
 $requestStatus=$request->input('bdr_request_status');
 if(isset($requestStatus) && isset($requestStatus)){
 $query .=" AND bdr_request_status='".$requestStatus."'"; 

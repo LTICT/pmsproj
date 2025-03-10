@@ -19,7 +19,7 @@ Route::resource('films', 'film\\MoviesController');*/
 /*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 return $request->user();
 });*/
-
+Route::get('send_email', 'Api\EmailControllerTest@sendWelcomeEmail');
 Route::post('email/send_email', 'Api\EmailController@sendEmail');
 Route::get('/data', 'GanttController@get');
 Route::resource('task', 'TaskController');
@@ -38,11 +38,12 @@ Route::post('project/deletegrid', 'Api\PmsprojectController@deletegrid');
 Route::post('project/search', 'PmsprojectController@search');
 Route::post('project/listgridsearch', 'Api\PmsprojectController@listgridsearch');
 
+  Route::resource('project_cso', 'Api\PmscsoprojectController');
 Route::post('project_cso/listgrid', 'Api\PmscsoprojectController@listgrid');
 Route::post('project_cso/insertgrid', 'Api\PmscsoprojectController@insertgrid');
 Route::post('project_cso/updategrid', 'Api\PmscsoprojectController@updategrid');
 Route::post('project_cso/deletegrid', 'Api\PmscsoprojectController@deletegrid');
-
+Route::resource('project_citizenship', 'Api\PmscitizenshipprojectController');
 Route::post('project_citizenship/listgrid', 'Api\PmscitizenshipprojectController@listgrid');
 Route::post('project_citizenship/insertgrid', 'Api\PmscitizenshipprojectController@insertgrid');
 Route::post('project_citizenship/updategrid', 'Api\PmscitizenshipprojectController@updategrid');
