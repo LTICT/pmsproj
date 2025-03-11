@@ -78,7 +78,14 @@ if(isset($bdrprojectid) && isset($bdrprojectid)){
 $query .= " AND bdr_project_id = '$bdrprojectid'";
 }
 }else{
-    $query =$this->getSearchParam($request,$query);
+    $userInfo=$this->getUserInfo($request);
+        if(isset($userInfo)){
+            if($userInfo->usr_owner_id > 0){
+                $query .=" AND prj_owner_id='".$userInfo->usr_owner_id."'";
+            }else{
+                $query=$this->getSearchParamCSO($request,$query);
+            }
+        }
 }
 //
 //$this->getQueryInfo($query);

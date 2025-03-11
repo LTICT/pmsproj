@@ -95,7 +95,7 @@ public function handleDatabaseException($e, $actionType){
 
 			$projectDepartmentID=$request->input('prj_department_id');
 			$projectSectorID=$request->input('prj_sector_id');
-
+			$query .=" AND prj_type=1";
 			if(isset($prjName) && isset($prjName)){
 				$query .=" AND prj_name LIKE '%".$prjName."%'"; 
 			}
@@ -149,7 +149,7 @@ public function handleDatabaseException($e, $actionType){
 
 			$projectDepartmentID=$request->input('prj_department_id');
 			$projectSectorID=$request->input('prj_sector_id');
-
+			$query .=" AND prj_owner_type=2";
 			if(isset($prjName) && isset($prjName)){
 				$query .=" AND prj_name LIKE '%".$prjName."%'"; 
 			}
@@ -357,6 +357,7 @@ public function handleDatabaseException($e, $actionType){
 			return null;
 		}
 	}
+
 	public function getUserInfo(Request $request){
 		$authenticatedUser = $request->authUser;
 		$userId=$authenticatedUser->usr_id;
