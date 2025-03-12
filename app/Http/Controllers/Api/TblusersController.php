@@ -38,7 +38,7 @@ class TblusersController extends MyController
         return view('users.show_tbl_users', $data);
     }
     public function listgrid(Request $request){
-       $query='SELECT usr_directorate_id, usr_team_id, usr_officer_id, usr_id,usr_email,usr_password,usr_full_name,usr_phone_number,sci_name_or AS sector_name,
+       $query='SELECT usr_user_type, usr_directorate_id, usr_team_id, usr_officer_id, usr_id,usr_email,usr_password,usr_full_name,usr_phone_number,sci_name_or AS sector_name,
        usr_role_id,usr_region_id, usr_zone_id,usr_woreda_id,usr_kebele_id,usr_sector_id,
        usr_department_id,usr_is_active,usr_picture,usr_last_logged_in,usr_ip,
        usr_remember_token,usr_notified,usr_description,usr_create_time,
@@ -113,7 +113,7 @@ class TblusersController extends MyController
 }
 
 public function getUserInfo(Request $request){
-       $query='SELECT usr_id,usr_email,usr_password,usr_full_name,usr_phone_number,sci_name_or AS sector_name,
+       $query='SELECT usr_user_type, usr_id,usr_email,usr_password,usr_full_name,usr_phone_number,sci_name_or AS sector_name,
        usr_role_id,usr_region_id, usr_zone_id,usr_woreda_id,usr_kebele_id,usr_sector_id,
        usr_department_id,usr_is_active,usr_picture,usr_last_logged_in,usr_ip,
        usr_remember_token,

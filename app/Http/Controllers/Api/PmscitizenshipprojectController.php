@@ -96,14 +96,8 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         if(isset($prjenddateplangc) && isset($prjenddateplangc)){
             $query .=' AND prj_end_date_plan_gc="'.$prjenddateplangc.'"'; 
         }
-        $userInfo=$this->getUserInfo($request);
-        if(isset($userInfo)){
-            if($userInfo->usr_owner_id > 0){
-                $query .=" AND prj_owner_id='".$userInfo->usr_owner_id."'";
-            }else{
-                $query=$this->getSearchParamCSO($request,$query);
-            }
-        }
+        
+        $query=$this->getSearchParamCitizenship($request,$query);
         $query.=' ORDER BY prj_id DESC';
         $data_info=DB::select($query);
         //$this->getQueryInfo($query);
