@@ -98,8 +98,8 @@ $query = "SELECT
     prj_rural_ben_number AS \"$ruralbennumber\"
 FROM pms_project";
 $query .= " LEFT JOIN pms_sector_information ON pms_project.prj_sector_id = pms_sector_information.sci_id";
-$query .= " INNER JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id";
-$query .= " INNER JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id";
+$query .= " LEFT JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id";
+$query .= " LEFT JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id";
 $query .= " LEFT JOIN gen_address_structure ON pms_project.prj_location_zone_id = gen_address_structure.add_id";
 $query .= " WHERE 1=1";
 }

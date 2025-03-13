@@ -96,6 +96,7 @@ public function handleDatabaseException($e, $actionType){
 			$projectDepartmentID=$request->input('prj_department_id');
 			$projectSectorID=$request->input('prj_sector_id');
 			$query .=" AND prj_owner_type='".$userTypeId."'";
+
 			if(isset($prjName) && isset($prjName)){
 				$query .=" AND prj_name LIKE '%".$prjName."%'"; 
 			}
@@ -117,7 +118,9 @@ public function handleDatabaseException($e, $actionType){
 			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $include ==0 && $prjownerzoneid > 0){
 				$query .=" AND prj_owner_woreda_id=0"; 
 			}
+			if($userTypeId ==1 ){
 			$query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_user_id=".$userId." )";
+		}
 			if(isset($sectorId) && !empty($sectorId) && $sectorId > 1){
 				//$query .=" AND prj_sector_id='".$sectorId."'";   
 			}else if(isset($projectSectorID) && isset($projectSectorID) && $projectSectorID>1){
@@ -129,6 +132,7 @@ public function handleDatabaseException($e, $actionType){
 				//$query .=" AND prj_department_id='".$projectSectorID."'";   
 			}
 		}
+		 //$this->getQueryInfo($query);
 		return $query;
 	}
 	public function getSearchParamCSO($request,$query){
@@ -387,13 +391,16 @@ public function handleDatabaseException($e, $actionType){
 			$sectorId=$userInfo->usr_sector_id;
 			$departmentId=$userInfo->usr_department_id;
 			$userId=$userInfo->usr_id;
+			$userType=$userInfo->usr_user_type;
 			$query="SELECT prj_id FROM pms_project ";
 			$query .="WHERE prj_id=".$projectId." ";
 			$query .=" AND prj_owner_zone_id='".$zoneId."'"; 
 			$query .=" AND prj_owner_woreda_id='".$woredaId."'";
 
 			//user sector should be set
+			if($userType==1){
 			$query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_user_id=".$userId." )";
+		    }
 			if(isset($zoneId) && isset($zoneId) && $zoneId > 0){
 				
 			}
