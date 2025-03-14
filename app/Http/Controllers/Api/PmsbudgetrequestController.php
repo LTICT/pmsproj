@@ -15,7 +15,7 @@ class PmsbudgetrequestController extends MyController
 }
  
     public function listgrid(Request $request){
-    $permissionData=$this->getPagePermission($request,70);
+    $permissionData=$this->getPagePermission($request,34);
     $query='SELECT bdr_request_category_id, sci_name_en AS sector_name, rqs_description AS color_code, rqs_name_en AS status_name, bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
      bdr_released_amount,bdr_project_id,bdr_requested_date_ec,bdr_requested_date_gc,
      bdr_released_date_ec,bdr_released_date_gc,bdr_description,bdr_create_time,bdr_update_time,
@@ -67,9 +67,9 @@ $bdrreleaseddateec=$request->input('bdr_released_date_ec');
 if(isset($bdrreleaseddateec) && isset($bdrreleaseddateec)){
 $query .=' AND bdr_released_date_ec="'.$bdrreleaseddateec.'"'; 
 }
-$bdrreleaseddategc=$request->input('bdr_released_date_gc');
-if(isset($bdrreleaseddategc) && isset($bdrreleaseddategc)){
-$query .=' AND bdr_released_date_gc="'.$bdrreleaseddategc.'"'; 
+$requestCategory=$request->input('bdr_request_category_id');
+if(isset($requestCategory) && isset($requestCategory)){
+$query .=" AND bdr_request_category_id='".$requestCategory."'"; 
 }
 $requesttype=$request->input('request_type');
 if(isset($requesttype) && !empty($requesttype) && $requesttype=='single'){

@@ -98,6 +98,10 @@ if(isset($bdrprojectid) && isset($bdrprojectid)){
 $query .= " AND bdr_project_id = '$bdrprojectid'";
 
 }
+$requestCategory=$request->input('bdr_request_category_id');
+if(isset($requestCategory) && isset($requestCategory)){
+$query .=" AND bdr_request_category_id='".$requestCategory."'"; 
+}
 //if user is assinged to a department
 if($departmentId > 1){
     //$query .=" AND prj_department_id='".$departmentId."'"; 
