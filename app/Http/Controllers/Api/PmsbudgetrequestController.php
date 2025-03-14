@@ -16,7 +16,7 @@ class PmsbudgetrequestController extends MyController
  
     public function listgrid(Request $request){
     $permissionData=$this->getPagePermission($request,70);
-    $query='SELECT sci_name_en AS sector_name, rqs_description AS color_code, rqs_name_en AS status_name, bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
+    $query='SELECT bdr_request_category_id, sci_name_en AS sector_name, rqs_description AS color_code, rqs_name_en AS status_name, bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
      bdr_released_amount,bdr_project_id,bdr_requested_date_ec,bdr_requested_date_gc,
      bdr_released_date_ec,bdr_released_date_gc,bdr_description,bdr_create_time,bdr_update_time,
      bdr_delete_time,bdr_created_by,bdr_status,bdr_action_remark,1 AS is_editable, 1 AS is_deletable 

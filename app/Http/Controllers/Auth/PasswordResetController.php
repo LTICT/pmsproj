@@ -43,7 +43,7 @@ class PasswordResetController extends Controller
     ]);
 
     // Send the password reset email
-    $resetLink = "http://localhost:8000/api/reset-password?token=$token";
+    $resetLink = "http://localhost:5173/reset-password-screen?token=$token";
     Mail::to($email)->send(new PasswordResetMail($resetLink));
 
     return response()->json(['message' => 'Password reset link sent']);

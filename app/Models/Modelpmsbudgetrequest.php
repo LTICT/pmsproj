@@ -28,7 +28,7 @@ class Modelpmsbudgetrequest extends Model
     protected $fillable = ['bdr_id','bdr_budget_year_id','bdr_requested_amount',
     'bdr_released_amount','bdr_project_id','bdr_requested_date_ec','bdr_requested_date_gc',
     'bdr_released_date_ec','bdr_released_date_gc','bdr_description','bdr_create_time',
-    'bdr_update_time','bdr_delete_time','bdr_created_by','bdr_status','bdr_request_status','bdr_action_remark'];
+    'bdr_update_time','bdr_delete_time','bdr_created_by','bdr_status','bdr_request_status','bdr_action_remark','bdr_request_category_id'];
 
     /**
      * Change activity log event description

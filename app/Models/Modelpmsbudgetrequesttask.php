@@ -25,9 +25,7 @@ class Modelpmsbudgetrequesttask extends Model
      *
      * @var array
      */
-    protected $fillable = ['brt_id','brt_task_name','brt_measurement','brt_budget_request_id','brt_previous_year_physical','brt_previous_year_financial','brt_current_year_physical','brt_current_year_financial','brt_next_year_physical','brt_next_year_financial','brt_description','brt_create_time','brt_update_time','brt_delete_time','brt_created_by','brt_status',];
-
-    
+    protected $fillable = ['brt_id','brt_task_name','brt_measurement','brt_budget_request_id','brt_previous_year_physical','brt_previous_year_financial','brt_current_year_physical','brt_current_year_financial','brt_next_year_physical','brt_next_year_financial','brt_description','brt_create_time','brt_update_time','brt_delete_time','brt_created_by','brt_status'];
 
     /**
      * Change activity log event description
