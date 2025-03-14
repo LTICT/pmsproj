@@ -19,12 +19,18 @@ Route::resource('films', 'film\\MoviesController');*/
 /*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 return $request->user();
 });*/
+// Forgot password route
+Route::post('forgot-password', 'Auth\PasswordResetController@sendResetLink');
+// Reset password route
+Route::post('reset-password', 'Auth\PasswordResetController@resetPassword');
+
 Route::get('send_email', 'Api\EmailControllerTest@sendWelcomeEmail');
 Route::post('email/send_email', 'Api\EmailController@sendEmail');
 Route::get('/data', 'GanttController@get');
 Route::resource('task', 'TaskController');
 Route::resource('link', 'LinkController');
 Route::post('login', 'AuthController@login');
+Route::post('refreshtoken', 'AuthController@refreshToken');
 Route::post('addressbyparent', 'Api\GenaddressstructureController@addressByParent');
 Route::post('departmentbyparent', 'Api\GendepartmentController@departmentByParent');
 Route::post('project_document/insertgrid', 'Api\PmsprojectdocumentController@insertgrid');

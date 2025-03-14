@@ -87,15 +87,32 @@ $user['user_sector']=$user_sector_data;
         unset($user->email);
         unset($user->password);
         unset($user->usr_password);
-        return response()->json([
-            'status'=> 'success',
-            'user'=> $user,
-            'authorization'=> [
-                'token' => $token,
-                'type' => 'bearer'
-            ]
-        ]);
+       return $this->respondWithToken($token, $user);
     }
+protected function respondWithToken($token, $user = null)
+{
+    return response()->json([
+        'status' => 'success',
+        'user' => $user,
+        'authorization' => [
+            'token' => $token,
+            'type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60,
+            'refresh_token' => JWTAuth::fromUser($user)
+        ]
+    ]);
+}
+public function refreshToken()
+{
+      $user = JWTAuth::parseToken()->authenticate();
+      unset($user->email);
+        unset($user->password);
+        unset($user->usr_password);
+        // Generate new token
+        $newToken = auth('api')->refresh();
+
+    return $this->respondWithToken($newToken, $user);
+}
     /* Register API */
     public function register(Request $request)
     {
