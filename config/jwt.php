@@ -89,7 +89,7 @@ return [
     |
     */
 
-    'ttl' => env('JWT_TTL', 7200),
+    //'ttl' => env('JWT_TTL', 7200),
 
     /*
     |--------------------------------------------------------------------------
@@ -108,7 +108,9 @@ return [
     |
     */
 
-    'refresh_ttl' => env('JWT_REFRESH_TTL', 2880),
+    //'refresh_ttl' => env('JWT_REFRESH_TTL', 2880),
+'ttl' => env('JWT_TTL', 60), // Access token expiration in minutes
+'refresh_ttl' => env('JWT_REFRESH_TTL', 20160), // Refresh token expiration in minutes (14 days)
 
     /*
     |--------------------------------------------------------------------------

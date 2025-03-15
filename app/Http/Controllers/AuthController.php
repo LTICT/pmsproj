@@ -91,6 +91,13 @@ $user['user_sector']=$user_sector_data;
     }
 protected function respondWithToken($token, $user = null)
 {
+    $refreshToken = JWTAuth::customClaims(['exp' => now()->addDays(14)->timestamp])->fromUser($user);
+    $payload = JWTAuth::setToken($refreshToken)->getPayload();
+        // Extract the expiration time
+       //$expirationTime = $payload['exp'];
+        // Convert to a readable timestamp
+        //$expirationDate = date('Y-m-d H:i:s', $expirationTime);
+        //dd($expirationDate);
     return response()->json([
         'status' => 'success',
         'user' => $user,
@@ -98,7 +105,7 @@ protected function respondWithToken($token, $user = null)
             'token' => $token,
             'type' => 'bearer',
             'expires_in' => auth('api')->factory()->getTTL() * 60,
-            'refresh_token' => JWTAuth::fromUser($user)
+            'refresh_token' => $refreshToken
         ]
     ]);
 }
