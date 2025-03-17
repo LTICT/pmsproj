@@ -79,7 +79,7 @@ class AuthController extends Controller
         $user['user_detail']=$text;
     }
         //START GET USER SECTORS
-        $query ="SELECT STRING_AGG(usc_sector_id::TEXT, ',') AS sector_ids FROM tbl_user_sector WHERE usc_user_id=".$user->usr_id."";
+        $query ="SELECT STRING_AGG(usc_sector_id::TEXT, ',') AS sector_ids FROM tbl_user_sector WHERE usc_status=1 AND usc_user_id=".$user->usr_id."";
 $user_sector_data=DB::select($query);
 $user['user_sector']=$user_sector_data;
         //END GET USER SECTORS

@@ -7,6 +7,7 @@ use App\Models\Modeltblupdateusers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
 //PROPERTY OF LT ICT SOLUTION PLC
 class TblusersController extends MyController
 {
@@ -223,19 +224,11 @@ public function updategrid(Request $request)
        'usr_remember_token'=> 'max:100', 
        'usr_description'=> 'max:425'
    ];
-   $validator = Validator::make ( $request->all(), $rules );
-   $validator->setAttributeNames($attributeNames);
-   if($validator->fails()) {
-    $errorString = implode(",",$validator->messages()->all());
-    $resultObject= array(
-        "odata.metadata"=>"",
-        "value" =>"",
-        "statusCode"=>"error",
-        "type"=>"update",
-        "errorMsg"=>$errorString
-    );
-    return response()->json($resultObject);
-}else{
+   $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update");
+if ($validationResult !== false) {
+    return $validationResult;
+}
+    try{
     $id=$request->get("usr_id");
         //$requestData['foreign_field_name']=$request->get('master_id');
             //assign data from of foreign key
@@ -300,8 +293,10 @@ public function updategrid(Request $request)
         "type"=>"save",
         "errorMsg"=>""
     );
-    return response()->json($resultObject);
-}        
+ return response()->json($resultObject);
+    }       
+}catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"update");
 }
 }
 public function insertgrid(Request $request)
@@ -345,19 +340,11 @@ public function insertgrid(Request $request)
         'usr_remember_token'=> 'max:100', 
         'usr_description'=> 'max:425'
     ];
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if($validator->fails()) {
-        $errorString = implode(",",$validator->messages()->all());
-        $resultObject= array(
-            "errorMsg"=>$errorString,
-            "data" =>array(),
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "status_code"=>200,
-            "type"=>"duplicate"
-        );
-        return response()->json($resultObject);
-    }else{
+  $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "save");
+if ($validationResult !== false) {
+    return $validationResult;
+}
+try {
         $requestData = $request->all();
         //$requestData['usr_created_by']=auth()->user()->usr_Id;
         $status= $request->input('usr_status');
@@ -393,15 +380,19 @@ public function insertgrid(Request $request)
         //START ADD DEFAULT ROLE
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;
-        $resultObject= array(
-            "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "status_code"=>200,
-            "type"=>"save",
-            "errorMsg"=>""
-        );
-    }  
-    return response()->json($resultObject);
+    return response()->json([
+        "data" => $data_info,
+        "previledge" => [
+            'is_role_editable' => 1,
+            'is_role_deletable' => 1
+        ],
+        "status_code" => 200,
+        "type" => "save",
+        "errorMsg" => ""
+    ]);
+}catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"save");
+}
 }
 public function changeuserstatus(Request $request)
 {

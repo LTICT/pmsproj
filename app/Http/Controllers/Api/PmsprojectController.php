@@ -5,6 +5,7 @@ use App\Models\Modelpmsproject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
 //PROPERTY OF LT ICT SOLUTION PLC
 class PmsprojectController extends MyController
 {
@@ -219,19 +220,11 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
             'prj_outcome'=> 'max:425', 
             'prj_remark'=> 'max:100',
         ];
-        $validator = Validator::make ( $request->all(), $rules );
-        $validator->setAttributeNames($attributeNames);
-        if($validator->fails()) {
-            $errorString = implode(",",$validator->messages()->all());
-            $resultObject= array(
-                "odata.metadata"=>"",
-                "value" =>"",
-                "statusCode"=>"error",
-                "type"=>"update",
-                "errorMsg"=>$errorString
-            );
-            return response()->json($resultObject);
-        }else{
+       $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update");
+if ($validationResult !== false) {
+    return $validationResult;
+}
+    try{
             $id=$request->get("prj_id");
         //$requestData['foreign_field_name']=$request->get('master_id');
             //assign data from of foreign key
@@ -281,7 +274,9 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
             );
             return response()->json($resultObject);
         }        
-    }
+  }catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"update");
+}
 }
 public function insertgrid(Request $request)
 {
@@ -349,19 +344,11 @@ public function insertgrid(Request $request)
         'prj_outcome'=> 'max:425', 
         'prj_remark'=> 'max:100'
     ];
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if($validator->fails()) {
-        $errorString = implode(",",$validator->messages()->all());
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>"",
-            "statusCode"=>"error",
-            "type"=>"update",
-            "errorMsg"=>$errorString
-        );
-        return response()->json($resultObject);
-    }else{
+$validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "save");
+if ($validationResult !== false) {
+    return $validationResult;
+}
+try {
         $requestData = $request->all();
         //$requestData['prj_created_by']=auth()->user()->usr_Id;
         $requestData['prj_created_by']=1;
@@ -385,15 +372,20 @@ public function insertgrid(Request $request)
         $data_info=Modelpmsproject::create($requestData);
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;
-        $resultObject= array(
-            "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "status_code"=>200,
-            "type"=>"save",
-            "errorMsg"=>""
-        );
-    }  
-    return response()->json($resultObject);
+    return response()->json([
+        "data" => $data_info,
+        "previledge" => [
+            'is_role_editable' => 1,
+            'is_role_deletable' => 1
+        ],
+        "status_code" => 200,
+        "type" => "save",
+        "errorMsg" => ""
+    ]);
+}catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"save");
+}
+
 }
 public function deletegrid(Request $request)
 {

@@ -119,7 +119,7 @@ public function handleDatabaseException($e, $actionType){
 				$query .=" AND prj_owner_woreda_id=0"; 
 			}
 			if($userTypeId ==1 ){
-			$query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_user_id=".$userId." )";
+			$query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_status=1 AND  usc_user_id=".$userId." )";
 		}
 			if(isset($sectorId) && !empty($sectorId) && $sectorId > 1){
 				//$query .=" AND prj_sector_id='".$sectorId."'";   
@@ -399,7 +399,7 @@ public function handleDatabaseException($e, $actionType){
 
 			//user sector should be set
 			if($userType==1){
-			$query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_user_id=".$userId." )";
+			$query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_status=1 AND usc_user_id=".$userId." )";
 		    }
 			if(isset($zoneId) && isset($zoneId) && $zoneId > 0){
 				

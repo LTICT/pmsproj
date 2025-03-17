@@ -187,7 +187,6 @@ try {
 }catch (QueryException $e) {
   return $this->handleDatabaseException($e,"save");
 }
-
 }
 //Delete Data
 public function deletegrid(Request $request)

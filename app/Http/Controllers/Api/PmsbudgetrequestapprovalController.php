@@ -19,6 +19,7 @@ class PmsbudgetrequestapprovalController extends MyController
     //dd($userInfo);
         //if(isset($userInfo)){
     //get user info from logged in user
+            $userId=$userInfo->usr_id;
             $zoneId=$userInfo->usr_zone_id;
             $woredaId=$userInfo->usr_woreda_id;
             $sectorId=$userInfo->usr_sector_id;
@@ -26,7 +27,6 @@ class PmsbudgetrequestapprovalController extends MyController
             $directorateId=$userInfo->usr_directorate_id;
             $teamId=$userInfo->usr_team_id;
             $officerId=$userInfo->usr_officer_id;
-
             $query='SELECT bdr_request_category_id, rqs_description AS color_code, rqs_name_en AS status_name, bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
      bdr_released_amount,bdr_project_id,bdr_requested_date_ec,bdr_requested_date_gc,
      bdr_released_date_ec,bdr_released_date_gc,bdr_description,bdr_create_time,bdr_update_time,
@@ -35,10 +35,9 @@ class PmsbudgetrequestapprovalController extends MyController
      INNER JOIN pms_project ON pms_project.prj_id=pms_budget_request.bdr_project_id
      INNER JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_budget_request.bdr_budget_year_id
      INNER JOIN gen_request_status ON gen_request_status.rqs_id=pms_budget_request.bdr_request_status';
-
 if($directorateId>0 && $teamId==0 && $officerId==0){
-    $query .=" INNER JOIN gen_request_followup ON gen_request_followup.rqf_request_id=pms_budget_request.bdr_id AND
-    rqf_forwarded_to_dep_id=".$directorateId."  ";
+    //$query .=" INNER JOIN gen_request_followup ON gen_request_followup.rqf_request_id=pms_budget_request.bdr_id AND
+    //rqf_forwarded_to_dep_id=".$directorateId."  ";
 }else if($directorateId>0 && $teamId>0 && $officerId==0){
     $query .=" INNER JOIN gen_request_followup ON gen_request_followup.rqf_request_id=pms_budget_request.bdr_id AND
     rqf_forwarded_to_dep_id=".$teamId."  ";
@@ -47,11 +46,14 @@ if($directorateId>0 && $teamId==0 && $officerId==0){
     rqf_forwarded_to_dep_id=".$officerId."  ";
 }    
      $query .=' WHERE prj_owner_type=1';
+if($directorateId>0 && $teamId==0 && $officerId==0){
+    //Directorates only view projects that are owned by sectors they are assigned to
+    $query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_status=1 AND usc_user_id=".$userId." )";
+}
 $requestStatus=$request->input('bdr_request_status');
 if(isset($requestStatus) && isset($requestStatus)){
 $query .=" AND bdr_request_status='".$requestStatus."'"; 
 }
-
 $prjName=$request->input('prj_name');
 if(isset($prjName) && isset($prjName)){
 $query .=" AND prj_name LIKE '%".$prjName."%'"; 
@@ -109,7 +111,7 @@ if($departmentId > 1){
 //dd($query);
 $query.=' ORDER BY bdr_id DESC';
 $data_info=DB::select($query);
-$this->getQueryInfo($query);
+//$this->getQueryInfo($query);
 /*}else{
     $data_info=array();
 }*/
