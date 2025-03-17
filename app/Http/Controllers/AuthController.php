@@ -104,7 +104,8 @@ protected function respondWithToken($token, $user = null)
         'authorization' => [
             'token' => $token,
             'type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60,
+            //'expires_in' => auth('api')->factory()->getTTL() * 60,
+            'expires_in' => 60,
             'refresh_token' => $refreshToken
         ]
     ]);
