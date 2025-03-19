@@ -54,29 +54,29 @@ class AuthController extends Controller
         //END TEST
          $user = auth('api')->user();
         //START USER INFO
-         $user['user_detail']="";
-         if(1==2){
+         $user['user_info']="";
+         if($user){
         $query='SELECT sci_name_or AS sector_name,
-        gen_address_structure.add_name_or AS zone_name, 
-        gen_department.dep_name_or as dep_name 
+        zone.add_name_or AS zone_name,
+        woreda.add_name_or AS woreda_name
         FROM tbl_users ';   
-        $query .= ' LEFT JOIN gen_address_structure ON tbl_users.usr_zone_id = gen_address_structure.add_id'; 
-        $query .= ' LEFT JOIN gen_department ON tbl_users.usr_department_id = gen_department.dep_id';
+        $query .= ' LEFT JOIN gen_address_structure zone ON tbl_users.usr_zone_id = zone.add_id';
+        $query .= ' LEFT JOIN gen_address_structure woreda ON tbl_users.usr_woreda_id = woreda.add_id'; 
         $query .= ' LEFT JOIN pms_sector_information ON tbl_users.usr_sector_id = pms_sector_information.sci_id';
         $query .=" WHERE usr_id=".$user->usr_id." ";
         $user_detail_data=DB::select($query);
         $text="";
         if( isset($user_detail_data) && !empty($user_detail_data)){
-            $text .=(isset($user_detail_data[0]->sector_name) && !empty($user_detail_data[0]->sector_name)) ? "Sector - ".  $user_detail_data[0]->sector_name : '';
+            /*$text .=(isset($user_detail_data[0]->sector_name) && !empty($user_detail_data[0]->sector_name)) ? "Sector - ".  $user_detail_data[0]->sector_name : '';
             $text .=(isset($user_detail_data[0]->zone_name) && !empty($user_detail_data[0]->zone_name)) ? " : Zone - ".  $user_detail_data[0]->zone_name : '';
-            $text .=(isset($user_detail_data[0]->dep_name) && !empty($user_detail_data[0]->dep_name)) ? " : Department - ".  $user_detail_data[0]->dep_name : '';
+            $text .=(isset($user_detail_data[0]->dep_name) && !empty($user_detail_data[0]->dep_name)) ? " : Department - ".  $user_detail_data[0]->dep_name : '';*/
             //Update last login data 
-
+            $user['user_info']=$user_detail_data[0];
             $data_info = Modeltblusers::findOrFail($user->usr_id);
             $data['usr_last_logged_in']=date('Y-m-d H:i:s');
             $data_info->update($data);
         }
-        $user['user_detail']=$text;
+        
     }
         //START GET USER SECTORS
         $query ="SELECT STRING_AGG(usc_sector_id::TEXT, ',') AS sector_ids FROM tbl_user_sector WHERE usc_status=1 AND usc_user_id=".$user->usr_id."";
@@ -105,7 +105,7 @@ protected function respondWithToken($token, $user = null)
             'token' => $token,
             'type' => 'bearer',
             //'expires_in' => auth('api')->factory()->getTTL() * 60,
-            'expires_in' => 60,
+            'expires_in' => 60, // Expiration time (applies to access token)
             'refresh_token' => $refreshToken
         ]
     ]);

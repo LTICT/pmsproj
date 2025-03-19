@@ -36,7 +36,7 @@ class JwtMiddleware
             $requestData['acl_user_id']=$user->usr_id;
             //serialize($request->input()->all());
             //dd($request->input());
-        $data_info=Modeltblaccesslog::create($requestData);
+        //$data_info=Modeltblaccesslog::create($requestData);
         $request->authUser = $user;
         } catch (JWTException $e) {
             //dd($e);

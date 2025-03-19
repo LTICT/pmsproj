@@ -30,31 +30,44 @@ class PmsprojectController extends MyController
 
          sci_name_en as sector_name,pct_name_en AS project_category, prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,prj_id,prj_name,prj_code,prj_project_status_id,
         pms_project_category.pct_name_or AS prj_project_category_id,prj_project_budget_source_id,prj_total_estimate_budget,prj_total_actual_budget,prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,prj_location_kebele_id,prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_kebele_id,prj_owner_description,prj_start_date_et,prj_start_date_gc,prj_start_date_plan_et,prj_start_date_plan_gc,prj_outcome,prj_deleted,prj_remark,prj_created_by,prj_created_date,prj_create_time,prj_update_time,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number FROM pms_project ';
-
         $query .= " LEFT JOIN pms_sector_information ON pms_project.prj_sector_id = pms_sector_information.sci_id";
 $query .= " LEFT JOIN gen_address_structure owner_zone ON pms_project.prj_owner_zone_id = owner_zone.add_id";
 $query .= " LEFT JOIN gen_address_structure owner_woreda ON pms_project.prj_owner_woreda_id = owner_woreda.add_id";
 $query .= " LEFT JOIN gen_address_structure location_zone ON pms_project.prj_location_zone_id = location_zone.add_id";
 $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_location_woreda_id = location_woreda.add_id";
-
         $query .=' LEFT JOIN pms_project_status ON pms_project_status.prs_id= pms_project.prj_project_status_id';
         $query .= ' LEFT JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id';
         $query .=" WHERE prj_id=".$id."  AND prj_owner_type=1";
         $data_info=DB::select($query);
         if(isset($data_info) && !empty($data_info)){
+            //START PROJECT ANALYSIS
+            //START PROJECT PERFORMANCE
+            $query='SELECT prp_record_date_gc,prp_total_budget_used AS used_amount,prp_physical_performance AS physical_performance FROM pms_project_performance ';
+             $query .=" WHERE prp_project_id= ".$id." ";
+              $performance_info=DB::select($query);
+            //END PROJECT PERFORMANCE
+              //START COST
+              $query='SELECT SUM(bdr_released_amount) AS additional_budget
+     FROM pms_budget_request ';
+     $query .=" WHERE bdr_project_id= ".$id." AND bdr_request_category_id > 1 ";
+     $additional_budget_info=DB::select($query);
+              //END COST
+            //END PROJECT ANALYSIS
             $data=$data_info[0];
-            $request_role='requester';
+          /*  $request_role='requester';
             $authenticatedUser = $request->authUser;
             $userId=$authenticatedUser->usr_id;
             if($userId==9){
                 $request_role='requester';
-            }
+            }*/
             $tabInfo=$this->getAllTabPermission($request);
             $resultObject= array(
+                'performance'=>$performance_info[0] ?? null,
+                'additional_budget'=>$additional_budget_info ?? null,
                 'allowedTabs'=>$tabInfo['allowedTabs'],
                 "data" =>$data,
                 "data_available"=>"1",
-                "request_role"=>$request_role);
+                "request_role"=>"requester");
             return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
         }else{
             $resultObject= array(

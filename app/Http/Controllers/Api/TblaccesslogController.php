@@ -14,7 +14,7 @@ class TblaccesslogController extends MyController
     //$this->middleware('auth');
 }
     public function listgrid(Request $request){
-     $query='SELECT acl_id,acl_ip,usr_email AS acl_user_id,acl_role_id,acl_object_name,pag_name AS acl_object_id,acl_remark,acl_detail,
+     $query='SELECT acl_id,acl_ip,usr_email AS acl_user_id,acl_role_id,acl_object_name,acl_object_id,acl_remark,acl_detail,
      acl_object_action,acl_description,acl_create_time,acl_update_time,acl_delete_time,
      acl_created_by,acl_status,1 AS is_editable, 1 AS is_deletable FROM tbl_access_log ';      
      $query .=' LEFT JOIN tbl_users ON tbl_users.usr_id=tbl_access_log.acl_user_id';

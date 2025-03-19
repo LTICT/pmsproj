@@ -2,7 +2,7 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
-class Modelpmsdocumenttype extends Model
+class Modelpmsdocumenttype extends BaseModel
 {
     const CREATED_AT = 'pdt_create_time';
     const UPDATED_AT = 'pdt_update_time';

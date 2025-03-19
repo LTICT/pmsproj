@@ -6,6 +6,8 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Cache\RateLimiting\Limit;
+use Symfony\Component\HttpFoundation\Response;
+
 class RouteServiceProvider extends ServiceProvider
 {
     /**
@@ -31,10 +33,33 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-
+        $this->configureRateLimiting();
         parent::boot();
-        
+    }
+
+    protected function configureRateLimiting()
+    {
+        // Global API rate limiter
+        RateLimiter::for('api', function ($request) {
+                     return Limit::perMinute(60) // Allow 60 attempts per minute
+                ->by($request->ip()) // Limit by IP address
+                ->response(function () {
+                    return response()->json([
+                        'message' => 'Too many Requests. Please try again later.',
+                    ], Response::HTTP_TOO_MANY_REQUESTS); // 429 status code
+                });
+        });
+
+        // Custom rate limiter for login
+        RateLimiter::for('login', function ($request) {
+            return Limit::perMinute(5) // Allow 5 attempts per minute
+                ->by($request->ip()) // Limit by IP address
+                ->response(function () {
+                    return response()->json([
+                        'message' => 'Too many login attempts. Please try again later.',
+                    ], Response::HTTP_TOO_MANY_REQUESTS); // 429 status code
+                });
+        });
     }
 
     /**
@@ -45,10 +70,7 @@ class RouteServiceProvider extends ServiceProvider
     public function map()
     {
         $this->mapApiRoutes();
-
         $this->mapWebRoutes();
-
-        //
     }
 
     /**

@@ -27,7 +27,7 @@ class PmsbudgetrequestapprovalController extends MyController
             $directorateId=$userInfo->usr_directorate_id;
             $teamId=$userInfo->usr_team_id;
             $officerId=$userInfo->usr_officer_id;
-            $query='SELECT bdr_request_category_id, rqs_description AS color_code, rqs_name_en AS status_name, bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
+            $query='SELECT bdr_request_type, bdr_request_category_id, rqs_description AS color_code, rqs_name_en AS status_name, bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
      bdr_released_amount,bdr_project_id,bdr_requested_date_ec,bdr_requested_date_gc,
      bdr_released_date_ec,bdr_released_date_gc,bdr_description,bdr_create_time,bdr_update_time,
      bdr_delete_time,bdr_created_by,bdr_status,bdr_action_remark,1 AS is_editable, 1 AS is_deletable 
@@ -104,6 +104,11 @@ $requestCategory=$request->input('bdr_request_category_id');
 if(isset($requestCategory) && isset($requestCategory)){
 $query .=" AND bdr_request_category_id='".$requestCategory."'"; 
 }
+$requestType=$request->input('bdr_request_type');
+if(isset($requestType) && isset($requestType)){
+$query .=" AND bdr_request_type='".$requestType."'"; 
+}
+
 //if user is assinged to a department
 if($departmentId > 1){
     //$query .=" AND prj_department_id='".$departmentId."'"; 
