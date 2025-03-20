@@ -1,8 +1,8 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-
-class Modelgenemailtemplate extends Model
+use App\Models\BaseModel;
+class Modelgenemailtemplate extends BaseModel
 {
     const CREATED_AT = 'emt_create_time';
     const UPDATED_AT = 'emt_update_time';

@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\BaseModel;
 class Modelpmsdocumenttype extends BaseModel
 {
     const CREATED_AT = 'pdt_create_time';

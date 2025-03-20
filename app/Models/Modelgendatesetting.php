@@ -1,8 +1,8 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-
-class Modelgendatesetting extends Model
+use App\Models\BaseModel;
+class Modelgendatesetting extends BaseModel
 {
     const CREATED_AT = 'dts_create_time';
     const UPDATED_AT = 'dts_update_time';

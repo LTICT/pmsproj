@@ -1,8 +1,8 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-
-class Modelgenaddressstructure extends Model
+use App\Models\BaseModel;
+class Modelgenaddressstructure extends BaseModel
 {
     const CREATED_AT = 'add_create_time';
     const UPDATED_AT = 'add_update_time';

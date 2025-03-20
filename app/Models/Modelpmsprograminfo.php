@@ -1,8 +1,8 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-
-class Modelpmsprograminfo extends Model
+use App\Models\BaseModel;
+class Modelpmsprograminfo extends BaseModel
 {
     const CREATED_AT = 'pri_create_time';
     const UPDATED_AT = 'pri_update_time';

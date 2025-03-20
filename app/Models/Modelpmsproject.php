@@ -1,8 +1,8 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-
-class Modelpmsproject extends Model
+use App\Models\BaseModel;
+class Modelpmsproject extends BaseModel
 {
     const CREATED_AT = 'prj_create_time';
     const UPDATED_AT = 'prj_update_time';
