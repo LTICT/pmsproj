@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
-use Illuminate\Database\Eloquent\Model;
-class Modelpmspaymentcategory extends Model
+use App\Models\BaseModel;
+class Modelpmspaymentcategory extends BaseModel
 {
     const CREATED_AT = 'pyc_create_time';
     const UPDATED_AT = 'pyc_update_time';

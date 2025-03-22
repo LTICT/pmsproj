@@ -50,7 +50,7 @@ $query .=' AND acl_object_name="'.$aclobjectname.'"';
 }
 $userId=$request->input('user_id');
 if(isset($userId) && isset($userId)){
-$query .=" AND user_id='".$userId."'"; 
+$query .=" AND acl_user_id='".$userId."'"; 
 }
 $query.=' ORDER BY acl_id DESC';
 $data_info=DB::select($query);

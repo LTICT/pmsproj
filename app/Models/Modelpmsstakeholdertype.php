@@ -1,8 +1,8 @@
 <?php
 namespace App\Models;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\BaseModel;
 
-class Modelpmsstakeholdertype extends Model
+class Modelpmsstakeholdertype extends BaseModel
 {
     const CREATED_AT = 'sht_create_time';
     const UPDATED_AT = 'sht_update_time';
@@ -26,8 +26,6 @@ class Modelpmsstakeholdertype extends Model
      * @var array
      */
     protected $fillable = ['sht_id','sht_type_name_or','sht_type_name_am','sht_type_name_en','sht_description','sht_create_time','sht_update_time','sht_delete_time','sht_created_by','sht_status',];
-
-    
 
     /**
      * Change activity log event description

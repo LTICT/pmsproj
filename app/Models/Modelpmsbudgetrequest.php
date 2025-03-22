@@ -1,8 +1,7 @@
 <?php
 namespace App\Models;
-use Illuminate\Database\Eloquent\Model;
-
-class Modelpmsbudgetrequest extends Model
+use App\Models\BaseModel;
+class Modelpmsbudgetrequest extends BaseModel
 {
     const CREATED_AT = 'bdr_create_time';
     const UPDATED_AT = 'bdr_update_time';

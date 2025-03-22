@@ -1,8 +1,8 @@
 <?php
 namespace App\Models;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\BaseModel;
 
-class Modelpmsprojectstakeholder extends Model
+class Modelpmsprojectstakeholder extends BaseModel
 {
     const CREATED_AT = 'psh_create_time';
     const UPDATED_AT = 'psh_update_time';
