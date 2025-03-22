@@ -1,8 +1,7 @@
 <?php
 namespace App\Models;
-use Illuminate\Database\Eloquent\Model;
-
-class Modelgenconversationinformation extends Model
+use App\Models\BaseModel;
+class Modelgenconversationinformation extends BaseModel
 {
     const CREATED_AT = 'cvi_create_time';
     const UPDATED_AT = 'cvi_update_time';

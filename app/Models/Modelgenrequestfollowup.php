@@ -1,8 +1,7 @@
 <?php
 namespace App\Models;
-use Illuminate\Database\Eloquent\Model;
-
-class Modelgenrequestfollowup extends Model
+use App\Models\BaseModel;
+class Modelgenrequestfollowup extends BaseModel
 {
     const CREATED_AT = 'rqf_create_time';
     const UPDATED_AT = 'rqf_update_time';
