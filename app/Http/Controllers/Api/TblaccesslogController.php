@@ -16,7 +16,7 @@ class TblaccesslogController extends MyController
     public function listgrid(Request $request){
      $query='SELECT acl_user_id AS user_id, acl_id,acl_ip,usr_email AS acl_user_id,acl_role_id,acl_object_name,acl_object_id,acl_remark,acl_detail,
      acl_object_action,acl_description,acl_create_time,acl_update_time,acl_delete_time,
-     acl_created_by,acl_status,1 AS is_editable, 1 AS is_deletable FROM tbl_access_log ';      
+     acl_created_by,acl_status,1 AS is_editable, 1 AS is_deletable FROM tbl_access_log ';
      $query .=' LEFT JOIN tbl_users ON tbl_users.usr_id=tbl_access_log.acl_user_id';
      $query .=' LEFT JOIN tbl_pages ON tbl_pages.pag_id=tbl_access_log.acl_role_id';
      $query .=' WHERE 1=1';
@@ -28,9 +28,9 @@ $query .=" AND acl_create_time >='".$startTime." 00 00 00'";
 if(isset($endTime) && isset($endTime)){
 $query .=" AND acl_create_time <='".$endTime." 23 59 59'"; 
 }
-     $aclid=$request->input('acl_id');
-if(isset($aclid) && isset($aclid)){
-$query .=' AND acl_id="'.$aclid.'"'; 
+$objectAction=$request->input('acl_object_action');
+if(isset($objectAction) && isset($objectAction)){
+$query .=" AND acl_object_action='".$objectAction."'"; 
 }
 $aclip=$request->input('acl_ip');
 if(isset($aclip) && isset($aclip)){

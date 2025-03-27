@@ -27,7 +27,7 @@ class PmscsoproposalrequestapprovalController extends MyController
             $teamId=$userInfo->usr_team_id;
             $officerId=$userInfo->usr_officer_id;
 
-            $query='SELECT rqs_description AS color_code, rqs_name_en AS status_name, bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
+            $query='SELECT cso_name, rqs_description AS color_code, rqs_name_en AS status_name, bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
      bdr_released_amount,bdr_project_id,bdr_requested_date_ec,bdr_requested_date_gc,
      bdr_released_date_ec,bdr_released_date_gc,bdr_description,bdr_create_time,bdr_update_time,
      bdr_delete_time,bdr_created_by,bdr_status,bdr_action_remark,1 AS is_editable, 1 AS is_deletable 
@@ -35,7 +35,7 @@ class PmscsoproposalrequestapprovalController extends MyController
      INNER JOIN pms_project ON pms_project.prj_id=pms_budget_request.bdr_project_id
      INNER JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_budget_request.bdr_budget_year_id
      INNER JOIN gen_request_status ON gen_request_status.rqs_id=pms_budget_request.bdr_request_status';
-
+$query .= ' LEFT JOIN pms_cso_info ON pms_project.prj_owner_id = pms_cso_info.cso_id';
 if($directorateId>0 && $teamId==0 && $officerId==0){
     $query .=" INNER JOIN gen_request_followup ON gen_request_followup.rqf_request_id=pms_budget_request.bdr_id AND
     rqf_forwarded_to_dep_id=".$directorateId."  ";

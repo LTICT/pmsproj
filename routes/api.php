@@ -249,6 +249,11 @@ Route::post('budget_request_approval/updategrid', 'Api\PmsbudgetrequestapprovalC
 
 Route::post('cso_proposal_request_approval/listgrid', 'Api\PmscsoproposalrequestapprovalController@listgrid');
 Route::post('cso_proposal_request_approval/updategrid', 'Api\PmscsoproposalrequestapprovalController@updategrid');
+Route::post('cso_budget_request/listgrid', 'Api\PmscsobudgetrequestController@listgrid');
+Route::post('cso_budget_request/insertgrid', 'Api\PmscsobudgetrequestController@insertgrid');
+Route::post('cso_budget_request/updategrid', 'Api\PmscsobudgetrequestController@updategrid');
+Route::post('cso_budget_request/deletegrid', 'Api\PmscsobudgetrequestController@deletegrid');
+Route::post('cso_budget_request/search', 'PmscsobudgetrequestController@search');
 
 Route::resource('project_contractor', 'PmsprojectcontractorController');
 Route::post('project_contractor/listgrid', 'Api\PmsprojectcontractorController@listgrid');

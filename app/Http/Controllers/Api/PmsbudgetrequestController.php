@@ -27,6 +27,10 @@ class PmsbudgetrequestController extends MyController
       $query .=' LEFT JOIN pms_sector_information ON pms_sector_information.sci_id= pms_project.prj_sector_id';
      $query .=' WHERE 1=1';
      
+$requestType=$request->input('bdr_request_type');
+if(isset($requestType) && isset($requestType)){
+$query .=" AND bdr_request_type='".$requestType."'"; 
+}
 $requestStatus=$request->input('bdr_request_status');
 if(isset($requestStatus) && isset($requestStatus)){
 $query .=" AND bdr_request_status='".$requestStatus."'"; 
@@ -78,14 +82,7 @@ if(isset($bdrprojectid) && isset($bdrprojectid)){
 $query .= " AND bdr_project_id = '$bdrprojectid'";
 }
 }else{
-    $userInfo=$this->getUserInfo($request);
-        if(isset($userInfo)){
-            if($userInfo->usr_owner_id > 0){
-                $query .=" AND prj_owner_id='".$userInfo->usr_owner_id."'";
-            }else{
-                $query=$this->getSearchParamCSO($request,$query);
-            }
-        }
+$query=$this->getSearchParam($request,$query);
 }
 //
 //$this->getQueryInfo($query);

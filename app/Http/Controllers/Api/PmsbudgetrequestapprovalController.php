@@ -50,6 +50,7 @@ if($directorateId>0 && $teamId==0 && $officerId==0){
     //Directorates only view projects that are owned by sectors they are assigned to
     $query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_status=1 AND usc_user_id=".$userId." )";
 }
+
 $requestStatus=$request->input('bdr_request_status');
 if(isset($requestStatus) && isset($requestStatus)){
 $query .=" AND bdr_request_status='".$requestStatus."'"; 
