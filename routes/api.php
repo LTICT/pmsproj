@@ -422,7 +422,32 @@ Route::resource('conversation_information', 'GenconversationinformationControlle
     Route::post('cso_info/insertgrid', 'Api\PmscsoinfoController@insertgrid');
     Route::post('cso_info/updategrid', 'Api\PmscsoinfoController@updategrid');
     Route::post('cso_info/deletegrid', 'Api\PmscsoinfoController@deletegrid');
+//START PROCUREMENT
+Route::resource('procurement_information', 'PmsprocurementinformationController');
+    Route::post('procurement_information/listgrid', 'Api\PmsprocurementinformationController@listgrid');
+    Route::post('procurement_information/insertgrid', 'Api\PmsprocurementinformationController@insertgrid');
+    Route::post('procurement_information/updategrid', 'Api\PmsprocurementinformationController@updategrid');
+    Route::post('procurement_information/deletegrid', 'Api\PmsprocurementinformationController@deletegrid');
 
+
+    Route::resource('procurement_method', 'PmsprocurementmethodController');
+    Route::post('procurement_method/listgrid', 'Api\PmsprocurementmethodController@listgrid');
+    Route::post('procurement_method/insertgrid', 'Api\PmsprocurementmethodController@insertgrid');
+    Route::post('procurement_method/updategrid', 'Api\PmsprocurementmethodController@updategrid');
+    Route::post('procurement_method/deletegrid', 'Api\PmsprocurementmethodController@deletegrid');
+
+    Route::resource('procurement_participant', 'PmsprocurementparticipantController');
+    Route::post('procurement_participant/listgrid', 'Api\PmsprocurementparticipantController@listgrid');
+    Route::post('procurement_participant/insertgrid', 'Api\PmsprocurementparticipantController@insertgrid');
+    Route::post('procurement_participant/updategrid', 'Api\PmsprocurementparticipantController@updategrid');
+    Route::post('procurement_participant/deletegrid', 'Api\PmsprocurementparticipantController@deletegrid');
+
+    Route::resource('procurement_stage', 'PmsprocurementstageController');
+    Route::post('procurement_stage/listgrid', 'Api\PmsprocurementstageController@listgrid');
+    Route::post('procurement_stage/insertgrid', 'Api\PmsprocurementstageController@insertgrid');
+    Route::post('procurement_stage/updategrid', 'Api\PmsprocurementstageController@updategrid');
+    Route::post('procurement_stage/deletegrid', 'Api\PmsprocurementstageController@deletegrid');
+//END PROCUREMENT
 });
 
    //START CACHE MANAGEMENT

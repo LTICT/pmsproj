@@ -79,7 +79,7 @@ try {
         }
         //START ADD DEFAULT ROLE
         if(isset($data_info) && !empty($data_info)){
-            $role_usr_data['url_role_id']=69;
+            $role_usr_data['url_role_id']=68;
             $role_usr_data['url_user_id']=$data_info->usr_id;
             \App\Models\Modeltbluserrole::create($role_usr_data);
         }
