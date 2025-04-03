@@ -75,7 +75,7 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
             return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
         }
     }
-    //to populate projects list based on selected program 
+    //to populate projects list based on selected program
     public function listgrid(Request $request){
         $permissionData=$this->getPagePermission($request,9, "project_info");
         //dd($permissionData);
@@ -92,11 +92,11 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         //$query=$this->getSearchParam($request,$query);
         $prjprojectstatusid=$request->input('prj_project_status_id');
         if(isset($prjprojectstatusid) && isset($prjprojectstatusid)){
-            $query .=' AND prj_project_status_id="'.$prjprojectstatusid.'"'; 
+            $query .=' AND prj_project_status_id="'.$prjprojectstatusid.'"';
         }
          $programID=$request->input('program_id');
         if(isset($programID) && isset($programID)){
-            $query .=" AND prj_program_id='".$programID."'"; 
+            $query .=" AND prj_program_id='".$programID."'";
         }
         $query.=' ORDER BY prj_id DESC';
         $data_info=DB::select($query);
@@ -129,36 +129,36 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         $query=$this->getSearchParam($request,$query);
         $prjprojectstatusid=$request->input('prj_project_status_id');
         if(isset($prjprojectstatusid) && isset($prjprojectstatusid)){
-            $query .=' AND prj_project_status_id="'.$prjprojectstatusid.'"'; 
+            $query .=' AND prj_project_status_id="'.$prjprojectstatusid.'"';
         }
         $prjprojectcategoryid=$request->input('prj_project_category_id');
         if(isset($prjprojectcategoryid) && isset($prjprojectcategoryid)){
-            $query .=" AND prj_project_category_id='".$prjprojectcategoryid."'"; 
-        }        
+            $query .=" AND prj_project_category_id='".$prjprojectcategoryid."'";
+        }
         $prjstartdategc=$request->input('prj_start_date_gc');
         if(isset($prjstartdategc) && isset($prjstartdategc)){
-            $query .=' AND prj_start_date_gc="'.$prjstartdategc.'"'; 
+            $query .=' AND prj_start_date_gc="'.$prjstartdategc.'"';
         }
         $prjstartdateplangc=$request->input('prj_start_date_plan_gc');
         if(isset($prjstartdateplangc) && isset($prjstartdateplangc)){
-            $query .=' AND prj_start_date_plan_gc="'.$prjstartdateplangc.'"'; 
+            $query .=' AND prj_start_date_plan_gc="'.$prjstartdateplangc.'"';
         }
         $prjenddateactualgc=$request->input('prj_end_date_actual_gc');
         if(isset($prjenddateactualgc) && isset($prjenddateactualgc)){
-            $query .=' AND prj_end_date_actual_gc="'.$prjenddateactualgc.'"'; 
+            $query .=' AND prj_end_date_actual_gc="'.$prjenddateactualgc.'"';
         }
         $prjenddateplangc=$request->input('prj_end_date_plan_gc');
         if(isset($prjenddateplangc) && isset($prjenddateplangc)){
-            $query .=' AND prj_end_date_plan_gc="'.$prjenddateplangc.'"'; 
+            $query .=' AND prj_end_date_plan_gc="'.$prjenddateplangc.'"';
         }
          $programID=$request->input('program_id');
         if(isset($programID) && isset($programID)){
-            $query .=" AND prj_program_id='".$programID."'"; 
+            $query .=" AND prj_program_id='".$programID."'";
         }
         $query.=' ORDER BY prj_id DESC';
         //$this->getQueryInfo($query);
         $data_info=DB::select($query);
-        
+
         $tabInfo=$this->getTabPermission($request);
         $resultObject= array(
             "data" =>$data_info,
@@ -170,67 +170,67 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
     public function updategrid(Request $request)
     {
         $attributeNames = [
-            'prj_name'=> trans('form_lang.prj_name'), 
-            'prj_code'=> trans('form_lang.prj_code'), 
-            'prj_project_status_id'=> trans('form_lang.prj_project_status_id'), 
-            'prj_project_category_id'=> trans('form_lang.prj_project_category_id'), 
-            'prj_project_budget_source_id'=> trans('form_lang.prj_project_budget_source_id'), 
-            'prj_total_estimate_budget'=> trans('form_lang.prj_total_estimate_budget'), 
-            'prj_total_actual_budget'=> trans('form_lang.prj_total_actual_budget'), 
-            'prj_geo_location'=> trans('form_lang.prj_geo_location'), 
-            'prj_sector_id'=> trans('form_lang.prj_sector_id'), 
-            'prj_location_region_id'=> trans('form_lang.prj_location_region_id'), 
-            'prj_location_zone_id'=> trans('form_lang.prj_location_zone_id'), 
-            'prj_location_woreda_id'=> trans('form_lang.prj_location_woreda_id'), 
-            'prj_location_kebele_id'=> trans('form_lang.prj_location_kebele_id'), 
-            'prj_location_description'=> trans('form_lang.prj_location_description'), 
-            'prj_owner_region_id'=> trans('form_lang.prj_owner_region_id'), 
-            'prj_owner_zone_id'=> trans('form_lang.prj_owner_zone_id'), 
-            'prj_owner_woreda_id'=> trans('form_lang.prj_owner_woreda_id'), 
-            'prj_owner_kebele_id'=> trans('form_lang.prj_owner_kebele_id'), 
-            'prj_owner_description'=> trans('form_lang.prj_owner_description'), 
-            'prj_start_date_et'=> trans('form_lang.prj_start_date_et'), 
-            'prj_start_date_gc'=> trans('form_lang.prj_start_date_gc'), 
-            'prj_start_date_plan_et'=> trans('form_lang.prj_start_date_plan_et'), 
-            'prj_start_date_plan_gc'=> trans('form_lang.prj_start_date_plan_gc'), 
-            'prj_end_date_actual_et'=> trans('form_lang.prj_end_date_actual_et'), 
-            'prj_end_date_actual_gc'=> trans('form_lang.prj_end_date_actual_gc'), 
-            'prj_end_date_plan_gc'=> trans('form_lang.prj_end_date_plan_gc'), 
-            'prj_end_date_plan_et'=> trans('form_lang.prj_end_date_plan_et'), 
-            'prj_outcome'=> trans('form_lang.prj_outcome'), 
-            'prj_deleted'=> trans('form_lang.prj_deleted'), 
-            'prj_remark'=> trans('form_lang.prj_remark'), 
-            'prj_created_date'=> trans('form_lang.prj_created_date'), 
-            'prj_owner_id'=> trans('form_lang.prj_owner_id'), 
-            'prj_urban_ben_number'=> trans('form_lang.prj_urban_ben_number'), 
-            'prj_rural_ben_number'=> trans('form_lang.prj_rural_ben_number'), 
+            'prj_name'=> trans('form_lang.prj_name'),
+            'prj_code'=> trans('form_lang.prj_code'),
+            'prj_project_status_id'=> trans('form_lang.prj_project_status_id'),
+            'prj_project_category_id'=> trans('form_lang.prj_project_category_id'),
+            'prj_project_budget_source_id'=> trans('form_lang.prj_project_budget_source_id'),
+            'prj_total_estimate_budget'=> trans('form_lang.prj_total_estimate_budget'),
+            'prj_total_actual_budget'=> trans('form_lang.prj_total_actual_budget'),
+            'prj_geo_location'=> trans('form_lang.prj_geo_location'),
+            'prj_sector_id'=> trans('form_lang.prj_sector_id'),
+            'prj_location_region_id'=> trans('form_lang.prj_location_region_id'),
+            'prj_location_zone_id'=> trans('form_lang.prj_location_zone_id'),
+            'prj_location_woreda_id'=> trans('form_lang.prj_location_woreda_id'),
+            'prj_location_kebele_id'=> trans('form_lang.prj_location_kebele_id'),
+            'prj_location_description'=> trans('form_lang.prj_location_description'),
+            'prj_owner_region_id'=> trans('form_lang.prj_owner_region_id'),
+            'prj_owner_zone_id'=> trans('form_lang.prj_owner_zone_id'),
+            'prj_owner_woreda_id'=> trans('form_lang.prj_owner_woreda_id'),
+            'prj_owner_kebele_id'=> trans('form_lang.prj_owner_kebele_id'),
+            'prj_owner_description'=> trans('form_lang.prj_owner_description'),
+            'prj_start_date_et'=> trans('form_lang.prj_start_date_et'),
+            'prj_start_date_gc'=> trans('form_lang.prj_start_date_gc'),
+            'prj_start_date_plan_et'=> trans('form_lang.prj_start_date_plan_et'),
+            'prj_start_date_plan_gc'=> trans('form_lang.prj_start_date_plan_gc'),
+            'prj_end_date_actual_et'=> trans('form_lang.prj_end_date_actual_et'),
+            'prj_end_date_actual_gc'=> trans('form_lang.prj_end_date_actual_gc'),
+            'prj_end_date_plan_gc'=> trans('form_lang.prj_end_date_plan_gc'),
+            'prj_end_date_plan_et'=> trans('form_lang.prj_end_date_plan_et'),
+            'prj_outcome'=> trans('form_lang.prj_outcome'),
+            'prj_deleted'=> trans('form_lang.prj_deleted'),
+            'prj_remark'=> trans('form_lang.prj_remark'),
+            'prj_created_date'=> trans('form_lang.prj_created_date'),
+            'prj_owner_id'=> trans('form_lang.prj_owner_id'),
+            'prj_urban_ben_number'=> trans('form_lang.prj_urban_ben_number'),
+            'prj_rural_ben_number'=> trans('form_lang.prj_rural_ben_number'),
         ];
         $rules= [
             'prj_name'=> 'max:200',
             'prj_name_am'=> 'max:200',
-            'prj_name_en'=> 'max:200', 
-            'prj_code'=> 'max:20', 
-            'prj_project_status_id'=> 'max:200', 
-            'prj_project_category_id'=> 'max:200', 
-            'prj_project_budget_source_id'=> 'max:200', 
-            'prj_total_estimate_budget'=> 'max:200', 
-            'prj_total_actual_budget'=> 'max:200', 
-            'prj_geo_location'=> 'max:200', 
-            //'prj_sector_id'=> 'integer', 
-            'prj_location_region_id'=> 'integer', 
+            'prj_name_en'=> 'max:200',
+            'prj_code'=> 'max:20',
+            'prj_project_status_id'=> 'max:200',
+            'prj_project_category_id'=> 'max:200',
+            'prj_project_budget_source_id'=> 'max:200',
+            'prj_total_estimate_budget'=> 'max:200',
+            'prj_total_actual_budget'=> 'max:200',
+            'prj_geo_location'=> 'max:200',
+            //'prj_sector_id'=> 'integer',
+            'prj_location_region_id'=> 'integer',
             'prj_location_zone_id'=> 'integer',
-            'prj_location_woreda_id'=> 'integer', 
-//'prj_location_kebele_id'=> 'integer', 
-            'prj_location_description'=> 'max:250', 
-            'prj_start_date_et'=> 'max:15', 
-            'prj_start_date_gc'=> 'max:15', 
-            'prj_start_date_plan_et'=> 'max:15', 
-            'prj_start_date_plan_gc'=> 'max:15', 
-            'prj_end_date_actual_et'=> 'max:15', 
-            'prj_end_date_actual_gc'=> 'max:15', 
-            'prj_end_date_plan_gc'=> 'max:15', 
-            'prj_end_date_plan_et'=> 'max:15', 
-            'prj_outcome'=> 'max:425', 
+            'prj_location_woreda_id'=> 'integer',
+//'prj_location_kebele_id'=> 'integer',
+            'prj_location_description'=> 'max:250',
+            'prj_start_date_et'=> 'max:15',
+            'prj_start_date_gc'=> 'max:15',
+            'prj_start_date_plan_et'=> 'max:15',
+            'prj_start_date_plan_gc'=> 'max:15',
+            'prj_end_date_actual_et'=> 'max:15',
+            'prj_end_date_actual_gc'=> 'max:15',
+            'prj_end_date_plan_gc'=> 'max:15',
+            'prj_end_date_plan_et'=> 'max:15',
+            'prj_outcome'=> 'max:425',
             'prj_remark'=> 'max:100',
         ];
        $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update");
@@ -241,7 +241,7 @@ if ($validationResult !== false) {
             $id=$request->get("prj_id");
         //$requestData['foreign_field_name']=$request->get('master_id');
             //assign data from of foreign key
-            $requestData = $request->all();            
+            $requestData = $request->all();
             $status= $request->input('prj_status');
             if($status=="true"){
                 $requestData['prj_status']=1;
@@ -286,7 +286,7 @@ if ($validationResult !== false) {
                 "errorMsg"=>""
             );
             return response()->json($resultObject);
-        }        
+        }
   }catch (QueryException $e) {
   return $this->handleDatabaseException($e,"update");
 }
@@ -294,67 +294,67 @@ if ($validationResult !== false) {
 public function insertgrid(Request $request)
 {
     $attributeNames = [
-        'prj_name'=> trans('form_lang.prj_name'), 
-        'prj_code'=> trans('form_lang.prj_code'), 
-        'prj_project_status_id'=> trans('form_lang.prj_project_status_id'), 
-        'prj_project_category_id'=> trans('form_lang.prj_project_category_id'), 
-        'prj_project_budget_source_id'=> trans('form_lang.prj_project_budget_source_id'), 
-        'prj_total_estimate_budget'=> trans('form_lang.prj_total_estimate_budget'), 
-        'prj_total_actual_budget'=> trans('form_lang.prj_total_actual_budget'), 
-        'prj_geo_location'=> trans('form_lang.prj_geo_location'), 
-        'prj_sector_id'=> trans('form_lang.prj_sector_id'), 
-        'prj_location_region_id'=> trans('form_lang.prj_location_region_id'), 
-        'prj_location_zone_id'=> trans('form_lang.prj_location_zone_id'), 
-        'prj_location_woreda_id'=> trans('form_lang.prj_location_woreda_id'), 
-        'prj_location_kebele_id'=> trans('form_lang.prj_location_kebele_id'), 
-        'prj_location_description'=> trans('form_lang.prj_location_description'), 
-        'prj_owner_region_id'=> trans('form_lang.prj_owner_region_id'), 
-        'prj_owner_zone_id'=> trans('form_lang.prj_owner_zone_id'), 
-        'prj_owner_woreda_id'=> trans('form_lang.prj_owner_woreda_id'), 
-        'prj_owner_kebele_id'=> trans('form_lang.prj_owner_kebele_id'), 
-        'prj_owner_description'=> trans('form_lang.prj_owner_description'), 
-        'prj_start_date_et'=> trans('form_lang.prj_start_date_et'), 
-        'prj_start_date_gc'=> trans('form_lang.prj_start_date_gc'), 
-        'prj_start_date_plan_et'=> trans('form_lang.prj_start_date_plan_et'), 
-        'prj_start_date_plan_gc'=> trans('form_lang.prj_start_date_plan_gc'), 
-        'prj_end_date_actual_et'=> trans('form_lang.prj_end_date_actual_et'), 
-        'prj_end_date_actual_gc'=> trans('form_lang.prj_end_date_actual_gc'), 
-        'prj_end_date_plan_gc'=> trans('form_lang.prj_end_date_plan_gc'), 
-        'prj_end_date_plan_et'=> trans('form_lang.prj_end_date_plan_et'), 
-        'prj_outcome'=> trans('form_lang.prj_outcome'), 
-        'prj_deleted'=> trans('form_lang.prj_deleted'), 
-        'prj_remark'=> trans('form_lang.prj_remark'), 
-        'prj_created_date'=> trans('form_lang.prj_created_date'), 
-        'prj_owner_id'=> trans('form_lang.prj_owner_id'), 
-        'prj_urban_ben_number'=> trans('form_lang.prj_urban_ben_number'), 
-        'prj_rural_ben_number'=> trans('form_lang.prj_rural_ben_number'), 
+        'prj_name'=> trans('form_lang.prj_name'),
+        'prj_code'=> trans('form_lang.prj_code'),
+        'prj_project_status_id'=> trans('form_lang.prj_project_status_id'),
+        'prj_project_category_id'=> trans('form_lang.prj_project_category_id'),
+        'prj_project_budget_source_id'=> trans('form_lang.prj_project_budget_source_id'),
+        'prj_total_estimate_budget'=> trans('form_lang.prj_total_estimate_budget'),
+        'prj_total_actual_budget'=> trans('form_lang.prj_total_actual_budget'),
+        'prj_geo_location'=> trans('form_lang.prj_geo_location'),
+        'prj_sector_id'=> trans('form_lang.prj_sector_id'),
+        'prj_location_region_id'=> trans('form_lang.prj_location_region_id'),
+        'prj_location_zone_id'=> trans('form_lang.prj_location_zone_id'),
+        'prj_location_woreda_id'=> trans('form_lang.prj_location_woreda_id'),
+        'prj_location_kebele_id'=> trans('form_lang.prj_location_kebele_id'),
+        'prj_location_description'=> trans('form_lang.prj_location_description'),
+        'prj_owner_region_id'=> trans('form_lang.prj_owner_region_id'),
+        'prj_owner_zone_id'=> trans('form_lang.prj_owner_zone_id'),
+        'prj_owner_woreda_id'=> trans('form_lang.prj_owner_woreda_id'),
+        'prj_owner_kebele_id'=> trans('form_lang.prj_owner_kebele_id'),
+        'prj_owner_description'=> trans('form_lang.prj_owner_description'),
+        'prj_start_date_et'=> trans('form_lang.prj_start_date_et'),
+        'prj_start_date_gc'=> trans('form_lang.prj_start_date_gc'),
+        'prj_start_date_plan_et'=> trans('form_lang.prj_start_date_plan_et'),
+        'prj_start_date_plan_gc'=> trans('form_lang.prj_start_date_plan_gc'),
+        'prj_end_date_actual_et'=> trans('form_lang.prj_end_date_actual_et'),
+        'prj_end_date_actual_gc'=> trans('form_lang.prj_end_date_actual_gc'),
+        'prj_end_date_plan_gc'=> trans('form_lang.prj_end_date_plan_gc'),
+        'prj_end_date_plan_et'=> trans('form_lang.prj_end_date_plan_et'),
+        'prj_outcome'=> trans('form_lang.prj_outcome'),
+        'prj_deleted'=> trans('form_lang.prj_deleted'),
+        'prj_remark'=> trans('form_lang.prj_remark'),
+        'prj_created_date'=> trans('form_lang.prj_created_date'),
+        'prj_owner_id'=> trans('form_lang.prj_owner_id'),
+        'prj_urban_ben_number'=> trans('form_lang.prj_urban_ben_number'),
+        'prj_rural_ben_number'=> trans('form_lang.prj_rural_ben_number'),
     ];
     $rules= [
         'prj_name'=> 'max:200',
         'prj_name_am'=> 'max:200',
-        'prj_name_en'=> 'max:200', 
-        'prj_code'=> 'max:20', 
-        'prj_project_status_id'=> 'max:200', 
-        'prj_project_category_id'=> 'max:200', 
-        'prj_project_budget_source_id'=> 'max:200', 
-        'prj_total_estimate_budget'=> 'max:200', 
-        'prj_total_actual_budget'=> 'max:200', 
-        'prj_geo_location'=> 'max:200', 
-        //'prj_sector_id'=> 'integer', 
-        'prj_location_region_id'=> 'integer', 
-        'prj_location_zone_id'=> 'integer', 
-        'prj_location_woreda_id'=> 'integer', 
-//'prj_location_kebele_id'=> 'integer', 
-        'prj_location_description'=> 'max:200', 
-        'prj_start_date_et'=> 'max:15', 
-        'prj_start_date_gc'=> 'max:15', 
-        'prj_start_date_plan_et'=> 'max:15', 
-        'prj_start_date_plan_gc'=> 'max:15', 
-        'prj_end_date_actual_et'=> 'max:15', 
-        'prj_end_date_actual_gc'=> 'max:15', 
-        'prj_end_date_plan_gc'=> 'max:15', 
-        'prj_end_date_plan_et'=> 'max:15', 
-        'prj_outcome'=> 'max:425', 
+        'prj_name_en'=> 'max:200',
+        'prj_code'=> 'max:20',
+        'prj_project_status_id'=> 'max:200',
+        'prj_project_category_id'=> 'max:200',
+        'prj_project_budget_source_id'=> 'max:200',
+        'prj_total_estimate_budget'=> 'max:200',
+        'prj_total_actual_budget'=> 'max:200',
+        'prj_geo_location'=> 'max:200',
+        //'prj_sector_id'=> 'integer',
+        'prj_location_region_id'=> 'integer',
+        'prj_location_zone_id'=> 'integer',
+        'prj_location_woreda_id'=> 'integer',
+//'prj_location_kebele_id'=> 'integer',
+        'prj_location_description'=> 'max:200',
+        'prj_start_date_et'=> 'max:15',
+        'prj_start_date_gc'=> 'max:15',
+        'prj_start_date_plan_et'=> 'max:15',
+        'prj_start_date_plan_gc'=> 'max:15',
+        'prj_end_date_actual_et'=> 'max:15',
+        'prj_end_date_actual_gc'=> 'max:15',
+        'prj_end_date_plan_gc'=> 'max:15',
+        'prj_end_date_plan_et'=> 'max:15',
+        'prj_outcome'=> 'max:425',
         'prj_remark'=> 'max:100'
     ];
 $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "save");

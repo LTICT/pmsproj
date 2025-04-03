@@ -58,6 +58,7 @@ try {
         $requestData['cso_website']=$request->input('cso_website');
         $requestData['cso_description']=$request->input('cso_description');
         $requestData['cso_created_by']=1;
+        $requestData['cso_status']=0;
         $cso_info=Modelpmscsoinfo::create($requestData);
         if(isset($cso_info)){
         $requestData['usr_owner_id']=$cso_info->cso_id;

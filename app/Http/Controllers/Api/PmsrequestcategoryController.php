@@ -22,8 +22,8 @@ class PmsrequestcategoryController extends MyController
      */
     public function show($id)
     {
-        $query='SELECT rqc_id,rqc_name_or,rqc_name_am,rqc_name_en,rqc_description,rqc_create_time,rqc_update_time,rqc_delete_time,rqc_created_by,rqc_status FROM pms_request_category ';       
-        
+        $query='SELECT rqc_id,rqc_name_or,rqc_name_am,rqc_name_en,rqc_description,rqc_create_time,rqc_update_time,rqc_delete_time,rqc_created_by,rqc_status FROM pms_request_category ';
+
         $query .=' WHERE rqc_id='.$id.' ';
         $data_info=DB::select(DB::raw($query));
         if(isset($data_info) && !empty($data_info)){
@@ -41,54 +41,55 @@ class PmsrequestcategoryController extends MyController
       if(isset($permissionData) && !empty($permissionData)){
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
      }
-     $query="SELECT rqc_id,rqc_name_or,rqc_name_am,rqc_name_en,rqc_description,rqc_create_time,rqc_update_time,rqc_delete_time,rqc_created_by,rqc_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM pms_request_category ";
-     
+     $query="SELECT rqc_gov_active,rqc_cso_active,rqc_id,rqc_name_or,rqc_name_am,rqc_name_en,rqc_description,
+     rqc_create_time,rqc_update_time,rqc_delete_time,rqc_created_by,rqc_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM pms_request_category ";
+
      $query .=' WHERE 1=1';
      $rqcid=$request->input('rqc_id');
 if(isset($rqcid) && isset($rqcid)){
-$query .=' AND rqc_id="'.$rqcid.'"'; 
+$query .=' AND rqc_id="'.$rqcid.'"';
 }
 $rqcnameor=$request->input('rqc_name_or');
 if(isset($rqcnameor) && isset($rqcnameor)){
-$query .=' AND rqc_name_or="'.$rqcnameor.'"'; 
+$query .=' AND rqc_name_or="'.$rqcnameor.'"';
 }
 $rqcnameam=$request->input('rqc_name_am');
 if(isset($rqcnameam) && isset($rqcnameam)){
-$query .=' AND rqc_name_am="'.$rqcnameam.'"'; 
+$query .=' AND rqc_name_am="'.$rqcnameam.'"';
 }
 $rqcnameen=$request->input('rqc_name_en');
 if(isset($rqcnameen) && isset($rqcnameen)){
-$query .=' AND rqc_name_en="'.$rqcnameen.'"'; 
+$query .=' AND rqc_name_en="'.$rqcnameen.'"';
 }
 $rqcdescription=$request->input('rqc_description');
 if(isset($rqcdescription) && isset($rqcdescription)){
-$query .=' AND rqc_description="'.$rqcdescription.'"'; 
+$query .=' AND rqc_description="'.$rqcdescription.'"';
 }
 $rqccreatetime=$request->input('rqc_create_time');
 if(isset($rqccreatetime) && isset($rqccreatetime)){
-$query .=' AND rqc_create_time="'.$rqccreatetime.'"'; 
+$query .=' AND rqc_create_time="'.$rqccreatetime.'"';
 }
 $rqcupdatetime=$request->input('rqc_update_time');
 if(isset($rqcupdatetime) && isset($rqcupdatetime)){
-$query .=' AND rqc_update_time="'.$rqcupdatetime.'"'; 
+$query .=' AND rqc_update_time="'.$rqcupdatetime.'"';
 }
 $rqcdeletetime=$request->input('rqc_delete_time');
 if(isset($rqcdeletetime) && isset($rqcdeletetime)){
-$query .=' AND rqc_delete_time="'.$rqcdeletetime.'"'; 
+$query .=' AND rqc_delete_time="'.$rqcdeletetime.'"';
 }
 $rqccreatedby=$request->input('rqc_created_by');
 if(isset($rqccreatedby) && isset($rqccreatedby)){
-$query .=' AND rqc_created_by="'.$rqccreatedby.'"'; 
+$query .=' AND rqc_created_by="'.$rqccreatedby.'"';
 }
 $rqcstatus=$request->input('rqc_status');
 if(isset($rqcstatus) && isset($rqcstatus)){
-$query .=' AND rqc_status="'.$rqcstatus.'"'; 
+$query .=' AND rqc_status="'.$rqcstatus.'"';
 }
 
      $masterId=$request->input('master_id');
      if(isset($masterId) && !empty($masterId)){
         //set foreign key field name
-        //$query .=' AND add_name="'.$masterId.'"'; 
+        //$query .=' AND add_name="'.$masterId.'"';
      }
      $search=$request->input('search');
      if(isset($search) && !empty($search)){
@@ -110,19 +111,19 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 public function updategrid(Request $request)
 {
     $attributeNames = [
-        'rqc_name_or'=> trans('form_lang.rqc_name_or'), 
-'rqc_name_am'=> trans('form_lang.rqc_name_am'), 
-'rqc_name_en'=> trans('form_lang.rqc_name_en'), 
-'rqc_description'=> trans('form_lang.rqc_description'), 
-'rqc_status'=> trans('form_lang.rqc_status'), 
+        'rqc_name_or'=> trans('form_lang.rqc_name_or'),
+'rqc_name_am'=> trans('form_lang.rqc_name_am'),
+'rqc_name_en'=> trans('form_lang.rqc_name_en'),
+'rqc_description'=> trans('form_lang.rqc_description'),
+'rqc_status'=> trans('form_lang.rqc_status'),
 
     ];
     $rules= [
-        'rqc_name_or'=> 'max:200', 
-'rqc_name_am'=> 'max:60', 
-'rqc_name_en'=> 'max:60', 
-'rqc_description'=> 'max:425', 
-//'rqc_status'=> 'integer', 
+        'rqc_name_or'=> 'max:200',
+'rqc_name_am'=> 'max:60',
+'rqc_name_en'=> 'max:60',
+'rqc_description'=> 'max:425',
+//'rqc_status'=> 'integer',
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -139,7 +140,7 @@ public function updategrid(Request $request)
         return response()->json($resultObject);
     }else{
         $id=$request->get("rqc_id");
-        $requestData = $request->all();            
+        $requestData = $request->all();
         $status= $request->input('rqc_status');
         if($status=="true"){
             $requestData['rqc_status']=1;
@@ -182,26 +183,26 @@ public function updategrid(Request $request)
             "errorMsg"=>""
         );
         return response()->json($resultObject);
-    }        
+    }
 }
 }
 //Insert Data
 public function insertgrid(Request $request)
 {
     $attributeNames = [
-        'rqc_name_or'=> trans('form_lang.rqc_name_or'), 
-'rqc_name_am'=> trans('form_lang.rqc_name_am'), 
-'rqc_name_en'=> trans('form_lang.rqc_name_en'), 
-'rqc_description'=> trans('form_lang.rqc_description'), 
-'rqc_status'=> trans('form_lang.rqc_status'), 
+        'rqc_name_or'=> trans('form_lang.rqc_name_or'),
+'rqc_name_am'=> trans('form_lang.rqc_name_am'),
+'rqc_name_en'=> trans('form_lang.rqc_name_en'),
+'rqc_description'=> trans('form_lang.rqc_description'),
+'rqc_status'=> trans('form_lang.rqc_status'),
 
     ];
     $rules= [
-        'rqc_name_or'=> 'max:200', 
-'rqc_name_am'=> 'max:60', 
-'rqc_name_en'=> 'max:60', 
-'rqc_description'=> 'max:425', 
-//'rqc_status'=> 'integer', 
+        'rqc_name_or'=> 'max:200',
+'rqc_name_am'=> 'max:60',
+'rqc_name_en'=> 'max:60',
+'rqc_description'=> 'max:425',
+//'rqc_status'=> 'integer',
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -234,7 +235,7 @@ public function insertgrid(Request $request)
             "type"=>"save",
             "errorMsg"=>""
         );
-    }  
+    }
     return response()->json($resultObject);
 }
 //Delete Data

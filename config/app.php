@@ -41,8 +41,8 @@ return [
     | application. If disabled, a simple generic error page is shown.
     |
     */
-
-    'debug' => 'false',
+'debug' => env('APP_DEBUG', false),
+//    'debug'
 
     /*
     |--------------------------------------------------------------------------

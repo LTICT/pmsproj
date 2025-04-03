@@ -41,13 +41,10 @@ class PmsprocurementinformationController extends MyController
 
      $query="SELECT prj_name, prj_code,pri_id,pri_total_procurement_amount,pri_bid_announced_date,
      pri_bid_invitation_date,pri_bid_opening_date,pri_bid_closing_date,pri_bid_evaluation_date,
-     pri_bid_award_date,pri_project_id,pst_name_or AS pri_procurement_stage_id,
-     prm_name_or AS pri_procurement_method_id,pri_description,pri_create_time,
+     pri_bid_award_date,pri_project_id, pri_procurement_stage_id, pri_procurement_method_id,pri_description,pri_create_time,
      pri_update_time,pri_delete_time,pri_created_by,pri_status,'1' AS is_editable
      FROM pms_procurement_information ";
      $query .=" INNER JOIN pms_project ON pms_project.prj_id=pms_procurement_information.pri_project_id";
-     $query .=' LEFT JOIN pms_procurement_stage ON pms_procurement_stage.pst_id= pms_procurement_information.pri_procurement_stage_id';
-     $query .=' LEFT JOIN pms_procurement_method ON pms_procurement_method.prm_id= pms_procurement_information.pri_procurement_method_id';
 
      $query .=' WHERE 1=1';
      $priid=$request->input('pri_id');

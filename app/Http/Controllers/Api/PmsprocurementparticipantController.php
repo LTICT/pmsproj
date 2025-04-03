@@ -22,8 +22,8 @@ class PmsprocurementparticipantController extends MyController
      */
     public function show($id)
     {
-        $query='SELECT ppp_id,ppp_name_or,ppp_name_en,ppp_name_am,ppp_tin_number,ppp_participant_phone_number,ppp_participant_email,ppp_participant_address,ppp_description,ppp_create_time,ppp_update_time,ppp_delete_time,ppp_created_by,ppp_status FROM pms_procurement_participant ';       
-        
+        $query='SELECT ppp_id,ppp_name_or,ppp_name_en,ppp_name_am,ppp_tin_number,ppp_participant_phone_number,ppp_participant_email,ppp_participant_address,ppp_description,ppp_create_time,ppp_update_time,ppp_delete_time,ppp_created_by,ppp_status FROM pms_procurement_participant ';
+
         $query .=' WHERE ppp_id='.$id.' ';
         $data_info=DB::select(DB::raw($query));
         if(isset($data_info) && !empty($data_info)){
@@ -41,12 +41,13 @@ class PmsprocurementparticipantController extends MyController
       if(isset($permissionData) && !empty($permissionData)){
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
      }
-     $query="SELECT ppp_id,ppp_name_or,ppp_name_en,ppp_name_am,ppp_tin_number,ppp_participant_phone_number,ppp_participant_email,ppp_participant_address,ppp_description,ppp_create_time,ppp_update_time,ppp_delete_time,ppp_created_by,ppp_status ".$permissionIndex." FROM pms_procurement_participant ";
-     
+     $query="SELECT ppp_id,ppp_name_or,ppp_name_en,ppp_name_am,ppp_tin_number,ppp_participant_phone_number,ppp_participant_email,
+     ppp_participant_address,ppp_description,ppp_create_time,ppp_update_time,ppp_delete_time,ppp_created_by,ppp_status ".$permissionIndex." FROM pms_procurement_participant ";
+
      $query .=' WHERE 1=1';
      $pppid=$request->input('ppp_id');
 if(isset($pppid) && isset($pppid)){
-$query .=' AND ppp_id="'.$pppid.'"'; 
+$query .=' AND ppp_id="'.$pppid.'"';
 }
 $pppnameor=$request->input('ppp_name_or');
 if(isset($pppnameor) && isset($pppnameor)){
@@ -62,50 +63,50 @@ if(isset($pppnameam) && isset($pppnameam)){
 }
 $ppptinnumber=$request->input('ppp_tin_number');
 if(isset($ppptinnumber) && isset($ppptinnumber)){
-$query .=' AND ppp_tin_number="'.$ppptinnumber.'"'; 
+    $query .= " AND ppp_tin_number LIKE '%" . addslashes($ppptinnumber) . "%'";
 }
 $pppparticipantphonenumber=$request->input('ppp_participant_phone_number');
 if(isset($pppparticipantphonenumber) && isset($pppparticipantphonenumber)){
-$query .=' AND ppp_participant_phone_number="'.$pppparticipantphonenumber.'"'; 
+$query .=' AND ppp_participant_phone_number="'.$pppparticipantphonenumber.'"';
 }
 $pppparticipantemail=$request->input('ppp_participant_email');
 if(isset($pppparticipantemail) && isset($pppparticipantemail)){
-$query .=' AND ppp_participant_email="'.$pppparticipantemail.'"'; 
+$query .=' AND ppp_participant_email="'.$pppparticipantemail.'"';
 }
 $pppparticipantaddress=$request->input('ppp_participant_address');
 if(isset($pppparticipantaddress) && isset($pppparticipantaddress)){
-$query .=' AND ppp_participant_address="'.$pppparticipantaddress.'"'; 
+$query .=' AND ppp_participant_address="'.$pppparticipantaddress.'"';
 }
 $pppdescription=$request->input('ppp_description');
 if(isset($pppdescription) && isset($pppdescription)){
-$query .=' AND ppp_description="'.$pppdescription.'"'; 
+$query .=' AND ppp_description="'.$pppdescription.'"';
 }
 $pppcreatetime=$request->input('ppp_create_time');
 if(isset($pppcreatetime) && isset($pppcreatetime)){
-$query .=' AND ppp_create_time="'.$pppcreatetime.'"'; 
+$query .=' AND ppp_create_time="'.$pppcreatetime.'"';
 }
 $pppupdatetime=$request->input('ppp_update_time');
 if(isset($pppupdatetime) && isset($pppupdatetime)){
-$query .=' AND ppp_update_time="'.$pppupdatetime.'"'; 
+$query .=' AND ppp_update_time="'.$pppupdatetime.'"';
 }
 $pppdeletetime=$request->input('ppp_delete_time');
 if(isset($pppdeletetime) && isset($pppdeletetime)){
-$query .=' AND ppp_delete_time="'.$pppdeletetime.'"'; 
+$query .=' AND ppp_delete_time="'.$pppdeletetime.'"';
 }
 $pppcreatedby=$request->input('ppp_created_by');
 if(isset($pppcreatedby) && isset($pppcreatedby)){
-$query .=' AND ppp_created_by="'.$pppcreatedby.'"'; 
+$query .=' AND ppp_created_by="'.$pppcreatedby.'"';
 }
 $pppstatus=$request->input('ppp_status');
 if(isset($pppstatus) && isset($pppstatus)){
-$query .=' AND ppp_status="'.$pppstatus.'"'; 
+$query .=' AND ppp_status="'.$pppstatus.'"';
 }
 
-     $masterId=$request->input('master_id');
+ $masterId=$request->input('ppp_procurement_id');
      if(isset($masterId) && !empty($masterId)){
         //set foreign key field name
-        //$query .=' AND add_name="'.$masterId.'"'; 
-     }
+           $query .= " AND ppp_procurement_id = '" . $masterId . "'";
+    }
      $search=$request->input('search');
      if(isset($search) && !empty($search)){
        $advanced= $request->input('adva-search');
@@ -119,34 +120,41 @@ $query .=' AND ppp_status="'.$pppstatus.'"';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit,'is_role_deletable'=>$permissionData->pem_delete,'is_role_can_add'=>$permissionData->pem_insert));
+    "previledge"=>array(
+        'is_role_editable' => 1,
+        'is_role_deletable' => 1,
+        'is_role_can_add' => 1)
+        //'is_role_editable' => $permissionData->pem_edit ?? 0,
+        //'is_role_deletable' => $permissionData->pem_delete ?? 0,
+        //'is_role_can_add' => $permissionData->pem_insert ?? 0)
+    );
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 //Update Data
 public function updategrid(Request $request)
 {
     $attributeNames = [
-        'ppp_name_or'=> trans('form_lang.ppp_name_or'), 
-'ppp_name_en'=> trans('form_lang.ppp_name_en'), 
-'ppp_name_am'=> trans('form_lang.ppp_name_am'), 
-'ppp_tin_number'=> trans('form_lang.ppp_tin_number'), 
-'ppp_participant_phone_number'=> trans('form_lang.ppp_participant_phone_number'), 
-'ppp_participant_email'=> trans('form_lang.ppp_participant_email'), 
-'ppp_participant_address'=> trans('form_lang.ppp_participant_address'), 
-'ppp_description'=> trans('form_lang.ppp_description'), 
-'ppp_status'=> trans('form_lang.ppp_status'), 
+        'ppp_name_or'=> trans('form_lang.ppp_name_or'),
+'ppp_name_en'=> trans('form_lang.ppp_name_en'),
+'ppp_name_am'=> trans('form_lang.ppp_name_am'),
+'ppp_tin_number'=> trans('form_lang.ppp_tin_number'),
+'ppp_participant_phone_number'=> trans('form_lang.ppp_participant_phone_number'),
+'ppp_participant_email'=> trans('form_lang.ppp_participant_email'),
+'ppp_participant_address'=> trans('form_lang.ppp_participant_address'),
+'ppp_description'=> trans('form_lang.ppp_description'),
+'ppp_status'=> trans('form_lang.ppp_status'),
 
     ];
     $rules= [
-        'ppp_name_or'=> 'max:50', 
-'ppp_name_en'=> 'max:200', 
-'ppp_name_am'=> 'max:50', 
-'ppp_tin_number'=> 'max:20', 
-'ppp_participant_phone_number'=> 'max:15', 
-'ppp_participant_email'=> 'max:50', 
-'ppp_participant_address'=> 'max:100', 
-'ppp_description'=> 'max:425', 
-//'ppp_status'=> 'integer', 
+        'ppp_name_or'=> 'max:50',
+'ppp_name_en'=> 'max:200',
+'ppp_name_am'=> 'max:50',
+'ppp_tin_number'=> 'max:20',
+'ppp_participant_phone_number'=> 'max:15',
+'ppp_participant_email'=> 'max:50',
+'ppp_participant_address'=> 'max:100',
+'ppp_description'=> 'max:425',
+//'ppp_status'=> 'integer',
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -163,7 +171,7 @@ public function updategrid(Request $request)
         return response()->json($resultObject);
     }else{
         $id=$request->get("ppp_id");
-        $requestData = $request->all();            
+        $requestData = $request->all();
         $status= $request->input('ppp_status');
         if($status=="true"){
             $requestData['ppp_status']=1;
@@ -206,34 +214,34 @@ public function updategrid(Request $request)
             "errorMsg"=>""
         );
         return response()->json($resultObject);
-    }        
+    }
 }
 }
 //Insert Data
 public function insertgrid(Request $request)
 {
     $attributeNames = [
-        'ppp_name_or'=> trans('form_lang.ppp_name_or'), 
-'ppp_name_en'=> trans('form_lang.ppp_name_en'), 
-'ppp_name_am'=> trans('form_lang.ppp_name_am'), 
-'ppp_tin_number'=> trans('form_lang.ppp_tin_number'), 
-'ppp_participant_phone_number'=> trans('form_lang.ppp_participant_phone_number'), 
-'ppp_participant_email'=> trans('form_lang.ppp_participant_email'), 
-'ppp_participant_address'=> trans('form_lang.ppp_participant_address'), 
-'ppp_description'=> trans('form_lang.ppp_description'), 
-'ppp_status'=> trans('form_lang.ppp_status'), 
+        'ppp_name_or'=> trans('form_lang.ppp_name_or'),
+'ppp_name_en'=> trans('form_lang.ppp_name_en'),
+'ppp_name_am'=> trans('form_lang.ppp_name_am'),
+'ppp_tin_number'=> trans('form_lang.ppp_tin_number'),
+'ppp_participant_phone_number'=> trans('form_lang.ppp_participant_phone_number'),
+'ppp_participant_email'=> trans('form_lang.ppp_participant_email'),
+'ppp_participant_address'=> trans('form_lang.ppp_participant_address'),
+'ppp_description'=> trans('form_lang.ppp_description'),
+'ppp_status'=> trans('form_lang.ppp_status'),
 
     ];
     $rules= [
-        'ppp_name_or'=> 'max:50', 
-'ppp_name_en'=> 'max:200', 
-'ppp_name_am'=> 'max:50', 
-'ppp_tin_number'=> 'max:20', 
-'ppp_participant_phone_number'=> 'max:15', 
-'ppp_participant_email'=> 'max:50', 
-'ppp_participant_address'=> 'max:100', 
-'ppp_description'=> 'max:425', 
-//ppp_status'=> 'integer', 
+        'ppp_name_or'=> 'max:50',
+'ppp_name_en'=> 'max:200',
+'ppp_name_am'=> 'max:50',
+'ppp_tin_number'=> 'max:20',
+'ppp_participant_phone_number'=> 'max:15',
+'ppp_participant_email'=> 'max:50',
+'ppp_participant_address'=> 'max:100',
+'ppp_description'=> 'max:425',
+//ppp_status'=> 'integer',
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -266,7 +274,7 @@ public function insertgrid(Request $request)
             "type"=>"save",
             "errorMsg"=>""
         );
-    }  
+    }
     return response()->json($resultObject);
 }
 //Delete Data

@@ -40,20 +40,20 @@ protected $table = 'tbl_users';
      *
      * @var array
      */
-   
+
 
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
-    
+
 
     /*public function roleList()
     {
         return $this->hasMany(Role::class,'id');
     }*/
-    
+
       /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
@@ -72,5 +72,10 @@ protected $table = 'tbl_users';
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(Modelpmscsoinfo::class, 'usr_owner_id', 'cso_id');
     }
 }

@@ -13,47 +13,47 @@ class PmsbudgetrequestController extends MyController
     parent::__construct();
     //$this->middleware('auth');
 }
- 
+
     public function listgrid(Request $request){
     $permissionData=$this->getPagePermission($request,34);
-    $query='SELECT bdr_request_type,bdr_request_category_id, sci_name_en AS sector_name, rqs_description AS color_code, rqs_name_en AS status_name, bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
-     bdr_released_amount,bdr_project_id,bdr_requested_date_ec,bdr_requested_date_gc,
-     bdr_released_date_ec,bdr_released_date_gc,bdr_description,bdr_create_time,bdr_update_time,
-     bdr_delete_time,bdr_created_by,bdr_status,bdr_action_remark,1 AS is_editable, 1 AS is_deletable 
-     FROM pms_budget_request 
+    $query='SELECT bdr_request_type,bdr_request_category_id, sci_name_en AS sector_name, rqs_description AS color_code,
+    rqs_name_en AS status_name, bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
+     bdr_released_amount,bdr_project_id,bdr_requested_date_gc,
+     bdr_released_date_gc,bdr_description,bdr_created_by,bdr_status,bdr_action_remark,1 AS is_editable, 1 AS is_deletable
+     FROM pms_budget_request
      INNER JOIN pms_project ON pms_project.prj_id=pms_budget_request.bdr_project_id
      INNER JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_budget_request.bdr_budget_year_id
      LEFT JOIN gen_request_status ON gen_request_status.rqs_id=pms_budget_request.bdr_request_status';
       $query .=' LEFT JOIN pms_sector_information ON pms_sector_information.sci_id= pms_project.prj_sector_id';
      $query .=' WHERE 1=1';
-     
+
 $requestType=$request->input('bdr_request_type');
 if(isset($requestType) && isset($requestType)){
-$query .=" AND bdr_request_type='".$requestType."'"; 
+$query .=" AND bdr_request_type='".$requestType."'";
 }
 $requestStatus=$request->input('bdr_request_status');
 if(isset($requestStatus) && isset($requestStatus)){
-$query .=" AND bdr_request_status='".$requestStatus."'"; 
+$query .=" AND bdr_request_status='".$requestStatus."'";
 }
 $startTime=$request->input('budget_request_dateStart');
 if(isset($startTime) && isset($startTime)){
-$query .=" AND bdr_requested_date_gc >='".$startTime." 00 00 00'"; 
+$query .=" AND bdr_requested_date_gc >='".$startTime." 00 00 00'";
 }
 $endTime=$request->input('budget_request_dateEnd');
 if(isset($endTime) && isset($endTime)){
-$query .=" AND bdr_requested_date_gc <='".$endTime." 23 59 59'"; 
+$query .=" AND bdr_requested_date_gc <='".$endTime." 23 59 59'";
 }
 $bdrbudgetyearid=$request->input('bdr_budget_year_id');
 if(isset($bdrbudgetyearid) && isset($bdrbudgetyearid)){
-$query .=" AND bdr_budget_year_id='".$bdrbudgetyearid."'"; 
+$query .=" AND bdr_budget_year_id='".$bdrbudgetyearid."'";
 }
 $bdrrequestedamount=$request->input('bdr_requested_amount');
 if(isset($bdrrequestedamount) && isset($bdrrequestedamount)){
-$query .=' AND bdr_requested_amount="'.$bdrrequestedamount.'"'; 
+$query .=' AND bdr_requested_amount="'.$bdrrequestedamount.'"';
 }
 $bdrreleasedamount=$request->input('bdr_released_amount');
 if(isset($bdrreleasedamount) && isset($bdrreleasedamount)){
-$query .=' AND bdr_released_amount="'.$bdrreleasedamount.'"'; 
+$query .=' AND bdr_released_amount="'.$bdrreleasedamount.'"';
 }
 $bdrprojectid=$request->input('project_id');
 if(isset($bdrprojectid) && isset($bdrprojectid)){
@@ -61,19 +61,19 @@ $query .= " AND bdr_project_id = '$bdrprojectid'";
 }
 $bdrrequesteddateec=$request->input('bdr_requested_date_ec');
 if(isset($bdrrequesteddateec) && isset($bdrrequesteddateec)){
-$query .=' AND bdr_requested_date_ec="'.$bdrrequesteddateec.'"'; 
+$query .=' AND bdr_requested_date_ec="'.$bdrrequesteddateec.'"';
 }
 $bdrrequesteddategc=$request->input('bdr_requested_date_gc');
 if(isset($bdrrequesteddategc) && isset($bdrrequesteddategc)){
-$query .=' AND bdr_requested_date_gc="'.$bdrrequesteddategc.'"'; 
+$query .=' AND bdr_requested_date_gc="'.$bdrrequesteddategc.'"';
 }
 $bdrreleaseddateec=$request->input('bdr_released_date_ec');
 if(isset($bdrreleaseddateec) && isset($bdrreleaseddateec)){
-$query .=' AND bdr_released_date_ec="'.$bdrreleaseddateec.'"'; 
+$query .=' AND bdr_released_date_ec="'.$bdrreleaseddateec.'"';
 }
 $requestCategory=$request->input('bdr_request_category_id');
 if(isset($requestCategory) && isset($requestCategory)){
-$query .=" AND bdr_request_category_id='".$requestCategory."'"; 
+$query .=" AND bdr_request_category_id='".$requestCategory."'";
 }
 $requesttype=$request->input('request_type');
 if(isset($requesttype) && !empty($requesttype) && $requesttype=='single'){
@@ -96,27 +96,27 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 public function updategrid(Request $request)
 {
     $attributeNames = [
-        'bdr_budget_year_id'=> trans('form_lang.bdr_budget_year_id'), 
-'bdr_requested_amount'=> trans('form_lang.bdr_requested_amount'), 
-'bdr_released_amount'=> trans('form_lang.bdr_released_amount'), 
-'bdr_project_id'=> trans('form_lang.bdr_project_id'), 
-'bdr_requested_date_ec'=> trans('form_lang.bdr_requested_date_ec'), 
-'bdr_requested_date_gc'=> trans('form_lang.bdr_requested_date_gc'), 
-'bdr_released_date_ec'=> trans('form_lang.bdr_released_date_ec'), 
-'bdr_released_date_gc'=> trans('form_lang.bdr_released_date_gc'), 
-'bdr_description'=> trans('form_lang.bdr_description'), 
-'bdr_status'=> trans('form_lang.bdr_status'), 
+        'bdr_budget_year_id'=> trans('form_lang.bdr_budget_year_id'),
+'bdr_requested_amount'=> trans('form_lang.bdr_requested_amount'),
+'bdr_released_amount'=> trans('form_lang.bdr_released_amount'),
+'bdr_project_id'=> trans('form_lang.bdr_project_id'),
+'bdr_requested_date_ec'=> trans('form_lang.bdr_requested_date_ec'),
+'bdr_requested_date_gc'=> trans('form_lang.bdr_requested_date_gc'),
+'bdr_released_date_ec'=> trans('form_lang.bdr_released_date_ec'),
+'bdr_released_date_gc'=> trans('form_lang.bdr_released_date_gc'),
+'bdr_description'=> trans('form_lang.bdr_description'),
+'bdr_status'=> trans('form_lang.bdr_status'),
 
     ];
     $rules= [
-    'bdr_budget_year_id'=> 'max:200', 
-'bdr_requested_amount'=> 'max:200', 
-//'bdr_released_amount'=> 'numeric', 
-'bdr_requested_date_ec'=> 'max:200', 
-'bdr_requested_date_gc'=> 'max:200', 
-'bdr_released_date_ec'=> 'max:10', 
-'bdr_released_date_gc'=> 'max:10', 
-'bdr_description'=> 'max:425', 
+    'bdr_budget_year_id'=> 'max:200',
+'bdr_requested_amount'=> 'max:200',
+//'bdr_released_amount'=> 'numeric',
+'bdr_requested_date_ec'=> 'max:200',
+'bdr_requested_date_gc'=> 'max:200',
+'bdr_released_date_ec'=> 'max:10',
+'bdr_released_date_gc'=> 'max:10',
+'bdr_description'=> 'max:425',
     ];
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
@@ -134,7 +134,7 @@ public function updategrid(Request $request)
         $id=$request->get("bdr_id");
         //$requestData['foreign_field_name']=$request->get('master_id');
             //assign data from of foreign key
-        $requestData = $request->all();            
+        $requestData = $request->all();
         $status= $request->input('bdr_status');
         if($status=="true"){
             $requestData['bdr_status']=1;
@@ -178,35 +178,35 @@ public function updategrid(Request $request)
             "errorMsg"=>""
         );
         return response()->json($resultObject);
-    }        
+    }
 }
 }
 public function insertgrid(Request $request)
 {
     $attributeNames = [
-        'bdr_budget_year_id'=> trans('form_lang.bdr_budget_year_id'), 
-'bdr_requested_amount'=> trans('form_lang.bdr_requested_amount'), 
-'bdr_released_amount'=> trans('form_lang.bdr_released_amount'), 
-'bdr_project_id'=> trans('form_lang.bdr_project_id'), 
-'bdr_requested_date_ec'=> trans('form_lang.bdr_requested_date_ec'), 
-'bdr_requested_date_gc'=> trans('form_lang.bdr_requested_date_gc'), 
-'bdr_released_date_ec'=> trans('form_lang.bdr_released_date_ec'), 
-'bdr_released_date_gc'=> trans('form_lang.bdr_released_date_gc'), 
-'bdr_description'=> trans('form_lang.bdr_description'), 
-'bdr_status'=> trans('form_lang.bdr_status'), 
+        'bdr_budget_year_id'=> trans('form_lang.bdr_budget_year_id'),
+'bdr_requested_amount'=> trans('form_lang.bdr_requested_amount'),
+'bdr_released_amount'=> trans('form_lang.bdr_released_amount'),
+'bdr_project_id'=> trans('form_lang.bdr_project_id'),
+'bdr_requested_date_ec'=> trans('form_lang.bdr_requested_date_ec'),
+'bdr_requested_date_gc'=> trans('form_lang.bdr_requested_date_gc'),
+'bdr_released_date_ec'=> trans('form_lang.bdr_released_date_ec'),
+'bdr_released_date_gc'=> trans('form_lang.bdr_released_date_gc'),
+'bdr_description'=> trans('form_lang.bdr_description'),
+'bdr_status'=> trans('form_lang.bdr_status'),
 
     ];
     $rules= [
-        'bdr_budget_year_id'=> 'max:200', 
-'bdr_requested_amount'=> 'max:200', 
-//'bdr_released_amount'=> 'numeric', 
-'bdr_project_id'=> 'max:200', 
-'bdr_requested_date_ec'=> 'max:200', 
-'bdr_requested_date_gc'=> 'max:200', 
-'bdr_released_date_ec'=> 'max:10', 
-'bdr_released_date_gc'=> 'max:10', 
-'bdr_description'=> 'max:425', 
-//'bdr_status'=> 'integer', 
+        'bdr_budget_year_id'=> 'max:200',
+'bdr_requested_amount'=> 'max:200',
+//'bdr_released_amount'=> 'numeric',
+'bdr_project_id'=> 'max:200',
+'bdr_requested_date_ec'=> 'max:200',
+'bdr_requested_date_gc'=> 'max:200',
+'bdr_released_date_ec'=> 'max:10',
+'bdr_released_date_gc'=> 'max:10',
+'bdr_description'=> 'max:425',
+//'bdr_status'=> 'integer',
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -241,7 +241,7 @@ public function insertgrid(Request $request)
             "type"=>"save",
             "errorMsg"=>""
         );
-    }  
+    }
     return response()->json($resultObject);
 }
 public function deletegrid(Request $request)

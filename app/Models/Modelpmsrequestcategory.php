@@ -25,9 +25,10 @@ class Modelpmsrequestcategory extends Model
      *
      * @var array
      */
-    protected $fillable = ['rqc_id','rqc_name_or','rqc_name_am','rqc_name_en','rqc_description','rqc_create_time','rqc_update_time','rqc_delete_time','rqc_created_by','rqc_status',];
+    protected $fillable = ['rqc_id','rqc_name_or','rqc_name_am','rqc_name_en','rqc_description','rqc_create_time',
+    'rqc_update_time','rqc_delete_time','rqc_created_by','rqc_status','rqc_gov_active','rqc_cso_active'];
 
-    
+
 
     /**
      * Change activity log event description
@@ -41,4 +42,3 @@ class Modelpmsrequestcategory extends Model
         return __CLASS__ . " model has been {$eventName}";
     }
 }
-

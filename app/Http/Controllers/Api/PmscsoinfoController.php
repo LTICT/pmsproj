@@ -22,8 +22,8 @@ class PmscsoinfoController extends MyController
      */
     public function show($id)
     {
-        $query='SELECT cso_id,cso_name,cso_code,cso_address,cso_phone,cso_email,cso_website,cso_description,cso_create_time,cso_update_time,cso_delete_time,cso_created_by,cso_status FROM pms_cso_info ';       
-        
+        $query='SELECT cso_id,cso_name,cso_code,cso_address,cso_phone,cso_email,cso_website,cso_description,cso_create_time,cso_update_time,cso_delete_time,cso_created_by,cso_status FROM pms_cso_info ';
+
         $query .=' WHERE cso_id='.$id.' ';
         $data_info=DB::select(DB::raw($query));
         if(isset($data_info) && !empty($data_info)){
@@ -40,15 +40,15 @@ class PmscsoinfoController extends MyController
      $query .=' WHERE 1=1';
      $csoid=$request->input('cso_id');
 if(isset($csoid) && isset($csoid)){
-$query .=' AND cso_id="'.$csoid.'"'; 
+$query .=" AND cso_id='".$csoid."'";
 }
 $csoname=$request->input('cso_name');
 if(isset($csoname) && isset($csoname)){
-$query .=' AND cso_name="'.$csoname.'"'; 
+$query .=' AND cso_name="'.$csoname.'"';
 }
 $csocode=$request->input('cso_code');
 if(isset($csocode) && isset($csocode)){
-$query .=' AND cso_code="'.$csocode.'"'; 
+$query .=' AND cso_code="'.$csocode.'"';
 }
 
 $data_info=DB::select($query);
@@ -61,23 +61,23 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 public function updategrid(Request $request)
 {
     $attributeNames = [
-        'cso_name'=> trans('form_lang.cso_name'), 
-'cso_code'=> trans('form_lang.cso_code'), 
-'cso_address'=> trans('form_lang.cso_address'), 
-'cso_phone'=> trans('form_lang.cso_phone'), 
-'cso_email'=> trans('form_lang.cso_email'), 
-'cso_website'=> trans('form_lang.cso_website'), 
-'cso_description'=> trans('form_lang.cso_description'), 
+        'cso_name'=> trans('form_lang.cso_name'),
+'cso_code'=> trans('form_lang.cso_code'),
+'cso_address'=> trans('form_lang.cso_address'),
+'cso_phone'=> trans('form_lang.cso_phone'),
+'cso_email'=> trans('form_lang.cso_email'),
+'cso_website'=> trans('form_lang.cso_website'),
+'cso_description'=> trans('form_lang.cso_description'),
 
     ];
     $rules= [
-        'cso_name'=> 'max:200', 
-'cso_code'=> 'max:200', 
-'cso_address'=> 'max:250', 
-'cso_phone'=> 'max:45', 
-'cso_email'=> 'max:100', 
-'cso_website'=> 'max:100', 
-'cso_description'=> 'max:425', 
+        'cso_name'=> 'max:200',
+'cso_code'=> 'max:200',
+'cso_address'=> 'max:250',
+'cso_phone'=> 'max:45',
+'cso_email'=> 'max:100',
+'cso_website'=> 'max:100',
+'cso_description'=> 'max:425',
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -94,7 +94,7 @@ public function updategrid(Request $request)
         return response()->json($resultObject);
     }else{
         $id=$request->get("cso_id");
-        $requestData = $request->all();            
+        $requestData = $request->all();
         $status= $request->input('cso_status');
         if($status=="true"){
             $requestData['cso_status']=1;
@@ -137,30 +137,30 @@ public function updategrid(Request $request)
             "errorMsg"=>""
         );
         return response()->json($resultObject);
-    }        
+    }
 }
 }
 //Insert Data
 public function insertgrid(Request $request)
 {
     $attributeNames = [
-        'cso_name'=> trans('form_lang.cso_name'), 
-'cso_code'=> trans('form_lang.cso_code'), 
-'cso_address'=> trans('form_lang.cso_address'), 
-'cso_phone'=> trans('form_lang.cso_phone'), 
-'cso_email'=> trans('form_lang.cso_email'), 
-'cso_website'=> trans('form_lang.cso_website'), 
-'cso_description'=> trans('form_lang.cso_description'), 
+        'cso_name'=> trans('form_lang.cso_name'),
+'cso_code'=> trans('form_lang.cso_code'),
+'cso_address'=> trans('form_lang.cso_address'),
+'cso_phone'=> trans('form_lang.cso_phone'),
+'cso_email'=> trans('form_lang.cso_email'),
+'cso_website'=> trans('form_lang.cso_website'),
+'cso_description'=> trans('form_lang.cso_description'),
 
     ];
     $rules= [
-        'cso_name'=> 'max:200', 
-'cso_code'=> 'max:200', 
-'cso_address'=> 'max:250', 
-'cso_phone'=> 'max:45', 
-'cso_email'=> 'max:100', 
-'cso_website'=> 'max:100', 
-'cso_description'=> 'max:425', 
+        'cso_name'=> 'max:200',
+'cso_code'=> 'max:200',
+'cso_address'=> 'max:250',
+'cso_phone'=> 'max:45',
+'cso_email'=> 'max:100',
+'cso_website'=> 'max:100',
+'cso_description'=> 'max:425',
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -193,7 +193,7 @@ public function insertgrid(Request $request)
             "type"=>"save",
             "errorMsg"=>""
         );
-    }  
+    }
     return response()->json($resultObject);
 }
 //Delete Data
