@@ -266,16 +266,8 @@ function getListForm(Request $request)
     if(isset($fileOwnerId) && isset($fileOwnerId)){
         $query .=" AND prd_owner_id='".$fileOwnerId."'";
     }
-    $query=$this->getSearchParam($request,$query);
-    $search=$request->input('search');
-    if(isset($search) && !empty($search)){
-     $advanced= $request->input('adva-search');
-     if(isset($advanced) && $advanced =='on'){
-         $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-     }else{
-        $query.=' AND (add_name LIKE "%'.$search.'%")  ';
-    }
-}
+    //$query=$this->getSearchParam($request,$query);
+
 //$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
 $data_info=DB::select($query);
 $resultObject= array(
