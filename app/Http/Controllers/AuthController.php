@@ -178,7 +178,10 @@ class AuthController extends Controller
             return response()->json(['is_updated' => false, 'status_code' => 200, 'type' => 'update', 'errorMsg' => '']);
         }
         $user = Modeltblusers::findOrFail($request->get('user_id'));
-        $user->update(['password' => bcrypt($request->get('password'))]);
+        $user->update([
+            'password' => bcrypt($request->get('password')),
+            'usr_password_changed' => 1
+        ]);
         unset($user->email);
         unset($user->password);
         unset($user->usr_password);
