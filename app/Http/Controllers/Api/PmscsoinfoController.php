@@ -95,12 +95,7 @@ public function updategrid(Request $request)
     }else{
         $id=$request->get("cso_id");
         $requestData = $request->all();
-        $status= $request->input('cso_status');
-        if($status=="true"){
-            $requestData['cso_status']=1;
-        }else{
-            $requestData['cso_status']=0;
-        }
+
         if(isset($id) && !empty($id)){
             $data_info = Modelpmscsoinfo::findOrFail($id);
             $data_info->update($requestData);
