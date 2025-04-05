@@ -22,8 +22,8 @@ class GenconversationinformationController extends MyController
      */
     public function show($id)
     {
-        $query='SELECT cvi_id,cvi_title,cvi_object_id,cvi_object_type_id,cvi_request_date_et,cvi_request_date_gc,cvi_description,cvi_create_time,cvi_update_time,cvi_delete_time,cvi_created_by,cvi_status FROM gen_conversation_information ';       
-        
+        $query='SELECT cvi_id,cvi_title,cvi_object_id,cvi_object_type_id,cvi_request_date_et,cvi_request_date_gc,cvi_description,cvi_create_time,cvi_update_time,cvi_delete_time,cvi_created_by,cvi_status FROM gen_conversation_information ';
+
         $query .=' WHERE cvi_id='.$id.' ';
         $data_info=DB::select(DB::raw($query));
         if(isset($data_info) && !empty($data_info)){
@@ -45,27 +45,27 @@ class GenconversationinformationController extends MyController
      $query .=' WHERE 1=1';
      $cviid=$request->input('cvi_id');
 if(isset($cviid) && isset($cviid)){
-$query .=' AND cvi_id="'.$cviid.'"'; 
+$query .=' AND cvi_id="'.$cviid.'"';
 }
 $cvititle=$request->input('cvi_title');
 if(isset($cvititle) && isset($cvititle)){
-$query .=' AND cvi_title="'.$cvititle.'"'; 
+$query .=' AND cvi_title="'.$cvititle.'"';
 }
 $cviobjectid=$request->input('cvi_object_id');
 if(isset($cviobjectid) && isset($cviobjectid)){
-$query .=" AND cvi_object_id='".$cviobjectid."'"; 
+$query .=" AND cvi_object_id='".$cviobjectid."'";
 }
 $cviobjecttypeid=$request->input('cvi_object_type_id');
 if(isset($cviobjecttypeid) && isset($cviobjecttypeid)){
-$query .=" AND cvi_object_type_id='".$cviobjecttypeid."'"; 
+$query .=" AND cvi_object_type_id='".$cviobjecttypeid."'";
 }
 $cvirequestdategc=$request->input('cvi_request_date_gc');
 if(isset($cvirequestdategc) && isset($cvirequestdategc)){
-$query .=' AND cvi_request_date_gc="'.$cvirequestdategc.'"'; 
+$query .=' AND cvi_request_date_gc="'.$cvirequestdategc.'"';
 }
 $cvidescription=$request->input('cvi_description');
 if(isset($cvidescription) && isset($cvidescription)){
-$query .=' AND cvi_description="'.$cvidescription.'"'; 
+$query .=' AND cvi_description="'.$cvidescription.'"';
 }
 $query.=' ORDER BY cvi_id DESC';
 $data_info=DB::select($query);
@@ -78,22 +78,22 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 public function updategrid(Request $request)
 {
     $attributeNames = [
-        'cvi_title'=> trans('form_lang.cvi_title'), 
-'cvi_object_id'=> trans('form_lang.cvi_object_id'), 
-'cvi_object_type_id'=> trans('form_lang.cvi_object_type_id'), 
-'cvi_request_date_et'=> trans('form_lang.cvi_request_date_et'), 
-'cvi_request_date_gc'=> trans('form_lang.cvi_request_date_gc'), 
-'cvi_description'=> trans('form_lang.cvi_description'), 
-'cvi_status'=> trans('form_lang.cvi_status'), 
+        'cvi_title'=> trans('form_lang.cvi_title'),
+'cvi_object_id'=> trans('form_lang.cvi_object_id'),
+'cvi_object_type_id'=> trans('form_lang.cvi_object_type_id'),
+'cvi_request_date_et'=> trans('form_lang.cvi_request_date_et'),
+'cvi_request_date_gc'=> trans('form_lang.cvi_request_date_gc'),
+'cvi_description'=> trans('form_lang.cvi_description'),
+'cvi_status'=> trans('form_lang.cvi_status'),
 
     ];
     $rules= [
         'cvi_title'=> 'max:425',
-'cvi_object_type_id'=> 'max:200', 
-'cvi_request_date_et'=> 'max:200', 
-'cvi_request_date_gc'=> 'max:200', 
-'cvi_description'=> 'max:425', 
-//'cvi_status'=> 'integer', 
+'cvi_object_type_id'=> 'max:200',
+'cvi_request_date_et'=> 'max:200',
+'cvi_request_date_gc'=> 'max:200',
+'cvi_description'=> 'max:425',
+//'cvi_status'=> 'integer',
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -110,13 +110,7 @@ public function updategrid(Request $request)
         return response()->json($resultObject);
     }else{
         $id=$request->get("cvi_id");
-        $requestData = $request->all();            
-        $status= $request->input('cvi_status');
-        if($status=="true"){
-            $requestData['cvi_status']=1;
-        }else{
-            $requestData['cvi_status']=0;
-        }
+        $requestData = $request->all();
         if(isset($id) && !empty($id)){
             $data_info = Modelgenconversationinformation::findOrFail($id);
             $data_info->update($requestData);
@@ -153,29 +147,29 @@ public function updategrid(Request $request)
             "errorMsg"=>""
         );
         return response()->json($resultObject);
-    }        
+    }
 }
 }
 //Insert Data
 public function insertgrid(Request $request)
 {
     $attributeNames = [
-        'cvi_title'=> trans('form_lang.cvi_title'), 
-'cvi_object_id'=> trans('form_lang.cvi_object_id'), 
-'cvi_object_type_id'=> trans('form_lang.cvi_object_type_id'), 
-'cvi_request_date_et'=> trans('form_lang.cvi_request_date_et'), 
-'cvi_request_date_gc'=> trans('form_lang.cvi_request_date_gc'), 
-'cvi_description'=> trans('form_lang.cvi_description'), 
-'cvi_status'=> trans('form_lang.cvi_status'), 
+        'cvi_title'=> trans('form_lang.cvi_title'),
+'cvi_object_id'=> trans('form_lang.cvi_object_id'),
+'cvi_object_type_id'=> trans('form_lang.cvi_object_type_id'),
+'cvi_request_date_et'=> trans('form_lang.cvi_request_date_et'),
+'cvi_request_date_gc'=> trans('form_lang.cvi_request_date_gc'),
+'cvi_description'=> trans('form_lang.cvi_description'),
+'cvi_status'=> trans('form_lang.cvi_status'),
 
     ];
     $rules= [
-        'cvi_title'=> 'max:425', 
-'cvi_object_type_id'=> 'max:200', 
-'cvi_request_date_et'=> 'max:200', 
-'cvi_request_date_gc'=> 'max:200', 
-'cvi_description'=> 'max:425', 
-//'cvi_status'=> 'integer', 
+        'cvi_title'=> 'max:425',
+'cvi_object_type_id'=> 'max:200',
+'cvi_request_date_et'=> 'max:200',
+'cvi_request_date_gc'=> 'max:200',
+'cvi_description'=> 'max:425',
+//'cvi_status'=> 'integer',
 
     ];
     $validator = Validator::make ( $request->all(), $rules );
@@ -192,13 +186,7 @@ public function insertgrid(Request $request)
         return response()->json($resultObject);
     }else{
         $requestData = $request->all();
-        $requestData['cvi_created_by']=auth()->user()->usr_Id;
-        $status= $request->input('cvi_status');
-        if($status=="true"){
-            $requestData['cvi_status']=1;
-        }else{
-            $requestData['cvi_status']=0;
-        }
+        //$requestData['cvi_created_by']=auth()->user()->usr_Id;
         $requestData['cvi_created_by']=1;
         $data_info=Modelgenconversationinformation::create($requestData);
         $resultObject= array(
@@ -208,7 +196,7 @@ public function insertgrid(Request $request)
             "type"=>"save",
             "errorMsg"=>""
         );
-    }  
+    }
     return response()->json($resultObject);
 }
 //Delete Data
