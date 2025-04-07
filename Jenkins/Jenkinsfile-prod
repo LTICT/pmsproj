@@ -88,8 +88,6 @@ pipeline {
 -v /www/html/configfiles/custom-php.ini:/etc/php/8.2/fpm/conf.d/custom-php.ini \
     ${imageToDeploy}
                     """
- // Run artisan optimize inside the container
-sh "docker exec laravel_app_prod php artisan config:cache"
                 }
             }
         }
