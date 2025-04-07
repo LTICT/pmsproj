@@ -24,11 +24,13 @@ return $request->user();
 Route::get('/phpinfo', function () {
     phpinfo();
 });
-Route::get('/checkconfig', function () {
+Route::get('/checkconfig/{id}', function ($id) {
     $configPath = base_path('bootstrap/cache/config.php');
+    if($id==2323){
     if (\Illuminate\Support\Facades\File::exists($configPath)) {
         return response()->file($configPath);
     }
+}
     return 'Config is NOT cached';
 });
 Route::post('user/signup', 'Api\GenSignupController@signup');
