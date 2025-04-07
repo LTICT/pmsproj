@@ -89,10 +89,7 @@ pipeline {
     ${imageToDeploy}
                     """
  // Run artisan optimize inside the container
-sh """
-    docker exec laravel_app_prod php artisan config:cache
-"""
-
+sh "docker exec laravel_app_prod php artisan config:cache"
                 }
             }
         }
