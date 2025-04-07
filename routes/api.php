@@ -20,6 +20,17 @@ Route::resource('films', 'film\\MoviesController');*/
 return $request->user();
 });*/
 // Forgot password route
+
+Route::get('/phpinfo', function () {
+    phpinfo();
+});
+Route::get('/checkconfig', function () {
+    $configPath = base_path('bootstrap/cache/config.php');
+    if (\Illuminate\Support\Facades\File::exists($configPath)) {
+        return response()->file($configPath);
+    }
+    return 'Config is NOT cached';
+});
 Route::post('user/signup', 'Api\GenSignupController@signup');
 Route::post('forgot-password', 'Auth\PasswordResetController@sendResetLink');
 // Reset password route
