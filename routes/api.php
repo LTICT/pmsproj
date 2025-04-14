@@ -420,6 +420,11 @@ Route::resource('conversation_information', 'GenconversationinformationControlle
     Route::post('program_info/updategrid', 'Api\PmsprograminfoController@updategrid');
     Route::post('program_info/deletegrid', 'Api\PmsprograminfoController@deletegrid');
 
+    Route::post('program_info_cso/listgrid', 'Api\PmscsoprograminfoController@listgrid');
+    Route::post('program_info_cso/insertgrid', 'Api\PmscsoprograminfoController@insertgrid');
+    Route::post('program_info_cso/updategrid', 'Api\PmscsoprograminfoController@updategrid');
+    Route::post('program_info_cso/deletegrid', 'Api\PmscsoprograminfoController@deletegrid');
+
     Route::resource('date_setting', 'GendatesettingController');
     Route::post('date_setting/listgrid', 'Api\GendatesettingController@listgrid');
     Route::post('date_setting/insertgrid', 'Api\GendatesettingController@insertgrid');
