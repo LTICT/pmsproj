@@ -21,19 +21,25 @@ class PmscsoprograminfoController extends MyController
      *
      * @return \Illuminate\View\View
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
-        $query='SELECT pri_id,pri_owner_region_id,pri_owner_zone_id,pri_owner_woreda_id,pri_sector_id,pri_name_or,pri_name_am,pri_name_en,pri_program_code,pri_description,pri_create_time,pri_update_time,pri_delete_time,pri_created_by,pri_status FROM pms_program_info ';       
-        
+        $query='SELECT pri_id,pri_owner_region_id,pri_owner_zone_id,pri_owner_woreda_id,pri_sector_id,pri_name_or,pri_name_am,pri_name_en,pri_program_code,pri_description,pri_create_time,pri_update_time,pri_delete_time,pri_created_by,pri_status FROM pms_program_info ';
         $query .=' WHERE pri_id='.$id.' ';
-        $data_info=DB::select(DB::raw($query));
+        $data_info=DB::select($query);
         if(isset($data_info) && !empty($data_info)){
-            $data['pms_program_info_data']=$data_info[0];
+            $data=$data_info[0];
+            $tabInfo=$this->getAllTabPermission($request);
+            $resultObject= array(
+                'allowedTabs'=>$tabInfo['allowedTabs'],
+                "data" =>$data,
+                "data_available"=>"1");
+            return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
+
+        }else{
+            $resultObject= array(
+                "data_available"=>"0");
+            return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
         }
-        //$data_info = Modelpmsprograminfo::findOrFail($id);
-        //$data['pms_program_info_data']=$data_info;
-        $data['page_title']=trans("form_lang.pms_program_info");
-        return view('program_info.show_pms_program_info', $data);
     }
     //Get List
     public function listgrid(Request $request){
