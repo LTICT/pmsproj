@@ -75,57 +75,114 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
             return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
         }
     }
+    function buildHierarchy(array $elements, $parentId=1) {
+    $branch = [];
+    //dd($elements);
+    foreach ($elements as $element) {
+        //dd($element);
+        if ($element['rootId'] == $parentId) {
+            $children = $this->buildHierarchy($elements, $element['id']);
+            $element['children'] = $children;
+            $branch[] = $element;
+        }
+    }
+    return $branch;
+}
     //to populate projects list based on selected program
     public function listgrid(Request $request){
         $permissionData=$this->getPagePermission($request,9, "project_info");
         //dd($permissionData);
         //dump($permissionData);
-        $query='SELECT prj_parent_id,prj_object_type_id, prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,add_name_or, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
+        /*$query='SELECT prj_parent_id,prj_object_type_id, prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,add_name_or, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
         prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,
         prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_description,
         prj_start_date_gc,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,
         prj_end_date_plan_gc,prj_outcome,prj_remark
-        ,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number,1 AS is_editable, 1 AS is_deletable,prj_program_id FROM pms_project ';
-        $query .=' LEFT JOIN pms_project_status ON pms_project_status.prs_id= pms_project.prj_project_status_id';
-        $query .=' LEFT JOIN gen_address_structure ON gen_address_structure.add_id= pms_project.prj_owner_zone_id';
-        $query .=' WHERE prj_owner_type =1';
-        //$query=$this->getSearchParam($request,$query);
+        ,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number,1 AS is_editable, 1 AS is_deletable,prj_program_id FROM pms_project ';*/
         $prjprojectstatusid=$request->input('prj_project_status_id');
         if(isset($prjprojectstatusid) && isset($prjprojectstatusid)){
-            $query .=' AND prj_project_status_id="'.$prjprojectstatusid.'"';
+            //$query .=' AND prj_project_status_id="'.$prjprojectstatusid.'"';
         }
          $programID=$request->input('program_id');
         if(isset($programID) && isset($programID)){
-            $query .=" AND prj_program_id='".$programID."'";
+            //$query .=" AND prj_program_id='".$programID."'";
         }
         $prjownerzoneid=$request->input('prj_owner_zone_id');
 if(isset($prjownerzoneid) && isset($prjownerzoneid)){
-$query .=" AND prj_owner_zone_id='".$prjownerzoneid."'"; 
+//$query .=" AND prj_owner_zone_id='".$prjownerzoneid."'"; 
 }
 $prjownerworedaid=$request->input('prj_owner_woreda_id');
 if(isset($prjownerworedaid) && isset($prjownerworedaid)){
-$query .=" AND prj_owner_woreda_id='".$prjownerworedaid."'";
+//$query .=" AND prj_owner_woreda_id='".$prjownerworedaid."'";
 }
 $prjsectorid=$request->input('prj_sector_id');
 if(isset($prjsectorid) && isset($prjsectorid)){
-$query .=" AND prj_sector_id='".$prjsectorid."'";
+//$query .=" AND prj_sector_id='".$prjsectorid."'";
 }
 
         $parentId=$request->input('parent_id');
         if(isset($parentId) && isset($parentId)){
-            $query .=" AND prj_parent_id='".$parentId."'";
+            //$query .=" AND prj_parent_id='".$parentId."'";
         }
          $objectTypeId=$request->input('object_type_id');
         if(isset($objectTypeId) && isset($objectTypeId)){
-            $query .=" AND prj_object_type_id='".$objectTypeId."'";
+            //$query .=" AND prj_object_type_id='".$objectTypeId."'";
         }
-        $query.=' ORDER BY prj_id DESC';
+          $query='WITH RECURSIVE project_hierarchy AS (
+    -- Anchor member: Start from the root project (change the ID as needed)
+    SELECT 
+        prj_id AS id,                     -- Primary key
+        prj_name AS name,
+        prj_parent_id AS "rootId",        -- Parent reference
+        ARRAY[]::json[] AS children,      -- Placeholder for children
+        prj_object_type_id, prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
+        prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,
+        prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_description,
+        prj_start_date_gc,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,
+        prj_end_date_plan_gc,prj_outcome,prj_remark
+        ,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number,1 AS is_editable, 1 AS is_deletable
+    FROM pms_project
+    INNER JOIN pms_project_status ON pms_project_status.prs_id= pms_project.prj_project_status_id
+    WHERE prj_id ='.$parentId.' AND prj_owner_type =1 AND prj_owner_zone_id='.$prjownerzoneid.'
+    AND prj_owner_woreda_id='.$prjownerworedaid.' 
+
+    UNION ALL
+    -- Recursive member: Get children of the current node
+    SELECT 
+        p.prj_id AS id,                   -- Primary key
+        p.prj_name AS name,
+        p.prj_parent_id AS "rootId",
+        ARRAY[]::json[] AS children,
+        p.prj_object_type_id, ps.prs_color_code AS color_code,ps.prs_id AS status_id, ps.prs_status_name_en AS status_name, p.prj_name_en,p.prj_name_am,p.prj_department_id,p.prj_id,p.prj_name,p.prj_code, p.prj_project_status_id,p.prj_project_category_id,p.prj_total_estimate_budget,p.prj_total_actual_budget,
+        p.prj_geo_location,p.prj_sector_id,p.prj_location_region_id,p.prj_location_zone_id,p.prj_location_woreda_id,
+        p.prj_location_description,p.prj_owner_region_id,p.prj_owner_zone_id,p.prj_owner_woreda_id,p.prj_owner_description,
+        p.prj_start_date_gc,p.prj_start_date_plan_gc,p.prj_end_date_actual_et,p.prj_end_date_actual_gc,
+        p.prj_end_date_plan_gc,p.prj_outcome,p.prj_remark
+        ,p.prj_owner_id,p.prj_urban_ben_number,p.prj_rural_ben_number,1 AS is_editable, 1 AS is_deletable
+    FROM pms_project p
+    INNER JOIN project_hierarchy ph ON p.prj_parent_id = ph.id 
+    INNER JOIN pms_project_status ps ON ps.prs_id= p.prj_project_status_id
+)
+SELECT * FROM project_hierarchy';
+//WHERE prj_owner_zone_id='.$prjownerzoneid.'
+       /* $query .=' LEFT JOIN pms_project_status ON pms_project_status.prs_id= pms_project.prj_project_status_id';
+        $query .=' LEFT JOIN gen_address_structure ON gen_address_structure.add_id= pms_project.prj_owner_zone_id';
+        $query .=' WHERE prj_owner_type =1';*/
+        //$query=$this->getSearchParam($request,$query);
+        
+        //$query.=' ORDER BY prj_id DESC';
         $data_info=DB::select($query);
+        if(isset($data_info) && !empty($data_info)){
+        $hierarchicalData = $this->buildHierarchy(json_decode(json_encode($data_info), true));
+}else{
+    $hierarchicalData=array("");
+}
+
         //$this->getQueryInfo($query);
         $tabInfo=$this->getTabPermission($request);
         $dateIsValid=$this->getDateParameter(1);
         $resultObject= array(
-            "data" =>$data_info,
+            "data" =>$hierarchicalData,
             "previledge"=>array('is_role_editable'=>$dateIsValid ? ($permissionData->pem_edit ?? 0) : 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$dateIsValid ? ($permissionData->pem_insert ?? 0) : 0),
             'allowedTabs'=>$tabInfo['allowedTabs'],
             'allowedLinks'=>$tabInfo['allowedLinks'] );

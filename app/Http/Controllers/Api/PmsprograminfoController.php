@@ -38,6 +38,7 @@ class PmsprograminfoController extends MyController
     //Get List
     public function listgrid(Request $request){
      $query="SELECT pri_id,pri_owner_region_id,pri_owner_zone_id,pri_owner_woreda_id,pri_sector_id,pri_name_or,pri_name_am,pri_name_en,pri_program_code,pri_description,pri_create_time,pri_update_time,pri_delete_time,pri_created_by,pri_status,1 AS is_editable, 1 AS is_deletable FROM pms_program_info ";
+     
 $query .=' WHERE 1=1';
 $priownerzoneid=$request->input('pri_owner_zone_id');
 if(isset($priownerzoneid) && isset($priownerzoneid)){
