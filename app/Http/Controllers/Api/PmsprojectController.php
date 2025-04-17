@@ -98,6 +98,19 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         if(isset($programID) && isset($programID)){
             $query .=" AND prj_program_id='".$programID."'";
         }
+        $prjownerzoneid=$request->input('prj_owner_zone_id');
+if(isset($prjownerzoneid) && isset($prjownerzoneid)){
+$query .=" AND prj_owner_zone_id='".$prjownerzoneid."'"; 
+}
+$prjownerworedaid=$request->input('prj_owner_woreda_id');
+if(isset($prjownerworedaid) && isset($prjownerworedaid)){
+$query .=" AND prj_owner_woreda_id='".$prjownerworedaid."'";
+}
+$prjsectorid=$request->input('prj_sector_id');
+if(isset($prjsectorid) && isset($prjsectorid)){
+$query .=" AND prj_sector_id='".$prjsectorid."'";
+}
+
         $parentId=$request->input('parent_id');
         if(isset($parentId) && isset($parentId)){
             $query .=" AND prj_parent_id='".$parentId."'";
