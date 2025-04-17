@@ -22,7 +22,7 @@ class PmscsoprojectController extends MyController
      */
     public function show(Request $request,$id)
     {
-        $query='SELECT owner_zone.add_name_or AS zone_owner,
+        $query='SELECT prj_parent_id,prj_object_type_id,owner_zone.add_name_or AS zone_owner,
         owner_woreda.add_name_or AS woreda_owner,
         location_zone.add_name_or AS zone_location,
         location_woreda.add_name_or AS woreda_location,
@@ -62,7 +62,7 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
     //to populate projects list based on selected program
     public function listgrid(Request $request){
         $permissionData=$this->getPagePermission($request,66, "project_info");
-      $query='SELECT cso_name,sci_name_en AS sector_name,prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,zone_info.add_name_or as zone_name, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
+      $query='SELECT prj_parent_id,prj_object_type_id,prj_parent_id,prj_object_type_id,cso_name,sci_name_en AS sector_name,prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,zone_info.add_name_or as zone_name, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
         prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,
         prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_description,
         prj_start_date_gc,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,
@@ -96,6 +96,14 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         $prjenddateplangc=$request->input('prj_end_date_plan_gc');
         if(isset($prjenddateplangc) && isset($prjenddateplangc)){
             $query .=' AND prj_end_date_plan_gc="'.$prjenddateplangc.'"';
+        }
+        $parentId=$request->input('parent_id');
+        if(isset($parentId) && isset($parentId)){
+            $query .=" AND prj_parent_id='".$parentId."'";
+        }
+         $objectTypeId=$request->input('object_type_id');
+        if(isset($objectTypeId) && isset($objectTypeId)){
+            $query .=" AND prj_object_type_id='".$objectTypeId."'";
         }
         $userInfo=$this->getUserInfo($request);
         if(isset($userInfo)){
@@ -158,6 +166,14 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
          $programID=$request->input('program_id');
         if(isset($programID) && isset($programID)){
             $query .=" AND prj_program_id='".$programID."'";
+        }
+        $parentId=$request->input('parent_id');
+        if(isset($parentId) && isset($parentId)){
+            $query .=" AND prj_parent_id='".$parentId."'";
+        }
+         $objectTypeId=$request->input('object_type_id');
+        if(isset($objectTypeId) && isset($objectTypeId)){
+            $query .=" AND prj_object_type_id='".$objectTypeId."'";
         }
         $query.=' ORDER BY prj_id DESC';
         //$this->getQueryInfo($query);
@@ -262,6 +278,7 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
             }
             if(isset($id) && !empty($id)){
                 $data_info = Modelpmsproject::findOrFail($id);
+                $requestData['prj_object_type_id']=$request->get('object_type_id');
                 $data_info->update($requestData);
                 $ischanged=$data_info->wasChanged();
                 if($ischanged){
@@ -288,6 +305,8 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         //Parent Id Assigment
         //$requestData['ins_vehicle_id']=$request->get('master_id');
         //$requestData['prj_created_by']=auth()->user()->usr_Id;
+            $requestData['prj_parent_id']=$request->get('parent_id');
+            $requestData['prj_object_type_id']=$request->get('object_type_id');
             $requestData['prj_program_id']=$request->get('program_id');
             $data_info=Modelpmsproject::create($requestData);
             $resultObject= array(
@@ -401,6 +420,8 @@ public function insertgrid(Request $request)
         //set project status to 1 - Draft when a new project is created
         $requestData['prj_project_status_id']=1;
         $requestData['prj_owner_type']=2;
+        $requestData['prj_object_type_id']=$request->get('object_type_id');
+        $requestData['prj_program_id']=$request->get('program_id');
         $data_info=Modelpmsproject::create($requestData);
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;

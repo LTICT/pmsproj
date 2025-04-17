@@ -44,8 +44,10 @@ class TblusersController extends MyController
        usr_department_id,usr_is_active,usr_picture,usr_last_logged_in,usr_ip,
        usr_remember_token,usr_notified,usr_description,usr_create_time,
        usr_update_time,usr_delete_time,usr_created_by,usr_status,1 AS is_editable, 1 AS is_deletable,
-       gen_address_structure.add_name_or AS zone_name, gen_department.dep_name_or as dep_name FROM tbl_users ';
-       $query .= ' LEFT JOIN gen_address_structure ON tbl_users.usr_zone_id = gen_address_structure.add_id';
+       zone_data.add_name_or AS zone_name, woreda_data.add_name_or AS woreda_name,
+        gen_department.dep_name_or as dep_name FROM tbl_users ';
+       $query .= ' LEFT JOIN gen_address_structure zone_data ON tbl_users.usr_zone_id = zone_data.add_id';
+       $query .= ' LEFT JOIN gen_address_structure woreda_data ON tbl_users.usr_woreda_id = woreda_data.add_id';
        $query .= ' LEFT JOIN gen_department ON tbl_users.usr_department_id = gen_department.dep_id';
        $query .= ' LEFT JOIN pms_sector_information ON tbl_users.usr_sector_id = pms_sector_information.sci_id';
        $query .=' WHERE 1=1';
