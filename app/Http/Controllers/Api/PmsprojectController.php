@@ -145,7 +145,7 @@ if(isset($prjsectorid) && isset($prjsectorid)){
     FROM pms_project
     INNER JOIN pms_project_status ON pms_project_status.prs_id= pms_project.prj_project_status_id
     WHERE prj_owner_type =1 AND prj_owner_zone_id='.$prjownerzoneid.'
-    AND prj_owner_woreda_id='.$prjownerworedaid.' 
+    AND prj_owner_woreda_id='.$prjownerworedaid.' AND prj_object_type_id=1
 
     UNION ALL
     -- Recursive member: Get children of the current node
