@@ -128,6 +128,7 @@ if(isset($prjsectorid) && isset($prjsectorid)){
         if(isset($objectTypeId) && isset($objectTypeId)){
             //$query .=" AND prj_object_type_id='".$objectTypeId."'";
         }
+        //prj_id ='.$parentId.' AND 
           $query='WITH RECURSIVE project_hierarchy AS (
     -- Anchor member: Start from the root project (change the ID as needed)
     SELECT 
@@ -143,7 +144,7 @@ if(isset($prjsectorid) && isset($prjsectorid)){
         ,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number,1 AS is_editable, 1 AS is_deletable
     FROM pms_project
     INNER JOIN pms_project_status ON pms_project_status.prs_id= pms_project.prj_project_status_id
-    WHERE prj_id ='.$parentId.' AND prj_owner_type =1 AND prj_owner_zone_id='.$prjownerzoneid.'
+    WHERE prj_owner_type =1 AND prj_owner_zone_id='.$prjownerzoneid.'
     AND prj_owner_woreda_id='.$prjownerworedaid.' 
 
     UNION ALL
