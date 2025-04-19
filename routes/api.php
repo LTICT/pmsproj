@@ -57,6 +57,7 @@ Route::post('project/updategrid', 'Api\PmsprojectController@updategrid');
 Route::post('project/deletegrid', 'Api\PmsprojectController@deletegrid');
 Route::post('project/search', 'PmsprojectController@search');
 Route::post('project/listgridsearch', 'Api\PmsprojectController@listgridsearch');
+Route::post('project/listprojectbyparent', 'Api\PmsprojectController@getProjectByParent');
 
   Route::resource('project_cso', 'Api\PmscsoprojectController');
 Route::post('project_cso/listgrid', 'Api\PmscsoprojectController@listgrid');
