@@ -420,8 +420,8 @@ public function insertgrid(Request $request)
         //set project status to 1 - Draft when a new project is created
         $requestData['prj_project_status_id']=1;
         $requestData['prj_owner_type']=2;
+        $requestData['prj_parent_id']=$request->get('parent_id');
         $requestData['prj_object_type_id']=$request->get('object_type_id');
-        $requestData['prj_program_id']=$request->get('program_id');
         $data_info=Modelpmsproject::create($requestData);
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;

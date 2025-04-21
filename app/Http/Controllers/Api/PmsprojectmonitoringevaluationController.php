@@ -81,7 +81,7 @@ $query .=' AND mne_status="'.$mnestatus.'"';
 
 //$query.=' ORDER BY emp_first_name';
 $data_info=DB::select($query);
-$previledge=array('is_role_editable'=>0,'is_role_deletable'=>0,'is_role_can_add'=>1);
+$previledge=array('is_role_editable'=>1,'is_role_deletable'=>0,'is_role_can_add'=>1);
 $permission=$this->ownsProject($request,$mneprojectid);
 if($permission !=null)
 {
