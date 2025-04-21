@@ -25,10 +25,9 @@ class Modelpmsprojectperformance extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['prp_id','prp_project_id','prp_project_status_id','prp_record_date_ec','prp_record_date_gc','prp_total_budget_used','prp_physical_performance','prp_description','prp_status','prp_created_by','prp_created_date','prp_create_time','prp_update_time','prp_termination_reason_id','prp_budget_year_id','prp_budget_month_id'];
-
-    
-
+    protected $fillable = ['prp_id','prp_project_id','prp_project_status_id','prp_record_date_ec','prp_record_date_gc','prp_total_budget_used','prp_physical_performance','prp_description','prp_status','prp_created_by','prp_created_date','prp_create_time','prp_update_time','prp_termination_reason_id','prp_budget_year_id','prp_budget_month_id',
+'prp_physical_planned','prp_budget_planned','prp_quarter_id','prp_budget_by_region','prp_physical_by_region','prp_budget_baseline', 'prp_physical_baseline',
+'prp_region_approved'];
     /**
      * Change activity log event description
      *

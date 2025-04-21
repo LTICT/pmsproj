@@ -468,6 +468,18 @@ Route::resource('procurement_information', 'PmsprocurementinformationController'
     Route::post('procurement_stage/updategrid', 'Api\PmsprocurementstageController@updategrid');
     Route::post('procurement_stage/deletegrid', 'Api\PmsprocurementstageController@deletegrid');
 //END PROCUREMENT
+
+    Route::resource('project_monitoring_evaluation', 'PmsprojectmonitoringevaluationController');
+    Route::post('project_monitoring_evaluation/listgrid', 'Api\PmsprojectmonitoringevaluationController@listgrid');
+    Route::post('project_monitoring_evaluation/insertgrid', 'Api\PmsprojectmonitoringevaluationController@insertgrid');
+    Route::post('project_monitoring_evaluation/updategrid', 'Api\PmsprojectmonitoringevaluationController@updategrid');
+    Route::post('project_monitoring_evaluation/deletegrid', 'Api\PmsprojectmonitoringevaluationController@deletegrid');
+
+    Route::resource('monitoring_evaluation_type', 'PmsmonitoringevaluationtypeController');
+    Route::post('monitoring_evaluation_type/listgrid', 'Api\PmsmonitoringevaluationtypeController@listgrid');
+    Route::post('monitoring_evaluation_type/insertgrid', 'Api\PmsmonitoringevaluationtypeController@insertgrid');
+    Route::post('monitoring_evaluation_type/updategrid', 'Api\PmsmonitoringevaluationtypeController@updategrid');
+    Route::post('monitoring_evaluation_type/deletegrid', 'Api\PmsmonitoringevaluationtypeController@deletegrid');
 });
 
    //START CACHE MANAGEMENT
