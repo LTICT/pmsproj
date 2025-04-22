@@ -19196,3 +19196,692 @@ HINT:  Perhaps you meant to reference the column \"pms_project_monitoring_evalua
 #38 C:\\wamp64\\www\\pmsotech\\index.php(21): require_once('C:\\\\wamp64\\\\www\\\\p...')
 #39 {main}
 "} 
+[2025-04-22 05:40:26] production.ERROR: SQLSTATE[08006] [7] could not connect to server: No route to host (0x00002751/10065)
+	Is the server running on host "196.188.182.83" and accepting
+	TCP/IP connections on port 1040? (Connection: pgsql, SQL: select * from "tbl_users" where "usr_id" = 9 limit 1) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 7): SQLSTATE[08006] [7] could not connect to server: No route to host (0x00002751/10065)
+\tIs the server running on host \"196.188.182.83\" and accepting
+\tTCP/IP connections on port 1040? (Connection: pgsql, SQL: select * from \"tbl_users\" where \"usr_id\" = 9 limit 1) at C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:825)
+[stacktrace]
+#0 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback('select * from \"...', Array, Object(Closure))
+#1 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(398): Illuminate\\Database\\Connection->run('select * from \"...', Array, Object(Closure))
+#2 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3133): Illuminate\\Database\\Connection->select('select * from \"...', Array, true)
+#3 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3118): Illuminate\\Database\\Query\\Builder->runSelect()
+#4 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3706): Illuminate\\Database\\Query\\Builder->Illuminate\\Database\\Query\\{closure}()
+#5 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3117): Illuminate\\Database\\Query\\Builder->onceWithColumns(Array, Object(Closure))
+#6 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Builder.php(759): Illuminate\\Database\\Query\\Builder->get(Array)
+#7 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Builder.php(741): Illuminate\\Database\\Eloquent\\Builder->getModels(Array)
+#8 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Concerns\\BuildsQueries.php(344): Illuminate\\Database\\Eloquent\\Builder->get(Array)
+#9 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\EloquentUserProvider.php(59): Illuminate\\Database\\Eloquent\\Builder->first()
+#10 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\SessionGuard.php(275): Illuminate\\Auth\\EloquentUserProvider->retrieveById('9')
+#11 C:\\wamp64\\www\\pmsotech\\vendor\\php-open-source-saver\\jwt-auth\\src\\Providers\\Auth\\Illuminate.php(54): Illuminate\\Auth\\SessionGuard->onceUsingId('9')
+#12 C:\\wamp64\\www\\pmsotech\\vendor\\php-open-source-saver\\jwt-auth\\src\\JWTAuth.php(62): PHPOpenSourceSaver\\JWTAuth\\Providers\\Auth\\Illuminate->byId('9')
+#13 C:\\wamp64\\www\\pmsotech\\app\\Http\\Controllers\\AuthController.php(100): PHPOpenSourceSaver\\JWTAuth\\JWTAuth->authenticate()
+#14 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(46): App\\Http\\Controllers\\AuthController->refreshToken()
+#15 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(265): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\AuthController), 'refreshToken')
+#16 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(211): Illuminate\\Routing\\Route->runController()
+#17 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(808): Illuminate\\Routing\\Route->run()
+#18 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#19 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(51): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#20 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#21 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#22 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#23 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(786): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#24 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(750): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#25 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(739): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#26 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(201): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#27 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#28 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#29 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#30 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#32 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#33 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#35 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#36 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#37 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#38 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(62): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#39 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#40 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#41 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#42 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks.php(22): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#43 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#44 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#45 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(176): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#46 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(145): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#47 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1190): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#48 C:\\wamp64\\www\\pmsotech\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
+#49 C:\\wamp64\\www\\pmsotech\\index.php(21): require_once('C:\\\\wamp64\\\\www\\\\p...')
+#50 {main}
+
+[previous exception] [object] (PDOException(code: 7): SQLSTATE[08006] [7] could not connect to server: No route to host (0x00002751/10065)
+\tIs the server running on host \"196.188.182.83\" and accepting
+\tTCP/IP connections on port 1040? at C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php:66)
+[stacktrace]
+#0 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php(66): PDO->__construct('pgsql:host=196....', 'admin', Object(SensitiveParameterValue), Array)
+#1 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php(44): Illuminate\\Database\\Connectors\\Connector->createPdoConnection('pgsql:host=196....', 'admin', Object(SensitiveParameterValue), Array)
+#2 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\PostgresConnector.php(35): Illuminate\\Database\\Connectors\\Connector->createConnection('pgsql:host=196....', Array, Array)
+#3 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\ConnectionFactory.php(185): Illuminate\\Database\\Connectors\\PostgresConnector->connect(Array)
+#4 [internal function]: Illuminate\\Database\\Connectors\\ConnectionFactory->Illuminate\\Database\\Connectors\\{closure}()
+#5 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(1231): call_user_func(Object(Closure))
+#6 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(1267): Illuminate\\Database\\Connection->getPdo()
+#7 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(512): Illuminate\\Database\\Connection->getReadPdo()
+#8 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(407): Illuminate\\Database\\Connection->getPdoForSelect(true)
+#9 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(812): Illuminate\\Database\\Connection->Illuminate\\Database\\{closure}('select * from \"...', Array)
+#10 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback('select * from \"...', Array, Object(Closure))
+#11 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(398): Illuminate\\Database\\Connection->run('select * from \"...', Array, Object(Closure))
+#12 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3133): Illuminate\\Database\\Connection->select('select * from \"...', Array, true)
+#13 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3118): Illuminate\\Database\\Query\\Builder->runSelect()
+#14 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3706): Illuminate\\Database\\Query\\Builder->Illuminate\\Database\\Query\\{closure}()
+#15 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3117): Illuminate\\Database\\Query\\Builder->onceWithColumns(Array, Object(Closure))
+#16 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Builder.php(759): Illuminate\\Database\\Query\\Builder->get(Array)
+#17 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Builder.php(741): Illuminate\\Database\\Eloquent\\Builder->getModels(Array)
+#18 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Concerns\\BuildsQueries.php(344): Illuminate\\Database\\Eloquent\\Builder->get(Array)
+#19 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\EloquentUserProvider.php(59): Illuminate\\Database\\Eloquent\\Builder->first()
+#20 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\SessionGuard.php(275): Illuminate\\Auth\\EloquentUserProvider->retrieveById('9')
+#21 C:\\wamp64\\www\\pmsotech\\vendor\\php-open-source-saver\\jwt-auth\\src\\Providers\\Auth\\Illuminate.php(54): Illuminate\\Auth\\SessionGuard->onceUsingId('9')
+#22 C:\\wamp64\\www\\pmsotech\\vendor\\php-open-source-saver\\jwt-auth\\src\\JWTAuth.php(62): PHPOpenSourceSaver\\JWTAuth\\Providers\\Auth\\Illuminate->byId('9')
+#23 C:\\wamp64\\www\\pmsotech\\app\\Http\\Controllers\\AuthController.php(100): PHPOpenSourceSaver\\JWTAuth\\JWTAuth->authenticate()
+#24 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(46): App\\Http\\Controllers\\AuthController->refreshToken()
+#25 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(265): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\AuthController), 'refreshToken')
+#26 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(211): Illuminate\\Routing\\Route->runController()
+#27 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(808): Illuminate\\Routing\\Route->run()
+#28 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#29 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(51): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#30 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#32 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#33 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(786): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#34 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(750): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#35 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(739): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#36 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(201): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#37 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#38 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#39 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#40 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#41 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#42 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#44 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#45 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#47 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#48 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(62): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#49 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#50 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#51 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#52 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks.php(22): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#53 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#54 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#55 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(176): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#56 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(145): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#57 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1190): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#58 C:\\wamp64\\www\\pmsotech\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
+#59 C:\\wamp64\\www\\pmsotech\\index.php(21): require_once('C:\\\\wamp64\\\\www\\\\p...')
+#60 {main}
+"} 
+[2025-04-22 15:19:28] production.ERROR: SQLSTATE[08006] [7] could not connect to server: No route to host (0x00002751/10065)
+	Is the server running on host "196.188.182.83" and accepting
+	TCP/IP connections on port 1040? (Connection: pgsql, SQL: SELECT sci_name_or AS sector_name, zone.add_name_or AS zone_name, woreda.add_name_or AS woreda_name
+                  FROM tbl_users
+                  LEFT JOIN gen_address_structure zone ON tbl_users.usr_zone_id = zone.add_id
+                  LEFT JOIN gen_address_structure woreda ON tbl_users.usr_woreda_id = woreda.add_id
+                  LEFT JOIN pms_sector_information ON tbl_users.usr_sector_id = pms_sector_information.sci_id
+                  WHERE usr_id = 105) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 7): SQLSTATE[08006] [7] could not connect to server: No route to host (0x00002751/10065)
+\tIs the server running on host \"196.188.182.83\" and accepting
+\tTCP/IP connections on port 1040? (Connection: pgsql, SQL: SELECT sci_name_or AS sector_name, zone.add_name_or AS zone_name, woreda.add_name_or AS woreda_name
+                  FROM tbl_users
+                  LEFT JOIN gen_address_structure zone ON tbl_users.usr_zone_id = zone.add_id
+                  LEFT JOIN gen_address_structure woreda ON tbl_users.usr_woreda_id = woreda.add_id
+                  LEFT JOIN pms_sector_information ON tbl_users.usr_sector_id = pms_sector_information.sci_id
+                  WHERE usr_id = 105) at C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:825)
+[stacktrace]
+#0 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(979): Illuminate\\Database\\Connection->runQueryCallback('SELECT sci_name...', Array, Object(Closure))
+#1 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(958): Illuminate\\Database\\Connection->tryAgainIfCausedByLostConnection(Object(Illuminate\\Database\\QueryException), 'SELECT sci_name...', Array, Object(Closure))
+#2 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(781): Illuminate\\Database\\Connection->handleQueryException(Object(Illuminate\\Database\\QueryException), 'SELECT sci_name...', Array, Object(Closure))
+#3 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(398): Illuminate\\Database\\Connection->run('SELECT sci_name...', Array, Object(Closure))
+#4 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\DatabaseManager.php(471): Illuminate\\Database\\Connection->select('SELECT sci_name...', Array)
+#5 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Facades\\Facade.php(358): Illuminate\\Database\\DatabaseManager->__call('select', Array)
+#6 C:\\wamp64\\www\\pmsotech\\app\\Http\\Controllers\\AuthController.php(70): Illuminate\\Support\\Facades\\Facade::__callStatic('select', Array)
+#7 C:\\wamp64\\www\\pmsotech\\app\\Http\\Controllers\\AuthController.php(38): App\\Http\\Controllers\\AuthController->getUserInfo(Object(App\\Models\\User))
+#8 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(46): App\\Http\\Controllers\\AuthController->login(Object(Illuminate\\Http\\Request))
+#9 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(265): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\AuthController), 'login')
+#10 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(211): Illuminate\\Routing\\Route->runController()
+#11 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(808): Illuminate\\Routing\\Route->run()
+#12 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#13 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(51): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#14 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#15 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(161): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#16 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(127): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequest(Object(Illuminate\\Http\\Request), Object(Closure), Array)
+#17 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(89): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequestUsingNamedLimiter(Object(Illuminate\\Http\\Request), Object(Closure), 'login', Object(Closure))
+#18 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\ThrottleRequests->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'login')
+#19 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#20 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#21 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(786): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#22 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(750): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#23 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(739): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#24 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(201): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#25 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#26 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#27 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#29 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#30 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#32 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#33 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#35 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#36 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(62): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#37 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#38 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#39 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#40 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks.php(22): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#41 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#42 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#43 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(176): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#44 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(145): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#45 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1190): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#46 C:\\wamp64\\www\\pmsotech\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
+#47 C:\\wamp64\\www\\pmsotech\\index.php(21): require_once('C:\\\\wamp64\\\\www\\\\p...')
+#48 {main}
+
+[previous exception] [object] (PDOException(code: 7): SQLSTATE[08006] [7] could not connect to server: No route to host (0x00002751/10065)
+\tIs the server running on host \"196.188.182.83\" and accepting
+\tTCP/IP connections on port 1040? at C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php:66)
+[stacktrace]
+#0 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php(66): PDO->__construct('pgsql:host=196....', 'admin', Object(SensitiveParameterValue), Array)
+#1 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php(44): Illuminate\\Database\\Connectors\\Connector->createPdoConnection('pgsql:host=196....', 'admin', Object(SensitiveParameterValue), Array)
+#2 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\PostgresConnector.php(35): Illuminate\\Database\\Connectors\\Connector->createConnection('pgsql:host=196....', Array, Array)
+#3 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\ConnectionFactory.php(185): Illuminate\\Database\\Connectors\\PostgresConnector->connect(Array)
+#4 [internal function]: Illuminate\\Database\\Connectors\\ConnectionFactory->Illuminate\\Database\\Connectors\\{closure}()
+#5 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(1231): call_user_func(Object(Closure))
+#6 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(1267): Illuminate\\Database\\Connection->getPdo()
+#7 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(512): Illuminate\\Database\\Connection->getReadPdo()
+#8 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(407): Illuminate\\Database\\Connection->getPdoForSelect(true)
+#9 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(812): Illuminate\\Database\\Connection->Illuminate\\Database\\{closure}('SELECT sci_name...', Array)
+#10 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(979): Illuminate\\Database\\Connection->runQueryCallback('SELECT sci_name...', Array, Object(Closure))
+#11 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(958): Illuminate\\Database\\Connection->tryAgainIfCausedByLostConnection(Object(Illuminate\\Database\\QueryException), 'SELECT sci_name...', Array, Object(Closure))
+#12 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(781): Illuminate\\Database\\Connection->handleQueryException(Object(Illuminate\\Database\\QueryException), 'SELECT sci_name...', Array, Object(Closure))
+#13 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(398): Illuminate\\Database\\Connection->run('SELECT sci_name...', Array, Object(Closure))
+#14 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\DatabaseManager.php(471): Illuminate\\Database\\Connection->select('SELECT sci_name...', Array)
+#15 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Facades\\Facade.php(358): Illuminate\\Database\\DatabaseManager->__call('select', Array)
+#16 C:\\wamp64\\www\\pmsotech\\app\\Http\\Controllers\\AuthController.php(70): Illuminate\\Support\\Facades\\Facade::__callStatic('select', Array)
+#17 C:\\wamp64\\www\\pmsotech\\app\\Http\\Controllers\\AuthController.php(38): App\\Http\\Controllers\\AuthController->getUserInfo(Object(App\\Models\\User))
+#18 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(46): App\\Http\\Controllers\\AuthController->login(Object(Illuminate\\Http\\Request))
+#19 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(265): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\AuthController), 'login')
+#20 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(211): Illuminate\\Routing\\Route->runController()
+#21 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(808): Illuminate\\Routing\\Route->run()
+#22 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#23 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(51): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#24 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#25 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(161): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#26 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(127): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequest(Object(Illuminate\\Http\\Request), Object(Closure), Array)
+#27 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(89): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequestUsingNamedLimiter(Object(Illuminate\\Http\\Request), Object(Closure), 'login', Object(Closure))
+#28 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\ThrottleRequests->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'login')
+#29 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#30 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#31 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(786): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#32 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(750): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#33 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(739): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#34 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(201): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#35 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#36 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#37 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#38 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#39 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#40 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#41 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#42 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#43 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#44 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#45 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(62): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#47 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#48 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#49 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#50 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks.php(22): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#51 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#52 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#53 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(176): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#54 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(145): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#55 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1190): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#56 C:\\wamp64\\www\\pmsotech\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
+#57 C:\\wamp64\\www\\pmsotech\\index.php(21): require_once('C:\\\\wamp64\\\\www\\\\p...')
+#58 {main}
+"} 
+[2025-04-22 15:19:45] production.ERROR: SQLSTATE[08006] [7] could not connect to server: No route to host (0x00002751/10065)
+	Is the server running on host "196.188.182.83" and accepting
+	TCP/IP connections on port 1040? (Connection: pgsql, SQL: select * from "tbl_users" where "email" = education@gmail.com and "usr_status" = 1 limit 1) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 7): SQLSTATE[08006] [7] could not connect to server: No route to host (0x00002751/10065)
+\tIs the server running on host \"196.188.182.83\" and accepting
+\tTCP/IP connections on port 1040? (Connection: pgsql, SQL: select * from \"tbl_users\" where \"email\" = education@gmail.com and \"usr_status\" = 1 limit 1) at C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:825)
+[stacktrace]
+#0 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback('select * from \"...', Array, Object(Closure))
+#1 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(398): Illuminate\\Database\\Connection->run('select * from \"...', Array, Object(Closure))
+#2 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3133): Illuminate\\Database\\Connection->select('select * from \"...', Array, true)
+#3 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3118): Illuminate\\Database\\Query\\Builder->runSelect()
+#4 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3706): Illuminate\\Database\\Query\\Builder->Illuminate\\Database\\Query\\{closure}()
+#5 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3117): Illuminate\\Database\\Query\\Builder->onceWithColumns(Array, Object(Closure))
+#6 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Builder.php(759): Illuminate\\Database\\Query\\Builder->get(Array)
+#7 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Builder.php(741): Illuminate\\Database\\Eloquent\\Builder->getModels(Array)
+#8 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Concerns\\BuildsQueries.php(344): Illuminate\\Database\\Eloquent\\Builder->get(Array)
+#9 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\EloquentUserProvider.php(139): Illuminate\\Database\\Eloquent\\Builder->first()
+#10 C:\\wamp64\\www\\pmsotech\\vendor\\php-open-source-saver\\jwt-auth\\src\\JWTGuard.php(146): Illuminate\\Auth\\EloquentUserProvider->retrieveByCredentials(Object(SensitiveParameterValue))
+#11 C:\\wamp64\\www\\pmsotech\\app\\Http\\Controllers\\AuthController.php(29): PHPOpenSourceSaver\\JWTAuth\\JWTGuard->attempt(Array)
+#12 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(46): App\\Http\\Controllers\\AuthController->login(Object(Illuminate\\Http\\Request))
+#13 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(265): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\AuthController), 'login')
+#14 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(211): Illuminate\\Routing\\Route->runController()
+#15 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(808): Illuminate\\Routing\\Route->run()
+#16 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#17 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(51): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#18 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#19 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(161): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#20 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(127): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequest(Object(Illuminate\\Http\\Request), Object(Closure), Array)
+#21 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(89): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequestUsingNamedLimiter(Object(Illuminate\\Http\\Request), Object(Closure), 'login', Object(Closure))
+#22 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\ThrottleRequests->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'login')
+#23 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#24 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#25 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(786): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#26 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(750): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#27 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(739): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#28 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(201): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#29 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#30 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#31 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#32 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#33 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#34 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#35 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#36 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#37 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#38 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#39 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#40 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(62): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#41 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#42 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#43 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#44 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks.php(22): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#45 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#47 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(176): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#48 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(145): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#49 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1190): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#50 C:\\wamp64\\www\\pmsotech\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
+#51 C:\\wamp64\\www\\pmsotech\\index.php(21): require_once('C:\\\\wamp64\\\\www\\\\p...')
+#52 {main}
+
+[previous exception] [object] (PDOException(code: 7): SQLSTATE[08006] [7] could not connect to server: No route to host (0x00002751/10065)
+\tIs the server running on host \"196.188.182.83\" and accepting
+\tTCP/IP connections on port 1040? at C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php:66)
+[stacktrace]
+#0 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php(66): PDO->__construct('pgsql:host=196....', 'admin', Object(SensitiveParameterValue), Array)
+#1 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\Connector.php(44): Illuminate\\Database\\Connectors\\Connector->createPdoConnection('pgsql:host=196....', 'admin', Object(SensitiveParameterValue), Array)
+#2 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\PostgresConnector.php(35): Illuminate\\Database\\Connectors\\Connector->createConnection('pgsql:host=196....', Array, Array)
+#3 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connectors\\ConnectionFactory.php(185): Illuminate\\Database\\Connectors\\PostgresConnector->connect(Array)
+#4 [internal function]: Illuminate\\Database\\Connectors\\ConnectionFactory->Illuminate\\Database\\Connectors\\{closure}()
+#5 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(1231): call_user_func(Object(Closure))
+#6 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(1267): Illuminate\\Database\\Connection->getPdo()
+#7 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(512): Illuminate\\Database\\Connection->getReadPdo()
+#8 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(407): Illuminate\\Database\\Connection->getPdoForSelect(true)
+#9 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(812): Illuminate\\Database\\Connection->Illuminate\\Database\\{closure}('select * from \"...', Array)
+#10 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback('select * from \"...', Array, Object(Closure))
+#11 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(398): Illuminate\\Database\\Connection->run('select * from \"...', Array, Object(Closure))
+#12 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3133): Illuminate\\Database\\Connection->select('select * from \"...', Array, true)
+#13 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3118): Illuminate\\Database\\Query\\Builder->runSelect()
+#14 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3706): Illuminate\\Database\\Query\\Builder->Illuminate\\Database\\Query\\{closure}()
+#15 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Query\\Builder.php(3117): Illuminate\\Database\\Query\\Builder->onceWithColumns(Array, Object(Closure))
+#16 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Builder.php(759): Illuminate\\Database\\Query\\Builder->get(Array)
+#17 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Eloquent\\Builder.php(741): Illuminate\\Database\\Eloquent\\Builder->getModels(Array)
+#18 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Concerns\\BuildsQueries.php(344): Illuminate\\Database\\Eloquent\\Builder->get(Array)
+#19 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\EloquentUserProvider.php(139): Illuminate\\Database\\Eloquent\\Builder->first()
+#20 C:\\wamp64\\www\\pmsotech\\vendor\\php-open-source-saver\\jwt-auth\\src\\JWTGuard.php(146): Illuminate\\Auth\\EloquentUserProvider->retrieveByCredentials(Object(SensitiveParameterValue))
+#21 C:\\wamp64\\www\\pmsotech\\app\\Http\\Controllers\\AuthController.php(29): PHPOpenSourceSaver\\JWTAuth\\JWTGuard->attempt(Array)
+#22 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(46): App\\Http\\Controllers\\AuthController->login(Object(Illuminate\\Http\\Request))
+#23 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(265): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\AuthController), 'login')
+#24 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(211): Illuminate\\Routing\\Route->runController()
+#25 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(808): Illuminate\\Routing\\Route->run()
+#26 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#27 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(51): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#28 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#29 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(161): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#30 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(127): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequest(Object(Illuminate\\Http\\Request), Object(Closure), Array)
+#31 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(89): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequestUsingNamedLimiter(Object(Illuminate\\Http\\Request), Object(Closure), 'login', Object(Closure))
+#32 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\ThrottleRequests->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'login')
+#33 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#34 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#35 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(786): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#36 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(750): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#37 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(739): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#38 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(201): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#39 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#40 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#41 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#42 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#44 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#45 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#46 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#47 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#48 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#49 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#50 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(62): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#51 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#52 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#53 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#54 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks.php(22): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#55 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#56 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#57 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(176): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#58 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(145): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#59 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1190): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#60 C:\\wamp64\\www\\pmsotech\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
+#61 C:\\wamp64\\www\\pmsotech\\index.php(21): require_once('C:\\\\wamp64\\\\www\\\\p...')
+#62 {main}
+"} 
+[2025-04-22 18:35:05] production.ERROR: SQLSTATE[42703]: Undefined column: 7 ERROR:  column "prj_sector_id" does not exist
+LINE 10:     WHERE prj_sector_id =1 AND pri_object_type_id=1
+                   ^
+HINT:  Perhaps you meant to reference the column "pms_program_info.pri_sector_id". (Connection: pgsql, SQL: WITH RECURSIVE program_hierarchy AS (
+    -- Anchor member: Start from the root project (change the ID as needed)
+    SELECT 
+        pri_id AS id,                     -- Primary key
+        pri_name_en AS name,
+        pri_parent_id AS "rootId",        -- Parent reference
+        ARRAY[]::json[] AS children,      -- Placeholder for children
+        pri_object_type_id
+    FROM pms_program_info
+    WHERE prj_sector_id =1 AND pri_object_type_id=1
+    UNION ALL
+    -- Recursive member: Get children of the current node
+    SELECT 
+        p.pri_id AS id,                   -- Primary key
+        p.pri_name_en AS name,
+        p.pri_parent_id AS "rootId",
+        ARRAY[]::json[] AS children,
+        p.pri_object_type_id
+    FROM pms_program_info p
+    INNER JOIN program_hierarchy ph ON p.pri_parent_id = ph.id 
+)
+SELECT * FROM program_hierarchy) {"userId":9,"exception":"[object] (Illuminate\\Database\\QueryException(code: 42703): SQLSTATE[42703]: Undefined column: 7 ERROR:  column \"prj_sector_id\" does not exist
+LINE 10:     WHERE prj_sector_id =1 AND pri_object_type_id=1
+                   ^
+HINT:  Perhaps you meant to reference the column \"pms_program_info.pri_sector_id\". (Connection: pgsql, SQL: WITH RECURSIVE program_hierarchy AS (
+    -- Anchor member: Start from the root project (change the ID as needed)
+    SELECT 
+        pri_id AS id,                     -- Primary key
+        pri_name_en AS name,
+        pri_parent_id AS \"rootId\",        -- Parent reference
+        ARRAY[]::json[] AS children,      -- Placeholder for children
+        pri_object_type_id
+    FROM pms_program_info
+    WHERE prj_sector_id =1 AND pri_object_type_id=1
+    UNION ALL
+    -- Recursive member: Get children of the current node
+    SELECT 
+        p.pri_id AS id,                   -- Primary key
+        p.pri_name_en AS name,
+        p.pri_parent_id AS \"rootId\",
+        ARRAY[]::json[] AS children,
+        p.pri_object_type_id
+    FROM pms_program_info p
+    INNER JOIN program_hierarchy ph ON p.pri_parent_id = ph.id 
+)
+SELECT * FROM program_hierarchy) at C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:825)
+[stacktrace]
+#0 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback('WITH RECURSIVE ...', Array, Object(Closure))
+#1 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(398): Illuminate\\Database\\Connection->run('WITH RECURSIVE ...', Array, Object(Closure))
+#2 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\DatabaseManager.php(471): Illuminate\\Database\\Connection->select('WITH RECURSIVE ...')
+#3 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Facades\\Facade.php(358): Illuminate\\Database\\DatabaseManager->__call('select', Array)
+#4 C:\\wamp64\\www\\pmsotech\\app\\Http\\Controllers\\Api\\PmsprograminfoController.php(257): Illuminate\\Support\\Facades\\Facade::__callStatic('select', Array)
+#5 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(46): App\\Http\\Controllers\\Api\\PmsprograminfoController->listprogramtree(Object(Illuminate\\Http\\Request))
+#6 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(265): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\Api\\PmsprograminfoController), 'listprogramtree')
+#7 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(211): Illuminate\\Routing\\Route->runController()
+#8 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(808): Illuminate\\Routing\\Route->run()
+#9 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#10 C:\\wamp64\\www\\pmsotech\\app\\Http\\Middleware\\JwtMiddleware.php(46): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#11 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): App\\Http\\Middleware\\JwtMiddleware->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#12 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(51): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#13 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#14 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(161): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#15 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(127): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequest(Object(Illuminate\\Http\\Request), Object(Closure), Array)
+#16 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(89): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequestUsingNamedLimiter(Object(Illuminate\\Http\\Request), Object(Closure), 'api', Object(Closure))
+#17 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\ThrottleRequests->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'api')
+#18 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#19 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#20 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(786): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#21 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(750): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#22 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(739): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#23 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(201): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#24 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#25 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#26 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#27 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#29 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#30 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#32 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#33 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#34 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#35 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(62): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#36 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#37 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#38 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#39 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks.php(22): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#40 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#41 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#42 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(176): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#43 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(145): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#44 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1190): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#45 C:\\wamp64\\www\\pmsotech\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
+#46 C:\\wamp64\\www\\pmsotech\\index.php(21): require_once('C:\\\\wamp64\\\\www\\\\p...')
+#47 {main}
+
+[previous exception] [object] (PDOException(code: 42703): SQLSTATE[42703]: Undefined column: 7 ERROR:  column \"prj_sector_id\" does not exist
+LINE 10:     WHERE prj_sector_id =1 AND pri_object_type_id=1
+                   ^
+HINT:  Perhaps you meant to reference the column \"pms_program_info.pri_sector_id\". at C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:412)
+[stacktrace]
+#0 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(412): PDOStatement->execute()
+#1 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(812): Illuminate\\Database\\Connection->Illuminate\\Database\\{closure}('WITH RECURSIVE ...', Array)
+#2 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback('WITH RECURSIVE ...', Array, Object(Closure))
+#3 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(398): Illuminate\\Database\\Connection->run('WITH RECURSIVE ...', Array, Object(Closure))
+#4 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\DatabaseManager.php(471): Illuminate\\Database\\Connection->select('WITH RECURSIVE ...')
+#5 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Facades\\Facade.php(358): Illuminate\\Database\\DatabaseManager->__call('select', Array)
+#6 C:\\wamp64\\www\\pmsotech\\app\\Http\\Controllers\\Api\\PmsprograminfoController.php(257): Illuminate\\Support\\Facades\\Facade::__callStatic('select', Array)
+#7 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(46): App\\Http\\Controllers\\Api\\PmsprograminfoController->listprogramtree(Object(Illuminate\\Http\\Request))
+#8 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(265): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\Api\\PmsprograminfoController), 'listprogramtree')
+#9 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(211): Illuminate\\Routing\\Route->runController()
+#10 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(808): Illuminate\\Routing\\Route->run()
+#11 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#12 C:\\wamp64\\www\\pmsotech\\app\\Http\\Middleware\\JwtMiddleware.php(46): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#13 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): App\\Http\\Middleware\\JwtMiddleware->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#14 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(51): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#15 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#16 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(161): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#17 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(127): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequest(Object(Illuminate\\Http\\Request), Object(Closure), Array)
+#18 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(89): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequestUsingNamedLimiter(Object(Illuminate\\Http\\Request), Object(Closure), 'api', Object(Closure))
+#19 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\ThrottleRequests->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'api')
+#20 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#21 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#22 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(786): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#23 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(750): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#24 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(739): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#25 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(201): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#26 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#27 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#28 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#29 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#30 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#31 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#32 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#33 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#34 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#35 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#36 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#37 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(62): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#38 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#39 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#40 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#41 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks.php(22): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#42 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#44 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(176): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#45 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(145): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#46 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1190): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#47 C:\\wamp64\\www\\pmsotech\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
+#48 C:\\wamp64\\www\\pmsotech\\index.php(21): require_once('C:\\\\wamp64\\\\www\\\\p...')
+#49 {main}
+"} 
+[2025-04-22 18:40:59] production.ERROR: SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near "AND"
+LINE 10:     WHERE pri_sector_id = AND pri_object_type_id=1
+                                   ^ (Connection: pgsql, SQL: WITH RECURSIVE program_hierarchy AS (
+    -- Anchor member: Start from the root project (change the ID as needed)
+    SELECT 
+        pri_id AS id,                     -- Primary key
+        pri_name_en AS name,
+        pri_parent_id AS "rootId",        -- Parent reference
+        ARRAY[]::json[] AS children,      -- Placeholder for children
+        pri_object_type_id
+    FROM pms_program_info
+    WHERE pri_sector_id = AND pri_object_type_id=1
+    UNION ALL
+    -- Recursive member: Get children of the current node
+    SELECT 
+        p.pri_id AS id,                   -- Primary key
+        p.pri_name_en AS name,
+        p.pri_parent_id AS "rootId",
+        ARRAY[]::json[] AS children,
+        p.pri_object_type_id
+    FROM pms_program_info p
+    INNER JOIN program_hierarchy ph ON p.pri_parent_id = ph.id 
+)
+SELECT * FROM program_hierarchy) {"userId":9,"exception":"[object] (Illuminate\\Database\\QueryException(code: 42601): SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near \"AND\"
+LINE 10:     WHERE pri_sector_id = AND pri_object_type_id=1
+                                   ^ (Connection: pgsql, SQL: WITH RECURSIVE program_hierarchy AS (
+    -- Anchor member: Start from the root project (change the ID as needed)
+    SELECT 
+        pri_id AS id,                     -- Primary key
+        pri_name_en AS name,
+        pri_parent_id AS \"rootId\",        -- Parent reference
+        ARRAY[]::json[] AS children,      -- Placeholder for children
+        pri_object_type_id
+    FROM pms_program_info
+    WHERE pri_sector_id = AND pri_object_type_id=1
+    UNION ALL
+    -- Recursive member: Get children of the current node
+    SELECT 
+        p.pri_id AS id,                   -- Primary key
+        p.pri_name_en AS name,
+        p.pri_parent_id AS \"rootId\",
+        ARRAY[]::json[] AS children,
+        p.pri_object_type_id
+    FROM pms_program_info p
+    INNER JOIN program_hierarchy ph ON p.pri_parent_id = ph.id 
+)
+SELECT * FROM program_hierarchy) at C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:825)
+[stacktrace]
+#0 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback('WITH RECURSIVE ...', Array, Object(Closure))
+#1 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(398): Illuminate\\Database\\Connection->run('WITH RECURSIVE ...', Array, Object(Closure))
+#2 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\DatabaseManager.php(471): Illuminate\\Database\\Connection->select('WITH RECURSIVE ...')
+#3 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Facades\\Facade.php(358): Illuminate\\Database\\DatabaseManager->__call('select', Array)
+#4 C:\\wamp64\\www\\pmsotech\\app\\Http\\Controllers\\Api\\PmsprograminfoController.php(257): Illuminate\\Support\\Facades\\Facade::__callStatic('select', Array)
+#5 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(46): App\\Http\\Controllers\\Api\\PmsprograminfoController->listprogramtree(Object(Illuminate\\Http\\Request))
+#6 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(265): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\Api\\PmsprograminfoController), 'listprogramtree')
+#7 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(211): Illuminate\\Routing\\Route->runController()
+#8 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(808): Illuminate\\Routing\\Route->run()
+#9 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#10 C:\\wamp64\\www\\pmsotech\\app\\Http\\Middleware\\JwtMiddleware.php(46): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#11 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): App\\Http\\Middleware\\JwtMiddleware->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#12 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(51): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#13 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#14 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(161): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#15 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(127): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequest(Object(Illuminate\\Http\\Request), Object(Closure), Array)
+#16 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(89): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequestUsingNamedLimiter(Object(Illuminate\\Http\\Request), Object(Closure), 'api', Object(Closure))
+#17 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\ThrottleRequests->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'api')
+#18 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#19 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#20 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(786): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#21 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(750): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#22 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(739): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#23 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(201): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#24 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#25 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#26 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#27 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#29 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#30 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#32 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#33 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#34 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#35 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(62): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#36 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#37 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#38 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#39 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks.php(22): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#40 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#41 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#42 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(176): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#43 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(145): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#44 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1190): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#45 C:\\wamp64\\www\\pmsotech\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
+#46 C:\\wamp64\\www\\pmsotech\\index.php(21): require_once('C:\\\\wamp64\\\\www\\\\p...')
+#47 {main}
+
+[previous exception] [object] (PDOException(code: 42601): SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near \"AND\"
+LINE 10:     WHERE pri_sector_id = AND pri_object_type_id=1
+                                   ^ at C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:412)
+[stacktrace]
+#0 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(412): PDOStatement->execute()
+#1 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(812): Illuminate\\Database\\Connection->Illuminate\\Database\\{closure}('WITH RECURSIVE ...', Array)
+#2 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(779): Illuminate\\Database\\Connection->runQueryCallback('WITH RECURSIVE ...', Array, Object(Closure))
+#3 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(398): Illuminate\\Database\\Connection->run('WITH RECURSIVE ...', Array, Object(Closure))
+#4 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\DatabaseManager.php(471): Illuminate\\Database\\Connection->select('WITH RECURSIVE ...')
+#5 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Facades\\Facade.php(358): Illuminate\\Database\\DatabaseManager->__call('select', Array)
+#6 C:\\wamp64\\www\\pmsotech\\app\\Http\\Controllers\\Api\\PmsprograminfoController.php(257): Illuminate\\Support\\Facades\\Facade::__callStatic('select', Array)
+#7 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(46): App\\Http\\Controllers\\Api\\PmsprograminfoController->listprogramtree(Object(Illuminate\\Http\\Request))
+#8 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(265): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\Api\\PmsprograminfoController), 'listprogramtree')
+#9 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(211): Illuminate\\Routing\\Route->runController()
+#10 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(808): Illuminate\\Routing\\Route->run()
+#11 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#12 C:\\wamp64\\www\\pmsotech\\app\\Http\\Middleware\\JwtMiddleware.php(46): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#13 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): App\\Http\\Middleware\\JwtMiddleware->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#14 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(51): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#15 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#16 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(161): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#17 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(127): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequest(Object(Illuminate\\Http\\Request), Object(Closure), Array)
+#18 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(89): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequestUsingNamedLimiter(Object(Illuminate\\Http\\Request), Object(Closure), 'api', Object(Closure))
+#19 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Routing\\Middleware\\ThrottleRequests->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'api')
+#20 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#21 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(807): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#22 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(786): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#23 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(750): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#24 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(739): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#25 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(201): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#26 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#27 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#28 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#29 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#30 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#31 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#32 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#33 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#34 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#35 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(110): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#36 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#37 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\HandleCors.php(62): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#38 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#39 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Middleware\\TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#40 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#41 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks.php(22): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#42 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#44 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(176): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#45 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(145): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#46 C:\\wamp64\\www\\pmsotech\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php(1190): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#47 C:\\wamp64\\www\\pmsotech\\public\\index.php(17): Illuminate\\Foundation\\Application->handleRequest(Object(Illuminate\\Http\\Request))
+#48 C:\\wamp64\\www\\pmsotech\\index.php(21): require_once('C:\\\\wamp64\\\\www\\\\p...')
+#49 {main}
+"} 
