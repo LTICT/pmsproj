@@ -52,7 +52,7 @@ $query .=" AND prp_project_status_id='".$prpprojectstatusid."'";
 $query=$this->getSearchParam($request,$query);
 $query.=' ORDER BY prp_id DESC';
 $data_info=DB::select($query);
-$previledge=array('is_role_editable'=>0,'is_role_deletable'=>0,'is_role_can_add'=>0);
+$previledge=array('is_role_editable'=>0,'is_role_deletable'=>0,'is_role_can_add'=>1);
 $permission=$this->ownsProject($request,$prpprojectid);
 if($permission !=null)
 {
