@@ -36,7 +36,8 @@ class PmsprojectmonitoringevaluationController extends MyController
     }
     //Get List
     public function listgrid(Request $request){     
-     $query="SELECT mne_id,mne_transaction_type_id,mne_visit_type,mne_project_id,mne_type_id,mne_physical,mne_financial,mne_physical_region,mne_financial_region,mne_team_members,mne_feedback,mne_weakness,mne_challenges,mne_recommendations,mne_purpose,mne_record_date,mne_start_date,mne_end_date,mne_description,mne_create_time,mne_update_time,mne_delete_time,mne_created_by,mne_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_monitoring_evaluation ";
+     $query="SELECT  prj_name,prj_code,mne_id,mne_transaction_type_id,mne_visit_type,mne_project_id,mne_type_id,mne_physical,mne_financial,mne_physical_region,mne_financial_region,mne_team_members,mne_feedback,mne_weakness,mne_challenges,mne_recommendations,mne_purpose,mne_record_date,mne_start_date,mne_end_date,mne_description,mne_create_time,mne_update_time,mne_delete_time,mne_created_by,mne_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_monitoring_evaluation
+     INNER JOIN pms_project ON pms_project.prj_id=pms_project_monitoring_evaluation.mne_project_id ";
      $query .=' WHERE 1=1';
      $mneid=$request->input('mne_id');
 if(isset($mneid) && isset($mneid)){
