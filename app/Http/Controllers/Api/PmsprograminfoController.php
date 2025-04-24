@@ -239,8 +239,11 @@ public function deletegrid(Request $request)
         pri_name_en AS name,
         pri_parent_id AS "rootId",        -- Parent reference
         ARRAY[]::json[] AS children,      -- Placeholder for children
-        pri_object_type_id
-    FROM pms_program_info
+        pri_object_type_id,
+        pri_start_date,
+        pri_end_date,
+        pri_description
+    FROM pms_program_info,
     WHERE pri_sector_id ='.$prjsectorid.' AND pri_object_type_id=1
     UNION ALL
     -- Recursive member: Get children of the current node
@@ -249,7 +252,10 @@ public function deletegrid(Request $request)
         p.pri_name_en AS name,
         p.pri_parent_id AS "rootId",
         ARRAY[]::json[] AS children,
-        p.pri_object_type_id
+        p.pri_object_type_id,
+        pri_start_date,
+        pri_end_date,
+        pri_description
     FROM pms_program_info p
     INNER JOIN program_hierarchy ph ON p.pri_parent_id = ph.id 
 )
