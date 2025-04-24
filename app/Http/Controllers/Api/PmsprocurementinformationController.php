@@ -79,10 +79,6 @@ $pribidawarddate=$request->input('pri_bid_award_date');
 if(isset($pribidawarddate) && isset($pribidawarddate)){
 $query .=' AND pri_bid_award_date="'.$pribidawarddate.'"';
 }
-$priprojectid=$request->input('pri_project_id');
-if(isset($priprojectid) && isset($priprojectid)){
-$query .=" AND pri_project_id='".$priprojectid."'";
-}
 $priprocurementstageid=$request->input('pri_procurement_stage_id');
 if(isset($priprocurementstageid) && isset($priprocurementstageid)){
     $query .= " AND pri_procurement_stage_id = '" . $priprocurementstageid . "'";
@@ -91,7 +87,17 @@ $priprocurementmethodid=$request->input('pri_procurement_method_id');
 if(isset($priprocurementmethodid) && isset($priprocurementmethodid)){
     $query .= " AND pri_procurement_method_id = '" . $priprocurementmethodid . "'";
 }
-//$query=$this->getSearchParam($request,$query);
+//START
+$requesttype=$request->input('request_type');
+$priprojectid=$request->input('pri_project_id');
+if(isset($requesttype) && !empty($requesttype) && $requesttype=='single'){
+if(isset($priprojectid) && isset($priprojectid)){
+$query .= " AND pri_project_id = '$priprojectid'";
+}
+}else{
+$query=$this->getSearchParam($request,$query);
+}
+//END
 $query.=' ORDER BY pri_id DESC';
 $data_info=DB::select($query);
 $previledge=array('is_role_editable'=>1,'is_role_deletable'=>0,'is_role_can_add'=>1);

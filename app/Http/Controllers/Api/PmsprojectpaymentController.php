@@ -27,15 +27,22 @@ $endTime=$request->input('payment_dateEnd');
 if(isset($endTime) && isset($endTime)){
 $query .=" AND prp_payment_date_gc <='".$endTime." 23 59 59'"; 
 }
-$prpprojectid=$request->input('project_id');
-if(isset($prpprojectid) && isset($prpprojectid)){
-$query .= " AND prp_project_id = '".$prpprojectid."'";
-}
 $prptype=$request->input('prp_type');
 if(isset($prptype) && isset($prptype)){
 $query .=" AND prp_type='".$prptype."'"; 
 }
+//START
+$prpprojectid=$request->input('project_id');
+$requesttype=$request->input('request_type');
+if(isset($requesttype) && !empty($requesttype) && $requesttype=='single'){
+if(isset($prpprojectid) && isset($prpprojectid)){
+$query .= " AND prp_project_id = '$prpprojectid'";
+}
+}else{
 $query=$this->getSearchParam($request,$query);
+}
+//END
+
 $query.=' ORDER BY prp_id DESC';
 $data_info=DB::select($query);
 $previledge=array('is_role_editable'=>0,'is_role_deletable'=>0,'is_role_can_add'=>0);

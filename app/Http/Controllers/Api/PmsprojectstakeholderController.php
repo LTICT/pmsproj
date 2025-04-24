@@ -45,10 +45,7 @@ $query .= ' INNER JOIN pms_project ON pms_project.prj_id=pms_project_stakeholder
 if(isset($pshid) && isset($pshid)){
 $query .=' AND psh_id="'.$pshid.'"';
 }
-$pshprojectid=$request->input('project_id');
-if(isset($pshprojectid) && isset($pshprojectid)){
-$query .= " AND psh_project_id = '$pshprojectid'";
-}
+
 $pshname=$request->input('psh_name');
 if(isset($pshname) && isset($pshname)){
 $query .=' AND psh_name="'.$pshname.'"'; 
@@ -69,7 +66,17 @@ $pshrole=$request->input('psh_role');
 if(isset($pshrole) && isset($pshrole)){
 $query .=' AND psh_role="'.$pshrole.'"'; 
 }
+//START
+$pshprojectid=$request->input('project_id');
+$requesttype=$request->input('request_type');
+if(isset($requesttype) && !empty($requesttype) && $requesttype=='single'){
+if(isset($pshprojectid) && isset($pshprojectid)){
+$query .= " AND psh_project_id = '$pshprojectid'";
+}
+}else{
 $query=$this->getSearchParam($request,$query);
+}
+//END
 $query.=' ORDER BY psh_id DESC';
 $data_info=DB::select($query);
 $previledge=array('is_role_editable'=>0,'is_role_deletable'=>0,'is_role_can_add'=>0);

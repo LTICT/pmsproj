@@ -51,7 +51,7 @@ $mnevisittype=$request->input('mne_visit_type');
 if(isset($mnevisittype) && isset($mnevisittype)){
 $query .=' AND mne_visit_type="'.$mnevisittype.'"'; 
 }
-$mneprojectid=$request->input('mne_project_id');
+$mneprojectid=$request->input('project_id');
 if(isset($mneprojectid) && isset($mneprojectid)){
 $query .=" AND mne_project_id='".$mneprojectid."'"; 
 }

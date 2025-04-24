@@ -41,15 +41,21 @@ if(isset($endTime) && isset($endTime)){
 $query .=" AND prp_record_date_gc <='".$endTime." 23 59 59'"; 
 }
 
-$prpprojectid=$request->input('prp_project_id');
-if(isset($prpprojectid) && isset($prpprojectid)){
-$query .=" AND prp_project_id='".$prpprojectid."'"; 
-}
 $prpprojectstatusid=$request->input('prp_project_status_id');
 if(isset($prpprojectstatusid) && isset($prpprojectstatusid)){
 $query .=" AND prp_project_status_id='".$prpprojectstatusid."'"; 
 }
+//START
+$prpprojectid=$request->input('prp_project_id');
+$requesttype=$request->input('request_type');
+if(isset($requesttype) && !empty($requesttype) && $requesttype=='single'){
+if(isset($prpprojectid) && isset($prpprojectid)){
+$query .= " AND prp_project_id = '$prpprojectid'";
+}
+}else{
 $query=$this->getSearchParam($request,$query);
+}
+//END
 $query.=' ORDER BY prp_id DESC';
 $data_info=DB::select($query);
 $previledge=array('is_role_editable'=>0,'is_role_deletable'=>0,'is_role_can_add'=>1);

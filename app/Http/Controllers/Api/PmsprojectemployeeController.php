@@ -53,10 +53,6 @@ $emprole=$request->input('emp_role');
 if(isset($emprole) && isset($emprole)){
 $query .=' AND emp_role="'.$emprole.'"'; 
 }
-$empprojectid=$request->input('emp_project_id');
-if(isset($empprojectid) && isset($empprojectid)){
-$query .=" AND emp_project_id='".$empprojectid."'"; 
-}
 $empstartdateec=$request->input('emp_start_date_ec');
 if(isset($empstartdateec) && isset($empstartdateec)){
 $query .=' AND emp_start_date_ec="'.$empstartdateec.'"'; 
@@ -73,8 +69,17 @@ $empenddategc=$request->input('emp_end_date_gc');
 if(isset($empenddategc) && isset($empenddategc)){
 $query .=' AND emp_end_date_gc="'.$empenddategc.'"'; 
 }
-
+//START
+$empprojectid=$request->input('emp_project_id');
+$requesttype=$request->input('request_type');
+if(isset($requesttype) && !empty($requesttype) && $requesttype=='single'){
+if(isset($empprojectid) && isset($empprojectid)){
+$query .= " AND emp_project_id = '$empprojectid'";
+}
+}else{
 $query=$this->getSearchParam($request,$query);
+}
+//END
 $query.=' ORDER BY emp_id DESC';
 $data_info=DB::select($query);
 $previledge=array('is_role_editable'=>0,'is_role_deletable'=>0,'is_role_can_add'=>0);

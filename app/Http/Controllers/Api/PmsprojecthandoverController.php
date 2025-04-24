@@ -26,10 +26,7 @@ $endTime=$request->input('handover_dateEnd');
 if(isset($endTime) && isset($endTime)){
 $query .=" AND prh_handover_date_gc <='".$endTime." 23 59 59'"; 
 }
-$prhprojectid=$request->input('prh_project_id');
-if(isset($prhprojectid) && isset($prhprojectid)){
-$query .=" AND prh_project_id='".$prhprojectid."'"; 
-}
+
 $prhhandoverdateec=$request->input('prh_handover_date_ec');
 if(isset($prhhandoverdateec) && isset($prhhandoverdateec)){
 $query .=' AND prh_handover_date_ec="'.$prhhandoverdateec.'"'; 
@@ -42,7 +39,18 @@ $prhdescription=$request->input('prh_description');
 if(isset($prhdescription) && isset($prhdescription)){
 $query .=' AND prh_description="'.$prhdescription.'"'; 
 }
+//START
+$prhprojectid=$request->input('prh_project_id');
+$requesttype=$request->input('request_type');
+if(isset($requesttype) && !empty($requesttype) && $requesttype=='single'){
+if(isset($prhprojectid) && isset($prhprojectid)){
+$query .= " AND prh_project_id = '$prhprojectid'";
+}
+}else{
 $query=$this->getSearchParam($request,$query);
+}
+//END
+
 $query.=' ORDER BY prh_id DESC';
 $data_info=DB::select($query);
 $previledge=array('is_role_editable'=>0,'is_role_deletable'=>0,'is_role_can_add'=>0);

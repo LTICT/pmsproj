@@ -75,9 +75,10 @@ $requestCategory=$request->input('bdr_request_category_id');
 if(isset($requestCategory) && isset($requestCategory)){
 $query .=" AND bdr_request_category_id='".$requestCategory."'";
 }
+
 $requesttype=$request->input('request_type');
-if(isset($requesttype) && !empty($requesttype) && $requesttype=='single'){
 $bdrprojectid=$request->input('project_id');
+if(isset($requesttype) && !empty($requesttype) && $requesttype=='single'){
 if(isset($bdrprojectid) && isset($bdrprojectid)){
 $query .= " AND bdr_project_id = '$bdrprojectid'";
 }

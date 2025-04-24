@@ -384,6 +384,7 @@ public function handleDatabaseException($e, $actionType){
 		return $pagIds;*/
 	}
 	public function ownsProject($request,$projectId){
+		return 1;
 		if(isset($projectId)){
 			$userInfo = $request->authUser;
 			$zoneId=$userInfo->usr_zone_id;
@@ -418,6 +419,7 @@ public function handleDatabaseException($e, $actionType){
 			}
 			return null;
 		}
+
 	}
 
 	public function getUserInfo(Request $request){

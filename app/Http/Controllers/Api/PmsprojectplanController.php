@@ -72,10 +72,6 @@ $pldname=$request->input('pld_name');
 if(isset($pldname) && isset($pldname)){
 $query .=' AND pld_name="'.$pldname.'"'; 
 }
-$pldprojectid=$request->input('pld_project_id');
-if(isset($pldprojectid) && isset($pldprojectid)){
-$query .=" AND pld_project_id='".$pldprojectid."'"; 
-}
 $pldbudgetyearid=$request->input('pld_budget_year_id');
 if(isset($pldbudgetyearid) && isset($pldbudgetyearid)){
 $query .=' AND pld_budget_year_id="'.$pldbudgetyearid.'"'; 
@@ -96,7 +92,18 @@ $pldenddategc=$request->input('pld_end_date_gc');
 if(isset($pldenddategc) && isset($pldenddategc)){
 $query .=' AND pld_end_date_gc="'.$pldenddategc.'"'; 
 }
-$query =$this->getSearchParam($request,$query);
+//START
+$requesttype=$request->input('request_type');
+$pldprojectid=$request->input('pld_project_id');
+if(isset($requesttype) && !empty($requesttype) && $requesttype=='single'){
+if(isset($pldprojectid) && isset($pldprojectid)){
+$query .= " AND pld_project_id = '$pldprojectid'";
+}
+}else{
+$query=$this->getSearchParam($request,$query);
+}
+//END
+
 $query.=' ORDER BY pld_id';
 $data_info=DB::select($query);
 $previledge=array('is_role_editable'=>0,'is_role_deletable'=>0,'is_role_can_add'=>0);
