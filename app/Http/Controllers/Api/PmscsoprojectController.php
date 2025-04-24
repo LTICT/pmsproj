@@ -110,7 +110,7 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
             if($userInfo->usr_owner_id > 0){
                 $query .=" AND prj_owner_id='".$userInfo->usr_owner_id."'";
             }else{
-                $query=$this->getSearchParam($request,$query);
+                //$query=$this->getSearchParam($request,$query);
             }
         }
         $query.=' ORDER BY prj_id DESC';

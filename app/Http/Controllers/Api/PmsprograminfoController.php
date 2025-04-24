@@ -258,7 +258,7 @@ SELECT * FROM program_hierarchy';
         if(isset($data_info) && !empty($data_info)){
         $hierarchicalData = $this->buildHierarchy(json_decode(json_encode($data_info), true));
 }else{
-    $hierarchicalData=array("");
+    $hierarchicalData=array();
 }
 
         //$this->getQueryInfo($query);        
