@@ -243,7 +243,7 @@ SELECT * FROM project_hierarchy';
         $query=$this->getSearchParam($request,$query);
         $prjprojectstatusid=$request->input('prj_project_status_id');
         if(isset($prjprojectstatusid) && isset($prjprojectstatusid)){
-            $query .=' AND prj_project_status_id="'.$prjprojectstatusid.'"';
+            $query .=" AND prj_project_status_id='".$prjprojectstatusid."'";
         }
         $prjprojectcategoryid=$request->input('prj_project_category_id');
         if(isset($prjprojectcategoryid) && isset($prjprojectcategoryid)){

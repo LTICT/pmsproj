@@ -85,20 +85,9 @@ $rqcstatus=$request->input('rqc_status');
 if(isset($rqcstatus) && isset($rqcstatus)){
 $query .=' AND rqc_status="'.$rqcstatus.'"';
 }
-
-     $masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
-        //set foreign key field name
-        //$query .=' AND add_name="'.$masterId.'"';
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
-        $query.=' AND (add_name LIKE "%'.$search.'%")  ';
-    }
+$rqcstatus=$request->input('rqc_gov_active');
+if(isset($rqcstatus) && isset($rqcstatus)){
+$query .=" AND rqc_gov_active='".$rqcstatus."'";
 }
 //$query.=' ORDER BY emp_first_name';
 $data_info=DB::select($query);
