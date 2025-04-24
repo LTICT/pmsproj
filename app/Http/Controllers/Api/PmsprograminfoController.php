@@ -253,9 +253,9 @@ public function deletegrid(Request $request)
         p.pri_parent_id AS "rootId",
         ARRAY[]::json[] AS children,
         p.pri_object_type_id,
-        pri_start_date,
-        pri_end_date,
-        pri_description
+        p.pri_start_date,
+        p.pri_end_date,
+        p.pri_description
     FROM pms_program_info p
     INNER JOIN program_hierarchy ph ON p.pri_parent_id = ph.id 
 )
