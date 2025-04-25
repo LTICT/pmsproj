@@ -248,7 +248,7 @@ public function deletegrid(Request $request)
         pri_sector_id,
         pri_program_code
     FROM pms_program_info
-    WHERE pri_sector_id ='.$prjsectorid.' 
+    WHERE pri_sector_id ='.$prjsectorid.' AND pri_object_type_id=1
     UNION ALL
     -- Recursive member: Get children of the current node
     SELECT 
@@ -282,7 +282,7 @@ SELECT * FROM program_hierarchy';
          );
         return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
     }
-function buildHierarchy(array $elements, $parentId=2) {
+function buildHierarchy(array $elements, $parentId=null) {
     $branch = [];
     //dd($elements);
     foreach ($elements as $element) {
