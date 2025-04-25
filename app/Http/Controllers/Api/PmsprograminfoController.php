@@ -248,7 +248,7 @@ public function deletegrid(Request $request)
         pri_sector_id,
         pri_program_code
     FROM pms_program_info
-    WHERE pri_sector_id ='.$prjsectorid.' AND pri_object_type_id=1
+    WHERE pri_sector_id ='.$prjsectorid.' 
     UNION ALL
     -- Recursive member: Get children of the current node
     SELECT 
