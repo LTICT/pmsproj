@@ -242,7 +242,11 @@ public function deletegrid(Request $request)
         pri_object_type_id,
         pri_start_date,
         pri_end_date,
-        pri_description
+        pri_description,
+        pri_name_or,
+        pri_name_am,
+        pri_sector_id,
+        pri_program_code
     FROM pms_program_info
     WHERE pri_sector_id ='.$prjsectorid.' AND pri_object_type_id=1
     UNION ALL
@@ -255,7 +259,11 @@ public function deletegrid(Request $request)
         p.pri_object_type_id,
         p.pri_start_date,
         p.pri_end_date,
-        p.pri_description
+        p.pri_description,
+        p.pri_name_or,
+        p.pri_name_am,
+        p.pri_sector_id,
+        p.pri_program_code
     FROM pms_program_info p
     INNER JOIN program_hierarchy ph ON p.pri_parent_id = ph.id 
 )
