@@ -42,8 +42,12 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         if(isset($data_info) && !empty($data_info)){
             //START PROJECT ANALYSIS
             //START PROJECT PERFORMANCE
-            $query='SELECT prp_record_date_gc,prp_total_budget_used AS used_amount,prp_physical_performance AS physical_performance FROM pms_project_performance ';
+            $query='SELECT prp_record_date_gc,
+       prp_total_budget_used AS used_amount,
+       prp_physical_performance AS physical_performance
+FROM pms_project_performance ';
              $query .=" WHERE prp_project_id= ".$id." ";
+             $query .=" ORDER BY prp_physical_performance DESC LIMIT 1 ";
               $performance_info=DB::select($query);
             //END PROJECT PERFORMANCE
               //START COST

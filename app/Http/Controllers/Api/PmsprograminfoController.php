@@ -86,9 +86,9 @@ public function updategrid(Request $request)
     ];
     $rules= [
        // 'pri_owner_region_id'=> 'required', 
-'pri_owner_zone_id'=> 'required', 
-'pri_owner_woreda_id'=> 'required', 
-'pri_sector_id'=> 'required', 
+//'pri_owner_zone_id'=> 'required', 
+//'pri_owner_woreda_id'=> 'required', 
+//'pri_sector_id'=> 'required', 
 'pri_name_or'=> 'max:200', 
 'pri_name_am'=> 'max:50', 
 'pri_name_en'=> 'max:50', 
@@ -171,9 +171,9 @@ public function insertgrid(Request $request)
     ];
     $rules= [
   // 'pri_owner_region_id'=> 'required', 
-'pri_owner_zone_id'=> 'required', 
-'pri_owner_woreda_id'=> 'required', 
-'pri_sector_id'=> 'required', 
+//'pri_owner_zone_id'=> 'required', 
+//'pri_owner_woreda_id'=> 'required', 
+//'pri_sector_id'=> 'required', 
 'pri_name_or'=> 'max:200', 
 'pri_name_am'=> 'max:50', 
 'pri_name_en'=> 'max:50', 
