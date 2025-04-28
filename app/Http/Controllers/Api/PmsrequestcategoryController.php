@@ -23,7 +23,6 @@ class PmsrequestcategoryController extends MyController
     public function show($id)
     {
         $query='SELECT rqc_id,rqc_name_or,rqc_name_am,rqc_name_en,rqc_description,rqc_create_time,rqc_update_time,rqc_delete_time,rqc_created_by,rqc_status FROM pms_request_category ';
-
         $query .=' WHERE rqc_id='.$id.' ';
         $data_info=DB::select(DB::raw($query));
         if(isset($data_info) && !empty($data_info)){
@@ -45,6 +44,11 @@ class PmsrequestcategoryController extends MyController
      rqc_create_time,rqc_update_time,rqc_delete_time,rqc_created_by,rqc_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM pms_request_category ";
 
      $query .=' WHERE 1=1';
+     $isGovActive=$request->input('gov_active');
+if(isset($isGovActive) && isset($isGovActive)){
+$query .=" AND rqc_gov_active='".$isGovActive."'"; 
+}
+
      $rqcid=$request->input('rqc_id');
 if(isset($rqcid) && isset($rqcid)){
 $query .=' AND rqc_id="'.$rqcid.'"';

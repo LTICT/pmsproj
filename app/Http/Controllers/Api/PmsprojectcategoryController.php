@@ -29,13 +29,15 @@ if(isset($pctStatus) && !empty($pctStatus) && $pctStatus==0){
           if(isset($permissionData) && !empty($permissionData)){
                 $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
              }
-$data_info = Cache::rememberForever($cacheKey, function () use ($permissionIndex,$request) {
      $query="SELECT pct_id,pct_name_or,pct_name_am,pct_name_en,pct_code,pct_description,pct_create_time,pct_update_time,pct_delete_time,pct_created_by,pct_status
        ".$permissionIndex." FROM pms_project_category ";
      $query .=' WHERE 1=1';
-     $pctid=$request->input('pct_id');
-if(isset($pctid) && isset($pctid)){
-$query .=' AND pct_id="'.$pctid.'"'; 
+     //if set get the set value else default to 0
+$ownerType=$request->input('owner_type_id');
+if(isset($ownerType) && isset($ownerType)){
+$query .=" AND pct_owner_type_id='".$ownerType."'"; 
+}else{
+    $query .=" AND pct_owner_type_id=1"; 
 }
 $pctnameor=$request->input('pct_name_or');
 if(isset($pctnameor) && isset($pctnameor)){
@@ -57,10 +59,9 @@ $pctStatus=$request->input('pct_status');
 if(isset($pctStatus) && isset($pctStatus)){
 $query .=" AND pct_status='".$pctStatus."'"; 
 }
-
 $query.=' ORDER BY pct_name_or';
-return DB::select($query);
-});
+$data_info=DB::select($query);
+//});
 $resultObject= array(
     "data" =>$data_info,
 "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0));

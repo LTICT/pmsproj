@@ -110,6 +110,11 @@ if(isset($requestType) && isset($requestType)){
 $query .=" AND bdr_request_type='".$requestType."'";
 }
 
+$sectorId=$request->input('prj_sector_id');
+if(isset($sectorId) && isset($sectorId)){
+$query .=" AND prj_sector_id='".$sectorId."'";
+}
+
 //if user is assinged to a department
 if($departmentId > 1){
     //$query .=" AND prj_department_id='".$departmentId."'";

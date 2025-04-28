@@ -281,6 +281,10 @@ SELECT * FROM project_hierarchy';
         if(isset($objectTypeId) && isset($objectTypeId)){
             $query .=" AND prj_object_type_id='".$objectTypeId."'";
         }
+        $sectorId=$request->input('prj_sector_id');
+if(isset($sectorId) && isset($sectorId)){
+$query .=" AND prj_sector_id='".$sectorId."'";
+}
         $query.=' ORDER BY prj_id DESC';
         //$this->getQueryInfo($query);
         $data_info=DB::select($query);

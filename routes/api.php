@@ -59,7 +59,7 @@ Route::post('project/search', 'PmsprojectController@search');
 Route::post('project/listgridsearch', 'Api\PmsprojectController@listgridsearch');
 Route::post('project/listprojectbyparent', 'Api\PmsprojectController@getProjectByParent');
 
-  Route::resource('project_cso', 'Api\PmscsoprojectController');
+Route::resource('project_cso', 'Api\PmscsoprojectController');
 Route::post('project_cso/listgrid', 'Api\PmscsoprojectController@listgrid');
 Route::post('project_cso/insertgrid', 'Api\PmscsoprojectController@insertgrid');
 Route::post('project_cso/updategrid', 'Api\PmscsoprojectController@updategrid');
@@ -482,6 +482,23 @@ Route::resource('procurement_information', 'PmsprocurementinformationController'
     Route::post('monitoring_evaluation_type/insertgrid', 'Api\PmsmonitoringevaluationtypeController@insertgrid');
     Route::post('monitoring_evaluation_type/updategrid', 'Api\PmsmonitoringevaluationtypeController@updategrid');
     Route::post('monitoring_evaluation_type/deletegrid', 'Api\PmsmonitoringevaluationtypeController@deletegrid');
+
+    Route::resource('project_component', 'PmsprojectcomponentController');
+    Route::post('project_component/listgrid', 'Api\PmsprojectcomponentController@listgrid');
+    Route::post('project_component/insertgrid', 'Api\PmsprojectcomponentController@insertgrid');
+    Route::post('project_component/updategrid', 'Api\PmsprojectcomponentController@updategrid');
+    Route::post('project_component/deletegrid', 'Api\PmsprojectcomponentController@deletegrid');
+
+    Route::resource('project_kpi', 'PmsprojectkpiController');
+    Route::post('project_kpi/listgrid', 'Api\PmsprojectkpiController@listgrid');
+    Route::post('project_kpi/insertgrid', 'Api\PmsprojectkpiController@insertgrid');
+    Route::post('project_kpi/updategrid', 'Api\PmsprojectkpiController@updategrid');
+    Route::post('project_kpi/deletegrid', 'Api\PmsprojectkpiController@deletegrid');
+        Route::resource('project_kpi_result', 'PmsprojectkpiresultController');
+    Route::post('project_kpi_result/listgrid', 'Api\PmsprojectkpiresultController@listgrid');
+    Route::post('project_kpi_result/insertgrid', 'Api\PmsprojectkpiresultController@insertgrid');
+    Route::post('project_kpi_result/updategrid', 'Api\PmsprojectkpiresultController@updategrid');
+    Route::post('project_kpi_result/deletegrid', 'Api\PmsprojectkpiresultController@deletegrid');
 });
 
    //START CACHE MANAGEMENT
