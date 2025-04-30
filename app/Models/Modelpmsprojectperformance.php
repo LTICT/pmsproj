@@ -86,18 +86,6 @@ class Modelpmsprojectperformance extends BaseModel
 'prp_status_month_9',
 'prp_status_month_10',
 'prp_status_month_11',
-'prp_status_month_12',
-'prp_status_month_1',
-'prp_status_month_2',
-'prp_status_month_3',
-'prp_status_month_4',
-'prp_status_month_5',
-'prp_status_month_6',
-'prp_status_month_7',
-'prp_status_month_8',
-'prp_status_month_9',
-'prp_status_month_10',
-'prp_status_month_11',
 'prp_status_month_12'];
     /**
      * Change activity log event description
