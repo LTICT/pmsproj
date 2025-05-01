@@ -218,4 +218,34 @@ public function updategrid(Request $request)
     }
 }
 }
+
+public function takeAction(Request $request)
+{
+    $attributeNames = [
+        'usc_sector_id'=> trans('form_lang.usc_sector_id')
+    ];
+    $rules= [
+        'usc_sector_id'=> 'max:200'
+    ];    
+$status = $request->get('request_status');
+$requestList = $request->get('request_list');
+
+// Convert to integer array
+//$ids = array_map('intval', explode(',', $requestList));
+$ids = array_map('intval', (array) $requestList);
+// Perform the update securely
+$data_info=DB::table('pms_budget_request')
+    ->whereIn('bdr_id', $ids)
+    ->update(['bdr_request_status' => $status]);
+
+$resultObject= array(
+                "changed_data" =>$data_info,
+            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+            "is_updated"=>true,
+                "status_code"=>200,
+                "type"=>"update",
+                "errorMsg"=>""
+            );
+return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
+}
 }

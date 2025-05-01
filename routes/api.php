@@ -261,6 +261,7 @@ Route::post('budget_request/deletegrid', 'Api\PmsbudgetrequestController@deleteg
 Route::post('budget_request/search', 'PmsbudgetrequestController@search');
 Route::post('budget_request_approval/listgrid', 'Api\PmsbudgetrequestapprovalController@listgrid');
 Route::post('budget_request_approval/updategrid', 'Api\PmsbudgetrequestapprovalController@updategrid');
+Route::post('budget_request_approval/takeaction', 'Api\PmsbudgetrequestapprovalController@takeAction');
 
 Route::post('cso_proposal_request_approval/listgrid', 'Api\PmscsoproposalrequestapprovalController@listgrid');
 Route::post('cso_proposal_request_approval/updategrid', 'Api\PmscsoproposalrequestapprovalController@updategrid');
