@@ -61,14 +61,16 @@ $kprprojectid=$request->input('kpr_project_id');
 $requesttype=$request->input('request_type');
 if(isset($requesttype) && !empty($requesttype) && $requesttype=='single'){
 if(isset($kprprojectid) && isset($kprprojectid)){
-$query .= " AND kpr_project_id = '$kprprojectid'";
+$query .= " AND kpr_project_id = '".$kprprojectid."'";
 }
 }else{
 $query=$this->getSearchParam($request,$query);
 }
+
 //END
 //$query.=' ORDER BY emp_first_name';
 $data_info=DB::select($query);
+//dd($query);
 $resultObject= array(
     "data" =>$data_info,
     "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
