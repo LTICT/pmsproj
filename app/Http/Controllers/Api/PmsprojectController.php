@@ -234,7 +234,7 @@ SELECT * FROM project_hierarchy';
         $permissionData=$this->getPagePermission($request,9, "project_info");
         //dd($permissionData);
         //dump($permissionData);
-        $query='SELECT prj_parent_id,prj_object_type_id,sci_name_en AS sector_name,prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,zone_info.add_name_or as zone_name, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
+        $query='SELECT prj_measured_figure,prj_measurement_unit,prj_parent_id,prj_object_type_id,sci_name_en AS sector_name,prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,zone_info.add_name_or as zone_name, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
         prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,
         prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_description,
         prj_start_date_gc,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,

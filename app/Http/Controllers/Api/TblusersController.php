@@ -377,7 +377,7 @@ try {
             $role_usr_data['url_role_id']=8;
             $role_usr_data['url_user_id']=$data_info->usr_id;
             //$role_usr_data['usr_role_id']=$data_info
-            //\App\Models\Modeltbluserrole::create($role_usr_data);
+            \App\Models\Modeltbluserrole::create($role_usr_data);
         }
         //START ADD DEFAULT ROLE
         $data_info['is_editable']=1;

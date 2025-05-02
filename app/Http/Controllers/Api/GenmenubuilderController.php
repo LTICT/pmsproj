@@ -25,7 +25,8 @@ public function listgrid(Request $request){
      pag_parent AS parent_menu,pag_order_number
      FROM tbl_pages 
      INNER JOIN tbl_permission ON tbl_permission.pem_page_id=tbl_pages.pag_id
-     INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id WHERE url_user_id='.$userId.' ORDER BY  pag_order_number ASC';  
+     INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id WHERE url_user_id='.$userId.' 
+     AND pag_status=1 ORDER BY  pag_order_number ASC';  
  }
  $pemid=$request->input('pem_id');
  if(isset($pemid) && isset($pemid)){
