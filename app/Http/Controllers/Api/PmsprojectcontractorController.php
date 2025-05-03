@@ -38,7 +38,10 @@ class PmsprojectcontractorController extends MyController
     }
     
     public function listgrid(Request $request){
-     $query='SELECT prj_name,prj_code, cni_id,cni_name,cni_tin_num,pms_contractor_type.cnt_type_name_or AS cni_contractor_type,cni_contractor_type_id,cni_vat_num,cni_total_contract_price,cni_contract_start_date_et,cni_contract_start_date_gc,cni_contract_end_date_et,cni_contract_end_date_gc,cni_contact_person,cni_phone_number,cni_address,cni_email,cni_website,cni_project_id,cni_procrument_method,cni_bid_invitation_date,cni_bid_opening_date,cni_bid_evaluation_date,cni_bid_award_date,cni_bid_contract_signing_date,cni_description,cni_create_time,cni_update_time,cni_delete_time,cni_created_by,cni_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_contractor ';       
+     $query='SELECT cni_financial_start,
+cni_physical_start,
+cni_financial_end,
+cni_physical_end,prj_name,prj_code, cni_id,cni_name,cni_tin_num,pms_contractor_type.cnt_type_name_or AS cni_contractor_type,cni_contractor_type_id,cni_vat_num,cni_total_contract_price,cni_contract_start_date_et,cni_contract_start_date_gc,cni_contract_end_date_et,cni_contract_end_date_gc,cni_contact_person,cni_phone_number,cni_address,cni_email,cni_website,cni_project_id,cni_procrument_method,cni_bid_invitation_date,cni_bid_opening_date,cni_bid_evaluation_date,cni_bid_award_date,cni_bid_contract_signing_date,cni_description,cni_create_time,cni_update_time,cni_delete_time,cni_created_by,cni_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_contractor ';       
      $query .= ' INNER JOIN pms_contractor_type ON pms_project_contractor.cni_contractor_type_id = pms_contractor_type.cnt_id'; 
 $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_contractor.cni_project_id';
      $query .=' WHERE 1=1';

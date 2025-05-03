@@ -51,9 +51,15 @@ FROM pms_project_performance ';
               $performance_info=DB::select($query);
             //END PROJECT PERFORMANCE
               //START COST
-              $query='SELECT SUM(bdr_released_amount) AS additional_budget
-     FROM pms_budget_request ';
+              $query='SELECT SUM(bdr_released_amount) AS additional_budget FROM pms_budget_request ';
      $query .=" WHERE bdr_project_id= ".$id." AND bdr_request_category_id > 1 ";
+
+      /** 
+      * $query='SELECT rqc_name_or AS request_category, bdr_released_amount
+     FROM pms_budget_request ';
+     $query .=' INNER JOIN  pms_request_category ON pms_request_category.rqc_id=pms_budget_request.bdr_request_category_id ';
+     $query .=" WHERE bdr_project_id= ".$id." AND bdr_request_category_id > 1 AND bdr_released_amount > 0 ";
+      **/ 
      $additional_budget_info=DB::select($query);
               //END COST
             //END PROJECT ANALYSIS

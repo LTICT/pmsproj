@@ -25,9 +25,11 @@ class Modelpmsprojectcontractor extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['cni_id','cni_name','cni_tin_num','cni_contractor_type_id','cni_vat_num','cni_total_contract_price','cni_contract_start_date_et','cni_contract_start_date_gc','cni_contract_end_date_et','cni_contract_end_date_gc','cni_contact_person','cni_phone_number','cni_address','cni_email','cni_website','cni_project_id','cni_procrument_method','cni_bid_invitation_date','cni_bid_opening_date','cni_bid_evaluation_date','cni_bid_award_date','cni_bid_contract_signing_date','cni_description','cni_create_time','cni_update_time','cni_delete_time','cni_created_by','cni_status',];
-
-    
+    protected $fillable = ['cni_id','cni_name','cni_tin_num','cni_contractor_type_id','cni_vat_num','cni_total_contract_price','cni_contract_start_date_et','cni_contract_start_date_gc','cni_contract_end_date_et','cni_contract_end_date_gc','cni_contact_person','cni_phone_number','cni_address','cni_email','cni_website','cni_project_id','cni_procrument_method','cni_bid_invitation_date','cni_bid_opening_date','cni_bid_evaluation_date','cni_bid_award_date','cni_bid_contract_signing_date','cni_description','cni_create_time','cni_update_time','cni_delete_time','cni_created_by','cni_status',
+'cni_financial_start',
+'cni_physical_start',
+'cni_financial_end',
+'cni_physical_end'];
 
     /**
      * Change activity log event description

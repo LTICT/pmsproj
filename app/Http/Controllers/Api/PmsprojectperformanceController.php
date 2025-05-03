@@ -130,6 +130,36 @@ $resultObject= array(
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 
+function getLastStatus($request){
+$var_1 =$request->get("prp_status_month_1");
+$var_2 = $request->get("prp_status_month_2");
+$var_3 = $request->get("prp_status_month_3");
+$var_4 = $request->get("prp_status_month_4");
+$var_5 = $request->get("prp_status_month_5");
+$var_6 = $request->get("prp_status_month_6");
+$var_7 = $request->get("prp_status_month_7");
+$var_8 = $request->get("prp_status_month_8");
+$var_9 = $request->get("prp_status_month_9");
+$var_10 = $request->get("prp_status_month_10");
+
+$maxValue = 0;
+$maxVar = '';
+
+for ($i = 1; $i <= 10; $i++) {
+    $varName = "var_$i";
+    if ($$varName > $maxValue) {
+        $maxValue = $$varName;
+        $maxVar = $varName;
+    }
+}
+
+if ($maxValue > 0) {
+    //echo "The correct variable is \${$lastValidVar[0]} with value {$lastValidVar[1]}";
+   return $maxValue;
+} else {
+    return 0;
+}
+}
 public function updategrid(Request $request)
 {
     $attributeNames = [
@@ -182,7 +212,18 @@ public function updategrid(Request $request)
             $data_info = Modelpmsprojectperformance::findOrFail($id);
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
+
             if($ischanged){
+                //START PROJECT INFO UPDATE
+                $project_id=$request->get("prp_project_id");
+                $status_id=$this->getLastStatus($request);
+                if($status_id > 0){
+                    $project_data['prj_project_status_id']=$status_id;
+                    $project_data['prj_start_date_gc']='2025-03-05';
+                    $data_info_project = \App\Models\Modelpmsproject::findOrFail($project_id);
+                    $data_info_project->update($project_data);
+                }
+                //END PROJECT INFO UPDATE
                $resultObject= array(
                 "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
