@@ -224,7 +224,7 @@ SELECT * FROM project_hierarchy';
         }
         $woredaID=$request->input('prj_woreda_id');
         if(isset($woredaID) && isset($woredaID)){
-            $query .=" AND prj_woreda_id='".$woredaID."'";
+            $query .=" AND prj_owner_woreda_id='".$woredaID."'";
         }
         $query.=' ORDER BY prj_id DESC';
         $data_info=DB::select($query);
