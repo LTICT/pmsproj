@@ -24,7 +24,7 @@ class Modelgenrequestfollowup extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['rqf_id','rqf_request_id','rqf_forwarding_dep_id','rqf_forwarded_to_dep_id','rqf_forwarding_date','rqf_received_date','rqf_description','rqf_create_time','rqf_update_time','rqf_delete_time','rqf_created_by','rqf_status','rqf_recommendation','rqf_recommended_by','rqf_recommended_date','rqf_current_status'];
+    protected $fillable = ['rqf_id','rqf_request_id','rqf_forwarding_dep_id','rqf_forwarded_to_dep_id','rqf_forwarding_date','rqf_received_date','rqf_description','rqf_create_time','rqf_update_time','rqf_delete_time','rqf_created_by','rqf_status','rqf_recommendation','rqf_recommended_by','rqf_recommended_date','rqf_current_status','rqf_recommended_amount'];
 
     /**
      * Change activity log event description
