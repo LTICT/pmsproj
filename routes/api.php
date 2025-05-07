@@ -43,7 +43,7 @@ Route::post('email/send_email', 'Api\EmailController@sendEmail');
 Route::get('/data', 'GanttController@get');
 Route::resource('task', 'TaskController');
 Route::resource('link', 'LinkController');
-Route::post('login', 'AuthController@login')->middleware('throttle:login');
+//Route::post('login', 'AuthController@login')->middleware('throttle:login');
 Route::post('login', 'AuthController@login');
 Route::post('refreshtoken', 'AuthController@refreshToken');
 Route::post('addressbyparent', 'Api\GenaddressstructureController@addressByParent');
