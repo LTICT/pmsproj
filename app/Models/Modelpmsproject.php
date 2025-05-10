@@ -36,5 +36,8 @@ class Modelpmsproject extends BaseModel
     {
         return __CLASS__ . " model has been {$eventName}";
     }
+    /*protected $casts = [
+    'prj_assigned_sectors' => 'array',
+];*/
 }
 

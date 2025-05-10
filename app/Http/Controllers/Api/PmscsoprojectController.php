@@ -115,8 +115,8 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
             }else{
                 //$query=$this->getSearchParam($request,$query);
                $csoId=$request->input('prj_owner_id');
-        if(isset($csoId) && isset($csoId)){
-            $query .=" AND prj_prj_owner_id='".$csoId."'";
+        if(isset($csoId) && !empty($csoId)){
+            $query .=" AND prj_owner_id='".$csoId."'";
         } 
         }
         }
@@ -287,6 +287,17 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
             if(isset($id) && !empty($id)){
                 $data_info = Modelpmsproject::findOrFail($id);
                 $requestData['prj_object_type_id']=$request->get('object_type_id');
+    $input = $request->input('prj_assigned_sectors');
+// Decode to PHP array
+$array = json_decode($input, true);
+
+// Convert to PostgreSQL array literal
+if (is_array($array)) {
+    $pgArray = '{' . implode(',', $array) . '}';
+} else {
+    $pgArray = '{}'; // fallback to empty array
+}
+$requestData['prj_assigned_sectors']=$pgArray;
                 $data_info->update($requestData);
                 $ischanged=$data_info->wasChanged();
                 if($ischanged){
