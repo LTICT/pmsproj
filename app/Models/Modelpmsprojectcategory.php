@@ -25,7 +25,7 @@ class Modelpmsprojectcategory extends Model
      *
      * @var array
      */
-    protected $fillable = ['pct_id','pct_name_or','pct_name_am','pct_name_en','pct_code','pct_description','pct_create_time','pct_update_time','pct_delete_time','pct_created_by','pct_status','pct_owner_type_id'];
+    protected $fillable = ['pct_id','pct_name_or','pct_name_am','pct_name_en','pct_code','pct_description','pct_create_time','pct_update_time','pct_delete_time','pct_created_by','pct_status','pct_owner_type_id','pct_parent_id'];
 
 
 

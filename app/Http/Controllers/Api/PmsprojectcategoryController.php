@@ -29,7 +29,7 @@ if(isset($pctStatus) && !empty($pctStatus) && $pctStatus==0){
           if(isset($permissionData) && !empty($permissionData)){
                 $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
              }
-     $query="SELECT pct_id,pct_name_or,pct_name_am,pct_name_en,pct_code,pct_description,pct_create_time,pct_update_time,pct_delete_time,pct_created_by,pct_status
+     $query="SELECT pct_owner_type_id, pct_parent_id, pct_id,pct_name_or,pct_name_am,pct_name_en,pct_code,pct_description,pct_create_time,pct_update_time,pct_delete_time,pct_created_by,pct_status
        ".$permissionIndex." FROM pms_project_category ";
      $query .=' WHERE 1=1';
      //if set get the set value else default to 0
