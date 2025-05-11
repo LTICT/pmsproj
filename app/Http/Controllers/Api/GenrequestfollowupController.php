@@ -36,7 +36,7 @@ class GenrequestfollowupController extends MyController
     }
     //Get List
     public function listgrid(Request $request){
-     $query="SELECT rqf_recommended_amount,rqf_recommendation,rqf_recommended_by,rqf_recommended_date,rqf_current_status, rqf_id,rqf_request_id,rqf_forwarding_dep_id,rqf_forwarded_to_dep_id,rqf_forwarding_date,rqf_received_date,rqf_description,rqf_create_time,rqf_update_time,rqf_delete_time,rqf_created_by,rqf_status,1 AS is_editable, 1 AS is_deletable FROM gen_request_followup ";
+     $query="SELECT rqf_recommended_physical, rqf_recommended_amount,rqf_recommendation,rqf_recommended_by,rqf_recommended_date,rqf_current_status, rqf_id,rqf_request_id,rqf_forwarding_dep_id,rqf_forwarded_to_dep_id,rqf_forwarding_date,rqf_received_date,rqf_description,rqf_create_time,rqf_update_time,rqf_delete_time,rqf_created_by,rqf_status,1 AS is_editable, 1 AS is_deletable FROM gen_request_followup ";
      
      $query .=' WHERE 1=1';
 $rqfrequestid=$request->input('rqf_request_id');
