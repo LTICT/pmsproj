@@ -371,7 +371,7 @@ try {
         $requestData['password']=bcrypt($request->get('usr_password'));
         $requestData['usr_password']=bcrypt($request->get('usr_password'));
         $requestData['usr_created_by']=auth()->user()->usr_id;
-        //$data_info=Modeltblusers::create($requestData);
+        $data_info=Modeltblusers::create($requestData);
         //START ADD DEFAULT ROLE
         if(isset($data_info) && !empty($data_info)){
             $role_usr_data['url_role_id']=8;

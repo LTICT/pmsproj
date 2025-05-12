@@ -102,6 +102,12 @@ $query .= " AND bdr_project_id = '$bdrprojectid'";
 if($departmentId > 1){
     //$query .=" AND prj_department_id='".$departmentId."'"; 
 }
+if($sectorId > 1){
+   //$query .= " AND prj_assigned_sectors = '$bdrprojectid'"; 
+    $query .= " AND ".$sectorId." = ANY(prj_assigned_sectors)"; 
+    
+
+}
 //dd($query);
 $query.=' ORDER BY bdr_id DESC';
 $data_info=DB::select($query);

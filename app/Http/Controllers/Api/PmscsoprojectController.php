@@ -103,12 +103,14 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         }else{
             //$query .=" AND prj_parent_id=0";
         }
-
+        //$query .=" AND prj_parent_id=0";
          $objectTypeId=$request->input('object_type_id');
         if(isset($objectTypeId) && isset($objectTypeId)){
             $query .=" AND prj_object_type_id='".$objectTypeId."'";
         }
         $userInfo=$this->getUserInfo($request);
+        $sectorId=$userInfo->usr_sector_id;
+
         if(isset($userInfo)){
             if($userInfo->usr_owner_id > 0){
                 $query .=" AND prj_owner_id='".$userInfo->usr_owner_id."'";
@@ -117,7 +119,10 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
                $csoId=$request->input('prj_owner_id');
         if(isset($csoId) && !empty($csoId)){
             $query .=" AND prj_owner_id='".$csoId."'";
-        } 
+        }
+        else if($sectorId > 1){
+    $query .= " AND ".$sectorId." = ANY(prj_assigned_sectors)"; 
+}
         }
         }
 
