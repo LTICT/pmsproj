@@ -57,7 +57,7 @@ if(isset($kprstatus) && isset($kprstatus)){
 $query .=' AND kpr_status="'.$kprstatus.'"'; 
 }
 //START
-$kprprojectid=$request->input('kpr_project_id');
+$kprprojectid=$request->input('project_id');
 $requesttype=$request->input('request_type');
 if(isset($requesttype) && !empty($requesttype) && $requesttype=='single'){
 if(isset($kprprojectid) && isset($kprprojectid)){

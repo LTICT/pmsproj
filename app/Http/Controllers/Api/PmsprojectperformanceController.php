@@ -215,13 +215,24 @@ public function updategrid(Request $request)
 
             if($ischanged){
                 //START PROJECT INFO UPDATE
-                $project_id=$request->get("prp_project_id");
-                $status_id=$this->getLastStatus($request);
-                if($status_id > 0){
-                    $project_data['prj_project_status_id']=$status_id;
-                    $project_data['prj_start_date_gc']='2025-03-05';
+                $project_id=$request->get("prp_project_id");                
                     $data_info_project = \App\Models\Modelpmsproject::findOrFail($project_id);
-                    $data_info_project->update($project_data);
+                    if(isset($data_info_project) && !empty($data_info_project)){
+                        //for governmental
+                        if($data_info_project->prj_owner_type == 1){
+                        $status_id=$this->getLastStatus($request);
+                        if($status_id > 0){
+                            $project_data['prj_project_status_id']=$status_id;
+                            $project_data['prj_start_date_gc']=$request->input('prp_record_date_gc');
+                            $data_info_project->update($project_data);
+                        }
+                        //for cso
+                    }else if($data_info_project->prj_owner_type ==2 ){
+                       
+                            $project_data['prj_project_status_id']=$request->input('prp_project_status_id');
+                            $project_data['prj_start_date_gc']=$request->input('prp_record_date_gc');
+                            $data_info_project->update($project_data);
+                    }
                 }
                 //END PROJECT INFO UPDATE
                $resultObject= array(

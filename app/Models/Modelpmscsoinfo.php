@@ -25,7 +25,7 @@ class Modelpmscsoinfo extends Model
      *
      * @var array
      */
-    protected $fillable = ['cso_id','cso_name','cso_code','cso_address','cso_phone','cso_email','cso_website','cso_description','cso_create_time','cso_update_time','cso_delete_time','cso_created_by','cso_status',];
+    protected $fillable = ['cso_id','cso_name','cso_code','cso_address','cso_phone','cso_email','cso_website','cso_description','cso_create_time','cso_update_time','cso_delete_time','cso_created_by','cso_status','cso_contact_person'];
 
 
 

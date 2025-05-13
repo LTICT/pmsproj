@@ -59,6 +59,8 @@ try {
         $requestData['cso_description']=$request->input('cso_description');
         $requestData['cso_created_by']=1;
         $requestData['cso_status']=0;
+        //$requestData['cso_contact_person']=0;
+        
         $cso_info=Modelpmscsoinfo::create($requestData);
         if(isset($cso_info)){
         $requestData['usr_owner_id']=$cso_info->cso_id;
@@ -77,7 +79,6 @@ try {
         $requestData['usr_woreda_id']=1;
         $requestData['usr_phone_number']=$request->input('usr_phone');
         $data_info=Modeltblusers::create($requestData);
-        }
         //START ADD DEFAULT ROLE
         if(isset($data_info) && !empty($data_info)){
             $role_usr_data['url_role_id']=68;
@@ -85,6 +86,8 @@ try {
             \App\Models\Modeltbluserrole::create($role_usr_data);
         }
         //START ADD DEFAULT ROLE
+        }
+        
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;
     return response()->json([

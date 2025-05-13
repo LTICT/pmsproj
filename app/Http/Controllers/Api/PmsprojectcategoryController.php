@@ -20,9 +20,9 @@ $cacheDuration = 60; // Cache for 60 minutes
 $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
         $pageId=config('constants.LU_CATEGORY');
 $pctStatus=$request->input('pct_status');
-$cacheKey = 'project_category';
+$cacheKey = 'project_category19';
 if(isset($pctStatus) && !empty($pctStatus) && $pctStatus==0){
-    $cacheKey = 'project_category_active';
+    $cacheKey = 'project_category_active17';
 }
           $permissionData=$this->getPagePermission($request,$pageId);
           //dd($permissionData);
