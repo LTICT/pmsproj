@@ -182,6 +182,17 @@ public function updategrid(Request $request)
             $data_info = Modelpmsbudgetrequest::findOrFail($id);
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
+            //START STATUS CHANGE
+
+            $requeststatus=$request->get('bdr_request_status');
+            if($requeststatus==3){
+                $project_id=$data_info->bdr_project_id;
+                $data_info_project = \App\Models\Modelpmsproject::findOrFail($project_id);
+                $project_data['prj_project_status_id']=5;
+                $project_data['prj_start_date_gc']=$request->input('bdr_released_date_gc');
+                $data_info_project->update($project_data);
+            }
+            //END STATUS CHANGE
             if($ischanged){
                $resultObject= array(
                 "data" =>$data_info,

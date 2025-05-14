@@ -295,7 +295,6 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
     $input = $request->input('prj_assigned_sectors');
 // Decode to PHP array
 $array = json_decode($input, true);
-
 // Convert to PostgreSQL array literal
 if (is_array($array)) {
     $pgArray = '{' . implode(',', $array) . '}';

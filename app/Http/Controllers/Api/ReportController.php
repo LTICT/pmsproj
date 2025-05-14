@@ -154,21 +154,18 @@ $query .=" AND prp_payment_date_gc <='".$endTime." 23 59 59'";
 }
 }
 
-else if($reportType==8 || $reportType==9 || $reportType==10 ){
-$query = ' SELECT  location_zone.add_name_or AS zone,
-                cni_name AS cni_name, location_woreda.add_name_or AS woreda,
+else if($reportType==8 || $reportType==9){
+$query = ' SELECT DISTINCT location_zone.add_name_or AS zone,
+                cni_name AS cni_name, location_woreda.add_name_or AS woreda,pms_budget_year.bdy_name AS budgetyear,
                 prj_name, prj_code , prj_location_description,sci_name_or AS sector,
-                COALESCE(budget_summary.bdr_released_amount, 0) AS bdr_released_amount,
+                COALESCE(bdr_released_amount, 0) AS bdr_released_amount,
+                COALESCE(bdr_requested_amount, 0) AS bdr_requested_amount,
                 prp_physical_performance, prp_physical_planned, prj_total_estimate_budget,
-                COALESCE(prj_urban_ben_number, 0) + COALESCE(prj_rural_ben_number, 0) AS beneficiery,
+                COALESCE(prj_urban_ben_number, 0) + COALESCE(prj_rural_ben_number, 0) AS beneficiery,prj_measurement_unit,prj_measured_figure,
                 EXTRACT(YEAR FROM prj_start_date_plan_gc::date) AS start_year,
                 EXTRACT(YEAR FROM prj_end_date_plan_gc::date) AS end_year,
-                prp_budget_baseline,prp_total_budget_used,prp_physical_baseline,
-                COALESCE(budget_summary.bdr_requested_amountspecificyear, 0) AS bdr_requested_amountspecificyear,
-                COALESCE(budget_summary.bdr_released_amountspecificyear, 0) AS bdr_released_amountspecificyear
+                prp_budget_baseline,prp_total_budget_used,prp_physical_baseline
                 FROM pms_project
-        LEFT JOIN pms_project_contractor 
-            ON pms_project.prj_id = pms_project_contractor.cni_project_id
         LEFT JOIN pms_sector_information 
             ON pms_project.prj_sector_id = pms_sector_information.sci_id
         INNER JOIN pms_project_performance 
@@ -177,26 +174,84 @@ $query = ' SELECT  location_zone.add_name_or AS zone,
             ON pms_project.prj_location_zone_id = location_zone.add_id
         LEFT JOIN gen_address_structure AS location_woreda 
             ON pms_project.prj_location_woreda_id = location_woreda.add_id
-        -- released and requested amount for specific year
+
+         LEFT JOIN (
+            SELECT DISTINCT ON (cni_project_id) cni_project_id, cni_name
+            FROM pms_project_contractor
+            ORDER BY cni_project_id, cni_name) AS contractor ON pms_project.prj_id = contractor.cni_project_id
         LEFT JOIN (
-            SELECT 
-                bdr_project_id,
-                SUM(CASE WHEN bdr_budget_year_id = bdy_id THEN bdr_requested_amount ELSE 0 END) AS bdr_requested_amountspecificyear,
-                SUM(CASE WHEN bdr_budget_year_id = bdy_id THEN bdr_released_amount ELSE 0 END) AS bdr_released_amountspecificyear,
-                SUM(bdr_released_amount) AS bdr_released_amount 
+            SELECT DISTINCT ON (bdr_project_id) bdr_project_id, bdr_id,bdr_released_amount, bdr_requested_amount
             FROM pms_budget_request
-            LEFT JOIN pms_budget_year ON bdr_budget_year_id = bdy_id
-            GROUP BY bdr_project_id
-        ) AS budget_summary
-            ON pms_project.prj_id = budget_summary.bdr_project_id';
+            ORDER BY bdr_project_id, bdr_id DESC) AS latest_request ON pms_project.prj_id = latest_request.bdr_project_id
+
+       INNER JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_project_performance.prp_budget_year_id ';
       $query .=' WHERE 1=1';
+        $budgetyearid = $request->input('prp_budget_year_id');
+        if(!empty($budgetyearid) && is_numeric($budgetyearid)){
+            $query .= " AND prp_budget_year_id = ".intval($budgetyearid); 
+        }
+
+     $sectorid = $request->input('prj_sector_id');
+        if(!empty($sectorid) && is_numeric($sectorid)){
+            $query .= " AND prj_sector_id = ".intval($sectorid); 
+        }
    }
 
+else if($reportType==10 ){
+    $query = ' SELECT DISTINCT  
+        location_zone.add_name_or AS zone,contractor.cni_name AS cni_name,pms_budget_year.bdy_name AS budgetyear,location_woreda.add_name_or AS woreda,prj_name, prj_code, prj_location_description,sci_name_or AS sector,
+        prp_total_budget_used, prp_budget_planned,prp_physical_performance, prp_physical_planned, prj_total_estimate_budget,
+        COALESCE(prj_urban_ben_number, 0) + COALESCE(prj_rural_ben_number, 0) AS beneficiery,prj_measurement_unit,prj_measured_figure,
+        EXTRACT(YEAR FROM prj_start_date_plan_gc::date) AS start_year,
+        EXTRACT(YEAR FROM prj_end_date_plan_gc::date) AS end_year,
+
+        COALESCE(bra.bra_source_government_approved, 0) AS bra_source_government_approved,
+        COALESCE(bra.bra_source_internal_approved, 0) AS bra_source_internal_approved,
+        COALESCE(bra.bra_source_support_approved, 0) AS bra_source_support_approved,
+        COALESCE(bra.bra_source_credit_approved, 0) AS bra_source_credit_approved,
+        COALESCE(bra.bra_source_other_approved, 0) AS bra_source_other_approved,
+        
+        (   COALESCE(bra.bra_source_government_approved, 0) +
+            COALESCE(bra.bra_source_internal_approved, 0) +
+            COALESCE(bra.bra_source_support_approved, 0) +
+            COALESCE(bra.bra_source_credit_approved, 0) +
+            COALESCE(bra.bra_source_other_approved, 0) ) AS total_sum
+      FROM pms_project
+        INNER JOIN pms_sector_information ON pms_project.prj_sector_id = pms_sector_information.sci_id
+        INNER JOIN pms_project_performance  ON pms_project.prj_id = pms_project_performance.prp_project_id
+        INNER JOIN gen_address_structure AS location_zone 
+            ON pms_project.prj_location_zone_id = location_zone.add_id
+        LEFT JOIN gen_address_structure AS location_woreda 
+            ON pms_project.prj_location_woreda_id = location_woreda.add_id
+        LEFT JOIN (
+            SELECT DISTINCT ON (cni_project_id) cni_project_id, cni_name
+            FROM pms_project_contractor
+            ORDER BY cni_project_id, cni_name) AS contractor ON pms_project.prj_id = contractor.cni_project_id
+        LEFT JOIN (
+            SELECT DISTINCT ON (bdr_project_id) bdr_project_id, bdr_id, bdr_requested_amount
+            FROM pms_budget_request
+            ORDER BY bdr_project_id, bdr_id DESC) AS latest_request ON pms_project.prj_id = latest_request.bdr_project_id
+
+        LEFT JOIN pms_budget_request_amount AS bra ON latest_request.bdr_id = bra.bra_budget_request_id
+        INNER JOIN pms_budget_year 
+            ON pms_budget_year.bdy_id = pms_project_performance.prp_budget_year_id';
+      $query .=' WHERE 1=1';
+      $budgetyearid = $request->input('prp_budget_year_id');
+        if(!empty($budgetyearid) && is_numeric($budgetyearid)){
+            $query .= " AND prp_budget_year_id = ".intval($budgetyearid); 
+        }
+
+     $sectorid = $request->input('prj_sector_id');
+        if(!empty($sectorid) && is_numeric($sectorid)){
+            $query .= " AND prj_sector_id = ".intval($sectorid); 
+        }
+
+   }
    else if($reportType==11){
 $query = ' SELECT  location_zone.add_name_or AS zone,
                 location_woreda.add_name_or AS woreda,
                 prj_name, prj_code ,prj_location_description,sci_name_or AS sector,
-                 pms_budget_year.bdy_name AS budgetyear,
+                 pms_budget_year.bdy_name AS budgetyear,prj_measurement_unit,prj_measured_figure,
                 prp_physical_performance, prp_physical_planned,
                 prp_pyhsical_planned_month_1, prp_pyhsical_planned_month_2, prp_pyhsical_planned_month_3,prp_pyhsical_planned_month_4,prp_pyhsical_planned_month_5,
                 prp_pyhsical_planned_month_6,prp_pyhsical_planned_month_7,prp_pyhsical_planned_month_8,prp_pyhsical_planned_month_9,prp_pyhsical_planned_month_10,prp_pyhsical_planned_month_11,prp_pyhsical_planned_month_12,
@@ -234,13 +289,17 @@ $query = ' SELECT  location_zone.add_name_or AS zone,
         if(!empty($budgetyearid) && is_numeric($budgetyearid)){
             $query .= " AND prp_budget_year_id = ".intval($budgetyearid); 
         }
+     $sectorid = $request->input('prj_sector_id');
+        if(!empty($sectorid) && is_numeric($sectorid)){
+            $query .= " AND prj_sector_id = ".intval($sectorid); 
+        }
    }
 
   else if($reportType==12){
       $query = ' SELECT  location_zone.add_name_or AS zone,
                 location_woreda.add_name_or AS woreda,
                 prj_name, prj_code , prj_location_description, sci_name_or AS sector,
-                pms_budget_year.bdy_name AS budgetyear,
+                pms_budget_year.bdy_name AS budgetyear,prj_measurement_unit,prj_measured_figure,
                 prp_physical_performance, prp_physical_planned,
                 prp_finan_planned_month_1, prp_finan_planned_month_2, prp_finan_planned_month_3,prp_finan_planned_month_4,prp_finan_planned_month_5,
                 prp_finan_planned_month_6,prp_finan_planned_month_7,prp_finan_planned_month_8,prp_finan_planned_month_9,prp_finan_planned_month_10,prp_finan_planned_month_11,prp_finan_planned_month_12,
@@ -280,6 +339,73 @@ $query = ' SELECT  location_zone.add_name_or AS zone,
         if(!empty($budgetyearid) && is_numeric($budgetyearid)){
             $query .= " AND prp_budget_year_id = ".intval($budgetyearid); 
         }
+     $sectorid = $request->input('prj_sector_id');
+        if(!empty($sectorid) && is_numeric($sectorid)){
+            $query .= " AND prj_sector_id = ".intval($sectorid); 
+        }
+   }
+
+     else if($reportType==13){
+      $query = ' SELECT  prj_name, pct_name_or, kpi_name_or, psc_name AS sectorcategory, pms_budget_year.bdy_name AS budgetyear,kpr_description,kpi_unit_measurement,
+            kpr_planned_month_1, kpr_planned_month_2, kpr_planned_month_3, kpr_planned_month_4,kpr_planned_month_5,kpr_planned_month_6, kpr_planned_month_7, kpr_planned_month_8, kpr_planned_month_9,kpr_planned_month_10, kpr_planned_month_11, kpr_planned_month_12,
+                 ( COALESCE(kpr_planned_month_1, 0) +
+                    COALESCE(kpr_planned_month_2, 0) +
+                    COALESCE(kpr_planned_month_3, 0) 
+                ) AS quarter1total,
+
+                ( COALESCE(kpr_planned_month_4, 0) +
+                    COALESCE(kpr_planned_month_5, 0) +
+                    COALESCE(kpr_planned_month_6, 0) 
+                ) AS quarter2total,
+
+                 ( COALESCE(kpr_planned_month_7, 0) +
+                    COALESCE(kpr_planned_month_8, 0) +
+                    COALESCE(kpr_planned_month_9, 0) 
+                ) AS quarter3total,
+
+                 ( COALESCE(kpr_planned_month_10, 0) +
+                    COALESCE(kpr_planned_month_11, 0) +
+                    COALESCE(kpr_planned_month_12, 0) 
+                ) AS quarter4total,
+                  (COALESCE(kpr_planned_month_1, 0) +
+                 COALESCE(kpr_planned_month_2, 0) +
+                 COALESCE(kpr_planned_month_3, 0) +
+                 COALESCE(kpr_planned_month_4, 0) +
+                 COALESCE(kpr_planned_month_5, 0) +
+                 COALESCE(kpr_planned_month_6, 0) +
+                 COALESCE(kpr_planned_month_7, 0) +
+                 COALESCE(kpr_planned_month_8, 0) +
+                 COALESCE(kpr_planned_month_9, 0) +
+                 COALESCE(kpr_planned_month_10, 0) +
+                 COALESCE(kpr_planned_month_11, 0) +
+                 COALESCE(kpr_planned_month_12, 0)) AS totalplan
+
+                 FROM pms_project
+                LEFT JOIN pms_project_category  ON pms_project.prj_project_category_id = pms_project_category.pct_id
+                
+                LEFT JOIN prj_sector_category  ON pms_project_category.pct_parent_id = prj_sector_category.psc_id
+
+               LEFT JOIN pms_project_kpi_result ON pms_project_kpi_result.kpr_project_id=pms_project.prj_id
+                LEFT JOIN pms_project_kpi ON pms_project_kpi.kpi_id=pms_project_kpi_result.kpr_project_kpi_id 
+                LEFT JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_project_kpi_result.kpr_year_id ';
+
+      $query .=' WHERE 1=1';
+
+      $budgetyearid = $request->input('prp_budget_year_id');
+        if(!empty($budgetyearid) && is_numeric($budgetyearid)){
+            $query .= " AND kpr_year_id = ".intval($budgetyearid); 
+        }
+
+      $projectcategoryid = $request->input('prj_project_category_id');
+        if(!empty($projectcategoryid) && is_numeric($projectcategoryid)){
+            $query .= " AND prj_project_category_id = ".intval($projectcategoryid); 
+        }
+
+      $sectorcategoryid = $request->input('sector_category_id');
+        if(!empty($sectorcategoryid) && is_numeric($sectorcategoryid)){
+            $query .= " AND pct_parent_id = ".intval($sectorcategoryid); 
+        }
+     
    }
    $prjlocationzoneid = $request->input('prj_location_zone_id');
     if(!empty($prjlocationzoneid)){
