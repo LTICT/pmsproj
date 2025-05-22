@@ -264,7 +264,7 @@ $query .=' AND bsr_name="'.$bsrname.'"';
 }
 $bsrprojectid=$request->input('bsr_project_id');
 if(isset($bsrprojectid) && isset($bsrprojectid)){
-$query .=" AND bsr_project_id='".$bsrprojectid."'"; 
+//$query .=" AND bsr_project_id='".$bsrprojectid."'"; 
 }
 $bsrbudgetsourceid=$request->input('bsr_budget_source_id');
 if(isset($bsrbudgetsourceid) && isset($bsrbudgetsourceid)){
@@ -299,20 +299,17 @@ if(isset($bsrupdatetime) && isset($bsrupdatetime)){
 $query .=' AND bsr_update_time="'.$bsrupdatetime.'"'; 
 }
 
-     $masterId=$request->input('master_id');
-     if(isset($masterId) && !empty($masterId)){
-        //set foreign key field name
-        //$query .=' AND add_name="'.$masterId.'"'; 
-     }
-     $search=$request->input('search');
-     if(isset($search) && !empty($search)){
-       $advanced= $request->input('adva-search');
-       if(isset($advanced) && $advanced =='on'){
-           $query.=' AND (add_name SOUNDS LIKE "%'.$search.'%" )  ';
-       }else{
-        $query.=' AND (add_name LIKE "%'.$search.'%")  ';
-    }
+//START
+$bsrprojectid=$request->input('project_id');
+$requesttype=$request->input('request_type');
+if(isset($requesttype) && !empty($requesttype) && $requesttype=='single'){
+if(isset($bsrprojectid) && isset($bsrprojectid)){
+$query .= " AND bsr_project_id = '$bsrprojectid'";
 }
+}else{
+$query=$this->getSearchParam($request,$query);
+}
+//END
 //$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
 $data_info=DB::select($query);
 $resultObject= array(
