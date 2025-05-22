@@ -23,9 +23,11 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $this->validateLogin($request);
-        $credentials = $request->only('email', 'password');
-        $credentials['usr_status'] = 1;
-
+        //$credentials = $request->only('email', 'password');
+        //$credentials['usr_status'] = 1;
+        $email = strtolower($request->input('email'));
+        $password=$request->input('password');
+      $credentials=array('email'=>$email, 'password'=>$password, 'usr_status'=>1);
         if (!$token = auth('api')->attempt($credentials)) {
             return response()->json(['status' => 'error', 'message' => 'Incorrect email/Password'], 401);
         }

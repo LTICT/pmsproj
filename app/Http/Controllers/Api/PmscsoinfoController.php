@@ -22,7 +22,7 @@ class PmscsoinfoController extends MyController
      */
     public function show($id)
     {
-        $query='SELECT cso_id,cso_name,cso_code,cso_address,cso_phone,cso_email,cso_website,cso_description,cso_create_time,cso_update_time,cso_delete_time,cso_created_by,cso_status FROM pms_cso_info ';
+        $query='SELECT cso_type, cso_id,cso_name,cso_code,cso_address,cso_phone,cso_email,cso_website,cso_description,cso_create_time,cso_update_time,cso_delete_time,cso_created_by,cso_status FROM pms_cso_info ';
 
         $query .=' WHERE cso_id='.$id.' ';
         $data_info=DB::select(DB::raw($query));
@@ -36,7 +36,7 @@ class PmscsoinfoController extends MyController
     }
     //Get List
     public function listgrid(Request $request){
-     $query="SELECT cso_contact_person,cso_id,cso_name,cso_code,cso_address,cso_phone,cso_email,cso_website,cso_description,cso_create_time,cso_update_time,cso_delete_time,cso_created_by,cso_status,1 AS is_editable, 1 AS is_deletable FROM pms_cso_info ";
+     $query="SELECT cso_type,cso_contact_person,cso_id,cso_name,cso_code,cso_address,cso_phone,cso_email,cso_website,cso_description,cso_create_time,cso_update_time,cso_delete_time,cso_created_by,cso_status,1 AS is_editable, 1 AS is_deletable FROM pms_cso_info ";
      $query .=' WHERE 1=1';
      $csoid=$request->input('cso_id');
 if(isset($csoid) && isset($csoid)){

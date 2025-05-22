@@ -83,7 +83,7 @@ if(isset($pcmstatus) && isset($pcmstatus)){
 $query .=' AND pcm_status="'.$pcmstatus.'"'; 
 }
 //START
-$pcmprojectid=$request->input('pcm_project_id');
+$pcmprojectid=$request->input('project_id');
 $requesttype=$request->input('request_type');
 if(isset($requesttype) && !empty($requesttype) && $requesttype=='single'){
 if(isset($pcmprojectid) && isset($pcmprojectid)){

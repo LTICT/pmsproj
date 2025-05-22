@@ -15,7 +15,7 @@ class PmsprojectemployeeController extends MyController
 }
  
     public function listgrid(Request $request){
-     $query='SELECT prj_name,prj_code,emp_id,emp_id_no,emp_full_name,emp_email,emp_phone_num,emp_role,emp_project_id,emp_start_date_ec,emp_start_date_gc,emp_end_date_ec,emp_end_date_gc,emp_address,emp_description,emp_create_time,emp_update_time,emp_delete_time,emp_created_by,emp_current_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_employee ';       
+     $query='SELECT emp_nationality,emp_sex,prj_name,prj_code,emp_id,emp_id_no,emp_full_name,emp_email,emp_phone_num,emp_role,emp_project_id,emp_start_date_ec,emp_start_date_gc,emp_end_date_ec,emp_end_date_gc,emp_address,emp_description,emp_create_time,emp_update_time,emp_delete_time,emp_created_by,emp_current_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_employee ';       
      
 $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_employee.emp_project_id';
      $query .=' WHERE 1=1';

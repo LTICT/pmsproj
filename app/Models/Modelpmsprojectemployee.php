@@ -25,7 +25,7 @@ class Modelpmsprojectemployee extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['emp_id','emp_id_no','emp_full_name','emp_email','emp_phone_num','emp_role','emp_project_id','emp_start_date_ec','emp_start_date_gc','emp_end_date_ec','emp_end_date_gc','emp_address','emp_description','emp_create_time','emp_update_time','emp_delete_time','emp_created_by','emp_current_status',];
+    protected $fillable = ['emp_id','emp_id_no','emp_full_name','emp_email','emp_phone_num','emp_role','emp_project_id','emp_start_date_ec','emp_start_date_gc','emp_end_date_ec','emp_end_date_gc','emp_address','emp_description','emp_create_time','emp_update_time','emp_delete_time','emp_created_by','emp_current_status','emp_nationality','emp_sex'];
 
     
 

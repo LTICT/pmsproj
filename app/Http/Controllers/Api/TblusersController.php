@@ -254,7 +254,7 @@ if ($validationResult !== false) {
                     //$requestData['prd_size']=$fileSize;
             $requestData['usr_picture']=$fileName;
         }
-        $requestData['email']=$request->input('usr_email');
+        $requestData['email']=strtolower($request->input('usr_email'));
         //$password=$request->get('usr_password');
         //if(isset)
         //$requestData['password']=bcrypt($request->get('usr_password'));
@@ -367,13 +367,26 @@ try {
             $requestData['usr_status']=0;
         }
         $requestData['usr_status']=1;
-        $requestData['email']=$request->input('usr_email');
+        $requestData['email']=strtolower($request->input('usr_email'));
         $requestData['password']=bcrypt($request->get('usr_password'));
         $requestData['usr_password']=bcrypt($request->get('usr_password'));
         $requestData['usr_created_by']=auth()->user()->usr_id;
         $data_info=Modeltblusers::create($requestData);
         //START ADD DEFAULT ROLE
         if(isset($data_info) && !empty($data_info)){
+            $userType=$request->get('usr_user_type');
+            
+            if($userType==1){
+                //Governmental
+            }else if($userType==2){
+                //CSO
+
+            }else if($userType==4){
+                //CSO Director
+
+            }else if($userType==3){
+                //Citizenship
+            }
             $role_usr_data['url_role_id']=8;
             $role_usr_data['url_user_id']=$data_info->usr_id;
             //$role_usr_data['usr_role_id']=$data_info
