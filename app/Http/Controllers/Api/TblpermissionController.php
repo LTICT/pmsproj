@@ -16,10 +16,10 @@ class TblpermissionController extends MyController
 }  
     public function listgrid(Request $request){
         $pemroleid=$request->input('pem_role_id');
-     $query='SELECT pag_id,pag_name,pem_page_id,pem_id,pem_role_id,pem_enabled,pem_edit,pem_insert,pem_view,pem_delete,pem_show,pem_search,pem_description,
+     $query='SELECT pag_system_module AS page_category, pag_id,pag_name,pem_page_id,pem_id,pem_role_id,pem_enabled,pem_edit,pem_insert,pem_view,pem_delete,pem_show,pem_search,pem_description,
      pem_create_time,pem_update_time,pem_delete_time,pem_created_by,pem_status,1 AS is_editable, 1 AS is_deletable FROM tbl_pages
      LEFT JOIN tbl_permission ON tbl_pages.pag_id=tbl_permission.pem_page_id AND pem_role_id='.$pemroleid.'';       
-     //$query .=' WHERE 1=1';
+     
      $pemid=$request->input('pem_id');
 if(isset($pemid) && isset($pemid)){
 $query .=' AND pem_id="'.$pemid.'"'; 
@@ -35,6 +35,7 @@ $pemenabled=$request->input('pem_enabled');
 if(isset($pemenabled) && isset($pemenabled)){
 $query .=' AND pem_enabled="'.$pemenabled.'"'; 
 }
+$query .=' WHERE pag_status=1';
 $query.=' ORDER BY pem_id,pag_name ASC';
 $data_info=DB::select($query);
 $resultObject= array(

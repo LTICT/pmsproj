@@ -501,6 +501,13 @@ Route::resource('procurement_information', 'PmsprocurementinformationController'
     Route::post('project_kpi_result/insertgrid', 'Api\PmsprojectkpiresultController@insertgrid');
     Route::post('project_kpi_result/updategrid', 'Api\PmsprojectkpiresultController@updategrid');
     Route::post('project_kpi_result/deletegrid', 'Api\PmsprojectkpiresultController@deletegrid');
+
+    //Route::resource('implementing_area', 'PmsimplementingareaController');
+    Route::post('implementing_area/listgrid', 'Api\PmsimplementingareaController@listgrid');
+    Route::post('implementing_area/insertgrid', 'Api\PmsimplementingareaController@insertgrid');
+    Route::post('implementing_area/updategrid', 'Api\PmsimplementingareaController@updategrid');
+    Route::post('implementing_area/deletegrid', 'Api\PmsimplementingareaController@deletegrid');
+
 });
 
    //START CACHE MANAGEMENT
