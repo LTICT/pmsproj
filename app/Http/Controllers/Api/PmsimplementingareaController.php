@@ -44,10 +44,6 @@ class PmsimplementingareaController extends MyController
 if(isset($piaid) && isset($piaid)){
 $query .=' AND pia_id="'.$piaid.'"'; 
 }
-$piaprojectid=$request->input('pia_project_id');
-if(isset($piaprojectid) && isset($piaprojectid)){
-$query .=' AND pia_project_id="'.$piaprojectid.'"'; 
-}
 $piaregionid=$request->input('pia_region_id');
 if(isset($piaregionid) && isset($piaregionid)){
 $query .=' AND pia_region_id="'.$piaregionid.'"'; 
@@ -72,7 +68,6 @@ $piasite=$request->input('pia_site');
 if(isset($piasite) && isset($piasite)){
 $query .=' AND pia_site="'.$piasite.'"'; 
 }
-
 //START
 $piaprojectid=$request->input('pia_project_id');
 $requesttype=$request->input('request_type');

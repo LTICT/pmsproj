@@ -425,7 +425,7 @@ public function handleDatabaseException($e, $actionType){
 	public function getUserInfo(Request $request){
 		$authenticatedUser = $request->authUser;
 		$userId=$authenticatedUser->usr_id;
-		$query="SELECT usr_user_type,usr_owner_id, usr_directorate_id,usr_team_id,usr_officer_id,usr_id,usr_zone_id,usr_woreda_id,usr_department_id,usr_sector_id
+		$query="SELECT usr_full_name,usr_user_type,usr_owner_id, usr_directorate_id,usr_team_id,usr_officer_id,usr_id,usr_zone_id,usr_woreda_id,usr_department_id,usr_sector_id
 		FROM tbl_users 
 		WHERE usr_id=".$userId."";
 		$data_info=DB::select($query);

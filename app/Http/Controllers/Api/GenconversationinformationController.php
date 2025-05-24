@@ -140,6 +140,7 @@ public function updategrid(Request $request)
         //Parent Id Assigment
         //$requestData['ins_vehicle_id']=$request->get('master_id');
         $data_info=Modelgenconversationinformation::create($requestData);
+        $data_info['created_by']=$this->getUserInfo($request)?->usr_full_name;
         $resultObject= array(
             "odata.metadata"=>"",
             "value" =>$data_info,
@@ -191,6 +192,7 @@ public function insertgrid(Request $request)
         $requestData['cvi_created_by']=1;
         $requestData['cvi_created_by']=auth()->user()->usr_id;
         $data_info=Modelgenconversationinformation::create($requestData);
+        $data_info['created_by']=$this->getUserInfo($request)?->usr_full_name;
         $resultObject= array(
             "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),

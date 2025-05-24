@@ -384,6 +384,7 @@ public function updategrid(Request $request)
         //$requestData['ins_vehicle_id']=$request->get('master_id');
         //$requestData['prd_created_by']=auth()->user()->usr_Id;
         $data_info=Modelpmsprojectdocument::create($requestData);
+        $data_info['created_by']=$this->getUserInfo($request)?->usr_full_name;
         $resultObject= array(
             "odata.metadata"=>"",
             "value" =>$data_info,
@@ -450,11 +451,12 @@ public function insertgrid(Request $request)
         }else{
             $requestData['prd_status']=0;
         }
-        
+
         $requestData['prd_created_by']=auth()->user()->usr_id;
         $data_info=Modelpmsprojectdocument::create($requestData);
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;
+        $data_info['created_by']=$this->getUserInfo($request)?->usr_full_name;
         $resultObject= array(
             "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
