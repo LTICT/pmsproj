@@ -41,7 +41,8 @@ class GenconversationinformationController extends MyController
       if(isset($permissionData) && !empty($permissionData)){
         $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
      }*/
-     $query="SELECT cvi_id,cvi_title,cvi_object_id,cvi_object_type_id,cvi_request_date_et,cvi_request_date_gc,cvi_description,cvi_create_time,cvi_update_time,cvi_delete_time,cvi_created_by,cvi_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM gen_conversation_information ";
+     $query="SELECT usr_full_name AS created_by,cvi_id,cvi_title,cvi_object_id,cvi_object_type_id,cvi_request_date_et,cvi_request_date_gc,cvi_description,cvi_create_time,cvi_update_time,cvi_delete_time,cvi_created_by,cvi_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM gen_conversation_information ";
+     $query .=' INNER JOIN tbl_users ON tbl_users.usr_id=gen_conversation_information.cvi_created_by';     
      $query .=' WHERE 1=1';
      $cviid=$request->input('cvi_id');
 if(isset($cviid) && isset($cviid)){
@@ -188,6 +189,7 @@ public function insertgrid(Request $request)
         $requestData = $request->all();
         //$requestData['cvi_created_by']=auth()->user()->usr_Id;
         $requestData['cvi_created_by']=1;
+        $requestData['cvi_created_by']=auth()->user()->usr_id;
         $data_info=Modelgenconversationinformation::create($requestData);
         $resultObject= array(
             "data" =>$data_info,
