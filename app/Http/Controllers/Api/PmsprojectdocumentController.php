@@ -450,6 +450,7 @@ public function insertgrid(Request $request)
         }else{
             $requestData['prd_status']=0;
         }
+        
         $requestData['prd_created_by']=auth()->user()->usr_id;
         $data_info=Modelpmsprojectdocument::create($requestData);
         $data_info['is_editable']=1;

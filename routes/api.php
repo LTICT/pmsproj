@@ -48,9 +48,9 @@ Route::post('login', 'AuthController@login');
 Route::post('refreshtoken', 'AuthController@refreshToken');
 Route::post('addressbyparent', 'Api\GenaddressstructureController@addressByParent');
 Route::post('departmentbyparent', 'Api\GendepartmentController@departmentByParent');
-Route::post('project_document/insertgrid', 'Api\PmsprojectdocumentController@insertgrid');
    // Route::post('department/listgrid', [\Api\GendepartmentController::class, 'listgrid'])->middleware('apilogin');
 Route::group(['middleware' => [\App\Http\Middleware\JwtMiddleware::class,'throttle:api'], 'except' => ['api/login', 'api/register']], function () {
+    Route::post('project_document/insertgrid', 'Api\PmsprojectdocumentController@insertgrid');
     Route::resource('project', 'Api\PmsprojectController');
     Route::post('project/listgrid', 'Api\PmsprojectController@listgrid');
 Route::post('project/insertgrid', 'Api\PmsprojectController@insertgrid');
