@@ -64,7 +64,7 @@ try {
         $cso_info=Modelpmscsoinfo::create($requestData);
         if(isset($cso_info)){
         $requestData['usr_owner_id']=$cso_info->cso_id;
-        $requestData['usr_user_type']=2;
+        $requestData['usr_user_type']=4;
         $requestData['usr_status']=1;
         $requestData['usr_full_name']=$name;
         $requestData['email']=$email;

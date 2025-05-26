@@ -50,7 +50,7 @@ $csocode=$request->input('cso_code');
 if(isset($csocode) && isset($csocode)){
 $query .=' AND cso_code="'.$csocode.'"';
 }
-
+$query.=' ORDER BY cso_id DESC';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
