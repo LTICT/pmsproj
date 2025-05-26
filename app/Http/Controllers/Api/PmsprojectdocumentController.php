@@ -237,10 +237,10 @@ function getListForm(Request $request)
         return redirect('project_document')->with('flash_message',  trans('form_lang.delete_success'));
     }
     public function listgrid(Request $request){
-       $query='SELECT usr_full_name AS created_by, prj_name,prj_code,prd_id,prd_project_id, prd_document_type_id,prd_name,prd_file_path,prd_size,prd_file_extension, prd_uploaded_date,prd_description,prd_create_time,prd_update_time,prd_delete_time,prd_created_by,
-       1 AS is_editable, 1 AS is_deletable,COUNT(*) OVER () AS total_count FROM pms_project_document ';
-       $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_document.prd_project_id';
-       $query .=' INNER JOIN tbl_users ON tbl_users.usr_id=pms_project_document.prd_created_by';
+       $query='SELECT usr_full_name AS created_by, 1 AS prj_name,1 AS prj_code,prd_id,prd_project_id, prd_document_type_id,prd_name,prd_file_path,prd_size,prd_file_extension, prd_uploaded_date,prd_description,prd_create_time,prd_update_time,prd_delete_time,prd_created_by,
+       1 AS is_editable, 1 AS is_deletable FROM pms_project_document ';
+       //$query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_document.prd_project_id';
+       $query .=' LEFT JOIN tbl_users ON tbl_users.usr_id=pms_project_document.prd_created_by';
      //$query .= ' INNER JOIN pms_document_type ON pms_project_document.prd_document_type_id = pms_document_type.pdt_id';
        $query .=' WHERE 1=1';
        $prdid=$request->input('prd_id');
@@ -260,11 +260,11 @@ function getListForm(Request $request)
         $query .=' AND prd_name="'.$prdname.'"';
     }
     $fileOwnerType=$request->input('prd_owner_type_id');
-    if(isset($fileOwnerType) && isset($fileOwnerType)){
+    if(isset($fileOwnerType) && !empty($fileOwnerType)){
         $query .=" AND prd_owner_type_id='".$fileOwnerType."'";
     }
     $fileOwnerId=$request->input('prd_owner_id');
-    if(isset($fileOwnerId) && isset($fileOwnerId)){
+    if(isset($fileOwnerId) && !empty($fileOwnerId)){
         $query .=" AND prd_owner_id='".$fileOwnerId."'";
     }
     //$query=$this->getSearchParam($request,$query);
