@@ -25,10 +25,7 @@ class Modelprjsectorcategory extends Model
      *
      * @var array
      */
-    protected $fillable = ['psc_id','psc_created_by','psc_status','psc_name','psc_code','psc_sector_id','psc_description','psc_create_time','psc_update_time',];
-
-    
-
+    protected $fillable = ['psc_id','psc_created_by','psc_status','psc_name','psc_code','psc_sector_id','psc_description','psc_create_time','psc_update_time','psc_gov_active','psc_cso_active', 'psc_citizenship_active'];
     /**
      * Change activity log event description
      *
@@ -41,4 +38,5 @@ class Modelprjsectorcategory extends Model
         return __CLASS__ . " model has been {$eventName}";
     }
 }
+
 

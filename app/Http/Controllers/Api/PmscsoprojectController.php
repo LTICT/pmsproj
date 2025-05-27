@@ -132,7 +132,7 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         $tabInfo=$this->getTabPermission($request);
         $resultObject= array(
             "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 2,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0));
+            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
         return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
     }
 //Only to search and display data

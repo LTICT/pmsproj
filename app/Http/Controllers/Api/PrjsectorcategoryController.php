@@ -19,7 +19,7 @@ public function listgrid(Request $request){
    if(isset($permissionData) && !empty($permissionData)){
     $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
 }
-$query="SELECT psc_delete_time,psc_created_by,psc_status,psc_id,psc_name,psc_code,psc_description,psc_create_time,psc_update_time ".$permissionIndex." FROM prj_sector_category ";
+$query="SELECT psc_gov_active,psc_cso_active,psc_citizenship_active,psc_delete_time,psc_created_by,psc_status,psc_id,psc_name,psc_code,psc_description,psc_create_time,psc_update_time ".$permissionIndex." FROM prj_sector_category ";
 $query .=' WHERE 1=1';
 $pscname=$request->input('psc_name');
 if(isset($pscname) && isset($pscname)){
