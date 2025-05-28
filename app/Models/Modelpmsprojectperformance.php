@@ -98,4 +98,34 @@ class Modelpmsprojectperformance extends BaseModel
     {
         return __CLASS__ . " model has been {$eventName}";
     }
+
+    protected static function boot()
+{
+    parent::boot();
+
+    static::saving(function ($model) {
+        // Sum physical planned
+        $model->prp_physical_planned = self::sumFields($model, 'prp_pyhsical_planned_month_');
+
+        // Sum financial planned
+        $model->prp_budget_planned = self::sumFields($model, 'prp_finan_planned_month_');
+
+        // Sum financial actual (budget used)
+        $model->prp_total_budget_used = self::sumFields($model, 'prp_finan_actual_month_');
+
+        // Sum physical actual (performance)
+        $model->prp_physical_performance = self::sumFields($model, 'prp_pyhsical_actual_month_');
+    });
+}
+
+// Helper to sum month fields
+private static function sumFields($model, $prefix)
+{
+    $sum = 0;
+    for ($i = 1; $i <= 12; $i++) {
+        $field = $prefix . $i;
+        $sum += (float) ($model->{$field} ?? 0);
+    }
+    return $sum;
+}
 }

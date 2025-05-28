@@ -42,17 +42,20 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         if(isset($data_info) && !empty($data_info)){
             //START PROJECT ANALYSIS
             //START PROJECT PERFORMANCE
-            $query='SELECT prp_record_date_gc,
-       prp_total_budget_used AS used_amount,
-       prp_physical_performance AS physical_performance
+            $query='SELECT
+       SUM(prp_total_budget_used) AS actual_financial,
+       SUM(prp_physical_performance) AS actual_physical,
+       SUM(prp_budget_planned) AS planned_financial,
+       SUM(prp_physical_planned) AS planned_physical
 FROM pms_project_performance ';
-             $query .=" WHERE prp_project_id= ".$id." ";
-             $query .=" ORDER BY prp_physical_performance DESC LIMIT 1 ";
+             $query .=" WHERE prp_project_id= ".$id." GROUP BY prp_project_id ";
+             //$query .=" ORDER BY prp_physical_performance ";
               $performance_info=DB::select($query);
             //END PROJECT PERFORMANCE
               //START COST
-              $query='SELECT SUM(bdr_released_amount) AS additional_budget FROM pms_budget_request ';
-     $query .=" WHERE bdr_project_id= ".$id." AND bdr_request_category_id > 1 ";
+              $query='SELECT SUM(bdr_released_amount) AS released_amount, rqc_name_en as budget_type FROM pms_budget_request ';
+     $query .=" INNER JOIN pms_request_category ON pms_request_category.rqc_id=pms_budget_request.bdr_request_category_id ";
+     $query .=" WHERE bdr_project_id= ".$id." AND bdr_request_status=3 GROUP BY rqc_name_en ";
 
       /** 
       * $query='SELECT rqc_name_or AS request_category, bdr_released_amount
@@ -73,7 +76,7 @@ FROM pms_project_performance ';
             $tabInfo=$this->getAllTabPermission($request);
             $resultObject= array(
                 'performance'=>$performance_info[0] ?? null,
-                'additional_budget'=>$additional_budget_info ?? null,
+                'budget_info'=>$additional_budget_info ?? null,
                 'allowedTabs'=>$tabInfo['allowedTabs'],
                 "data" =>$data,
                 "data_available"=>"1",
