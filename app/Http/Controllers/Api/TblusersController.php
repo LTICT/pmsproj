@@ -367,30 +367,52 @@ try {
             $requestData['usr_status']=0;
         }
         $requestData['usr_status']=1;
+        $createdBy=auth()->user()->usr_id;
         $requestData['email']=strtolower($request->input('usr_email'));
         $requestData['password']=bcrypt($request->get('usr_password'));
         $requestData['usr_password']=bcrypt($request->get('usr_password'));
-        $requestData['usr_created_by']=auth()->user()->usr_id;
+        $requestData['usr_created_by']=$createdBy;
+        $userCopiedFromId=$request->input('usr_copied_from_id');
+        $requestData['usr_copied_from']=$userCopiedFromId;
         $data_info=Modeltblusers::create($requestData);
         //START ADD DEFAULT ROLE
         if(isset($data_info) && !empty($data_info)){
-            $userType=$request->get('usr_user_type');
+            //START COPY ROLE and USER SECTOR
+            if(isset($userCopiedFromId) && !empty($userCopiedFromId) && 1==2){
+               $assignedRoles= \App\Models\Modeltbluserrole::where('url_user_id','=',$userCopiedFromId)->get();
+               $copiedUserId=$data_info->usr_id;
+               if(isset($assignedRoles) && !empty($assignedRoles)){
+                        $dataToInsert = $assignedRoles->map(function ($assignedRole) {
+                return [
+                    'url_user_id' => $assignedRole->copiedUserId,
+                    'url_role_id' => $assignedRole->url_role_id,
+                    'url_created_by' => $createdBy
+                ];
+            })->toArray();
+            \App\Models\Modeltbluserrole::insert($dataToInsert);
+               }
+            }
+        //START COPY ROLE and USER SECTOR
             
+            $userType=$request->get('usr_user_type');
+            $role_usr_data['url_role_id']=8;
             if($userType==1){
                 //Governmental
             }else if($userType==2){
                 //CSO
-
+                    $role_usr_data['url_role_id']=66;
             }else if($userType==4){
                 //CSO Director
 
             }else if($userType==3){
                 //Citizenship
+                $role_usr_data['url_role_id']=66;
             }
-            $role_usr_data['url_role_id']=8;
+            
             $role_usr_data['url_user_id']=$data_info->usr_id;
             //$role_usr_data['usr_role_id']=$data_info
-            \App\Models\Modeltbluserrole::create($role_usr_data);
+            //\App\Models\Modeltbluserrole::create($role_usr_data);
+        
         }
         //START ADD DEFAULT ROLE
         $data_info['is_editable']=1;
