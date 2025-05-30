@@ -36,8 +36,6 @@ if(isset($pctStatus) && !empty($pctStatus) && $pctStatus==0){
 $ownerType=$request->input('owner_type_id');
 if(isset($ownerType) && isset($ownerType)){
 $query .=" AND pct_owner_type_id='".$ownerType."'"; 
-}else{
-    //$query .=" AND pct_owner_type_id=1"; 
 }
 $pctnameor=$request->input('pct_name_or');
 if(isset($pctnameor) && isset($pctnameor)){
