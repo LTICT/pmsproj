@@ -85,22 +85,6 @@ class AuthController extends Controller
     {
         // Generate refresh token
         $refreshToken = JWTAuth::customClaims(['exp' => now()->addDays(14)->timestamp])->fromUser($user);
-
-        // Set refresh token in HttpOnly cookie
-        Cookie::queue(
-            cookie(
-                'refresh_token',
-                $refreshToken,
-                20160, // 14 days in minutes
-                '/',
-                null,
-                false,  // set to true if using HTTPS
-                true,   // HttpOnly
-                false,
-                'None'
-            )
-        );
-
         return response()->json([
             'status' => 'success',
             'user' => $user,
@@ -110,7 +94,17 @@ class AuthController extends Controller
                 //'expires_in' => auth('api')->factory()->getTTL() * 60,
                 'expires_in' => 1800
             ]
-        ]);
+        ])->withCookie(cookie(
+    'refresh_token',
+    $refreshToken,
+    20160, // 14 days
+    '/',
+    null,
+    false,  // ✅ Secure = false for HTTP (local)
+    true,   // ✅ HttpOnly = true
+    false,  // raw
+    'Lax'   // ✅ SameSite = Lax to avoid Secure requirement (None+Secure → HTTPS only)
+));
     }
     protected function respondWithToken1($token, $user = null)
     {
