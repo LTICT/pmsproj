@@ -138,7 +138,7 @@ $query .=' WHERE 1=1';
 
 //project payment
 }else if($reportType==7){
-$query='SELECT pms_project_category.pct_name_or As  "Project Category",zone_Add.add_name_or AS "Zone", sci_name_or AS "Sector", prj_name || prj_code AS "Project Name(Code)", prp_type AS "Payment Type",prp_payment_date_gc AS "Payment Date" ,prp_payment_amount AS "Payment Amount",prp_payment_percentage AS "Payment Percentage" FROM pms_project_payment 
+  $query='SELECT pms_project_category.pct_name_or As  "Project Category",zone_Add.add_name_or AS "Zone", sci_name_or AS "Sector", prj_name || prj_code AS "Project Name(Code)", prp_type AS "Payment Type",prp_payment_date_gc AS "Payment Date" , prp_payment_amount AS "Payment Amount",prp_payment_percentage AS "Payment Percentage" FROM pms_project_payment 
      INNER JOIN pms_project ON pms_project.prj_id=pms_project_payment.prp_project_id';
      $query .= ' INNER JOIN gen_address_structure zone_add ON pms_project.prj_location_zone_id = zone_add.add_id';
      $query .= ' INNER JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id';
@@ -155,18 +155,18 @@ $query .=" AND prp_payment_date_gc <='".$endTime." 23 59 59'";
 }
 
 else if($reportType==8 || $reportType==9){
-$query = ' SELECT DISTINCT location_zone.add_name_or AS zone,
+    $query = ' SELECT DISTINCT location_zone.add_name_or AS zone,
                 cni_name AS cni_name, location_woreda.add_name_or AS woreda,pms_budget_year.bdy_name AS budgetyear,
-                prj_name, prj_code , prj_location_description,sci_name_or AS sector,
+                prj_name, prj_code, prj_location_description,sci_name_or AS sector,
                 COALESCE(bdr_released_amount, 0) AS bdr_released_amount,
-                COALESCE(bdr_requested_amount, 0) AS bdr_requested_amount,
+                COALESCE(bdr_requested_amount, 0) AS bdr_requested_amount,prp_record_date_gc,
                 prp_physical_performance, prp_physical_planned, prj_total_estimate_budget,
                 COALESCE(prj_urban_ben_number, 0) + COALESCE(prj_rural_ben_number, 0) AS beneficiery,prj_measurement_unit,prj_measured_figure,
                 EXTRACT(YEAR FROM prj_start_date_plan_gc::date) AS start_year,
                 EXTRACT(YEAR FROM prj_end_date_plan_gc::date) AS end_year,
                 prp_budget_baseline,prp_total_budget_used,prp_physical_baseline
                 FROM pms_project
-        LEFT JOIN pms_sector_information 
+        INNER JOIN pms_sector_information 
             ON pms_project.prj_sector_id = pms_sector_information.sci_id
         INNER JOIN pms_project_performance 
             ON pms_project.prj_id = pms_project_performance.prp_project_id
@@ -191,11 +191,17 @@ $query = ' SELECT DISTINCT location_zone.add_name_or AS zone,
             $query .= " AND prp_budget_year_id = ".intval($budgetyearid); 
         }
 
-     $sectorid = $request->input('prj_sector_id');
-        if(!empty($sectorid) && is_numeric($sectorid)){
-            $query .= " AND prj_sector_id = ".intval($sectorid); 
+        $reportstartdate = $request->input('report_dateStart');
+        $reportenddate = $request->input('report_dateEnd');
+       if (!empty($reportstartdate) && !empty($reportenddate)) {
+            $query .= " AND prp_record_date_gc BETWEEN '{$reportstartdate}' AND '{$reportenddate}'";
         }
-   }
+
+         $sectorid = $request->input('prj_sector_id');
+            if(!empty($sectorid) && is_numeric($sectorid)){
+                $query .= " AND prj_sector_id = ".intval($sectorid); 
+            }
+       }
 
 else if($reportType==10 ){
     $query = ' SELECT DISTINCT  
@@ -240,7 +246,11 @@ else if($reportType==10 ){
         if(!empty($budgetyearid) && is_numeric($budgetyearid)){
             $query .= " AND prp_budget_year_id = ".intval($budgetyearid); 
         }
-
+       $reportstartdate = $request->input('report_dateStart');
+        $reportenddate = $request->input('report_dateEnd');
+       if (!empty($reportstartdate) && !empty($reportenddate)) {
+            $query .= " AND prp_record_date_gc BETWEEN '{$reportstartdate}' AND '{$reportenddate}'";
+        }
      $sectorid = $request->input('prj_sector_id');
         if(!empty($sectorid) && is_numeric($sectorid)){
             $query .= " AND prj_sector_id = ".intval($sectorid); 
@@ -248,7 +258,7 @@ else if($reportType==10 ){
 
    }
    else if($reportType==11){
-$query = ' SELECT  location_zone.add_name_or AS zone,
+      $query = ' SELECT  location_zone.add_name_or AS zone,
                 location_woreda.add_name_or AS woreda,
                 prj_name, prj_code ,prj_location_description,sci_name_or AS sector,
                  pms_budget_year.bdy_name AS budgetyear,prj_measurement_unit,prj_measured_figure,
@@ -288,6 +298,11 @@ $query = ' SELECT  location_zone.add_name_or AS zone,
       $budgetyearid = $request->input('prp_budget_year_id');
         if(!empty($budgetyearid) && is_numeric($budgetyearid)){
             $query .= " AND prp_budget_year_id = ".intval($budgetyearid); 
+        }
+        $reportstartdate = $request->input('report_dateStart');
+        $reportenddate = $request->input('report_dateEnd');
+       if (!empty($reportstartdate) && !empty($reportenddate)) {
+            $query .= " AND prp_record_date_gc BETWEEN '{$reportstartdate}' AND '{$reportenddate}'";
         }
      $sectorid = $request->input('prj_sector_id');
         if(!empty($sectorid) && is_numeric($sectorid)){
@@ -339,6 +354,11 @@ $query = ' SELECT  location_zone.add_name_or AS zone,
         if(!empty($budgetyearid) && is_numeric($budgetyearid)){
             $query .= " AND prp_budget_year_id = ".intval($budgetyearid); 
         }
+        $reportstartdate = $request->input('report_dateStart');
+        $reportenddate = $request->input('report_dateEnd');
+       if (!empty($reportstartdate) && !empty($reportenddate)) {
+            $query .= " AND prp_record_date_gc BETWEEN '{$reportstartdate}' AND '{$reportenddate}'";
+        }
      $sectorid = $request->input('prj_sector_id');
         if(!empty($sectorid) && is_numeric($sectorid)){
             $query .= " AND prj_sector_id = ".intval($sectorid); 
@@ -367,7 +387,7 @@ $query = ' SELECT  location_zone.add_name_or AS zone,
                     COALESCE(kpr_planned_month_11, 0) +
                     COALESCE(kpr_planned_month_12, 0) 
                 ) AS quarter4total,
-                  (COALESCE(kpr_planned_month_1, 0) +
+                (COALESCE(kpr_planned_month_1, 0) +
                  COALESCE(kpr_planned_month_2, 0) +
                  COALESCE(kpr_planned_month_3, 0) +
                  COALESCE(kpr_planned_month_4, 0) +
@@ -378,18 +398,13 @@ $query = ' SELECT  location_zone.add_name_or AS zone,
                  COALESCE(kpr_planned_month_9, 0) +
                  COALESCE(kpr_planned_month_10, 0) +
                  COALESCE(kpr_planned_month_11, 0) +
-                 COALESCE(kpr_planned_month_12, 0)) AS totalplan
-
-                 FROM pms_project
+                 COALESCE(kpr_planned_month_12, 0)) AS totalplan FROM pms_project
                 LEFT JOIN pms_project_category  ON pms_project.prj_project_category_id = pms_project_category.pct_id
-                
                 LEFT JOIN prj_sector_category  ON pms_project_category.pct_parent_id = prj_sector_category.psc_id
-
                LEFT JOIN pms_project_kpi_result ON pms_project_kpi_result.kpr_project_id=pms_project.prj_id
                 LEFT JOIN pms_project_kpi ON pms_project_kpi.kpi_id=pms_project_kpi_result.kpr_project_kpi_id 
                 LEFT JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_project_kpi_result.kpr_year_id ';
-
-      $query .=' WHERE 1=1';
+             $query .=' WHERE 1=1';
 
       $budgetyearid = $request->input('prp_budget_year_id');
         if(!empty($budgetyearid) && is_numeric($budgetyearid)){
@@ -401,7 +416,7 @@ $query = ' SELECT  location_zone.add_name_or AS zone,
             $query .= " AND prj_project_category_id = ".intval($projectcategoryid); 
         }
 
-      $sectorcategoryid = $request->input('sector_category_id');
+      $sectorcategoryid = $request->input('sector_category');
         if(!empty($sectorcategoryid) && is_numeric($sectorcategoryid)){
             $query .= " AND pct_parent_id = ".intval($sectorcategoryid); 
         }

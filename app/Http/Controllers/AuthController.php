@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Cookie;
 
 class AuthController extends Controller
 {
@@ -22,7 +23,6 @@ class AuthController extends Controller
     /* Login API */
     public function login(Request $request)
     {
-        if(1==1){
         $this->validateLogin($request);
         //$credentials = $request->only('email', 'password');
         //$credentials['usr_status'] = 1;
@@ -40,23 +40,8 @@ class AuthController extends Controller
         unset($user->usr_password);
         $user->user_info = $this->getUserInfo($user);
         $user->user_sector = $this->getUserSectors($user);
-
         return $this->respondWithToken($token, $user);
-    }else{
-        return response()->json([
-    'success' => true,
-    'message' => 'Data retrieved successfully',
-    'data' => [
-        'id' => 1,
-        'name' => 'John Doe',
-        'email' => 'john@example.com',
-    ],
-     "authorization"=> [
-        "token"=> "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTk2LjE4OC4xODIuODM6MTIxMy9hcGkvbG9naW4iLCJpYXQiOjE3NDc5NzM4MjMsImV4cCI6MTc0Nzk3NzQyMywibmJmIjoxNzQ3OTczODIzLCJqdGkiOiJFZXJrMDdad042NmNsWjlDIiwic3ViIjoiMTQ3IiwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.U8l2sYu23g4Cg-ez2HmkNz0vPGyzzxEBlqzgPekiomQ"
-    ]
-], 200);
-
-    }
+    
     }
 
     protected function validateLogin(Request $request)
@@ -96,8 +81,38 @@ class AuthController extends Controller
 
         return DB::select($query, [$user->usr_id]);
     }
+     protected function respondWithToken($token, $user = null)
+    {
+        // Generate refresh token
+        $refreshToken = JWTAuth::customClaims(['exp' => now()->addDays(14)->timestamp])->fromUser($user);
 
-    protected function respondWithToken($token, $user = null)
+        // Set refresh token in HttpOnly cookie
+        Cookie::queue(
+            cookie(
+                'refresh_token',
+                $refreshToken,
+                20160, // 14 days in minutes
+                '/',
+                null,
+                false,  // set to true if using HTTPS
+                true,   // HttpOnly
+                false,
+                'None'
+            )
+        );
+
+        return response()->json([
+            'status' => 'success',
+            'user' => $user,
+            'authorization' => [
+                'token' => $token,
+                'type' => 'bearer',
+                //'expires_in' => auth('api')->factory()->getTTL() * 60,
+                'expires_in' => 1800
+            ]
+        ]);
+    }
+    protected function respondWithToken1($token, $user = null)
     {
         $refreshToken = JWTAuth::customClaims(['exp' => now()->addDays(14)->timestamp])->fromUser($user);
 
