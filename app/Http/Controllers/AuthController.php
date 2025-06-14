@@ -124,6 +124,20 @@ class AuthController extends Controller
 
     public function refreshToken()
     {
+        $token = $request->cookie('refresh_token');
+         if (!$token) {
+            return response()->json(['error' => 'Token not provided'], 401);
+        }
+        $user = JWTAuth::setToken($token)->authenticate();
+        //$newToken = JWTAuth::refresh($token);
+
+        //$user = JWTAuth::parseToken()->authenticate();
+        $newToken = auth('api')->refresh();
+
+        return $this->respondWithToken($newToken, $user);
+    }
+    public function refreshToken1()
+    {
         $user = JWTAuth::parseToken()->authenticate();
         $newToken = auth('api')->refresh();
 
