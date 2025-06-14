@@ -103,7 +103,7 @@ class AuthController extends Controller
     false,  // ✅ Secure = false for HTTP (local)
     true,   // ✅ HttpOnly = true
     false,  // raw
-    'Lax'   // ✅ SameSite = Lax to avoid Secure requirement (None+Secure → HTTPS only)
+    'none'   // ✅ SameSite = Lax to avoid Secure requirement (None+Secure → HTTPS only)
 ));
     }
     protected function respondWithToken1($token, $user = null)
