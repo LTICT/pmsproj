@@ -122,7 +122,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function refreshToken()
+    public function refreshToken(Request $request)
     {
         $token = $request->cookie('refresh_token');
          if (!$token) {
