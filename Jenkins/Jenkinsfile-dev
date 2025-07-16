@@ -110,12 +110,18 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry("${REGISTRY_URL}", "${REGISTRY_CREDENTIALS}") {
-                        // Push the versioned image
-                        docker.image("${FULL_DOCKER_IMAGE}").push()
-                        
-                        // Push again to ensure the :latest tag is also updated
-                        docker.image("${DOCKER_IMAGE}").push("${DOCKER_TAG}")
+                    try {
+                        docker.withRegistry("${REGISTRY_URL}", "${REGISTRY_CREDENTIALS}") {
+                            // Push the versioned image
+                            docker.image("${FULL_DOCKER_IMAGE}").push()
+                            
+                            // Push again to ensure the :latest tag is also updated
+                            docker.image("${DOCKER_IMAGE}").push("${DOCKER_TAG}")
+                        }
+                    } catch (err) {
+                        echo "❌ Docker image push failed!"
+                        echo "👉 Error: ${err.getMessage()}"
+                        error("Stopping build due to Docker push failure.")
                     }
                 }
             }
