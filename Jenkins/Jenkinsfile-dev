@@ -16,7 +16,7 @@ pipeline {
         
         // Environment / Ports
         ENV_FILE_PATH        = '/var/jenkins_home/pms_files/dev-backend.env'
-        PORT_EXT             = '1213'
+        PORT_EXT             = '8083'
         PORT_INT             = '1155'
         
         // Container name
