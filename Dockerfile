@@ -8,8 +8,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # ---------------------------------------------------------
 # 1. Install system packages, add PHP repo (ondrej), and install PHP 8.2 + Composer + Nginx
 # ---------------------------------------------------------
-RUN sed -i 's|http://|https://|g' /etc/apt/sources.list && \
-    apt-get update && apt-get install -y software-properties-common \
+RUN apt-get update && apt-get install -y software-properties-common \
     && add-apt-repository ppa:ondrej/php -y \
     && apt-get update && apt-get install -y \
        php8.2-fpm \
