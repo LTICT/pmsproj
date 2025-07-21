@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Docker image details
-        QA_DOCKER_IMAGE = 'otecpms/laravel-app-qa'
+        QA_DOCKER_IMAGE = 'otecpms/laravel-app-dev'
         PROD_DOCKER_IMAGE = 'otecpms/laravel-app-prod'
         REGISTRY_CREDENTIALS = 'dockerhub-credentials' // Jenkins credentials ID for Docker registry
         ENV_FILE_PATH = '/var/jenkins_home/pms_files/prod-backend.env'
