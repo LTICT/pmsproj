@@ -16,7 +16,7 @@ pipeline {
         
         // Environment / Ports
         ENV_FILE_PATH        = '/var/jenkins_home/pms_files/dev-backend.env'
-        PORT_EXT             = '1213'
+        PORT_EXT             = '8083'
         PORT_INT             = '1155'
         
         // Container name
@@ -100,7 +100,7 @@ pipeline {
                 script {
                     sh """
                         echo "Building Docker image..."
-                        docker build -t ${FULL_DOCKER_IMAGE} .
+                        docker build --network=host -t ${FULL_DOCKER_IMAGE} .
                         echo "Docker image built successfully."
                     """
                 }
@@ -110,12 +110,18 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry("${REGISTRY_URL}", "${REGISTRY_CREDENTIALS}") {
-                        // Push the versioned image
-                        docker.image("${FULL_DOCKER_IMAGE}").push()
-                        
-                        // Push again to ensure the :latest tag is also updated
-                        docker.image("${DOCKER_IMAGE}").push("${DOCKER_TAG}")
+                    try {
+                        docker.withRegistry("${REGISTRY_URL}", "${REGISTRY_CREDENTIALS}") {
+                            // Push the versioned image
+                            docker.image("${FULL_DOCKER_IMAGE}").push()
+                            
+                            // Push again to ensure the :latest tag is also updated
+                            docker.image("${DOCKER_IMAGE}").push("${DOCKER_TAG}")
+                        }
+                    } catch (err) {
+                        echo "❌ Docker image push failed!"
+                        echo "👉 Error: ${err.getMessage()}"
+                        error("Stopping build due to Docker push failure.")
                     }
                 }
             }
