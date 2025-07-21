@@ -5,6 +5,7 @@ use App\Models\Modelgensmsinformation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use App\Services\SmsSender;
 //PROPERTY OF LT ICT SOLUTION PLC
 class GensmsinformationController extends MyController
 {
@@ -203,7 +204,15 @@ public function insertgrid(Request $request)
             $requestData['smi_status']=0;
         }
         $requestData['smi_created_by']=1;
+        //START SMS
+        
         $data_info=Modelgensmsinformation::create($requestData);
+        $to = $request->get("smi_sent_to");
+        $content = $request->get("smi_sms_content");
+        $smsSender = new SmsSender();
+        $result = $smsSender->sendSms($to, $content);
+        return response()->json(['result' => $result]);
+        //END SMS
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;
         $resultObject= array(

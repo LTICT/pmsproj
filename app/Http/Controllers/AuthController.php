@@ -129,6 +129,12 @@ class AuthController extends Controller
             return response()->json(['error' => 'Token not provided'], 401);
         }
         $user = JWTAuth::setToken($token)->authenticate();
+        unset($user->email);
+        unset($user->password);
+        unset($user->usr_password);
+        $user->user_info = $this->getUserInfo($user);
+        $user->user_sector = $this->getUserSectors($user);
+        
         $newToken = JWTAuth::refresh($token);
 
         //$user = JWTAuth::parseToken()->authenticate();
