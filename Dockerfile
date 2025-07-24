@@ -80,8 +80,7 @@ RUN chown -R www-data:www-data $DEPLOY_DIR \
 # 8. Generate cached Laravel config file (config.php)
 # ---------------------------------------------------------
 RUN php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache
+    && php artisan route:cache
 
 # ---------------------------------------------------------
 # 9. Configure Nginx (assumes you have a custom site conf)
