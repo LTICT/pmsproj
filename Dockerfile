@@ -68,6 +68,7 @@ COPY .env /app/.env
 # ---------------------------------------------------------
 # 6. Install Laravel dependencies via Composer
 # ---------------------------------------------------------
+ENV COMPOSER_MEMORY_LIMIT=-1
 RUN composer install --no-interaction --prefer-dist --no-progress
 
 # ---------------------------------------------------------
