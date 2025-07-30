@@ -70,8 +70,8 @@ COPY .env /app/.env
 # ---------------------------------------------------------
 #ENV COMPOSER_MEMORY_LIMIT=-1
 #RUN composer install --no-interaction --prefer-dist --no-progress
-RUN php -d memory_limit=-1 /usr/bin/composer install --no-interaction --no-progress --prefer-dist
-
+#RUN php -d memory_limit=-1 /usr/bin/composer install --no-interaction --no-progress --prefer-dist
+RUN composer install --no-interaction --prefer-dist --no-progress --no-plugins --no-scripts --prefer-stable
 # ---------------------------------------------------------
 # 7. Set folder permissions for Laravel
 # ---------------------------------------------------------
