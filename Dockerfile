@@ -69,9 +69,16 @@ COPY .env /app/.env
 # 6. Install Laravel dependencies via Composer
 # ---------------------------------------------------------
 #ENV COMPOSER_MEMORY_LIMIT=-1
-RUN composer install --no-interaction --prefer-dist --no-progress -vvv
+#RUN composer install --no-interaction --prefer-dist --no-progress -vvv
 #RUN php -d memory_limit=-1 /usr/bin/composer install --no-interaction --no-progress --prefer-dist
 #RUN composer install --no-interaction --prefer-dist --no-progress --no-plugins --no-scripts --prefer-stable
+# 👉 Set Composer environment variables
+ENV COMPOSER_MEMORY_LIMIT=-1
+ENV COMPOSER_DISABLE_INSTALLER_PLUGINS=1
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+# Install PHP dependencies without running post-install scripts (like artisan)
+RUN composer install --no-interaction --prefer-dist --no-progress --no-scripts -vvv
 # ---------------------------------------------------------
 # 7. Set folder permissions for Laravel
 # ---------------------------------------------------------
