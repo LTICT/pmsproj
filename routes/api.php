@@ -50,6 +50,7 @@ Route::post('addressbyparent', 'Api\GenaddressstructureController@addressByParen
 Route::post('departmentbyparent', 'Api\GendepartmentController@departmentByParent');
    // Route::post('department/listgrid', [\Api\GendepartmentController::class, 'listgrid'])->middleware('apilogin');
 Route::group(['middleware' => [\App\Http\Middleware\JwtMiddleware::class,'throttle:api'], 'except' => ['api/login', 'api/register']], function () {
+    Route::post('logout', 'AuthController@logout');
     Route::post('project_document/insertgrid', 'Api\PmsprojectdocumentController@insertgrid');
     Route::resource('project', 'Api\PmsprojectController');
     Route::post('project/listgrid', 'Api\PmsprojectController@listgrid');

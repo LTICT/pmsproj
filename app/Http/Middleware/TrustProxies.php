@@ -19,4 +19,15 @@ class TrustProxies extends Middleware
     {
         $this->proxies = '*'; // Adjust this as needed
     }
+    public function handle($request, Closure $next)
+    {
+        $response = parent::handle($request, $next);
+
+        // Add XSS protection header
+        $response->headers->set('X-XSS-Protection', '1; mode=block');
+        // Optional: Add CSP as well for extra XSS protection
+        // $response->headers->set('Content-Security-Policy', "default-src 'self'");
+
+        return $response;
+    }
 }

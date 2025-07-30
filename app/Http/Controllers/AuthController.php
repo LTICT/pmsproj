@@ -12,6 +12,7 @@ use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\RateLimiter;
 
 class AuthController extends Controller
 {
@@ -23,13 +24,19 @@ class AuthController extends Controller
     /* Login API */
     public function login(Request $request)
     {
+        $email = strtolower($request->input('email'));
+        $password=$request->input('password');
+        if (RateLimiter::tooManyAttempts($email, 2)){
+            return response()->json(['status' => 'error', 'message' => 'Incorrect email/Password','retry_after_minutes'=>5], 429);
+        return redirect()->back()->withInput()->withErrors(['email' => 'Too Many login attempts. Please try after 3 minutes']);
+      }else{
         $this->validateLogin($request);
         //$credentials = $request->only('email', 'password');
         //$credentials['usr_status'] = 1;
-        $email = strtolower($request->input('email'));
-        $password=$request->input('password');
+        
       $credentials=array('email'=>$email, 'password'=>$password, 'usr_status'=>1);
         if (!$token = auth('api')->attempt($credentials)) {
+            RateLimiter::hit($email, 180);//180 is number of seconds to wait for a retry
             return response()->json(['status' => 'error', 'message' => 'Incorrect email/Password'], 401);
         }
 
@@ -40,14 +47,16 @@ class AuthController extends Controller
         unset($user->usr_password);
         $user->user_info = $this->getUserInfo($user);
         $user->user_sector = $this->getUserSectors($user);
+        RateLimiter::clear($email);
         return $this->respondWithToken($token, $user);
     
     }
 
+}
     protected function validateLogin(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email',
+            'email' => 'required|string',
             'password' => 'required|string'
         ]);
 
@@ -213,7 +222,7 @@ class AuthController extends Controller
                 'message' => 'Successfully logged out',
             ],
             'data' => [],
-        ]);
+        ])->withoutCookie('refresh_token');;
     }
     public function changePassword(Request $request)
     {
