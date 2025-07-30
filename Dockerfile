@@ -63,7 +63,7 @@ ENV DEPLOY_DIR="/var/www/dev_app_backend"
 WORKDIR $DEPLOY_DIR
 
 COPY . $DEPLOY_DIR
-COPY "/var/jenkins_home/pms_files/dev-backend.env" /app/.env
+COPY .env /app/.env
 
 # ---------------------------------------------------------
 # 6. Install Laravel dependencies via Composer
