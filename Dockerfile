@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y software-properties-common \
        php8.2-mbstring \
        php8.2-bcmath \
        php8.2-pgsql \
-       php8.2-opcache \ 
+       php8.2-opcache \
        nginx \
        git \
        curl \
