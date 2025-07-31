@@ -51,11 +51,11 @@ Route::post('departmentbyparent', 'Api\GendepartmentController@departmentByParen
    // Route::post('department/listgrid', [\Api\GendepartmentController::class, 'listgrid'])->middleware('apilogin');
 Route::group(['middleware' => [\App\Http\Middleware\JwtMiddleware::class,'throttle:api'], 'except' => ['api/login', 'api/register']], function () {
     Route::post('logout', 'AuthController@logout');
-    Route::post('project_document/insertgrid', 'Api\PmsprojectdocumentController@insertgrid');
+    Route::post('project_document/insertgrid', 'Api\PmsprojectdocumentController@insertgrid')->name('project_document.insertgrid');
     Route::resource('project', 'Api\PmsprojectController');
     Route::post('project/listgrid', 'Api\PmsprojectController@listgrid');
 Route::post('project/insertgrid', 'Api\PmsprojectController@insertgrid');
-Route::post('project/updategrid', 'Api\PmsprojectController@updategrid');
+Route::post('project/updategrid', 'Api\PmsprojectController@updategrid')->name('project_document.updategrid');
 Route::post('project/deletegrid', 'Api\PmsprojectController@deletegrid');
 Route::post('project/search', 'PmsprojectController@search');
 Route::post('project/listgridsearch', 'Api\PmsprojectController@listgridsearch');

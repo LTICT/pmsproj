@@ -9,7 +9,8 @@ public function handle($request, Closure $next)
 {
     // List of route names or controller actions to exclude
     $excludedRoutes = [
-        'ggggg',                      // Route name
+        'project_document.insertgrid',// Route name
+        'project_document.updategrid',
         'SomeController@index',       // Controller@method
     ];
 
