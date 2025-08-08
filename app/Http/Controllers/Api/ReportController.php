@@ -431,6 +431,7 @@ else if($reportType==10 ){
     if(!empty($prjlocationworedaid)){
         $query .= " AND pms_project.prj_location_woreda_id = '".$prjlocationworedaid."'"; 
     }
+    //$query =$this->getSearchParam($request,$query);
 //$query .="GROUP BY sci_id";
 //END COMMON PARAMETERS
  $data_info=DB::select($query);

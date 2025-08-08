@@ -222,16 +222,20 @@ public function updategrid(Request $request)
                         //for governmental
                         if($data_info_project->prj_owner_type == 1){
                         $status_id=$this->getLastStatus($request);
-                        if($status_id > 0){
-                            $project_data['prj_project_status_id']=$status_id;
-                            $project_data['prj_start_date_gc']=$request->input('prp_record_date_gc');
+                        if(1==1){
+                            $actualStartDate=$request->input('prp_record_date_gc');
+                            if(isset($actualStartDate) && !empty($actualStartDate)){
+                            //$project_data['prj_project_status_id']=$status_id;
+                            $project_data['prj_project_status_id']=5;
+                            $project_data['prj_start_date_gc']=$actualStartDate;
                             $data_info_project->update($project_data);
+                        }
                         }
                         //for cso
                     }else if($data_info_project->prj_owner_type ==2 ){                       
                             $project_data['prj_project_status_id']=$request->input('prp_project_status_id');
                             $project_data['prj_start_date_gc']=$request->input('prp_record_date_gc');
-                            $data_info_project->update($project_data);
+                            //$data_info_project->update($project_data);
                     }
                 }
                 //END PROJECT INFO UPDATE
@@ -327,10 +331,14 @@ public function insertgrid(Request $request)
                         //for governmental
                         if($data_info_project->prj_owner_type == 1){
                         $status_id=$this->getLastStatus($request);
-                        if($status_id > 0){
-                            $project_data['prj_project_status_id']=$status_id;
-                            $project_data['prj_start_date_gc']=$request->input('prp_record_date_gc');
+                        if(1==1){
+                            $actualStartDate=$request->input('prp_record_date_gc');
+                            if(isset($actualStartDate) && !empty($actualStartDate)){
+                            //$project_data['prj_project_status_id']=$status_id;
+                            $project_data['prj_project_status_id']=5;
+                            $project_data['prj_start_date_gc']=$actualStartDate;
                             $data_info_project->update($project_data);
+                        }
                         }
                         //for cso
                     }else if($data_info_project->prj_owner_type ==2 ){                       

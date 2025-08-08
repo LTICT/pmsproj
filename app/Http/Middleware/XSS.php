@@ -7,48 +7,42 @@ class XSS
 {
 public function handle($request, Closure $next)
 {
-    // List of route names or controller actions to exclude
+    // List of route names and controller methods to exclude
     $excludedRoutes = [
-        'project_document.insertgrid',// Route name
-        'project_document.updategrid',
-        'SomeController@index',       // Controller@method
+        'project_document.insertgrid',    // Route name
+        'project_document.updategrid',    // Route name
+        'SomeController@index',           // Controller@method
     ];
 
-    // Option 1: Check route name
-    if (in_array($request->route()?->getName(), $excludedRoutes)) {
+    // Check if route name is excluded
+    $routeName = $request->route()?->getName();
+    if (in_array($routeName, $excludedRoutes)) {
         return $next($request);
     }
 
-    // Option 2: Check controller and method
-    $action = $request->route()?->getActionName(); // e.g. App\Http\Controllers\SomeController@index
-    if (in_array(class_basename($action), $excludedRoutes)) {
+    // Check if controller@method is excluded
+    $action = $request->route()?->getActionName(); // e.g., App\Http\Controllers\SomeController@index
+    if ($action && in_array(class_basename($action), $excludedRoutes)) {
         return $next($request);
     }
 
-    // Perform XSS filtering
+    // Sanitize input to block XSS
     $input = $request->all();
 
-    foreach ($input as $key => $value) {
-        if (is_array($value)) {
-            array_walk_recursive($value, function ($v) {
-                if ($v !== strip_tags($v)) {
-                    throw new \Illuminate\Http\Exceptions\HttpResponseException(
-                        response()->json([
-                            'error' => 'Input contains disallowed HTML tags.'
-                        ], 487)
-                    );
-                }
-            });
-        } else {
-            if ($value !== strip_tags($value)) {
-                return response()->json([
+    array_walk_recursive($input, function ($value) {
+        if ((string)$value !== strip_tags((string)$value)) {
+            throw new \Illuminate\Http\Exceptions\HttpResponseException(
+                response()->json([
                     'error' => 'Input contains disallowed HTML tags.'
-                ], 487);
-            }
+                ], 487)
+            );
         }
-    }
+    });
+    // Merge sanitized input back (optional)
+    $request->merge($input);
 
     return $next($request);
 }
+
 
 }
