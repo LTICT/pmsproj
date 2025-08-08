@@ -100,7 +100,7 @@ pipeline {
                 script {
                     sh """
                         echo "Building Docker image..."
-                        docker build --network=host -t ${FULL_DOCKER_IMAGE} .
+                        DOCKER_BUILDKIT=0 docker build --network=host -t ${FULL_DOCKER_IMAGE} .
                         echo "Docker image built successfully."
                     """
                 }
@@ -173,3 +173,4 @@ pipeline {
         }
     }
 }
+
