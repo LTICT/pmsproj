@@ -130,22 +130,24 @@ $resultObject= array(
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 
-function getLastStatus($request){
-$var_1 =$request->get("prp_status_month_1");
-$var_2 = $request->get("prp_status_month_2");
-$var_3 = $request->get("prp_status_month_3");
-$var_4 = $request->get("prp_status_month_4");
-$var_5 = $request->get("prp_status_month_5");
-$var_6 = $request->get("prp_status_month_6");
-$var_7 = $request->get("prp_status_month_7");
-$var_8 = $request->get("prp_status_month_8");
-$var_9 = $request->get("prp_status_month_9");
-$var_10 = $request->get("prp_status_month_10");
+function getLastStatusold($request){
+$var_1 =$request->get("prp_status_month_11");
+$var_2 = $request->get("prp_status_month_12");
+$var_3 =$request->get("prp_status_month_1");
+$var_4 = $request->get("prp_status_month_2");
+$var_5 = $request->get("prp_status_month_3");
+$var_6 = $request->get("prp_status_month_4");
+$var_7 = $request->get("prp_status_month_5");
+$var_8 = $request->get("prp_status_month_6");
+$var_9 = $request->get("prp_status_month_7");
+$var_10 = $request->get("prp_status_month_8");
+$var_11 = $request->get("prp_status_month_9");
+$var_12 = $request->get("prp_status_month_10");
 
 $maxValue = 0;
 $maxVar = '';
 
-for ($i = 1; $i <= 10; $i++) {
+for ($i = 1; $i <= 12; $i++) {
     $varName = "var_$i";
     if ($$varName > $maxValue) {
         $maxValue = $$varName;
@@ -160,6 +162,29 @@ if ($maxValue > 0) {
     return 0;
 }
 }
+function getLastStatus($request) {
+    // Collect all 12 months into an array
+    $months = [
+        $request->get("prp_status_month_11"),
+        $request->get("prp_status_month_12"),
+        $request->get("prp_status_month_1"),
+        $request->get("prp_status_month_2"),
+        $request->get("prp_status_month_3"),
+        $request->get("prp_status_month_4"),
+        $request->get("prp_status_month_5"),
+        $request->get("prp_status_month_6"),
+        $request->get("prp_status_month_7"),
+        $request->get("prp_status_month_8"),
+        $request->get("prp_status_month_9"),
+        $request->get("prp_status_month_10"),
+    ];
+
+    // Find the max value
+    $maxValue = max($months);
+
+    return $maxValue > 0 ? $maxValue : 0;
+}
+
 public function updategrid(Request $request)
 {
     $attributeNames = [
@@ -222,14 +247,14 @@ public function updategrid(Request $request)
                         //for governmental
                         if($data_info_project->prj_owner_type == 1){
                         $status_id=$this->getLastStatus($request);
-                        if(1==1){
+                        if($status_id > 0){
                             $actualStartDate=$request->input('prp_record_date_gc');
                             if(isset($actualStartDate) && !empty($actualStartDate)){
-                            //$project_data['prj_project_status_id']=$status_id;
-                            $project_data['prj_project_status_id']=5;
                             $project_data['prj_start_date_gc']=$actualStartDate;
-                            $data_info_project->update($project_data);
-                        }
+                            }
+                            //$project_data['prj_project_status_id']=$status_id;
+                            $project_data['prj_project_status_id']=$status_id;
+                            $data_info_project->update($project_data);                        
                         }
                         //for cso
                     }else if($data_info_project->prj_owner_type ==2 ){                       
