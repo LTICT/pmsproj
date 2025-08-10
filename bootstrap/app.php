@@ -14,6 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
          $middleware->append([
             \Illuminate\Http\Middleware\HandleCors::class,
             //\App\Http\Middleware\XSS::class,
+            //\App\Http\Middleware\EncryptCookies::class,
+            
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

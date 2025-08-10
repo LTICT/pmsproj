@@ -41,7 +41,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         // Global API rate limiter
         RateLimiter::for('api', function ($request) {
-                     return Limit::perMinute(60) // Allow 60 attempts per minute
+                     return Limit::perMinute(5000) // Allow 60 attempts per minute
                 ->by($request->ip()) // Limit by IP address
                 ->response(function () {
                     return response()->json([
