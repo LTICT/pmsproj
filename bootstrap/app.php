@@ -13,7 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
          $middleware->append([
             \Illuminate\Http\Middleware\HandleCors::class,
-            //\App\Http\Middleware\XSS::class,
+            \App\Http\Middleware\XSS::class,
             //\App\Http\Middleware\EncryptCookies::class,
             
         ]);

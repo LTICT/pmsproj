@@ -9,9 +9,11 @@ public function handle($request, Closure $next)
 {
     // List of route names and controller methods to exclude
     $excludedRoutes = [
-        'project_document.insertgrid',    // Route name
-        'project_document.updategrid',    // Route name
-        'SomeController@index',           // Controller@method
+        //'project_monitoring_evaluation.insertgrid',    // Route name
+        //'project_monitoring_evaluation.updategrid',    // Route name
+        'PmsprojectmonitoringevaluationController@listgrid',           // Controller@method
+        'PmsprojectmonitoringevaluationController@insertgrid',           // Controller@method
+        'PmsprojectmonitoringevaluationController@updategrid',           // Controller@method
     ];
 
     // Check if route name is excluded
