@@ -16,10 +16,13 @@ class PmsbudgetrequestapprovalController extends MyController
 
 public function show(Request $request,$id)
     {
-        $query='SELECT bdr_id,bdr_budget_year_id,bdr_requested_amount,
+        $query='SELECT prs_status_name_en AS request_type,rqs_name_en AS status_name, bdy_name as budget_year,bdr_id,bdr_budget_year_id,bdr_requested_amount,
     bdr_released_amount,bdr_project_id,bdr_requested_date_ec,bdr_requested_date_gc,
     bdr_released_date_ec,bdr_released_date_gc,bdr_description,bdr_create_time,
-    bdr_update_time,bdr_delete_time,bdr_created_by,bdr_status,bdr_request_status,bdr_action_remark,bdr_request_category_id,bdr_request_type,bdr_physical_baseline,bdr_financial_baseline,bdr_physical_planned,bdr_physical_approved,bdr_physical_recommended,bdr_financial_recommended FROM pms_budget_request ';       
+    bdr_update_time,bdr_delete_time,bdr_created_by,bdr_status,bdr_request_status,bdr_action_remark,bdr_request_category_id,bdr_request_type,bdr_physical_baseline,bdr_financial_baseline,bdr_physical_planned,bdr_physical_approved,bdr_physical_recommended,bdr_financial_recommended FROM pms_budget_request '; 
+    $query .= ' INNER JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_budget_request.bdr_budget_year_id
+     LEFT JOIN gen_request_status ON gen_request_status.rqs_id=pms_budget_request.bdr_request_status 
+     LEFT JOIN pms_project_status ON pms_project_status.prs_id=pms_budget_request.bdr_request_type';
         $query .=" WHERE bdr_id=".$id." ";
         $data_info=DB::select($query);
         if(isset($data_info) && !empty($data_info)){
