@@ -14,6 +14,27 @@ class PmsbudgetrequestapprovalController extends MyController
     //$this->middleware('auth');
 }
 
+public function show(Request $request,$id)
+    {
+        $query='SELECT bdr_id,bdr_budget_year_id,bdr_requested_amount,
+    bdr_released_amount,bdr_project_id,bdr_requested_date_ec,bdr_requested_date_gc,
+    bdr_released_date_ec,bdr_released_date_gc,bdr_description,bdr_create_time,
+    bdr_update_time,bdr_delete_time,bdr_created_by,bdr_status,bdr_request_status,bdr_action_remark,bdr_request_category_id,bdr_request_type,bdr_physical_baseline,bdr_financial_baseline,bdr_physical_planned,bdr_physical_approved,bdr_physical_recommended,bdr_financial_recommended FROM pms_budget_request ';       
+        $query .=" WHERE bdr_id=".$id." ";
+        $data_info=DB::select($query);
+        if(isset($data_info) && !empty($data_info)){
+            $data=$data_info[0];
+            $resultObject= array(
+                "data" =>$data,
+                "data_available"=>"1",);
+            return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
+        }else{
+            $resultObject= array(
+                "data_available"=>"0");
+            return response()->json($resultObject,404, [], JSON_NUMERIC_CHECK);
+        }
+    }
+
     public function listgrid(Request $request){
     $userInfo=$this->getUserInfo($request);
     //dd($userInfo);
