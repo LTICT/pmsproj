@@ -16,7 +16,7 @@ class GendepartmentController extends MyController
 }
 
 public function departmentByParent(Request $request){
-   $query='SELECT dep_id AS id,dep_name_or AS name,dep_parent_id AS rootId,0 AS selected, dep_category AS dep_category FROM gen_department ';
+   $query='SELECT dep_id AS id,dep_name_or AS name,dep_name_am, dep_name_en, dep_parent_id AS rootId,0 AS selected, dep_category AS dep_category FROM gen_department ';
    $query .=' WHERE 1=1';
    $departmentparentid=$request->input('parent_id');
    if(isset($departmentparentid) && isset($departmentparentid)){
