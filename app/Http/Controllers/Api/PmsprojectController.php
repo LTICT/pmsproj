@@ -23,7 +23,7 @@ class PmsprojectController extends MyController
      */
     public function show(Request $request,$id)
     {
-        $query='SELECT prj_end_date_actual_gc, prj_parent_id,prj_object_type_id,owner_zone.add_name_or AS zone_owner,
+        $query='SELECT prj_measured_figure,prj_measurement_unit, prj_end_date_actual_gc, prj_parent_id,prj_object_type_id,owner_zone.add_name_or AS zone_owner,
         owner_woreda.add_name_or AS woreda_owner,
         location_zone.add_name_or AS zone_location,
         location_woreda.add_name_or AS woreda_location,
