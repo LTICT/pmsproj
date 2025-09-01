@@ -25,7 +25,7 @@ class Modelpmsimplementingarea extends Model
      *
      * @var array
      */
-    protected $fillable = ['pia_id','pia_project_id','pia_region_id','pia_zone_id_id','pia_woreda_id','pia_sector_id','pia_budget_amount','pia_site','pia_geo_location','pia_description','pia_create_time','pia_update_time','pia_delete_time','pia_created_by','pia_status',];
+    protected $fillable = ['pia_id','pia_project_id','pia_region_id','pia_zone_id_id','pia_woreda_id','pia_sector_id','pia_budget_amount','pia_site','pia_geo_location','pia_description','pia_create_time','pia_update_time','pia_delete_time','pia_created_by','pia_status','pia_is_other_region'];
 
     
 

@@ -25,7 +25,7 @@ class Modelpmsprojectcomponent extends Model
      *
      * @var array
      */
-    protected $fillable = ['pcm_id','pcm_project_id','pcm_component_name','pcm_unit_measurement','pcm_amount','pcm_description','pcm_create_time','pcm_update_time','pcm_delete_time','pcm_created_by','pcm_status',];
+    protected $fillable = ['pcm_id','pcm_project_id','pcm_component_name','pcm_unit_measurement','pcm_amount','pcm_description','pcm_create_time','pcm_update_time','pcm_delete_time','pcm_created_by','pcm_status','pcm_budget_amount'];
 
     
 

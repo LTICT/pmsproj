@@ -37,7 +37,7 @@ class PmsprojectcomponentController extends MyController
     //Get List
     public function listgrid(Request $request){
     
-     $query="SELECT pcm_id,pcm_project_id,pcm_component_name,pcm_unit_measurement,pcm_amount,pcm_description,pcm_create_time,pcm_update_time,pcm_delete_time,pcm_created_by,pcm_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_component 
+     $query="SELECT pcm_budget_amount,pcm_id,pcm_project_id,pcm_component_name,pcm_unit_measurement,pcm_amount,pcm_description,pcm_create_time,pcm_update_time,pcm_delete_time,pcm_created_by,pcm_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_component 
      INNER JOIN pms_project ON pms_project.prj_id=pms_project_component.pcm_project_id";
      
      $query .=' WHERE 1=1';

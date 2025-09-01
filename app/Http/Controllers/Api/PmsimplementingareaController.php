@@ -37,7 +37,7 @@ class PmsimplementingareaController extends MyController
     //Get List
     public function listgrid(Request $request){
     
-     $query="SELECT pia_id,pia_project_id,pia_region_id,pia_zone_id_id,pia_woreda_id,pia_sector_id,pia_budget_amount,pia_site,pia_geo_location,pia_description,pia_create_time,pia_update_time,pia_delete_time,pia_created_by,pia_status,1 AS is_editable, 1 AS is_deletable FROM pms_implementing_area ";
+     $query="SELECT pia_is_other_region,pia_id,pia_project_id,pia_region_id,pia_zone_id_id,pia_woreda_id,pia_sector_id,pia_budget_amount,pia_site,pia_geo_location,pia_description,pia_create_time,pia_update_time,pia_delete_time,pia_created_by,pia_status,1 AS is_editable, 1 AS is_deletable FROM pms_implementing_area ";
      $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_implementing_area.pia_project_id';
      $query .=' WHERE 1=1';
      $piaid=$request->input('pia_id');
