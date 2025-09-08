@@ -35,8 +35,14 @@ class PmspaymentcategoryController extends MyController
         $data['page_title']=trans("form_lang.pms_payment_category");
         return view('payment_category.show_pms_payment_category', $data);
     }
+    
     //Get List
     public function listgrid(Request $request){
+    $canListData=$this->getSinglePagePermission($request,45,'list',"");
+    if(!$canListData){
+        return $this->cannotOperate("list");
+    }
+
      $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
      $permissionData=$this->getPagePermission($request,45);
       if(isset($permissionData) && !empty($permissionData)){
@@ -93,7 +99,12 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 //Update Data
 public function updategrid(Request $request)
-{
+{   
+    $id=$request->get("pyc_id");
+    $canEditData=$this->getSinglePagePermission($request,45,'update',$id);
+    if(!$canEditData){
+        return $this->cannotOperate("update");
+    }
     $attributeNames = [
         'pyc_name_or'=> trans('form_lang.pyc_name_or'), 
 'pyc_name_am'=> trans('form_lang.pyc_name_am'), 
@@ -102,24 +113,26 @@ public function updategrid(Request $request)
 'pyc_status'=> trans('form_lang.pyc_status'), 
     ];
     $rules= [
-'pyc_name_or'=> 'required|max:200', 
-'pyc_name_am'=> 'required|max:200', 
-'pyc_name_en'=> 'required|max:200', 
+'pyc_name_or'=> 'required|max:15', 
+'pyc_name_am'=> 'required|max:15', 
+'pyc_name_en'=> 'required|max:15', 
 'pyc_description'=> 'max:425'
     ];
-$validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update");
+$validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update", $id);
 if ($validationResult !== false) {
     return $validationResult;
 }
     try{
-        $id=$request->get("pyc_id");
-        $requestData = $request->all();
+        $requestData = $request->all();        
         if(isset($id) && !empty($id)){
-            $data_info = Modelpmspaymentcategory::findOrFail($id);
+            $data_info = Modelpmspaymentcategory::find($id);
+            if(!isset($data_info) || empty($data_info)){
+             return $this->handleUpdateDataException();
+            }
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
-                Cache::forget('payment_category');
+                //Cache::forget('payment_category');
                $resultObject= array(
                 "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
@@ -147,6 +160,10 @@ if ($validationResult !== false) {
 //Insert Data
 public function insertgrid(Request $request)
 {
+    $canAddData=$this->getSinglePagePermission($request,45,'save',"");
+    if(!$canAddData){
+        return $this->cannotOperate("save");
+    }
 $attributeNames = [
     'pyc_name_or' => trans('form_lang.pyc_name_or'), 
     'pyc_name_am' => trans('form_lang.pyc_name_am'), 
@@ -154,11 +171,10 @@ $attributeNames = [
     'pyc_description' => trans('form_lang.pyc_description'), 
     'pyc_status' => trans('form_lang.pyc_status'),
 ];
-
 $rules = [
-    'pyc_name_or' => 'required|max:200', 
-    'pyc_name_am' => 'max:200', 
-    'pyc_name_en' => 'max:200', 
+    'pyc_name_or' => 'required|max:15', 
+    'pyc_name_am' => 'required|max:15', 
+    'pyc_name_en' => 'required|max:15', 
     'pyc_description' => 'max:425',
 ];
 $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "save");
@@ -171,7 +187,7 @@ try {
     $requestData['pyc_created_by'] = 1;
     //dd($requestData); 
     $data_info = Modelpmspaymentcategory::create($requestData);
-    Cache::forget('payment_category');    
+    //Cache::forget('payment_category');    
     $data_info['is_editable'] = 1;
     $data_info['is_deletable'] = 1;    
     return response()->json([

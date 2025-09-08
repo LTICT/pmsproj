@@ -37,6 +37,10 @@ class PmsprograminfoController extends MyController
     }
     //Get List
     public function listgrid(Request $request){
+         $canListData=$this->getSinglePagePermission($request,74,'list',"");
+    if(!$canListData){
+        return $this->cannotOperate("list");
+    }
      $query="SELECT pri_id,pri_owner_region_id,pri_owner_zone_id,pri_owner_woreda_id,pri_sector_id,pri_name_or,pri_name_am,pri_name_en,pri_program_code,pri_description,pri_create_time,pri_update_time,pri_delete_time,pri_created_by,pri_status,1 AS is_editable, 1 AS is_deletable FROM pms_program_info ";
 
 $query .=' WHERE 1=1';
@@ -71,6 +75,11 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 //Update Data
 public function updategrid(Request $request)
 {
+     $id=$request->get("pri_id");
+    $canEditData=$this->getSinglePagePermission($request,74,'update',$id);
+    if(!$canEditData){
+        return $this->cannotOperate("update");
+    }
     $attributeNames = [
         'pri_owner_region_id'=> trans('form_lang.pri_owner_region_id'), 
 'pri_owner_zone_id'=> trans('form_lang.pri_owner_zone_id'), 
@@ -96,12 +105,12 @@ public function updategrid(Request $request)
 'pri_description'=> 'max:425'
 
     ];
-   $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update");
+   $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update", $id);
 if ($validationResult !== false) {
     return $validationResult;
 }
     try{
-        $id=$request->get("pri_id");
+        
         $requestData = $request->all();            
         $status= $request->input('pri_status');
         if($status=="true"){
@@ -110,7 +119,10 @@ if ($validationResult !== false) {
             $requestData['pri_status']=0;
         }
         if(isset($id) && !empty($id)){
-            $data_info = Modelpmsprograminfo::findOrFail($id);
+            $data_info = Modelpmsprograminfo::find($id);
+            if(!isset($data_info) || empty($data_info)){
+             return $this->handleUpdateDataException();
+            }
             //$requestData['pri_parent_id']=$request->get('parent_id');
             $requestData['pri_object_type_id']=$request->get('object_type_id');
             $data_info->update($requestData);
@@ -157,6 +169,10 @@ if ($validationResult !== false) {
 //Insert Data
 public function insertgrid(Request $request)
 {
+    $canAddData=$this->getSinglePagePermission($request,74,'save',"");
+    if(!$canAddData){
+        return $this->cannotOperate("save");
+    }
     $attributeNames = [
         'pri_owner_region_id'=> trans('form_lang.pri_owner_region_id'), 
 'pri_owner_zone_id'=> trans('form_lang.pri_owner_zone_id'), 

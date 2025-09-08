@@ -14,6 +14,11 @@ class PmsprojectpaymentController extends MyController
     //$this->middleware('auth');
 }
     public function listgrid(Request $request){
+        $canListData=$this->getSinglePagePermission($request,26,'list',"");
+    if(!$canListData){
+        return $this->cannotOperate("list");
+    }
+
      $query='SELECT prp_budget_year_id,pyc_name_or AS payment_category, prj_name,prj_code,prp_id,prp_project_id,prp_type,prp_payment_date_et,prp_payment_date_gc,prp_payment_amount,prp_payment_percentage,prp_description,prp_create_time,prp_update_time,prp_delete_time,prp_created_by,prp_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_payment 
      INNER JOIN pms_project ON pms_project.prj_id=pms_project_payment.prp_project_id
      LEFT JOIN pms_payment_category ON pms_payment_category.pyc_id=pms_project_payment.prp_project_id';
@@ -59,7 +64,12 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
 {
-    $attributeNames = [
+$id=$request->get("prp_id");
+    $canEditData=$this->getSinglePagePermission($request,26,'update',$id);
+    if(!$canEditData){
+        return $this->cannotOperate("update");
+    }
+$attributeNames = [
         'prp_project_id'=> trans('form_lang.prp_project_id'), 
 'prp_type'=> trans('form_lang.prp_type'), 
 'prp_payment_date_et'=> trans('form_lang.prp_payment_date_et'), 
@@ -80,20 +90,11 @@ public function updategrid(Request $request)
 //'prp_status'=> 'integer', 
 
     ];
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if($validator->fails()) {
-        $errorString = implode(",",$validator->messages()->all());
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>"",
-            "statusCode"=>"error",
-            "type"=>"update",
-            "errorMsg"=>$errorString
-        );
-        return response()->json($resultObject);
-    }else{
-        $id=$request->get("prp_id");
+   $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update", $id);
+if ($validationResult !== false) {
+    return $validationResult;
+}
+    try{
         $requestData = $request->all();            
         $status= $request->input('prp_status');
         if($status=="true"){
@@ -102,7 +103,10 @@ public function updategrid(Request $request)
             $requestData['prp_status']=0;
         }
         if(isset($id) && !empty($id)){
-            $data_info = Modelpmsprojectpayment::findOrFail($id);
+            $data_info = Modelpmsprojectpayment::find($id);
+            if(!isset($data_info) || empty($data_info)){
+             return $this->handleUpdateDataException();
+            }
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
@@ -137,12 +141,18 @@ public function updategrid(Request $request)
             "type"=>"save",
             "errorMsg"=>""
         );
-        return response()->json($resultObject);
-    }
+       return response()->json($resultObject);
+    }       
+}catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"update");
 }
 }
 public function insertgrid(Request $request)
 {
+    $canAddData=$this->getSinglePagePermission($request,26,'save',"");
+    if(!$canAddData){
+        return $this->cannotOperate("save");
+    }
     $attributeNames = [
         'prp_project_id'=> trans('form_lang.prp_project_id'), 
 'prp_type'=> trans('form_lang.prp_type'), 
@@ -164,19 +174,11 @@ public function insertgrid(Request $request)
 //'prp_status'=> 'integer', 
 
     ];
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if($validator->fails()) {
-        $errorString = implode(",",$validator->messages()->all());
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>"",
-            "statusCode"=>"error",
-            "type"=>"update",
-            "errorMsg"=>$errorString
-        );
-        return response()->json($resultObject);
-    }else{
+    $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "save");
+if ($validationResult !== false) {
+    return $validationResult;
+}
+try {
         $requestData = $request->all();
         //$requestData['prp_created_by']=auth()->user()->usr_Id;
         $requestData['prp_created_by']=1;
@@ -189,15 +191,19 @@ public function insertgrid(Request $request)
         $data_info=Modelpmsprojectpayment::create($requestData);
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;
-        $resultObject= array(
-            "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "status_code"=>200,
-            "type"=>"save",
-            "errorMsg"=>""
-        );
-    }  
-    return response()->json($resultObject);
+        return response()->json([
+        "data" => $data_info,
+        "previledge" => [
+            'is_role_editable' => 1,
+            'is_role_deletable' => 1
+        ],
+        "status_code" => 200,
+        "type" => "save",
+        "errorMsg" => ""
+    ]);
+}catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"save");
+}
 }
 public function deletegrid(Request $request)
 {

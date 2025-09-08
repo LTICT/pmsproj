@@ -15,6 +15,10 @@ class PmsbudgetsourceController extends MyController
 }
  
     public function listgrid(Request $request){
+        $canListData=$this->getSinglePagePermission($request,13,'list',"");
+    if(!$canListData){
+        return $this->cannotOperate("list");
+    }
         $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
      $permissionData=$this->getPagePermission($request,13);
      //dd($permissionData);
@@ -55,6 +59,11 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
 {
+    $id=$request->get("pbs_id");
+    $canEditData=$this->getSinglePagePermission($request,13,'update',$id);
+    if(!$canEditData){
+        return $this->cannotOperate("update");
+    }
     $attributeNames = [
         'pbs_name_or'=> trans('form_lang.pbs_name_or'), 
 'pbs_name_am'=> trans('form_lang.pbs_name_am'), 
@@ -73,21 +82,11 @@ public function updategrid(Request $request)
 //'pbs_status'=> 'integer', 
 
     ];
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if($validator->fails()) {
-        $errorString = implode(",",$validator->messages()->all());
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>"",
-            "statusCode"=>"error",
-            "type"=>"update",
-            "errorMsg"=>$errorString
-        );
-        return response()->json($resultObject);
-    }else{
-        $id=$request->get("pbs_id");
-        //$requestData['foreign_field_name']=$request->get('master_id');
+    $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update", $id);
+if ($validationResult !== false) {
+    return $validationResult;
+}
+    try{
             //assign data from of foreign key
         $requestData = $request->all();            
         $status= $request->input('pbs_status');
@@ -98,6 +97,9 @@ public function updategrid(Request $request)
         }
         if(isset($id) && !empty($id)){
             $data_info = Modelpmsbudgetsource::findOrFail($id);
+            if(!isset($data_info) || empty($data_info)){
+             return $this->handleUpdateDataException();
+            }
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
@@ -133,11 +135,17 @@ public function updategrid(Request $request)
             "errorMsg"=>""
         );
         return response()->json($resultObject);
-    }        
+   }       
+}catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"update");
 }
 }
 public function insertgrid(Request $request)
 {
+     $canAddData=$this->getSinglePagePermission($request,13,'save',"");
+    if(!$canAddData){
+        return $this->cannotOperate("save");
+    }
     $attributeNames = [
         'pbs_name_or'=> trans('form_lang.pbs_name_or'), 
 'pbs_name_am'=> trans('form_lang.pbs_name_am'), 
@@ -156,19 +164,11 @@ public function insertgrid(Request $request)
 //'pbs_status'=> 'integer', 
 
     ];
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if($validator->fails()) {
-        $errorString = implode(",",$validator->messages()->all());
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>"",
-            "statusCode"=>"error",
-            "type"=>"update",
-            "errorMsg"=>$errorString
-        );
-        return response()->json($resultObject);
-    }else{
+    $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "save");
+if ($validationResult !== false) {
+    return $validationResult;
+}
+try {
         $requestData = $request->all();
         $requestData['pbs_created_by']=auth()->user()->usr_id;
         $status= $request->input('pbs_status');
@@ -180,15 +180,19 @@ public function insertgrid(Request $request)
         $data_info=Modelpmsbudgetsource::create($requestData);
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;
-        $resultObject= array(
-            "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "status_code"=>200,
-            "type"=>"save",
-            "errorMsg"=>""
-        );
-    }  
-    return response()->json($resultObject);
+        return response()->json([
+        "data" => $data_info,
+        "previledge" => [
+            'is_role_editable' => 1,
+            'is_role_deletable' => 1
+        ],
+        "status_code" => 200,
+        "type" => "save",
+        "errorMsg" => ""
+    ]);
+}catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"save");
+}
 }
 public function deletegrid(Request $request)
 {

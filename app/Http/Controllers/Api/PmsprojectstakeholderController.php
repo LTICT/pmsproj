@@ -37,6 +37,10 @@ class PmsprojectstakeholderController extends MyController
     }
 
     public function listgrid(Request $request){
+        $canListData=$this->getSinglePagePermission($request,53,'list',"");
+    if(!$canListData){
+        return $this->cannotOperate("list");
+    }
      $query='SELECT  prj_name,prj_code,psh_id,psh_project_id,psh_name,pms_stakeholder_type.sht_type_name_or AS psh_stakeholder_type,psh_representative_name,psh_representative_phone,psh_role,psh_description,psh_create_time,psh_update_time,psh_delete_time,psh_created_by,psh_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_stakeholder ';       
      $query .= ' INNER JOIN pms_stakeholder_type ON pms_project_stakeholder.psh_stakeholder_type = pms_stakeholder_type.sht_id'; 
 $query .= ' INNER JOIN pms_project ON pms_project.prj_id=pms_project_stakeholder.psh_project_id';
@@ -93,6 +97,11 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
 {
+    $id=$request->get("psh_id");
+    $canEditData=$this->getSinglePagePermission($request,53,'update',$id);
+    if(!$canEditData){
+        return $this->cannotOperate("update");
+    }
     $attributeNames = [
         'psh_project_id'=> trans('form_lang.psh_project_id'), 
 'psh_name'=> trans('form_lang.psh_name'), 
@@ -114,20 +123,11 @@ public function updategrid(Request $request)
 //'psh_status'=> 'integer', 
 
     ];
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if($validator->fails()) {
-        $errorString = implode(",",$validator->messages()->all());
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>"",
-            "statusCode"=>"error",
-            "type"=>"update",
-            "errorMsg"=>$errorString
-        );
-        return response()->json($resultObject);
-    }else{
-        $id=$request->get("psh_id");
+    $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update", $id);
+if ($validationResult !== false) {
+    return $validationResult;
+}
+    try{
         //$requestData['foreign_field_name']=$request->get('master_id');
             //assign data from of foreign key
         $requestData = $request->all();            
@@ -138,7 +138,10 @@ public function updategrid(Request $request)
             $requestData['psh_status']=0;
         }
         if(isset($id) && !empty($id)){
-            $data_info = Modelpmsprojectstakeholder::findOrFail($id);
+            $data_info = Modelpmsprojectstakeholder::find($id);
+            if(!isset($data_info) || empty($data_info)){
+             return $this->handleUpdateDataException();
+            }
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
@@ -174,11 +177,17 @@ public function updategrid(Request $request)
             "errorMsg"=>""
         );
         return response()->json($resultObject);
-    }        
+    }       
+}catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"update");
 }
 }
 public function insertgrid(Request $request)
 {
+     $canAddData=$this->getSinglePagePermission($request,53,'save',"");
+    if(!$canAddData){
+        return $this->cannotOperate("save");
+    }
     $attributeNames = [
         'psh_project_id'=> trans('form_lang.psh_project_id'), 
 'psh_name'=> trans('form_lang.psh_name'), 
@@ -200,19 +209,11 @@ public function insertgrid(Request $request)
 //'psh_status'=> 'integer', 
 
     ];
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if($validator->fails()) {
-        $errorString = implode(",",$validator->messages()->all());
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>"",
-            "statusCode"=>"error",
-            "type"=>"update",
-            "errorMsg"=>$errorString
-        );
-        return response()->json($resultObject);
-    }else{
+    $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "save");
+if ($validationResult !== false) {
+    return $validationResult;
+}
+try {
         $requestData = $request->all();
         //$requestData['psh_created_by']=auth()->user()->usr_Id;
         $requestData['psh_created_by']=1;
@@ -225,15 +226,19 @@ public function insertgrid(Request $request)
         $data_info=Modelpmsprojectstakeholder::create($requestData);
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;
-        $resultObject= array(
-            "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "status_code"=>200,
-            "type"=>"save",
-            "errorMsg"=>""
-        );
-    }  
-    return response()->json($resultObject);
+        return response()->json([
+        "data" => $data_info,
+        "previledge" => [
+            'is_role_editable' => 1,
+            'is_role_deletable' => 1
+        ],
+        "status_code" => 200,
+        "type" => "save",
+        "errorMsg" => ""
+    ]);
+}catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"save");
+}
 }
 public function deletegrid(Request $request)
 {

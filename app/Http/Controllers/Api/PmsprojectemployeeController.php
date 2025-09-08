@@ -15,6 +15,10 @@ class PmsprojectemployeeController extends MyController
 }
  
     public function listgrid(Request $request){
+        $canListData=$this->getSinglePagePermission($request,43,'list',"");
+    if(!$canListData){
+        return $this->cannotOperate("list");
+    }
      $query='SELECT emp_nationality,emp_sex,prj_name,prj_code,emp_id,emp_id_no,emp_full_name,emp_email,emp_phone_num,emp_role,emp_project_id,emp_start_date_ec,emp_start_date_gc,emp_end_date_ec,emp_end_date_gc,emp_address,emp_description,emp_create_time,emp_update_time,emp_delete_time,emp_created_by,emp_current_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_employee ';       
      
 $query .=' INNER JOIN pms_project ON pms_project.prj_id=pms_project_employee.emp_project_id';
@@ -95,6 +99,11 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
 {
+    $id=$request->get("emp_id");
+    $canEditData=$this->getSinglePagePermission($request,43,'update',$id);
+    if(!$canEditData){
+        return $this->cannotOperate("update");
+    }
     $attributeNames = [
         'emp_id_no'=> trans('form_lang.emp_id_no'), 
 'emp_full_name'=> trans('form_lang.emp_full_name'), 
@@ -124,22 +133,11 @@ public function updategrid(Request $request)
 'emp_description'=> 'max:425', 
 
     ];
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if($validator->fails()) {
-        $errorString = implode(",",$validator->messages()->all());
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>"",
-            "statusCode"=>"error",
-            "type"=>"update",
-            "errorMsg"=>$errorString
-        );
-        return response()->json($resultObject);
-    }else{
-        $id=$request->get("emp_id");
-        //$requestData['foreign_field_name']=$request->get('master_id');
-            //assign data from of foreign key
+    $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update", $id);
+if ($validationResult !== false) {
+    return $validationResult;
+}
+    try{
         $requestData = $request->all();            
         $status= $request->input('emp_status');
         if($status=="true"){
@@ -148,7 +146,10 @@ public function updategrid(Request $request)
             $requestData['emp_status']=0;
         }
         if(isset($id) && !empty($id)){
-            $data_info = Modelpmsprojectemployee::findOrFail($id);
+            $data_info = Modelpmsprojectemployee::find($id);
+             if(!isset($data_info) || empty($data_info)){
+             return $this->handleUpdateDataException();
+            }
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
@@ -171,24 +172,17 @@ public function updategrid(Request $request)
             );
         }
         return response()->json($resultObject);
-    }else{
-        //Parent Id Assigment
-        //$requestData['ins_vehicle_id']=$request->get('master_id');
-        //$requestData['emp_created_by']=auth()->user()->usr_Id;
-        $data_info=Modelpmsprojectemployee::create($requestData);
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>$data_info,
-            "statusCode"=>200,
-            "type"=>"save",
-            "errorMsg"=>""
-        );
-        return response()->json($resultObject);
-    }        
+    }       
+}catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"update");
 }
 }
 public function insertgrid(Request $request)
 {
+    $canAddData=$this->getSinglePagePermission($request,43,'save',"");
+    if(!$canAddData){
+        return $this->cannotOperate("save");
+    }
     $attributeNames = [
         'emp_id_no'=> trans('form_lang.emp_id_no'), 
 'emp_full_name'=> trans('form_lang.emp_full_name'), 
@@ -216,19 +210,11 @@ public function insertgrid(Request $request)
 'emp_address'=> 'max:50', 
 'emp_description'=> 'max:425', 
     ];
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if($validator->fails()) {
-        $errorString = implode(",",$validator->messages()->all());
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>"",
-            "statusCode"=>"error",
-            "type"=>"update",
-            "errorMsg"=>$errorString
-        );
-        return response()->json($resultObject);
-    }else{
+    $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "save");
+if ($validationResult !== false) {
+    return $validationResult;
+}
+try {
         $requestData = $request->all();
         //$requestData['emp_created_by']=auth()->user()->usr_Id;
         $status= $request->input('emp_status');
@@ -238,17 +224,21 @@ public function insertgrid(Request $request)
             $requestData['emp_status']=0;
         }
         $data_info=Modelpmsprojectemployee::create($requestData);
-        $data_info['is_editable']=1;
-        $data_info['is_deletable']=1;
-        $resultObject= array(
-            "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "status_code"=>200,
-            "type"=>"save",
-            "errorMsg"=>""
-        );
-    }  
-    return response()->json($resultObject);
+        $data_info['is_editable'] = 1;
+    $data_info['is_deletable'] = 1;    
+    return response()->json([
+        "data" => $data_info,
+        "previledge" => [
+            'is_role_editable' => 1,
+            'is_role_deletable' => 1
+        ],
+        "status_code" => 200,
+        "type" => "save",
+        "errorMsg" => ""
+    ]);
+}catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"save");
+}
 }
 public function deletegrid(Request $request)
 {

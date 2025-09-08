@@ -36,7 +36,10 @@ class PmsprojectcomponentController extends MyController
     }
     //Get List
     public function listgrid(Request $request){
-    
+    $canListData=$this->getSinglePagePermission($request,75,'list',"");
+    if(!$canListData){
+        return $this->cannotOperate("list");
+    }
      $query="SELECT pcm_budget_amount,pcm_id,pcm_project_id,pcm_component_name,pcm_unit_measurement,pcm_amount,pcm_description,pcm_create_time,pcm_update_time,pcm_delete_time,pcm_created_by,pcm_status,1 AS is_editable, 1 AS is_deletable FROM pms_project_component 
      INNER JOIN pms_project ON pms_project.prj_id=pms_project_component.pcm_project_id";
      
@@ -103,7 +106,12 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 //Update Data
 public function updategrid(Request $request)
 {
-    $attributeNames = [
+$id=$request->get("pcm_id");
+    $canEditData=$this->getSinglePagePermission($request,75,'update',$id);
+    if(!$canEditData){
+        return $this->cannotOperate("update");
+    }
+$attributeNames = [
         'pcm_project_id'=> trans('form_lang.pcm_project_id'), 
 'pcm_component_name'=> trans('form_lang.pcm_component_name'), 
 'pcm_unit_measurement'=> trans('form_lang.pcm_unit_measurement'), 
@@ -121,20 +129,11 @@ public function updategrid(Request $request)
 'pcm_status'=> 'integer', 
 
     ];
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if($validator->fails()) {
-        $errorString = implode(",",$validator->messages()->all());
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>"",
-            "statusCode"=>"error",
-            "type"=>"update",
-            "errorMsg"=>$errorString
-        );
-        return response()->json($resultObject);
-    }else{
-        $id=$request->get("pcm_id");
+    $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update", $id);
+if ($validationResult !== false) {
+    return $validationResult;
+}
+    try{
         $requestData = $request->all();            
         $status= $request->input('pcm_status');
         if($status=="true"){
@@ -143,7 +142,10 @@ public function updategrid(Request $request)
             $requestData['pcm_status']=0;
         }
         if(isset($id) && !empty($id)){
-            $data_info = Modelpmsprojectcomponent::findOrFail($id);
+            $data_info = Modelpmsprojectcomponent::find($id);
+            if(!isset($data_info) || empty($data_info)){
+             return $this->handleUpdateDataException();
+            }
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
@@ -177,13 +179,19 @@ public function updategrid(Request $request)
             "type"=>"save",
             "errorMsg"=>""
         );
-        return response()->json($resultObject);
-    }        
+       return response()->json($resultObject);
+    }       
+}catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"update");
 }
 }
 //Insert Data
 public function insertgrid(Request $request)
 {
+    $canAddData=$this->getSinglePagePermission($request,75,'save',"");
+    if(!$canAddData){
+        return $this->cannotOperate("save");
+    }
     $attributeNames = [
         'pcm_project_id'=> trans('form_lang.pcm_project_id'), 
 'pcm_component_name'=> trans('form_lang.pcm_component_name'), 
@@ -202,19 +210,11 @@ public function insertgrid(Request $request)
 'pcm_status'=> 'integer', 
 
     ];
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if($validator->fails()) {
-        $errorString = implode(",",$validator->messages()->all());
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>"",
-            "statusCode"=>"error",
-            "type"=>"update",
-            "errorMsg"=>$errorString
-        );
-        return response()->json($resultObject);
-    }else{
+    $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "save");
+if ($validationResult !== false) {
+    return $validationResult;
+}
+try {
         $requestData = $request->all();
         //$requestData['pcm_created_by']=auth()->user()->usr_Id;
         $status= $request->input('pcm_status');
@@ -225,15 +225,21 @@ public function insertgrid(Request $request)
         }
         $requestData['pcm_created_by']=1;
         $data_info=Modelpmsprojectcomponent::create($requestData);
-        $resultObject= array(
-            "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "status_code"=>200,
-            "type"=>"save",
-            "errorMsg"=>""
-        );
-    }  
-    return response()->json($resultObject);
+         $data_info['is_editable'] = 1;
+    $data_info['is_deletable'] = 1;    
+    return response()->json([
+        "data" => $data_info,
+        "previledge" => [
+            'is_role_editable' => 1,
+            'is_role_deletable' => 1
+        ],
+        "status_code" => 200,
+        "type" => "save",
+        "errorMsg" => ""
+    ]);
+}catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"save");
+}
 }
 //Delete Data
 public function deletegrid(Request $request)

@@ -24,7 +24,17 @@ class MyController extends Controller
     dump($query->time);
 });
 }
-public function handleLaravelException($request, $attributeNames,$rules, $actionType){
+public function handleLaravelException($request, $attributeNames,$rules, $actionType, $updateId=false){
+	if(!isset($updateId) || empty($updateId)){
+		return response()->json([
+        "value" => "",
+        "status_code" => 457,
+        "type" => "",
+        "errorMsg" => "",
+        "column"=>""
+    ],457);
+	}
+
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
     if($validator->fails()) {
@@ -69,6 +79,12 @@ public function handleDatabaseException($e, $actionType){
          $column = $matches[1] ?? 'not_known';
          $statusCode=454;
     }
+    elseif ($statusCode == '22001') { // value too long validation violation in PostgreSQL
+        //$errorMsg = "Foreign key constraint violation. Please check related records.";
+         //$column = $e;
+         $statusCode=456;
+    }
+    
     return response()->json([
         "value" => "",
         "status_code" => $statusCode,
@@ -76,6 +92,30 @@ public function handleDatabaseException($e, $actionType){
         "errorMsg" => $errorMsg,
         "column"=>$column
     ],$statusCode);
+	}
+
+
+	public function handleUpdateIdException($updateId){
+    $errorMsg = "database_error";
+    return response()->json([
+        "value" => "",
+        "status_code" => 457,
+        "type" => "",
+        "errorMsg" => "",
+        "column"=>""
+    ],457);
+	}
+
+	public function handleUpdateDataException(){
+    $errorMsg = "database_error";
+    //$statusCode=$e->errorInfo[0];    
+    return response()->json([
+        "value" => "",
+        "status_code" => 458,
+        "type" => "",
+        "errorMsg" => "",
+        "column"=>""
+    ],458);
 	}
 
 	public function getSearchParam($request,$query){
@@ -350,6 +390,62 @@ public function handleDatabaseException($e, $actionType){
 		}
 		return null;
 	}
+	public function cannotOperate($operation){
+    $errorMsg = "database_error";
+    $statusCode=0;
+    if($operation=='save'){
+    	$statusCode=459;
+    }else if($operation=='update'){
+    	$statusCode=460;
+    }else if($operation=='list'){
+    	$statusCode=461;
+    }
+    return response()->json([
+        "value" => "",
+        "status_code" => $statusCode,
+        "type" => $operation,
+        "errorMsg" => "",
+        "column"=>""
+    ],$statusCode);
+	}
+
+	public function getSinglePagePermission($request,$pageId, $operation, $singleDataId=false){
+		$authenticatedUser = $request->authUser;
+		$userId=$authenticatedUser->usr_id;
+		$sectorId=$authenticatedUser->usr_sector_id;
+		$departmentId=$authenticatedUser->usr_department_id;
+
+		$zoneId=$authenticatedUser->usr_zone_id;
+		$woredaId=$authenticatedUser->usr_woreda_id;
+		$query="SELECT MIN(pem_role_id) AS pem_role_id, MIN(pem_page_id) AS pem_page_id,
+    MIN(tbl_permission.pem_insert) AS pem_edit,  
+    MIN(tbl_permission.pem_delete) AS pem_delete,
+    MIN(tbl_permission.pem_insert) AS pem_insert,  
+    MIN(tbl_permission.pem_enabled) AS pem_enabled,
+    MIN(tbl_permission.pem_show) AS pem_view
+		FROM tbl_permission 
+		INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id 
+		WHERE url_user_id=".$userId." AND pem_page_id=".$pageId." GROUP BY url_user_id";
+		$data_info=DB::select($query);
+		// $this->getQueryInfo($query);
+		if(isset($data_info) && !empty($data_info)){
+			if($operation=='update'){
+				if($data_info[0]->pem_edit == 1){
+					return true;
+				}
+			}else if($operation=='save'){
+				if($data_info[0]->pem_insert == 1){
+					return true;
+				}
+			}else if($operation=='list'){
+				if($data_info[0]->pem_view == 1){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	public function getTabPermission($request){
 		$authenticatedUser = $request->authUser;
 		$userId=$authenticatedUser->usr_id;

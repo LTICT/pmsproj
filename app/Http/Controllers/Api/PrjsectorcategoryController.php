@@ -14,6 +14,10 @@ class PrjsectorcategoryController extends MyController
     //$this->middleware('auth');
 }
 public function listgrid(Request $request){
+     $canListData=$this->getSinglePagePermission($request,29,'list',"");
+    if(!$canListData){
+        return $this->cannotOperate("list");
+    }
    $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
    $permissionData=$this->getPagePermission($request,29);
    if(isset($permissionData) && !empty($permissionData)){
@@ -42,6 +46,11 @@ return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
 {
+    $id=$request->get("psc_id");
+    $canEditData=$this->getSinglePagePermission($request,29,'update',$id);
+    if(!$canEditData){
+        return $this->cannotOperate("update");
+    }
     $attributeNames = [
         'psc_status'=> trans('form_lang.psc_status'), 
         'psc_id'=> trans('form_lang.psc_id'), 
@@ -56,22 +65,11 @@ public function updategrid(Request $request)
         'psc_code'=> 'max:20', 
         'psc_description'=> 'max:425', 
     ];
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if($validator->fails()) {
-        $errorString = implode(",",$validator->messages()->all());
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>"",
-            "statusCode"=>"error",
-            "type"=>"update",
-            "errorMsg"=>$errorString
-        );
-        return response()->json($resultObject);
-    }else{
-        $id=$request->get("psc_id");
-        //$requestData['foreign_field_name']=$request->get('master_id');
-            //assign data from of foreign key
+    $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update", $id);
+if ($validationResult !== false) {
+    return $validationResult;
+}
+    try{
         $requestData = $request->all();            
         $status= $request->input('psc_status');
         if($status=="true"){
@@ -80,7 +78,10 @@ public function updategrid(Request $request)
             $requestData['psc_status']=0;
         }
         if(isset($id) && !empty($id)){
-            $data_info = Modelprjsectorcategory::findOrFail($id);
+            $data_info = Modelprjsectorcategory::find($id);
+            if(!isset($data_info) || empty($data_info)){
+             return $this->handleUpdateDataException();
+            }
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
@@ -102,25 +103,18 @@ public function updategrid(Request $request)
                 "errorMsg"=>""
             );
         }
-        return response()->json($resultObject);
-    }else{
-        //Parent Id Assigment
-        //$requestData['ins_vehicle_id']=$request->get('master_id');
-        //$requestData['psc_created_by']=auth()->user()->usr_Id;
-        $data_info=Modelprjsectorcategory::create($requestData);
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>$data_info,
-            "statusCode"=>200,
-            "type"=>"save",
-            "errorMsg"=>""
-        );
-        return response()->json($resultObject);
-    }        
+            return response()->json($resultObject);
+    }       
+}catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"update");
 }
 }
 public function insertgrid(Request $request)
 {
+    $canAddData=$this->getSinglePagePermission($request,29,'save',"");
+    if(!$canAddData){
+        return $this->cannotOperate("save");
+    }
     $attributeNames = [
         'psc_status'=> trans('form_lang.psc_status'), 
         'psc_id'=> trans('form_lang.psc_id'), 
@@ -135,19 +129,11 @@ public function insertgrid(Request $request)
      'psc_code'=> 'max:20', 
      'psc_description'=> 'max:425', 
  ];
- $validator = Validator::make ( $request->all(), $rules );
- $validator->setAttributeNames($attributeNames);
- if($validator->fails()) {
-    $errorString = implode(",",$validator->messages()->all());
-    $resultObject= array( 
-        "odata.metadata"=>"",
-        "value" =>"",
-        "statusCode"=>"error",
-        "type"=>"update",
-        "errorMsg"=>$errorString
-    );
-    return response()->json($resultObject);
-}else{
+ $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "save");
+if ($validationResult !== false) {
+    return $validationResult;
+}
+try {
     $requestData = $request->all();
     $requestData['psc_created_by']=auth()->user()->usr_id;
     $status= $request->input('psc_status');
@@ -159,15 +145,19 @@ public function insertgrid(Request $request)
     $data_info=Modelprjsectorcategory::create($requestData);
     $data_info['is_editable']=1;
     $data_info['is_deletable']=1;
-    $resultObject= array(
-        "data" =>$data_info,
-        "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-        "status_code"=>200,
-        "type"=>"save",
-        "errorMsg"=>""
-    );
-}  
-return response()->json($resultObject);
+    return response()->json([
+        "data" => $data_info,
+        "previledge" => [
+            'is_role_editable' => 1,
+            'is_role_deletable' => 1
+        ],
+        "status_code" => 200,
+        "type" => "save",
+        "errorMsg" => ""
+    ]);
+}catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"save");
+}
 }
 public function deletegrid(Request $request)
 {
