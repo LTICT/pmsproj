@@ -25,7 +25,8 @@ class MyController extends Controller
 });
 }
 public function handleLaravelException($request, $attributeNames,$rules, $actionType, $updateId=false){
-	/*if(!isset($updateId) || empty($updateId)){
+	if($actionType=='update'){
+	if(!isset($updateId) || empty($updateId)){
 		return response()->json([
         "value" => "",
         "status_code" => 457,
@@ -33,8 +34,8 @@ public function handleLaravelException($request, $attributeNames,$rules, $action
         "errorMsg" => "",
         "column"=>""
     ],457);
-	}*/
-
+	}
+}
     $validator = Validator::make ( $request->all(), $rules );
     $validator->setAttributeNames($attributeNames);
     if($validator->fails()) {
