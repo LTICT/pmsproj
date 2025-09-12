@@ -411,6 +411,9 @@ public function handleDatabaseException($e, $actionType){
 	}
 
 	public function getSinglePagePermission($request,$pageId, $operation, $singleDataId=false){
+		if($operation=='list'){
+			return true;
+		}
 		$authenticatedUser = $request->authUser;
 		$userId=$authenticatedUser->usr_id;
 		$sectorId=$authenticatedUser->usr_sector_id;

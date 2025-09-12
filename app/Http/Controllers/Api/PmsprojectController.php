@@ -380,12 +380,13 @@ $query .=" AND prj_sector_id='".$sectorId."'";
             'prj_outcome'=> 'max:425',
             'prj_remark'=> 'max:100',
         ];
-       $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update");
+        $id=$request->get("prj_id");
+       $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update",$id);
 if ($validationResult !== false) {
     return $validationResult;
 }
     try{
-            $id=$request->get("prj_id");
+            
         //$requestData['foreign_field_name']=$request->get('master_id');
             //assign data from of foreign key
             $requestData = $request->all();

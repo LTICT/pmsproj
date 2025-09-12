@@ -236,7 +236,7 @@ try {
         $data_info['is_editable']=1;
         $data_info['is_deletable']=1;
         return response()->json([
-        "data" => $data_info,
+      "data" => $data_info,
         "previledge" => [
             'is_role_editable' => 1,
             'is_role_deletable' => 1
