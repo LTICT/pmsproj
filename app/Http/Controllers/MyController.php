@@ -338,7 +338,7 @@ public function handleDatabaseException($e, $actionType){
 		FROM tbl_permission 
 		INNER JOIN tbl_pages ON tbl_pages.pag_id=tbl_permission.pem_page_id
 		INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id 
-		WHERE url_user_id=".$userId." AND pag_appear_tab=1 AND pem_view='1'";
+		WHERE url_user_id=".$userId." AND pag_appear_tab=1 AND pem_view='1' ORDER BY pag_order_number ASC";
 		$data_info=DB::select($query);
     $allowedTabs = [];
 
