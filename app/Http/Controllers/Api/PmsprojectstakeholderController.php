@@ -184,7 +184,8 @@ if ($validationResult !== false) {
 }
 public function insertgrid(Request $request)
 {
-     $canAddData=$this->getSinglePagePermission($request,53,'save',"");
+    $projectId=$request->input('psh_project_id');
+    $canAddData=$this->getSinglePagePermissionProject($request,53,'save',"", $projectId);
     if(!$canAddData){
         return $this->cannotOperate("save");
     }

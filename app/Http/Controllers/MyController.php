@@ -144,6 +144,7 @@ public function handleDatabaseException($e, $actionType){
 			if(isset($prjCode) && isset($prjCode)){
 				$query .=" AND prj_code LIKE '%".$prjCode."%'"; 
 			}
+			if(1==2){
 			if(isset($zoneId) && !empty($zoneId) && $zoneId > 0){
 				$query .=" AND prj_owner_zone_id='".$zoneId."'";
 			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $prjownerzoneid>0){
@@ -159,6 +160,7 @@ public function handleDatabaseException($e, $actionType){
 			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $include ==0 && $prjownerzoneid > 0){
 				$query .=" AND prj_owner_woreda_id=0"; 
 			}
+		}
 			if($userTypeId ==1 ){
 			$query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_status=1 AND  usc_user_id=".$userId." )";
 		}
@@ -409,7 +411,25 @@ public function handleDatabaseException($e, $actionType){
         "column"=>""
     ],$statusCode);
 	}
-
+public function getSinglePagePermissionProject($request,$pageId, $operation, $singleDataId=false, $projectId=false){
+	$result=false;
+	$insertPermission=$this->getSinglePagePermission($request,$pageId, $operation,"");	
+	if($insertPermission){
+	$userInfo=$this->getUserInfo($request);
+		if(isset($userInfo)){
+			$userId=$userInfo->usr_id;			
+			$userTypeId=$userInfo->usr_user_type;
+			if($userTypeId ==1 ){
+					$query =" SELECT prj_id FROM pms_project WHERE prj_id=".$projectId." AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_status=1 AND  usc_user_id=".$userId." )";
+			$data_info=DB::select($query);
+		if(isset($data_info) && !empty($data_info)){
+			$result=true;
+					}
+	}
+}
+}
+return $result;
+}
 	public function getSinglePagePermission($request,$pageId, $operation, $singleDataId=false){
 		if($operation=='list'){
 			return true;
@@ -422,7 +442,7 @@ public function handleDatabaseException($e, $actionType){
 		$zoneId=$authenticatedUser->usr_zone_id;
 		$woredaId=$authenticatedUser->usr_woreda_id;
 		$query="SELECT MIN(pem_role_id) AS pem_role_id, MIN(pem_page_id) AS pem_page_id,
-    MIN(tbl_permission.pem_insert) AS pem_edit,  
+    MIN(tbl_permission.pem_edit) AS pem_edit,  
     MIN(tbl_permission.pem_delete) AS pem_delete,
     MIN(tbl_permission.pem_insert) AS pem_insert,  
     MIN(tbl_permission.pem_enabled) AS pem_enabled,
@@ -431,6 +451,7 @@ public function handleDatabaseException($e, $actionType){
 		INNER JOIN tbl_user_role ON tbl_permission.pem_role_id=tbl_user_role.url_role_id 
 		WHERE url_user_id=".$userId." AND pem_page_id=".$pageId." GROUP BY url_user_id";
 		$data_info=DB::select($query);
+		//dd($data_info);
 		// $this->getQueryInfo($query);
 		if(isset($data_info) && !empty($data_info)){
 			if($operation=='update'){
