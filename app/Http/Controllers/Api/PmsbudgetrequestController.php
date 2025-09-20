@@ -151,6 +151,7 @@ public function updategrid(Request $request)
         }
         if(isset($id) && !empty($id)){
             $data_info = Modelpmsbudgetrequest::findOrFail($id);
+            //dd($data_info);
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
             if($ischanged){
