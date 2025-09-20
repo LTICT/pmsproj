@@ -27,7 +27,15 @@ class Modelpmsbudgetrequest extends BaseModel
     protected $fillable = ['bdr_id','bdr_budget_year_id','bdr_requested_amount',
     'bdr_released_amount','bdr_project_id','bdr_requested_date_ec','bdr_requested_date_gc',
     'bdr_released_date_ec','bdr_released_date_gc','bdr_description','bdr_create_time',
-    'bdr_update_time','bdr_delete_time','bdr_created_by','bdr_status','bdr_request_status','bdr_action_remark','bdr_request_category_id','bdr_request_type','bdr_physical_baseline','bdr_financial_baseline','bdr_physical_planned','bdr_physical_approved','bdr_physical_recommended','bdr_financial_recommended','bdr_additional_days'];
+    'bdr_update_time','bdr_delete_time','bdr_created_by','bdr_status','bdr_request_status','bdr_action_remark','bdr_request_category_id','bdr_request_type','bdr_physical_baseline','bdr_financial_baseline','bdr_physical_planned','bdr_physical_approved','bdr_physical_recommended','bdr_financial_recommended','bdr_additional_days',
+'bdr_before_previous_year_pysical',
+'bdr_before_previous_year_financial','bdr_previous_year_pysical',
+'bdr_previous_year_financial','bdr_source_government_requested',
+'bdr_source_government_approved','bdr_source_internal_requested',
+'bdr_source_support_requested','bdr_source_support_approved',
+'bdr_source_credit_requested','bdr_source_credit_approved',
+'bdr_source_other_requested','bdr_source_other_approved'
+];
     /**
      * Change activity log event description
      *

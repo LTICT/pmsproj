@@ -226,12 +226,13 @@ public function updategrid(Request $request)
        'usr_remember_token'=> 'max:100',
        'usr_description'=> 'max:425'
    ];
-   $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update");
+   $id=$request->get("usr_id");
+   $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update", $id);
 if ($validationResult !== false) {
     return $validationResult;
 }
     try{
-    $id=$request->get("usr_id");
+    
         //$requestData['foreign_field_name']=$request->get('master_id');
             //assign data from of foreign key
     $requestData = $request->all();

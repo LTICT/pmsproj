@@ -16,7 +16,14 @@ class PmsbudgetrequestController extends MyController
 
     public function listgrid(Request $request){
     $permissionData=$this->getPagePermission($request,34);
-    $query='SELECT bdr_additional_days, bdr_physical_baseline,bdr_financial_baseline,bdr_physical_planned,bdr_request_type,bdr_request_category_id, sci_name_en AS sector_name, rqs_description AS color_code,
+    $query='SELECT bdr_before_previous_year_physical,
+            bdr_before_previous_year_financial,
+            bdr_previous_year_physical,
+            bdr_previous_year_financial, bdr_source_government_requested, 
+bdr_source_government_approved, bdr_source_internal_requested, 
+bdr_source_support_requested, bdr_source_support_approved, 
+bdr_source_credit_requested, bdr_source_credit_approved, 
+bdr_source_other_requested, bdr_source_other_approved, bdr_additional_days, bdr_physical_baseline,bdr_financial_baseline,bdr_physical_planned,bdr_request_type,bdr_request_category_id, sci_name_en AS sector_name, rqs_description AS color_code,
     rqs_name_en AS status_name, bdy_name,prj_name, prj_code, bdr_request_status, bdr_id,bdr_budget_year_id,bdr_requested_amount,
      bdr_released_amount,bdr_project_id,bdr_requested_date_gc,
      bdr_released_date_gc,bdr_description,bdr_created_by,bdr_status,bdr_action_remark,1 AS is_editable, 1 AS is_deletable
