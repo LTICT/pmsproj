@@ -153,8 +153,59 @@ if(isset($endTime) && isset($endTime)){
 $query .=" AND prp_payment_date_gc <='".$endTime." 23 59 59'"; 
 }
 }
+else if($reportType==8 ){
+    $query = " SELECT prs_status_name_or AS prj_status, prj_project_category_id AS prj_category,'' AS cni_name, location_zone.add_name_or AS zone,
+                 location_woreda.add_name_or AS woreda,pms_budget_year.bdy_name AS budgetyear,
+                prj_name, prj_code, prj_location_description,sci_name_or AS sector,
+                COALESCE(bdr_released_amount, 0) AS bdr_released_amount,
+                COALESCE(bdr_requested_amount, 0) AS bdr_requested_amount,
+                prj_total_estimate_budget AS prj_total_estimate_budget,
+                COALESCE(prj_urban_ben_number, 0) + COALESCE(prj_rural_ben_number, 0) AS beneficiery,prj_measurement_unit,prj_measured_figure,
+                EXTRACT(YEAR FROM prj_start_date_plan_gc::date) AS start_year,
+                EXTRACT(YEAR FROM prj_end_date_plan_gc::date) AS end_year,
+                pct_name_or AS project_category,
+                bdr_physical_planned,
+                bdr_physical_approved,
+                bdr_financial_baseline,
+                bdr_before_previous_year_physical,
+                bdr_before_previous_year_financial,
+        bdr_previous_year_physical,
+        bdr_previous_year_financial,
+        bdr_source_government_approved,
+        bdr_source_support_approved,
+        bdr_source_credit_requested AS bdr_source_credit_approved,
+        bdr_source_credit_approved,
+        bdr_source_other_requested,
+        bdr_source_other_approved
+                FROM pms_budget_request
+        INNER JOIN pms_project ON pms_budget_request.bdr_project_id=pms_project.prj_id
+        INNER JOIN pms_project_status ON pms_budget_request.bdr_request_type=pms_project_status.prs_id
+        INNER JOIN pms_sector_information 
+            ON pms_project.prj_sector_id = pms_sector_information.sci_id
+        INNER JOIN pms_project_category 
+            ON pms_project.prj_project_category_id = pms_project_category.pct_id
+        INNER JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_budget_request.bdr_budget_year_id
+        LEFT JOIN gen_address_structure AS location_zone 
+            ON pms_project.prj_location_zone_id = location_zone.add_id
+        LEFT JOIN gen_address_structure AS location_woreda 
+            ON pms_project.prj_location_woreda_id = location_woreda.add_id";
+      $query .=' WHERE 1=1';
+        $budgetyearid = $request->input('prp_budget_year_id');
+        if(!empty($budgetyearid) && is_numeric($budgetyearid)){
+            $query .= " AND prp_budget_year_id = ".intval($budgetyearid); 
+        }
 
-else if($reportType==8 || $reportType==9){
+        $reportstartdate = $request->input('report_dateStart');
+        $reportenddate = $request->input('report_dateEnd');
+       if (!empty($reportstartdate) && !empty($reportenddate)) {
+            $query .= " AND prp_record_date_gc BETWEEN '{$reportstartdate}' AND '{$reportenddate}'";
+        }
+
+         $sectorid = $request->input('prj_sector_id');
+            if(!empty($sectorid) && is_numeric($sectorid)){
+                $query .= " AND prj_sector_id = ".intval($sectorid); 
+            }
+       }else if($reportType==9){
     $query = ' SELECT DISTINCT location_zone.add_name_or AS zone,
                 cni_name AS cni_name, location_woreda.add_name_or AS woreda,pms_budget_year.bdy_name AS budgetyear,
                 prj_name, prj_code, prj_location_description,sci_name_or AS sector,
