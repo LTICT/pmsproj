@@ -161,8 +161,16 @@ else if($reportType==8 ){
                 COALESCE(bdr_requested_amount, 0) AS bdr_requested_amount,
                 prj_total_estimate_budget AS prj_total_estimate_budget,
                 COALESCE(prj_urban_ben_number, 0) + COALESCE(prj_rural_ben_number, 0) AS beneficiery,prj_measurement_unit,prj_measured_figure,
-                EXTRACT(YEAR FROM prj_start_date_plan_gc::date) AS start_year,
-                EXTRACT(YEAR FROM prj_end_date_plan_gc::date) AS end_year,
+                CASE 
+    WHEN prj_start_date_plan_gc IS NOT NULL 
+         AND prj_start_date_plan_gc <> '' 
+    THEN EXTRACT(YEAR FROM prj_start_date_plan_gc::date)
+END AS start_year,
+CASE 
+    WHEN prj_end_date_plan_gc IS NOT NULL 
+         AND prj_end_date_plan_gc <> '' 
+    THEN EXTRACT(YEAR FROM prj_end_date_plan_gc::date)
+END AS end_year,
                 pct_name_or AS project_category,
                 bdr_physical_planned,
                 bdr_physical_approved,
