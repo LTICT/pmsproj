@@ -174,7 +174,8 @@ END AS end_year,
                 pct_name_or AS project_category,
                 bdr_physical_planned,
                 bdr_physical_approved,
-                bdr_financial_baseline,
+                bdr_physical_baseline,
+                bdr_financial_baseline,                
                 bdr_before_previous_year_physical,
                 bdr_before_previous_year_financial,
         bdr_previous_year_physical,
@@ -184,8 +185,10 @@ END AS end_year,
         bdr_source_credit_requested AS bdr_source_credit_approved,
         bdr_source_credit_approved,
         bdr_source_other_requested,
-        bdr_source_other_approved
-                FROM pms_budget_request
+        bdr_source_other_approved,
+        bdr_source_internal_requested,
+        0 AS bdr_source_internal_approved
+        FROM pms_budget_request
         INNER JOIN pms_project ON pms_budget_request.bdr_project_id=pms_project.prj_id
         INNER JOIN pms_project_status ON pms_budget_request.bdr_request_type=pms_project_status.prs_id
         INNER JOIN pms_sector_information 
@@ -200,7 +203,7 @@ END AS end_year,
       $query .=' WHERE 1=1';
         $budgetyearid = $request->input('prp_budget_year_id');
         if(!empty($budgetyearid) && is_numeric($budgetyearid)){
-            $query .= " AND prp_budget_year_id = ".intval($budgetyearid); 
+            $query .= " AND bdr_budget_year_id = ".intval($budgetyearid); 
         }
 
         $reportstartdate = $request->input('report_dateStart');
