@@ -201,6 +201,10 @@ END AS end_year,
         LEFT JOIN gen_address_structure AS location_woreda 
             ON pms_project.prj_location_woreda_id = location_woreda.add_id";
       $query .=' WHERE 1=1';
+      $sectorCategory=$request->input('sector_category');
+if(isset($sectorCategory) && !empty($sectorCategory)){
+$query .=" AND sci_sector_category_id='".$sectorCategory."'";
+}
         $budgetyearid = $request->input('prp_budget_year_id');
         if(!empty($budgetyearid) && is_numeric($budgetyearid)){
             $query .= " AND bdr_budget_year_id = ".intval($budgetyearid); 

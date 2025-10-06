@@ -144,7 +144,7 @@ public function handleDatabaseException($e, $actionType){
 			if(isset($prjCode) && isset($prjCode)){
 				$query .=" AND prj_code LIKE '%".$prjCode."%'"; 
 			}
-			if(1==2){
+			//if(1==2){
 			if(isset($zoneId) && !empty($zoneId) && $zoneId > 0){
 				$query .=" AND prj_owner_zone_id='".$zoneId."'";
 			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $prjownerzoneid>0){
@@ -160,7 +160,7 @@ public function handleDatabaseException($e, $actionType){
 			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $include ==0 && $prjownerzoneid > 0){
 				$query .=" AND prj_owner_woreda_id=0"; 
 			}
-		}
+		//}
 			if($userTypeId ==1 ){
 			$query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_status=1 AND  usc_user_id=".$userId." )";
 		}

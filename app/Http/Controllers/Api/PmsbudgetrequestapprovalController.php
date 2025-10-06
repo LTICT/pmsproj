@@ -65,7 +65,8 @@ bdr_source_other_requested, bdr_source_other_approved,prs_color_code AS project_
      FROM pms_budget_request
      INNER JOIN pms_project ON pms_project.prj_id=pms_budget_request.bdr_project_id
      INNER JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_budget_request.bdr_budget_year_id
-     INNER JOIN gen_request_status ON gen_request_status.rqs_id=pms_budget_request.bdr_request_status';
+     INNER JOIN gen_request_status ON gen_request_status.rqs_id=pms_budget_request.bdr_request_status
+     INNER JOIN pms_sector_information ON pms_sector_information.sci_id=pms_project.prj_sector_id';
 if($directorateId>0 && $teamId==0 && $officerId==0){
     //$query .=" INNER JOIN gen_request_followup ON gen_request_followup.rqf_request_id=pms_budget_request.bdr_id AND
     //rqf_forwarded_to_dep_id=".$directorateId."  ";
@@ -81,68 +82,71 @@ if($directorateId>0 && $teamId==0 && $officerId==0){
     //Directorates only view projects that are owned by sectors they are assigned to
     $query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_status=1 AND usc_user_id=".$userId." )";
 }
-
+$sectorCategory=$request->input('prj_sector_category_id');
+if(isset($sectorCategory) && !empty($sectorCategory)){
+$query .=" AND sci_sector_category_id='".$sectorCategory."'";
+}
 $requestStatus=$request->input('bdr_request_status');
-if(isset($requestStatus) && isset($requestStatus)){
+if(isset($requestStatus) && !empty($requestStatus)){
 $query .=" AND bdr_request_status='".$requestStatus."'";
 }
 $prjName=$request->input('prj_name');
-if(isset($prjName) && isset($prjName)){
+if(isset($prjName) && !empty($prjName)){
 $query .=" AND prj_name LIKE '%".$prjName."%'";
 }
 $prjCode=$request->input('prj_code');
-if(isset($prjCode) && isset($prjCode)){
+if(isset($prjCode) && !empty($prjCode)){
 $query .=" AND prj_code='".$prjCode."'";
 }
 $startTime=$request->input('budget_request_dateStart');
-if(isset($startTime) && isset($startTime)){
+if(isset($startTime) && !empty($startTime)){
 $query .=" AND bdr_requested_date_gc >='".$startTime." 00 00 00'";
 }
 $endTime=$request->input('budget_request_dateEnd');
-if(isset($endTime) && isset($endTime)){
+if(isset($endTime) && !empty($endTime)){
 $query .=" AND bdr_requested_date_gc <='".$endTime." 23 59 59'";
 }
 $prjlocationregionid=$request->input('prj_location_region_id');
-if(isset($prjlocationregionid) && isset($prjlocationregionid)){
+if(isset($prjlocationregionid) && !empty($prjlocationregionid)){
 $query .=" AND prj_location_region_id='".$prjlocationregionid."'";
 }
 $prjlocationzoneid=$request->input('prj_location_zone_id');
-if(isset($prjlocationzoneid) && isset($prjlocationzoneid)){
+if(isset($prjlocationzoneid) && !empty($prjlocationzoneid)){
 $query .=" AND prj_location_zone_id='".$prjlocationzoneid."'";
 }
 $prjlocationworedaid=$request->input('prj_location_woreda_id');
-if(isset($prjlocationworedaid) && isset($prjlocationworedaid)){
+if(isset($prjlocationworedaid) && !empty($prjlocationworedaid)){
 $query .=" AND prj_location_woreda_id='".$prjlocationworedaid."'";
 }
 
 $bdrbudgetyearid=$request->input('bdr_budget_year_id');
-if(isset($bdrbudgetyearid) && isset($bdrbudgetyearid)){
+if(isset($bdrbudgetyearid) && !empty($bdrbudgetyearid)){
 $query .=" AND bdr_budget_year_id='".$bdrbudgetyearid."'";
 }
 $bdrrequestedamount=$request->input('bdr_requested_amount');
-if(isset($bdrrequestedamount) && isset($bdrrequestedamount)){
+if(isset($bdrrequestedamount) && !empty($bdrrequestedamount)){
 $query .=' AND bdr_requested_amount="'.$bdrrequestedamount.'"';
 }
 $bdrreleasedamount=$request->input('bdr_released_amount');
-if(isset($bdrreleasedamount) && isset($bdrreleasedamount)){
+if(isset($bdrreleasedamount) && !empty($bdrreleasedamount)){
 $query .=' AND bdr_released_amount="'.$bdrreleasedamount.'"';
 }
 $bdrprojectid=$request->input('project_id');
-if(isset($bdrprojectid) && isset($bdrprojectid)){
+if(isset($bdrprojectid) && !empty($bdrprojectid)){
 $query .= " AND bdr_project_id = '$bdrprojectid'";
 
 }
 $requestCategory=$request->input('bdr_request_category_id');
-if(isset($requestCategory) && isset($requestCategory)){
+if(isset($requestCategory) && !empty($requestCategory)){
 $query .=" AND bdr_request_category_id='".$requestCategory."'";
 }
 $requestType=$request->input('bdr_request_type');
-if(isset($requestType) && isset($requestType)){
+if(isset($requestType) && !empty($requestType)){
 $query .=" AND bdr_request_type='".$requestType."'";
 }
 
 $sectorId=$request->input('prj_sector_id');
-if(isset($sectorId) && isset($sectorId)){
+if(isset($sectorId) && !empty($sectorId)){
 $query .=" AND prj_sector_id='".$sectorId."'";
 }
 
