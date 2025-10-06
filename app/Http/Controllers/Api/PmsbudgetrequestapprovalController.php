@@ -80,7 +80,7 @@ if($directorateId>0 && $teamId==0 && $officerId==0){
      $query .=' WHERE prj_owner_type=1';
 if($directorateId>0 && $teamId==0 && $officerId==0){
     //Directorates only view projects that are owned by sectors they are assigned to
-    $query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_status=1 AND usc_user_id=".$userId." )";
+    //$query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_status=1 AND usc_user_id=".$userId." )";
 }
 $sectorCategory=$request->input('prj_sector_category_id');
 if(isset($sectorCategory) && !empty($sectorCategory)){
@@ -105,18 +105,6 @@ $query .=" AND bdr_requested_date_gc >='".$startTime." 00 00 00'";
 $endTime=$request->input('budget_request_dateEnd');
 if(isset($endTime) && !empty($endTime)){
 $query .=" AND bdr_requested_date_gc <='".$endTime." 23 59 59'";
-}
-$prjlocationregionid=$request->input('prj_location_region_id');
-if(isset($prjlocationregionid) && !empty($prjlocationregionid)){
-$query .=" AND prj_location_region_id='".$prjlocationregionid."'";
-}
-$prjlocationzoneid=$request->input('prj_location_zone_id');
-if(isset($prjlocationzoneid) && !empty($prjlocationzoneid)){
-$query .=" AND prj_location_zone_id='".$prjlocationzoneid."'";
-}
-$prjlocationworedaid=$request->input('prj_location_woreda_id');
-if(isset($prjlocationworedaid) && !empty($prjlocationworedaid)){
-$query .=" AND prj_location_woreda_id='".$prjlocationworedaid."'";
 }
 
 $bdrbudgetyearid=$request->input('bdr_budget_year_id');
@@ -149,7 +137,7 @@ $sectorId=$request->input('prj_sector_id');
 if(isset($sectorId) && !empty($sectorId)){
 $query .=" AND prj_sector_id='".$sectorId."'";
 }
-
+$query=$this->getSearchParam($request,$query);
 //if user is assinged to a department
 if($departmentId > 1){
     //$query .=" AND prj_department_id='".$departmentId."'";
