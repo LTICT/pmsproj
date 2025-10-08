@@ -22,7 +22,8 @@ class PmscsoprojectController extends MyController
      */
     public function show(Request $request,$id)
     {
-        $query='SELECT prj_cluster_id,prj_admin_cost,prj_program_cost,prj_funding_agency,prj_consortium_members, prj_assigned_sectors, prj_parent_id,prj_object_type_id,owner_zone.add_name_or AS zone_owner,
+        $query='SELECT prj_direct_ben_male,prj_direct_ben_female,
+    prj_indirect_ben_male,prj_indirect_ben_female,prj_date_agreement_signed,prj_agreement_signed_level, prj_cluster_id,prj_admin_cost,prj_program_cost,prj_funding_agency,prj_consortium_members, prj_assigned_sectors, prj_parent_id,prj_object_type_id,owner_zone.add_name_or AS zone_owner,
         owner_woreda.add_name_or AS woreda_owner,
         location_zone.add_name_or AS zone_location,
         location_woreda.add_name_or AS woreda_location,
@@ -62,7 +63,8 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
     //to populate projects list based on selected program
     public function listgrid(Request $request){
         $permissionData=$this->getPagePermission($request,66, "project_info");
-      $query='SELECT prj_male_participant,prj_female_participant,prj_measured_figure,prj_measurement_unit, prj_cluster_id, prj_admin_cost,prj_program_cost,prj_funding_agency,prj_consortium_members, prj_assigned_sectors, prj_parent_id,prj_object_type_id,prj_parent_id,prj_object_type_id,cso_name,sci_name_en AS sector_name,prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,zone_info.add_name_or as zone_name, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
+      $query='SELECT prj_direct_ben_male,prj_direct_ben_female,
+    prj_indirect_ben_male,prj_indirect_ben_female,prj_date_agreement_signed,prj_agreement_signed_level, prj_male_participant,prj_female_participant,prj_measured_figure,prj_measurement_unit, prj_cluster_id, prj_admin_cost,prj_program_cost,prj_funding_agency,prj_consortium_members, prj_assigned_sectors, prj_parent_id,prj_object_type_id,prj_parent_id,prj_object_type_id,cso_name,sci_name_en AS sector_name,prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,zone_info.add_name_or as zone_name, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
         prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,
         prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_description,
         prj_start_date_gc,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,
@@ -140,7 +142,8 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         $permissionData=$this->getPagePermission($request,9, "project_info");
         //dd($permissionData);
         //dump($permissionData);
-        $query='SELECT prj_male_participant,prj_female_participant,prj_measured_figure,prj_measurement_unit,prj_cluster_id,prj_admin_cost,prj_program_cost,prj_funding_agency,prj_consortium_members, cso_name, sci_name_en AS sector_name,prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,zone_info.add_name_or as zone_name, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
+        $query='SELECT prj_direct_ben_male,prj_direct_ben_female,
+    prj_indirect_ben_male,prj_indirect_ben_female,prj_date_agreement_signed,prj_agreement_signed_level,prj_male_participant,prj_female_participant,prj_measured_figure,prj_measurement_unit,prj_cluster_id,prj_admin_cost,prj_program_cost,prj_funding_agency,prj_consortium_members, cso_name, sci_name_en AS sector_name,prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,zone_info.add_name_or as zone_name, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
         prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,
         prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_description,
         prj_start_date_gc,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,
