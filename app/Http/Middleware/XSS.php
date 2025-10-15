@@ -31,15 +31,16 @@ public function handle($request, Closure $next)
     // Sanitize input to block XSS
     $input = $request->all();
 
-    array_walk_recursive($input, function ($value) {
-        if ((string)$value !== strip_tags((string)$value)) {
-            throw new \Illuminate\Http\Exceptions\HttpResponseException(
-                response()->json([
-                    'error' => 'Input contains disallowed HTML tags.'
-                ], 487)
-            );
-        }
-    });
+   array_walk_recursive($input, function ($value) {
+    // Detect only <script> tags (opening or closing, any attributes)
+    if (preg_match('/<\s*\/?\s*script\b/i', (string)$value)) {
+        throw new \Illuminate\Http\Exceptions\HttpResponseException(
+            response()->json([
+                'error' => 'Input contains disallowed <script> tags.'
+            ], 487)
+        );
+    }
+});
     // Merge sanitized input back (optional)
     $request->merge($input);
 

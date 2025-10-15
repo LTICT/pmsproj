@@ -384,7 +384,8 @@ else{
     add_parent_id AS "rootId",
         ARRAY[]::json[] AS children -- Initialize children as empty array
         FROM gen_address_structure 
-        WHERE add_id::integer =1 
+        WHERE add_id::integer =508
+        /*WHERE add_id::integer =1*/
         UNION ALL
         SELECT 
         g.add_id AS id,
@@ -394,7 +395,8 @@ else{
         g.add_parent_id AS "rootId",
         ARRAY[]::json[] AS children
         FROM gen_address_structure g
-    INNER JOIN address_hierarchy h ON g.add_parent_id::text = h.id::text -- Link child nodes to parents
+    INNER JOIN address_hierarchy h ON g.add_parent_id::text = h.id::text 
+     -- Link child nodes to parents
 )
  SELECT * FROM address_hierarchy';
 }
@@ -416,13 +418,14 @@ if(isset($search) && !empty($search)){
 //$query.=' ORDER BY emp_first_name, emp_middle_name, emp_last_name';
 
 $cacheKey = 'address';
-if($zoneId == 0  && $woredaId == 0){
+/*if($zoneId == 0  && $woredaId == 0){
 $data_info = Cache::rememberForever($cacheKey, function () use ($query) {
 return DB::select($query);
 });
 }else{
     $data_info= DB::select($query);
-}
+}*/
+$data_info= DB::select($query);
 $hierarchicalData = $this->buildHierarchy(json_decode(json_encode($data_info), true));
 }else{
     $hierarchicalData=array("");
