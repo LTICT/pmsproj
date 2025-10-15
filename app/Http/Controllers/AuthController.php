@@ -249,7 +249,7 @@ class AuthController extends Controller
             'status_code' => 457,
             'type' => 'validation_error',
             'errorMsg' => $validator->errors()
-        ]);
+        ],400);
     }
 
         $user = Modeltblusers::findOrFail($request->get('user_id'));
@@ -291,10 +291,10 @@ class AuthController extends Controller
     if ($validator->fails()) {
         return response()->json([
             'is_updated' => false,
-            'status_code' => 457,
+            'status_code' => 400,
             'type' => 'validation_error',
             'errorMsg' => $validator->errors()
-        ]);
+        ],400);
     }
 
     $authenticatedUser = $request->authUser;
@@ -305,10 +305,10 @@ class AuthController extends Controller
     if (!Hash::check($request->old_password, $user->password)) {
         return response()->json([
             'is_updated' => false,
-            'status_code' => 401,
+            'status_code' => 400,
             'type' => 'auth_error',
             'errorMsg' => 'Old password is incorrect.'
-        ]);
+        ],400);
     }
 
     // ✅ Update password
