@@ -225,13 +225,33 @@ class AuthController extends Controller
     }
     public function changePassword(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'password' => 'required|max:10',
-            'user_id' => 'required'
+        // ✅ Validate old and new passwords
+    $validator = Validator::make($request->all(), [
+        'old_password' => 'required|min:8',
+        'user_id'=>'required',
+       // 'password' => 'required|min:6|max:10|confirmed', // optional: add `confirmed` if using password_confirmation field
+        'password' => [
+            'required',
+            'string',
+            'min:8',   // at least 8 characters
+            'max:32',  // reasonable upper limit
+            // strong password pattern: at least 1 uppercase, 1 lowercase, 1 digit, 1 special char
+            'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+=<>.,;:{}|~\-])[A-Za-z\d@$!%*?&#^()_+=<>.,;:{}|~\-]+$/'
+        ],
+    ], [
+        // ✅ Custom error message for clarity
+        'password.regex' => 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.'
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'is_updated' => false,
+            'status_code' => 457,
+            'type' => 'validation_error',
+            'errorMsg' => $validator->errors()
         ]);
-        if ($validator->fails()) {
-            return response()->json(['is_updated' => false, 'status_code' => 200, 'type' => 'update', 'errorMsg' => '']);
-        }
+    }
+
         $user = Modeltblusers::findOrFail($request->get('user_id'));
         $user->update([
             'password' => bcrypt($request->get('password')),
@@ -249,4 +269,64 @@ class AuthController extends Controller
             'errorMsg' => ''
         ]);
     }
+    public function changeOwnPassword(Request $request)
+{
+    // ✅ Validate old and new passwords
+    $validator = Validator::make($request->all(), [
+        'old_password' => 'required|min:8',
+       // 'password' => 'required|min:6|max:10|confirmed', // optional: add `confirmed` if using password_confirmation field
+        'password' => [
+            'required',
+            'string',
+            'min:8',   // at least 8 characters
+            'max:32',  // reasonable upper limit
+            // strong password pattern: at least 1 uppercase, 1 lowercase, 1 digit, 1 special char
+            'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+=<>.,;:{}|~\-])[A-Za-z\d@$!%*?&#^()_+=<>.,;:{}|~\-]+$/'
+        ],
+    ], [
+        // ✅ Custom error message for clarity
+        'password.regex' => 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.'
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'is_updated' => false,
+            'status_code' => 457,
+            'type' => 'validation_error',
+            'errorMsg' => $validator->errors()
+        ]);
+    }
+
+    $authenticatedUser = $request->authUser;
+    $userId = $authenticatedUser->usr_id;        
+    $user = Modeltblusers::findOrFail($userId);
+
+    // ✅ Check if old password matches
+    if (!Hash::check($request->old_password, $user->password)) {
+        return response()->json([
+            'is_updated' => false,
+            'status_code' => 401,
+            'type' => 'auth_error',
+            'errorMsg' => 'Old password is incorrect.'
+        ]);
+    }
+
+    // ✅ Update password
+    $user->update([
+        'password' => bcrypt($request->password),
+        'usr_password_changed' => 1
+    ]);
+
+    // Remove sensitive fields before returning response
+    unset($user->email, $user->password, $user->usr_password);
+
+    return response()->json([
+        'data' => $user,
+        'previledge' => ['is_role_editable' => 1, 'is_role_deletable' => 1],
+        'is_updated' => true,
+        'status_code' => 200,
+        'type' => 'update',
+        'errorMsg' => ''
+    ]);
+}
 }

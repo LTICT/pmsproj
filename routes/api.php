@@ -245,7 +245,9 @@ Route::post('users/deletegrid', 'Api\TblusersController@deletegrid');
 Route::post('users/search', 'TblusersController@search');
 Route::post('users/changeuserstatus', 'Api\TblusersController@changeuserstatus');
 Route::post('users/getuserinfo', 'Api\TblusersController@getUserInfo');
+Route::post('users/getownuserinfo', 'Api\TblusersController@getOwnUserInfo');
 Route::post('users/updateprofile', 'Api\TblusersController@updateUserProfile');
+Route::post('users/updateownprofile', 'Api\TblusersController@updateOwnUserProfile');
 
 Route::resource('address_structure', 'GenaddressstructureController');
 //Route::post('address_structure/listgrid', 'Api\GenaddressstructureController@listgrid');
@@ -314,6 +316,7 @@ Route::post('notification', 'Api\GennotificationController@listgrid');
 Route::post('updatenotification', 'Api\GennotificationController@updategrid');
 
 Route::post('user/change_password', 'AuthController@changePassword');
+Route::post('user/change_own_password', 'AuthController@changeOwnPassword');
 
 //NEWLY ADDED
 

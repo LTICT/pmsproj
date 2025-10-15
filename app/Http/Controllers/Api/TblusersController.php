@@ -135,6 +135,25 @@ public function getUserInfo(Request $request){
         "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
     return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
+public function getOwnUserInfo(Request $request){
+       $query='SELECT usr_user_type, usr_id,usr_email,usr_password,usr_full_name,usr_phone_number,sci_name_or AS sector_name,
+       usr_role_id,usr_region_id, usr_zone_id,usr_woreda_id,usr_kebele_id,usr_sector_id,
+       usr_department_id,usr_is_active,usr_picture,usr_last_logged_in,usr_ip,
+       usr_remember_token,
+       gen_address_structure.add_name_or AS zone_name, gen_department.dep_name_or as dep_name FROM tbl_users ';
+       $query .= ' LEFT JOIN gen_address_structure ON tbl_users.usr_zone_id = gen_address_structure.add_id';
+       $query .= ' LEFT JOIN gen_department ON tbl_users.usr_department_id = gen_department.dep_id';
+       $query .= ' LEFT JOIN pms_sector_information ON tbl_users.usr_sector_id = pms_sector_information.sci_id';
+       $query .=' WHERE 1=1';
+       $authenticatedUser = $request->authUser;
+       $userId = $authenticatedUser->usr_id;
+       $query .=" AND usr_id='".$userId."'";
+    $data_info=DB::select($query);
+    $resultObject= array(
+        "data" =>$data_info,
+        "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+    return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
+}
 public function updateUserProfile(Request $request)
 {
     $attributeNames = [
@@ -154,7 +173,7 @@ public function updateUserProfile(Request $request)
         "type"=>"update",
         "errorMsg"=>$errorString
     );
-    return response()->json($resultObject);
+    return response()->json($resultObject,457);
 }else{
     $id=$request->get("id");
     $requestData = $request->all();
@@ -185,7 +204,59 @@ public function updateUserProfile(Request $request)
 }
 }
 }
+public function updateOwnUserProfile(Request $request)
+{
+    $attributeNames = [
+        'usr_email'=> trans('form_lang.usr_email'),
+    ];
+    $rules= [
+       'usr_email'=> 'max:200',
+   ];
+   $validator = Validator::make ( $request->all(), $rules );
+   $validator->setAttributeNames($attributeNames);
+   if($validator->fails()) {
+    $errorString = implode(",",$validator->messages()->all());
+    $resultObject= array(
+        "odata.metadata"=>"",
+        "value" =>"",
+        "statusCode"=>"error",
+        "type"=>"update",
+        "errorMsg"=>$errorString
+    );
+    return response()->json($resultObject,457);
+}else{
+    //$id=$request->get("id");
+    $authenticatedUser = $request->authUser;
+    $id = $authenticatedUser->usr_id;
 
+    $requestData = $request->all();
+    if(isset($id) && !empty($id)){
+        $data_info = ModelUserProfile::findOrFail($id);
+        $data_info->update($requestData);
+        $ischanged=$data_info->wasChanged();
+        if($ischanged){
+         $resultObject= array(
+            "data" =>$data_info,
+            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+            "is_updated"=>true,
+            "status_code"=>200,
+            "type"=>"update",
+            "errorMsg"=>""
+        );
+     }else{
+        $resultObject= array(
+            "data" =>$data_info,
+            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
+            "is_updated"=>true,
+            "status_code"=>200,
+            "type"=>"update",
+            "errorMsg"=>""
+        );
+    }
+    return response()->json($resultObject);
+}
+}
+}
 public function updategrid(Request $request)
 {
     $attributeNames = [
