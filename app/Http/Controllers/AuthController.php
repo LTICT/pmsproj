@@ -227,7 +227,6 @@ class AuthController extends Controller
     {
         // ✅ Validate old and new passwords
     $validator = Validator::make($request->all(), [
-        'old_password' => 'required|min:8',
         'user_id'=>'required',
        // 'password' => 'required|min:6|max:10|confirmed', // optional: add `confirmed` if using password_confirmation field
         'password' => [
@@ -246,7 +245,7 @@ class AuthController extends Controller
     if ($validator->fails()) {
         return response()->json([
             'is_updated' => false,
-            'status_code' => 457,
+            'status_code' => 400,
             'type' => 'validation_error',
             'errorMsg' => $validator->errors()
         ],400);
