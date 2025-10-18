@@ -430,6 +430,9 @@ Route::resource('conversation_information', 'GenconversationinformationControlle
 
     Route::post('program_info/listprogramtree', 'Api\PmsprograminfoController@listprogramtree');
 
+    Route::post('program_info/listallprogramtree', 'Api\PmsprograminfoController@listallprogramtree');
+
+
     Route::resource('program_info_cso', 'Api\PmscsoprograminfoController');
     Route::post('program_info_cso/listgrid', 'Api\PmscsoprograminfoController@listgrid');
     Route::post('program_info_cso/insertgrid', 'Api\PmscsoprograminfoController@insertgrid');

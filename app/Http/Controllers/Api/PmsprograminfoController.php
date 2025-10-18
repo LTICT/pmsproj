@@ -242,7 +242,7 @@ public function deletegrid(Request $request)
     );
     return response()->json($resultObject);
 }
-//to populate projects list based on selected program
+//to fetch programs, subprogram and output based on selected sector
     public function listprogramtree(Request $request){
         $permissionData=$this->getPagePermission($request,9, "project_info");
         $prjsectorid=$request->input('pri_sector_id');
@@ -280,6 +280,65 @@ public function deletegrid(Request $request)
         p.pri_name_am,
         p.pri_sector_id,
         p.pri_program_code
+    FROM pms_program_info p
+    INNER JOIN program_hierarchy ph ON p.pri_parent_id = ph.id 
+)
+SELECT * FROM program_hierarchy';
+        $data_info=DB::select($query);
+        if(isset($data_info) && !empty($data_info)){
+        $hierarchicalData = $this->buildHierarchy(json_decode(json_encode($data_info), true));
+}else{
+    $hierarchicalData=array();
+}
+
+        //$this->getQueryInfo($query);        
+        $resultObject= array(
+            "data" =>$hierarchicalData,
+            "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0)
+         );
+        return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
+    }
+    //to fetch all programs, subprogram and output
+    public function listallprogramtree(Request $request){
+        $permissionData=$this->getPagePermission($request,9, "project_info");
+        $prjsectorid=$request->input('pri_sector_id');
+        $parentId=$request->input('parent_id');
+        $objectTypeId=$request->input('object_type_id');        
+        $query='WITH RECURSIVE program_hierarchy AS (
+    -- Anchor member: Start from the root project (change the ID as needed)
+    SELECT 
+        pri_id AS id,                     -- Primary key
+        pri_name_en AS name,
+        pri_parent_id AS "rootId",        -- Parent reference
+        ARRAY[]::json[] AS children,      -- Placeholder for children
+        pri_object_type_id,
+        pri_start_date,
+        pri_end_date,
+        pri_description,
+        pri_name_or,
+        pri_name_am,
+        pri_sector_id,
+        pri_program_code,
+        sci_name_en::varchar AS sci_name_en
+    FROM pms_program_info
+    INNER JOIN pms_sector_information ON pms_sector_information.sci_id=pms_program_info.pri_sector_id
+    WHERE pri_object_type_id=1
+    UNION ALL
+    -- Recursive member: Get children of the current node
+    SELECT 
+        p.pri_id AS id,                   -- Primary key
+        p.pri_name_en AS name,
+        p.pri_parent_id AS "rootId",
+        ARRAY[]::json[] AS children,
+        p.pri_object_type_id,
+        p.pri_start_date,
+        p.pri_end_date,
+        p.pri_description,
+        p.pri_name_or,
+        p.pri_name_am,
+        p.pri_sector_id,
+        p.pri_program_code,
+        p.pri_sector_id::varchar AS sci_name_en
     FROM pms_program_info p
     INNER JOIN program_hierarchy ph ON p.pri_parent_id = ph.id 
 )
