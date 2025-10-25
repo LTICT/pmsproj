@@ -487,6 +487,56 @@ else if($reportType==10 ){
             $query .= " AND pct_parent_id = ".intval($sectorcategoryid); 
         }
      
+   }else if($reportType==14){
+    //START PROGRAM
+    $query='WITH RECURSIVE program_hierarchy AS (
+    -- Anchor member: Start from the root project (change the ID as needed)
+    SELECT 
+        pri_id AS id,                     -- Primary key
+        pri_name_en AS name,
+        pri_parent_id AS "rootId",        -- Parent reference
+        ARRAY[]::json[] AS children,      -- Placeholder for children
+        pri_object_type_id,
+        pri_start_date,
+        pri_end_date,
+        pri_description,
+        pri_name_or,
+        pri_name_am,
+        pri_sector_id,
+        pri_program_code,
+        sci_name_en::varchar AS sci_name_en
+    FROM pms_program_info
+    INNER JOIN pms_sector_information ON pms_sector_information.sci_id=pms_program_info.pri_sector_id
+    WHERE pri_object_type_id=1
+    UNION ALL
+    -- Recursive member: Get children of the current node
+    SELECT 
+        p.pri_id AS id,                   -- Primary key
+        p.pri_name_en AS name,
+        p.pri_parent_id AS "rootId",
+        ARRAY[]::json[] AS children,
+        p.pri_object_type_id,
+        p.pri_start_date,
+        p.pri_end_date,
+        p.pri_description,
+        p.pri_name_or,
+        p.pri_name_am,
+        p.pri_sector_id,
+        p.pri_program_code,
+        p.pri_sector_id::varchar AS sci_name_en
+    FROM pms_program_info p
+    INNER JOIN program_hierarchy ph ON p.pri_parent_id = ph.id 
+)
+SELECT * FROM program_hierarchy';
+        $data_info=DB::select($query);
+if(isset($data_info) && !empty($data_info)){
+        $hierarchicalData = $this->buildHierarchy(json_decode(json_encode($data_info), true));
+}else{
+    $hierarchicalData=array();
+}
+$resultObject= array("data" =>$hierarchicalData);
+        return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
+    //END PROGRAM
    }
    $prjlocationzoneid = $request->input('prj_location_zone_id');
     if(!empty($prjlocationzoneid)){
@@ -508,4 +558,17 @@ $resultObject= array(
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 
+function buildHierarchy(array $elements, $parentId=null) {
+    $branch = [];
+    //dd($elements);
+    foreach ($elements as $element) {
+        //dd($element);
+        if ($element['rootId'] == $parentId) {
+            $children = $this->buildHierarchy($elements, $element['id']);
+            $element['children'] = $children;
+            $branch[] = $element;
+        }
+    }
+    return $branch;
+}
 }
