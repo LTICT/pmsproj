@@ -551,23 +551,25 @@ $cols = $zones->map(function ($z) {
     $zoneId = (int) $z->add_id; // ensure integer to prevent SQL injection
     $zoneName = preg_replace('/[^a-zA-Z0-9_]/', '_', $z->add_name_en); // sanitize name for SQL alias
     return "
-        MAX(CASE WHEN p.prj_owner_zone_id = {$zoneId} THEN br.bdr_requested_amount END) AS \"{$zoneName}_requested\",
-        MAX(CASE WHEN p.prj_owner_zone_id = {$zoneId} THEN br.bdr_released_amount END) AS \"{$zoneName}_approved\"
+        SUM(CASE WHEN p.prj_owner_zone_id = {$zoneId} THEN br.bdr_requested_amount END) AS \"{$zoneName}_req\",
+        SUM(CASE WHEN p.prj_owner_zone_id = {$zoneId} THEN br.bdr_released_amount END) AS \"{$zoneName}_app\"
     ";
 })->implode(", ");
 
 // Build final SQL
 $sql = "
     SELECT 
-        s.sci_name_or AS sector_name,
-        sc.psc_name AS sector_category,
+        s.sci_id AS sector_id,
+        s.sci_id AS sector_id,
+    (ARRAY_AGG(s.sci_name_or ORDER BY p.prj_id ASC))[1] AS sector_name,
+    (ARRAY_AGG(sc.psc_name ORDER BY p.prj_id ASC))[1] AS sector_category,
         $cols
     FROM pms_project p
     INNER JOIN pms_budget_request br ON br.bdr_project_id = p.prj_id
     INNER JOIN pms_project_category pc ON p.prj_project_category_id = pc.pct_id
     INNER JOIN pms_sector_information s ON p.prj_sector_id = s.sci_id
     INNER JOIN prj_sector_category sc ON sc.psc_id = s.sci_sector_category_id
-    GROUP BY s.sci_name_or, sc.psc_name
+    GROUP BY s.sci_id
 ";
 // Execute query
 $result = DB::select($sql);
