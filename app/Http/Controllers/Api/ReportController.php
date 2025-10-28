@@ -560,7 +560,8 @@ $cols = $zones->map(function ($z) {
 $sql = "
     SELECT 
         s.sci_id AS sector_id,
-        s.sci_id AS sector_id,
+        (ARRAY_AGG(sc.psc_id ORDER BY p.prj_id ASC))[1] AS sector_cat,
+       (ARRAY_AGG(s.sci_name_or ORDER BY p.prj_id ASC))[1] AS sector_name,
     (ARRAY_AGG(s.sci_name_or ORDER BY p.prj_id ASC))[1] AS sector_name,
     (ARRAY_AGG(sc.psc_name ORDER BY p.prj_id ASC))[1] AS sector_category,
         $cols
