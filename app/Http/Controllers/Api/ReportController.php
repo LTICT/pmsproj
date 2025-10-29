@@ -562,7 +562,6 @@ $sql = "
         s.sci_id AS sector_id,
         (ARRAY_AGG(sc.psc_id ORDER BY p.prj_id ASC))[1] AS sector_cat,
        (ARRAY_AGG(s.sci_name_or ORDER BY p.prj_id ASC))[1] AS sector_name,
-    (ARRAY_AGG(s.sci_name_or ORDER BY p.prj_id ASC))[1] AS sector_name,
     (ARRAY_AGG(sc.psc_name ORDER BY p.prj_id ASC))[1] AS sector_category,
         $cols
     FROM pms_project p
@@ -581,6 +580,37 @@ return response()->json([
 ], 200, [], JSON_NUMERIC_CHECK);
 
     //END PIVOT
+   }else if($reportType==16){
+    //START 16
+    // Fetch zones safely
+$sql = "
+    SELECT 
+        s.sci_id AS sector_id,
+        (ARRAY_AGG(sc.psc_id ORDER BY p.prj_id ASC))[1] AS sector_category_id,
+       (ARRAY_AGG(s.sci_name_or ORDER BY p.prj_id ASC))[1] AS sector_name,
+    (ARRAY_AGG(sc.psc_name ORDER BY p.prj_id ASC))[1] AS sector_category_name,
+    SUM(bdr_source_government_approved) AS gov_approved,
+    SUM(bdr_source_support_approved) AS support_approved,
+    SUM(bdr_source_credit_approved) AS credit_approved,
+    SUM(bdr_source_other_approved) AS other_approved,
+    SUM(bdr_source_internal_requested) AS internal_approved,
+    COUNT(bdr_id) AS requested_budget_count,
+    COUNT(CASE WHEN bdr_request_status = 3 THEN 1 END) AS approved_budget_count
+    FROM pms_project p
+    INNER JOIN pms_budget_request br ON br.bdr_project_id = p.prj_id
+    INNER JOIN pms_project_category pc ON p.prj_project_category_id = pc.pct_id
+    INNER JOIN pms_sector_information s ON p.prj_sector_id = s.sci_id
+    INNER JOIN prj_sector_category sc ON sc.psc_id = s.sci_sector_category_id
+    GROUP BY s.sci_id
+";
+// Execute query
+$result = DB::select($sql);
+// Return response
+return response()->json([
+    'data' => $result,
+], 200, [], JSON_NUMERIC_CHECK);
+
+    //END 16
    }
    $prjlocationzoneid = $request->input('prj_location_zone_id');
     if(!empty($prjlocationzoneid)){
