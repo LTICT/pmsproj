@@ -611,6 +611,34 @@ return response()->json([
 ], 200, [], JSON_NUMERIC_CHECK);
 
     //END 16
+   }else if($reportType==17){
+    //START 16
+    // Fetch zones safely
+$sql = "
+    SELECT 
+        s.sci_id AS sector_id,
+        (ARRAY_AGG(sc.psc_id ORDER BY p.prj_id ASC))[1] AS sector_category_id,
+       (ARRAY_AGG(s.sci_name_or ORDER BY p.prj_id ASC))[1] AS sector_name,
+    (ARRAY_AGG(sc.psc_name ORDER BY p.prj_id ASC))[1] AS sector_category_name,
+    SUM(CASE WHEN bdr_request_type = 5 THEN bdr_released_amount END) AS new_projects_budget,
+    SUM(CASE WHEN bdr_request_type = 6 THEN bdr_released_amount END) AS inprogress_projects_budget,
+    COUNT(CASE WHEN bdr_request_type = 5 THEN 1 END) AS new_projects_count,
+    COUNT(CASE WHEN bdr_request_type = 6 THEN 1 END) AS inprogress_project_count
+    FROM pms_project p
+    INNER JOIN pms_budget_request br ON br.bdr_project_id = p.prj_id
+    INNER JOIN pms_project_category pc ON p.prj_project_category_id = pc.pct_id
+    INNER JOIN pms_sector_information s ON p.prj_sector_id = s.sci_id
+    INNER JOIN prj_sector_category sc ON sc.psc_id = s.sci_sector_category_id
+    GROUP BY s.sci_id
+";
+// Execute query
+$result = DB::select($sql);
+// Return response
+return response()->json([
+    'data' => $result,
+], 200, [], JSON_NUMERIC_CHECK);
+
+    //END 16
    }
    $prjlocationzoneid = $request->input('prj_location_zone_id');
     if(!empty($prjlocationzoneid)){
