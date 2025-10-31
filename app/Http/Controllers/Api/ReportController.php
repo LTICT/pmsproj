@@ -612,7 +612,7 @@ return response()->json([
 
     //END 16
    }else if($reportType==17){
-    //START 16
+    //START 17, 3.3
     // Fetch zones safely
 $sql = "
     SELECT 
@@ -637,8 +637,105 @@ $result = DB::select($sql);
 return response()->json([
     'data' => $result,
 ], 200, [], JSON_NUMERIC_CHECK);
-
-    //END 16
+    //END 17
+   }else if($reportType==18){
+    //START 18, 3.4
+    // Fetch fiscalYear safely
+$fiscalYear = collect(DB::select("SELECT bdy_id, bdy_name FROM pms_budget_year ORDER BY bdy_name"));
+// Dynamically generate pivot columns
+$cols = $fiscalYear->map(function ($z) {
+    $yearId = (int) $z->bdy_id; // ensure integer to prevent SQL injection
+    $yearName = preg_replace('/[^a-zA-Z0-9_]/', '_', $z->bdy_name); // sanitize name for SQL alias
+    return "
+        SUM(CASE WHEN br.bdr_budget_year_id = {$yearId} THEN br.bdr_released_amount END) AS \"{$yearName}\"
+    ";
+})->implode(", ");
+// Build final SQL
+$sql = "
+    SELECT 
+        s.sci_id AS sector_id,
+        (ARRAY_AGG(sc.psc_id ORDER BY p.prj_id ASC))[1] AS sector_category_id,
+       (ARRAY_AGG(s.sci_name_or ORDER BY p.prj_id ASC))[1] AS sector_name,
+    (ARRAY_AGG(sc.psc_name ORDER BY p.prj_id ASC))[1] AS sector_category_name,
+        $cols
+    FROM pms_project p
+    INNER JOIN pms_budget_request br ON br.bdr_project_id = p.prj_id
+    INNER JOIN pms_project_category pc ON p.prj_project_category_id = pc.pct_id
+    INNER JOIN pms_sector_information s ON p.prj_sector_id = s.sci_id
+    INNER JOIN prj_sector_category sc ON sc.psc_id = s.sci_sector_category_id
+    GROUP BY s.sci_id
+";
+// Execute query
+$result = DB::select($sql);
+// Return response
+return response()->json([
+    'data' => $result,
+], 200, [], JSON_NUMERIC_CHECK);
+    //END 18
+   }else if($reportType==19){
+    //START 19, 3.5
+    // Fetch fiscalYear safely
+$sectorCategory = collect(DB::select("SELECT psc_id, psc_name FROM prj_sector_category"));
+// Dynamically generate pivot columns
+$cols = $sectorCategory->map(function ($z) {
+    $sectorCategoryId = (int) $z->psc_id; // ensure integer to prevent SQL injection
+    $sectorCategoryName = preg_replace('/[^a-zA-Z0-9_]/', '_', $z->psc_name); // sanitize name for SQL alias
+    return "SUM(CASE WHEN sc.psc_id = {$sectorCategoryId} THEN br.bdr_released_amount END) AS \"{$sectorCategoryName}\" ";
+})->implode(", ");
+// Build final SQL
+$sql = "
+    SELECT 
+        add_name_or AS zone_id,
+        (ARRAY_AGG(add.add_name_or ORDER BY p.prj_id ASC))[1] AS zone_name,
+        $cols
+    FROM pms_project p
+    INNER JOIN pms_budget_request br ON br.bdr_project_id = p.prj_id
+    INNER JOIN pms_project_category pc ON p.prj_project_category_id = pc.pct_id
+    INNER JOIN pms_sector_information s ON p.prj_sector_id = s.sci_id
+    INNER JOIN prj_sector_category sc ON sc.psc_id = s.sci_sector_category_id
+    INNER JOIN gen_address_structure add ON p.prj_owner_zone_id = add.add_id
+    GROUP BY add.add_id
+";
+// Execute query
+$result = DB::select($sql);
+// Return response
+return response()->json([
+    'data' => $result,
+], 200, [], JSON_NUMERIC_CHECK);
+    //END 3.5
+   }else if($reportType==20){
+    //START 20, 3.6
+    // Fetch fiscalYear safely
+$fiscalYear = collect(DB::select("SELECT bdy_id, bdy_name FROM pms_budget_year ORDER BY bdy_name"));
+// Dynamically generate pivot columns
+$cols = $fiscalYear->map(function ($z) {
+    $yearId = (int) $z->bdy_id; // ensure integer to prevent SQL injection
+    $yearName = preg_replace('/[^a-zA-Z0-9_]/', '_', $z->bdy_name); // sanitize name for SQL alias
+    return "
+        SUM(CASE WHEN br.bdr_budget_year_id = {$yearId} THEN br.bdr_released_amount END) AS \"{$yearName}\"
+    ";
+})->implode(", ");
+// Build final SQL
+$sql = "
+    SELECT 
+        add_name_or AS zone_id,
+        (ARRAY_AGG(add.add_name_or ORDER BY p.prj_id ASC))[1] AS zone_name,
+        $cols
+    FROM pms_project p
+    INNER JOIN pms_budget_request br ON br.bdr_project_id = p.prj_id
+    INNER JOIN pms_project_category pc ON p.prj_project_category_id = pc.pct_id
+    INNER JOIN pms_sector_information s ON p.prj_sector_id = s.sci_id
+    INNER JOIN prj_sector_category sc ON sc.psc_id = s.sci_sector_category_id
+    INNER JOIN gen_address_structure add ON p.prj_owner_zone_id = add.add_id
+    GROUP BY add.add_id
+";
+// Execute query
+$result = DB::select($sql);
+// Return response
+return response()->json([
+    'data' => $result,
+], 200, [], JSON_NUMERIC_CHECK);
+    //END 20
    }
    $prjlocationzoneid = $request->input('prj_location_zone_id');
     if(!empty($prjlocationzoneid)){
