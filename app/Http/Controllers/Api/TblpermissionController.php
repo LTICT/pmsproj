@@ -35,7 +35,7 @@ $pemenabled=$request->input('pem_enabled');
 if(isset($pemenabled) && isset($pemenabled)){
 $query .=' AND pem_enabled="'.$pemenabled.'"'; 
 }
-$query .=' WHERE pag_status=1';
+//$query .=' WHERE pag_status=1';
 $query.=' ORDER BY pem_id,pag_name ASC';
 $data_info=DB::select($query);
 $resultObject= array(

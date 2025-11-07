@@ -736,6 +736,24 @@ return response()->json([
     'data' => $result,
 ], 200, [], JSON_NUMERIC_CHECK);
     //END 20
+   }else if($reportType==50){
+    //START 20, 3.6
+     $sql='SELECT prj_direct_ben_male,prj_direct_ben_female,
+    prj_indirect_ben_male,prj_indirect_ben_female,
+    prj_date_agreement_signed,prj_agreement_signed_level, prj_admin_cost,prj_program_cost,  cso_name,zone_info.add_name_or as zone_name, prj_location_woreda_id AS woreda_name, prj_name_en,prj_name,
+        prj_location_description,prj_funding_agency,prj_consortium_members,
+        prj_start_date_gc,prj_start_date_plan_gc,prj_end_date_actual_gc,prj_assigned_sectors,
+        prj_end_date_plan_gc, cso_phone, cso_email FROM pms_project ';
+        $sql .= ' LEFT JOIN pms_cso_info ON pms_project.prj_owner_id = pms_cso_info.cso_id';
+        $sql .=' LEFT JOIN gen_address_structure zone_info ON zone_info.add_id= pms_project.prj_location_zone_id';
+        $sql .=' WHERE prj_owner_type=2';
+// Execute query
+$result = DB::select($sql);
+// Return response
+return response()->json([
+    'data' => $result,
+], 200, [], JSON_NUMERIC_CHECK);
+    //END 20
    }
    $prjlocationzoneid = $request->input('prj_location_zone_id');
     if(!empty($prjlocationzoneid)){
