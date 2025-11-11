@@ -736,7 +736,7 @@ return response()->json([
     'data' => $result,
 ], 200, [], JSON_NUMERIC_CHECK);
     //END 20
-   }else if($reportType==50){
+   }else if($reportType==101){
     //START 20, 3.6
      $sql='SELECT prj_direct_ben_male,prj_direct_ben_female,
     prj_indirect_ben_male,prj_indirect_ben_female,
