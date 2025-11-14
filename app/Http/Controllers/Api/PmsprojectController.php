@@ -248,9 +248,53 @@ SELECT * FROM project_hierarchy';
 
 //Only to search and display data
         public function listgridsearch(Request $request){
+        $page = (int) $request->input('page', 1);
+$perPage = (int) $request->input('per_page', 20);
+
+        //$page = 1;
+        //$perPage = 5;
+
+        $offset = ($page - 1) * $perPage;        
+
         $permissionData=$this->getPagePermission($request,9, "project_info");
         //dd($permissionData);
         //dump($permissionData);
+        //START COUNT
+        $query='SELECT COUNT(prj_id) AS total_count FROM pms_project ';
+        $query .=' WHERE prj_owner_type =1';
+        $query=$this->getSearchParam($request,$query);
+        $prjprojectstatusid=$request->input('prj_project_status_id');
+        if(isset($prjprojectstatusid) && !empty($prjprojectstatusid)){
+            $query .=" AND prj_project_status_id='".$prjprojectstatusid."'";
+        }
+        $prjprojectcategoryid=$request->input('prj_project_category_id');
+        if(isset($prjprojectcategoryid) && !empty($prjprojectcategoryid)){
+            $query .=" AND prj_project_category_id='".$prjprojectcategoryid."'";
+        }
+         $programID=$request->input('program_id');
+        if(isset($programID) && !empty($programID)){
+            $query .=" AND prj_program_id='".$programID."'";
+        }
+        $parentId=$request->input('parent_id');
+        if(isset($parentId) && !empty($parentId)){
+            $query .=" AND prj_parent_id='".$parentId."'";
+        }
+         $objectTypeId=$request->input('object_type_id');
+        if(isset($objectTypeId) && !empty($objectTypeId)){
+            $query .=" AND prj_object_type_id='".$objectTypeId."'";
+        }
+        $sectorId=$request->input('prj_sector_id');
+if(isset($sectorId) && !empty($sectorId)){
+$query .=" AND prj_sector_id='".$sectorId."'";
+}
+        $data_info=DB::select($query);
+        $total=1;
+        if(isset($data_info) && !empty($data_info)){
+            $total=$data_info[0]->total_count;                
+            }
+            $totalPages = (int) ceil($total / $perPage);
+
+        //END COUNT
         $query='SELECT prj_measured_figure,prj_measurement_unit,prj_parent_id,prj_object_type_id,sci_name_en AS sector_name,prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,zone_info.add_name_or as zone_name, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
         prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,
         prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_description,
@@ -302,16 +346,27 @@ SELECT * FROM project_hierarchy';
 if(isset($sectorId) && isset($sectorId)){
 $query .=" AND prj_sector_id='".$sectorId."'";
 }
-        $query.=' ORDER BY prj_id DESC';
+//$query.=' ORDER BY prj_id DESC LIMIT :
+        $query.=" ORDER BY prj_id LIMIT :limit OFFSET :offset";
         //$this->getQueryInfo($query);
-        $data_info=DB::select($query);
-
+        $data_info=DB::select($query, [
+    'limit'  => (int) $perPage,
+    'offset' => (int) $offset,
+]);
         $tabInfo=$this->getTabPermission($request);
         $resultObject= array(
             "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 2,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0),
             'allowedTabs'=>$tabInfo['allowedTabs'],
-            'allowedLinks'=>$tabInfo['allowedLinks'] );
+            'allowedLinks'=>$tabInfo['allowedLinks'],
+        'pagination' => [
+            'current_page' => $page,
+            'per_page' => $perPage,
+            'total' => $total,
+            'total_pages' => $totalPages,
+            'has_next' => $page < $totalPages,
+            'has_prev' => $page > 1,
+        ]);
         return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
     }
     public function updategrid(Request $request)
