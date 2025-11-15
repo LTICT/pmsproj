@@ -249,13 +249,10 @@ SELECT * FROM project_hierarchy';
 //Only to search and display data
         public function listgridsearch(Request $request){
         $page = (int) $request->input('page', 1);
-$perPage = (int) $request->input('per_page', 20);
-
+        $perPage = (int) $request->input('per_page', 20);
         //$page = 1;
         //$perPage = 5;
-
-        $offset = ($page - 1) * $perPage;        
-
+        $offset = ($page - 1) * $perPage;
         $permissionData=$this->getPagePermission($request,9, "project_info");
         //dd($permissionData);
         //dump($permissionData);

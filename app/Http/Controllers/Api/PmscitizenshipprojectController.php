@@ -60,7 +60,49 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
     }
     //to populate projects list based on selected program
     public function listgrid(Request $request){
+        $page = (int) $request->input('page', 1);
+        $perPage = (int) $request->input('per_page', 20);
+        //$page = 1;
+        //$perPage = 5;
+        $offset = ($page - 1) * $perPage;
         $permissionData=$this->getPagePermission($request,68, "project_info");
+        //dd($permissionData);
+        //dump($permissionData);
+        //START COUNT
+        $query='SELECT COUNT(prj_id) AS total_count FROM pms_project ';
+        $query .=' WHERE prj_owner_type =3';
+        $query=$this->getSearchParamCSO($request,$query);
+        $prjprojectstatusid=$request->input('prj_project_status_id');
+        if(isset($prjprojectstatusid) && isset($prjprojectstatusid)){
+            $query .=' AND prj_project_status_id="'.$prjprojectstatusid.'"';
+        }
+        $prjprojectcategoryid=$request->input('prj_project_category_id');
+        if(isset($prjprojectcategoryid) && isset($prjprojectcategoryid)){
+            $query .=" AND prj_project_category_id='".$prjprojectcategoryid."'";
+        }
+        $prjstartdategc=$request->input('prj_start_date_gc');
+        if(isset($prjstartdategc) && isset($prjstartdategc)){
+            $query .=' AND prj_start_date_gc="'.$prjstartdategc.'"';
+        }
+        $prjstartdateplangc=$request->input('prj_start_date_plan_gc');
+        if(isset($prjstartdateplangc) && isset($prjstartdateplangc)){
+            $query .=' AND prj_start_date_plan_gc="'.$prjstartdateplangc.'"';
+        }
+        $prjenddateactualgc=$request->input('prj_end_date_actual_gc');
+        if(isset($prjenddateactualgc) && isset($prjenddateactualgc)){
+            $query .=' AND prj_end_date_actual_gc="'.$prjenddateactualgc.'"';
+        }
+        $prjenddateplangc=$request->input('prj_end_date_plan_gc');
+        if(isset($prjenddateplangc) && isset($prjenddateplangc)){
+            $query .=' AND prj_end_date_plan_gc="'.$prjenddateplangc.'"';
+        }
+        $data_info=DB::select($query);
+        $total=1;
+        if(isset($data_info) && !empty($data_info)){
+            $total=$data_info[0]->total_count;                
+        }
+        $totalPages = (int) ceil($total / $perPage);
+        //END COUNT
       $query='SELECT prj_cluster_id,prj_male_participant,prj_female_participant,prj_sub_project_category_id,prj_job_opportunity,sci_name_en AS sector_name,prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,zone_info.add_name_or as zone_name, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
         prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,
         prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_description,
@@ -97,20 +139,75 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         }
 
         $query=$this->getSearchParamCitizenship($request,$query);
-        $query.=' ORDER BY prj_id DESC';
-        $data_info=DB::select($query);
+        //$query.=' ORDER BY prj_id DESC';
+        $query.=" ORDER BY prj_id LIMIT :limit OFFSET :offset";
+        //$this->getQueryInfo($query);
+        $data_info=DB::select($query, [
+    'limit'  => (int) $perPage,
+    'offset' => (int) $offset,
+]);
+        //$data_info=DB::select($query);
         //$this->getQueryInfo($query);
         $tabInfo=$this->getTabPermission($request);
         $resultObject= array(
             "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1),
+        'pagination' => [
+            'current_page' => $page,
+            'per_page' => $perPage,
+            'total' => $total,
+            'total_pages' => $totalPages,
+            'has_next' => $page < $totalPages,
+            'has_prev' => $page > 1,
+        ]);
         return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
     }
 //Only to search and display data
         public function listgridsearch(Request $request){
+        $page = (int) $request->input('page', 1);
+        $perPage = (int) $request->input('per_page', 20);
+        //$page = 1;
+        //$perPage = 5;
+        $offset = ($page - 1) * $perPage;
         $permissionData=$this->getPagePermission($request,9, "project_info");
         //dd($permissionData);
         //dump($permissionData);
+        //START COUNT
+        $query='SELECT COUNT(prj_id) AS total_count FROM pms_project ';
+        $query .=' WHERE prj_owner_type =3';
+        $query=$this->getSearchParamCSO($request,$query);
+        $prjprojectstatusid=$request->input('prj_project_status_id');
+        if(isset($prjprojectstatusid) && isset($prjprojectstatusid)){
+            $query .=' AND prj_project_status_id="'.$prjprojectstatusid.'"';
+        }
+        $prjprojectcategoryid=$request->input('prj_project_category_id');
+        if(isset($prjprojectcategoryid) && isset($prjprojectcategoryid)){
+            $query .=" AND prj_project_category_id='".$prjprojectcategoryid."'";
+        }
+        $prjstartdategc=$request->input('prj_start_date_gc');
+        if(isset($prjstartdategc) && isset($prjstartdategc)){
+            $query .=' AND prj_start_date_gc="'.$prjstartdategc.'"';
+        }
+        $prjstartdateplangc=$request->input('prj_start_date_plan_gc');
+        if(isset($prjstartdateplangc) && isset($prjstartdateplangc)){
+            $query .=' AND prj_start_date_plan_gc="'.$prjstartdateplangc.'"';
+        }
+        $prjenddateactualgc=$request->input('prj_end_date_actual_gc');
+        if(isset($prjenddateactualgc) && isset($prjenddateactualgc)){
+            $query .=' AND prj_end_date_actual_gc="'.$prjenddateactualgc.'"';
+        }
+        $prjenddateplangc=$request->input('prj_end_date_plan_gc');
+        if(isset($prjenddateplangc) && isset($prjenddateplangc)){
+            $query .=' AND prj_end_date_plan_gc="'.$prjenddateplangc.'"';
+        }
+        $data_info=DB::select($query);
+        $total=1;
+        if(isset($data_info) && !empty($data_info)){
+            $total=$data_info[0]->total_count;                
+        }
+        $totalPages = (int) ceil($total / $perPage);
+        //END COUNT
+
         $query='SELECT prj_cluster_id,cso_name, sci_name_en AS sector_name,prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,zone_info.add_name_or as zone_name, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
         prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,
         prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_description,
@@ -151,7 +248,13 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         if(isset($programID) && isset($programID)){
             $query .=" AND prj_program_id='".$programID."'";
         }
-        $query.=' ORDER BY prj_id DESC';
+        //$query.=' ORDER BY prj_id DESC';
+            $query.=" ORDER BY prj_id LIMIT :limit OFFSET :offset";
+        //$this->getQueryInfo($query);
+        $data_info=DB::select($query, [
+    'limit'  => (int) $perPage,
+    'offset' => (int) $offset,
+]);
         //$this->getQueryInfo($query);
         $data_info=DB::select($query);
 
@@ -160,7 +263,15 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
             "data" =>$data_info,
             "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 2,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0),
             'allowedTabs'=>$tabInfo['allowedTabs'],
-            'allowedLinks'=>$tabInfo['allowedLinks'] );
+            'allowedLinks'=>$tabInfo['allowedLinks'],
+            'pagination' => [
+            'current_page' => $page,
+            'per_page' => $perPage,
+            'total' => $total,
+            'total_pages' => $totalPages,
+            'has_next' => $page < $totalPages,
+            'has_prev' => $page > 1,
+        ] );
         return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
     }
     public function updategrid(Request $request)
