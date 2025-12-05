@@ -251,7 +251,7 @@ public function handleDatabaseException($e, $actionType){
 
 			$projectDepartmentID=$request->input('prj_department_id');
 			$projectSectorID=$request->input('prj_sector_id');
-			$query .=" AND prj_owner_type='".$userTypeId."'";
+			//$query .=" AND prj_owner_type='".$userTypeId."'";
 			if(isset($prjName) && isset($prjName)){
 				$query .=" AND prj_name LIKE '%".$prjName."%'"; 
 			}
@@ -259,20 +259,20 @@ public function handleDatabaseException($e, $actionType){
 				$query .=" AND prj_code LIKE '%".$prjCode."%'"; 
 			}
 			if(isset($zoneId) && !empty($zoneId) && $zoneId > 0){
-				$query .=" AND prj_owner_zone_id='".$zoneId."'";
+				$query .=" AND prj_location_zone_id='".$zoneId."'";
 			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $prjownerzoneid>0){
-				$query .=" AND prj_owner_zone_id='".$prjownerzoneid."'";   
+				$query .=" AND prj_location_zone_id='".$prjownerzoneid."'";
 			}else if($include ==0){
-				$query .=" AND prj_owner_zone_id=0"; 
-				$query .=" AND prj_owner_woreda_id=0"; 
+				$query .=" AND prj_location_zone_id=0"; 
+				$query .=" AND prj_location_woreda_id=0"; 
 			}
 
 			if(isset($woredaId) && !empty($woredaId) && $woredaId > 0){
-				$query .=" AND prj_owner_woreda_id='".$woredaId."'"; 
+				$query .=" AND prj_location_woreda_id='".$woredaId."'"; 
 			}else if(isset($prjownerworedaid) && isset($prjownerworedaid) && $prjownerworedaid>0){
-				$query .=" AND prj_owner_woreda_id='".$prjownerworedaid."'";   
+				$query .=" AND prj_location_woreda_id='".$prjownerworedaid."'";   
 			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $include ==0 && $prjownerzoneid > 0){
-				$query .=" AND prj_owner_woreda_id=0"; 
+				$query .=" AND prj_location_woreda_id=0"; 
 			}
 			//$query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_user_id=".$userId." )";
 			if(isset($sectorId) && !empty($sectorId) && $sectorId > 1){

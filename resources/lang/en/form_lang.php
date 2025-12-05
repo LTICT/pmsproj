@@ -7,6 +7,8 @@ return [
 'prj_total_actual_budget' => 'Total Actual Budget',
 'sector_name' => 'Sector Name',
 'zone' => 'Zone',
+'prj_cluster_id'=>'Cluster',
+'woreda' => 'Woreda',
 'prj_start_date_gc' => 'Start Date (GC)',
 'prj_urban_ben_number' => 'Urban Beneficiaries',
 'prj_rural_ben_number' => 'Rural Beneficiaries',

@@ -543,7 +543,7 @@ $resultObject= array("data" =>$hierarchicalData);
 $zones = collect(DB::select("
     SELECT add_id, add_name_en
     FROM gen_address_structure
-    WHERE add_parent_id::integer = 1
+    WHERE add_parent_id::integer = 508
 "));
 
 // Dynamically generate pivot columns
@@ -551,8 +551,8 @@ $cols = $zones->map(function ($z) {
     $zoneId = (int) $z->add_id; // ensure integer to prevent SQL injection
     $zoneName = preg_replace('/[^a-zA-Z0-9_]/', '_', $z->add_name_en); // sanitize name for SQL alias
     return "
-        SUM(CASE WHEN p.prj_owner_zone_id = {$zoneId} THEN br.bdr_requested_amount END) AS \"{$zoneName}_req\",
-        SUM(CASE WHEN p.prj_owner_zone_id = {$zoneId} THEN br.bdr_released_amount END) AS \"{$zoneName}_app\"
+        SUM(CASE WHEN p.prj_owner_woreda_id = {$zoneId} THEN br.bdr_requested_amount END) AS \"{$zoneName}_req\",
+        SUM(CASE WHEN p.prj_owner_woreda_id = {$zoneId} THEN br.bdr_released_amount END) AS \"{$zoneName}_app\"
     ";
 })->implode(", ");
 
@@ -693,7 +693,7 @@ $sql = "
     INNER JOIN pms_project_category pc ON p.prj_project_category_id = pc.pct_id
     INNER JOIN pms_sector_information s ON p.prj_sector_id = s.sci_id
     INNER JOIN prj_sector_category sc ON sc.psc_id = s.sci_sector_category_id
-    INNER JOIN gen_address_structure add ON p.prj_owner_zone_id = add.add_id
+    INNER JOIN gen_address_structure add ON p.prj_owner_woreda_id = add.add_id
     GROUP BY add.add_id
 ";
 // Execute query

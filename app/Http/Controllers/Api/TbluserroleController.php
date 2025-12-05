@@ -13,225 +13,21 @@ class TbluserroleController extends MyController
     parent::__construct();
     //$this->middleware('auth');
 }
- /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\View\View
-     */
- public function index(Request $request)
- {
-    $selectedLanguage=app()->getLocale();
-    if($selectedLanguage=="or"){
-        $filepath = base_path() .'\resources\lang\or\ag_grid.php';
-    }else if($selectedLanguage=="en"){
-        $filepath = base_path() .'\resources\lang\en\ag_grid.php';
-    }else if($selectedLanguage=="am"){
-        $filepath = base_path() .'\resources\lang\am\ag_grid.php';
-    }
-    $filepath = base_path() .'\resources\lang\en\ag_grid.php';
-    $txt = file_get_contents($filepath);
-    $data['ag_grid_lang']=$txt;
-    $searchParams= $this->getSearchSetting('tbl_user_role');
-    $dataInfo = Modeltbluserrole::latest();
-    $this->searchQuery($searchParams, $request,$dataInfo);
-    $perPage = 20;
-    $dataInfo =$dataInfo->paginate($perPage);
-    $data['tbl_user_role_data']=$dataInfo;
-    $generatedSearchInfo= $this->displaySearchForm($searchParams, $request,false, 1, true);
-    $generatedSearchInfo=explode("@", $generatedSearchInfo);
-    $generatedSearchForm=$generatedSearchInfo[0];
-    $generatedSearchTitle=$generatedSearchInfo[1];
-    $data['searchForm']=$generatedSearchForm;
-    $data['searchTitle']=$generatedSearchTitle;
-    $data['page_title']=trans("form_lang.tbl_user_role");
-    return view('user_role.list_tbl_user_role', $data);
-}
-function getForm(Request $request)
-{
-    $id=$request->get('id');
-    $tbl_roles_set=\App\Modeltblroles::latest()->get();
-
-    $data['related_tbl_roles']= $tbl_roles_set ;
-
-    $data['is_editable']=1;
-    if(isset($id) && !empty($id)){
-       $data_info = Modeltbluserrole::findOrFail($id);                
-       if(isset($data_info) && !empty($data_info)){
-        $controllerName="TbluserroleController";
-        $data= $this->validateEdit($data, $data_info['url_create_time'], $controllerName);
-        $data['tbl_user_role_data']=$data_info;
-    }
-}
-$data['page_title']=trans("form_lang.tbl_user_role");
-$form= view('user_role.form_popup_tbl_user_role', $data)->render();
-$resultObject = array(
-    "" => "", "form" => $form, 'pageTitle'=>trans('form_lang.tbl_user_role'));
-return response()->json($resultObject);
-}
-function getListForm(Request $request)
-{
-    $id=$request->get('id');
-    $data['page_title']='';
-    $form= view('user_role.editable_list_tbl_user_role', $data)->render();
-    $resultObject = array(
-        "" => "", "form" => $form, 'page_info'=>trans('form_lang.tbl_user_role'));
-    return response()->json($resultObject);
-    //echo json_encode($resultObject, JSON_NUMERIC_CHECK);
-}
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
-    {
-        $tbl_roles_set=\App\Modeltblroles::latest()->get();
-
-        $data['related_tbl_roles']= $tbl_roles_set ;
-
-        $data['page_title']=trans("form_lang.tbl_user_role");
-        $data['action_mode']="create";
-        return view('user_role.form_tbl_user_role', $data);
-    }
-    /**`
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function store(Request $request)
-    {
-       $attributeNames = [
-        'url_role_id'=> trans('form_lang.url_role_id'), 
-'url_user_id'=> trans('form_lang.url_user_id'), 
-'url_description'=> trans('form_lang.url_description'), 
-'url_status'=> trans('form_lang.url_status'), 
-
-    ];
-    $rules= [
-        'url_role_id'=> 'max:200', 
-'url_user_id'=> 'max:200', 
-'url_description'=> 'max:425', 
-'url_status'=> 'integer', 
-
-    ]; 
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if (!$validator->fails()) {
-        $requestData = $request->all();
-        $requestData['url_created_by']=auth()->user()->usr_Id;
-        Modeltbluserrole::create($requestData);
-        return redirect('user_role')->with('flash_message',  trans('form_lang.insert_success'));
-    }else{
-        return redirect('user_role/create')
-        ->withErrors($validator)
-        ->withInput();
-    }
-}
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\View\View
-     */
-    public function show($id)
-    {
-        $query='SELECT url_id,tbl_roles.rol_name AS url_role_id,url_user_id,url_description,url_create_time,url_update_time,url_delete_time,url_created_by,url_status FROM tbl_user_role ';       
-        $query .= ' INNER JOIN tbl_roles ON tbl_user_role.url_role_id = tbl_roles.rol_id'; 
-
-        $query .=' WHERE url_id='.$id.' ';
-        $data_info=DB::select(DB::raw($query));
-        if(isset($data_info) && !empty($data_info)){
-            $data['tbl_user_role_data']=$data_info[0];
-        }
-        //$data_info = Modeltbluserrole::findOrFail($id);
-        //$data['tbl_user_role_data']=$data_info;
-        $data['page_title']=trans("form_lang.tbl_user_role");
-        return view('user_role.show_tbl_user_role', $data);
-    }
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\View\View
-     */
-    public function edit($id)
-    {
-        $tbl_roles_set=\App\Modeltblroles::latest()->get();
-
-        $data['related_tbl_roles']= $tbl_roles_set ;
-
-        $data_info = Modeltbluserrole::find($id);
-        $data['tbl_user_role_data']=$data_info;
-        $data['page_title']=trans("form_lang.tbl_user_role");
-        $data['action_mode']="edit";
-        $data['record_id']=$id;
-        return view('user_role.form_tbl_user_role', $data);
-    }
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function update(Request $request, $id)
-    {
-     $attributeNames = [
-        'url_role_id'=> trans('form_lang.url_role_id'), 
-'url_user_id'=> trans('form_lang.url_user_id'), 
-'url_description'=> trans('form_lang.url_description'), 
-'url_status'=> trans('form_lang.url_status'), 
-
-    ];
-    $rules= [
-        'url_role_id'=> 'max:200', 
-'url_user_id'=> 'max:200', 
-'url_description'=> 'max:425', 
-'url_status'=> 'integer', 
-
-    ];     
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if (!$validator->fails()) {
-     $requestData = $request->all();
-     $data_info = Modeltbluserrole::findOrFail($id);
-     $data_info->update($requestData);
-     $ischanged=$data_info->wasChanged();
-     if($ischanged){
-         return redirect('user_role')->with('flash_message',  trans('form_lang.update_success'));
-     }else{
-        return redirect('user_role/'.$id.'/edit')
-        ->with('flash_message',trans('form_lang.not_changed') )
-        ->withInput();
-    }
-}else{
-    return redirect('user_role/'.$id.'/edit')
-    ->withErrors($validator)
-    ->withInput();
-}
-}
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function destroy($id)
-    {
-        Modeltbluserrole::destroy($id);
-        return redirect('user_role')->with('flash_message',  trans('form_lang.delete_success'));
-    }
+ 
     public function listgrid(Request $request){
-     $query='SELECT rol_name, url_id, url_role_id,url_user_id,url_description,url_create_time,
-     url_update_time,url_delete_time,url_created_by,url_status,1 AS is_editable, 1 AS is_deletable FROM tbl_user_role ';       
-     $query .= ' INNER JOIN tbl_roles ON tbl_user_role.url_role_id = tbl_roles.rol_id'; 
-
+     $pageId=22;
+$canListData=$this->getSinglePagePermission($request,$pageId,'list',"");
+    if(!$canListData){
+        return $this->cannotOperate("list");
+    } 
+    $permissionIndex=",0 AS is_editable, 0 AS is_deletable";
+     $permissionData=$this->getPagePermission($request,22);
+      if(isset($permissionData) && !empty($permissionData)){
+        $permissionIndex=",".$permissionData->pem_edit." AS is_editable, ".$permissionData->pem_delete." AS is_deletable";
+     }
+     $query="SELECT rol_name, url_id, url_role_id,url_user_id,url_description,url_create_time,
+     url_update_time,url_delete_time,url_created_by,url_status,1 AS is_editable, 1 AS is_deletable ".$permissionIndex." FROM tbl_user_role ";       
+     $query .= " INNER JOIN tbl_roles ON tbl_user_role.url_role_id = tbl_roles.rol_id";
      $query .=' WHERE 1=1';
      $urlid=$request->input('url_id');
 if(isset($urlid) && isset($urlid)){
@@ -289,13 +85,27 @@ $query .=' AND url_status="'.$urlstatus.'"';
 $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
-    "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+    "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0));
 return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 public function updategrid(Request $request)
 {
+ $id=$request->get("url_id");
+ if(isset($id) && !empty($id)){
+    $canEditData=$this->getSinglePagePermission($request,22,'update',$id);
+    if(!$canEditData){
+        return $this->cannotOperate("update");
+    }
+ }else{
+    $canAddData=$this->getSinglePagePermission($request,22,'save',"");
+    if(!$canAddData){
+        return $this->cannotOperate("save");
+    }
+ }
+    
+
     $attributeNames = [
-        'url_role_id'=> trans('form_lang.url_role_id'), 
+'url_role_id'=> trans('form_lang.url_role_id'), 
 'url_user_id'=> trans('form_lang.url_user_id'), 
 'url_description'=> trans('form_lang.url_description'), 
 'url_status'=> trans('form_lang.url_status'), 
@@ -307,23 +117,11 @@ public function updategrid(Request $request)
 'url_description'=> 'max:425', 
 //'url_status'=> 'integer',
     ];
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if($validator->fails()) {
-        $errorString = implode(",",$validator->messages()->all());
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>"",
-            "statusCode"=>"error",
-            "type"=>"update",
-            "errorMsg"=>$errorString
-        );
-        return response()->json($resultObject);
-    }else{
-        $id=$request->get("url_id");
-        //$requestData['foreign_field_name']=$request->get('master_id');
-            //assign data from of foreign key
-        $requestData = $request->all();            
+$validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update", $id);
+if ($validationResult !== false) {
+    return $validationResult;
+}
+$requestData = $request->all();
         $status= $request->input('url_status');
         if($status=="true"){
             $requestData['url_status']=1;
@@ -331,6 +129,7 @@ public function updategrid(Request $request)
             $requestData['url_status']=0;
         }
         if(isset($id) && !empty($id)){
+             try{
             $data_info = Modeltbluserrole::findOrFail($id);
             $data_info->update($requestData);
             $ischanged=$data_info->wasChanged();
@@ -354,10 +153,15 @@ public function updategrid(Request $request)
             );
         }
         return response()->json($resultObject);
+        }catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"update");
+}
+
     }else{
         //Parent Id Assigment
         //$requestData['ins_vehicle_id']=$request->get('master_id');
         //$requestData['url_created_by']=auth()->user()->usr_Id;
+        try{
         $data_info=Modeltbluserrole::create($requestData);
         $resultObject= array(
             "odata.metadata"=>"",
@@ -367,11 +171,19 @@ public function updategrid(Request $request)
             "errorMsg"=>""
         );
         return response()->json($resultObject);
+        }catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"save");
+}
     }        
 }
-}
+
 public function insertgrid(Request $request)
 {
+     $canAddData=$this->getSinglePagePermission($request,22,'save',"");
+    if(!$canAddData){
+        return $this->cannotOperate("save");
+    }
+
     $attributeNames = [
         'url_role_id'=> trans('form_lang.url_role_id'), 
 'url_user_id'=> trans('form_lang.url_user_id'), 
@@ -385,19 +197,11 @@ public function insertgrid(Request $request)
 'url_description'=> 'max:425', 
 //'url_status'=> 'integer', 
     ];
-    $validator = Validator::make ( $request->all(), $rules );
-    $validator->setAttributeNames($attributeNames);
-    if($validator->fails()) {
-        $errorString = implode(",",$validator->messages()->all());
-        $resultObject= array(
-            "odata.metadata"=>"",
-            "value" =>"",
-            "statusCode"=>"error",
-            "type"=>"update",
-            "errorMsg"=>$errorString
-        );
-        return response()->json($resultObject);
-    }else{
+     $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "save");
+if ($validationResult !== false) {
+    return $validationResult;
+}
+try {
         $requestData = $request->all();
         //$requestData['url_created_by']=auth()->user()->usr_Id;
         $status= $request->input('url_status');
@@ -410,15 +214,19 @@ public function insertgrid(Request $request)
        $data_info["rol_name"]= $request->get("rol_name");
        $data_info['is_editable']=1;
         $data_info['is_deletable']=1;
-        $resultObject= array(
-            "data" =>$data_info,
-            "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1),
-            "status_code"=>200,
-            "type"=>"save",
-            "errorMsg"=>""
-        );
-    }  
-    return response()->json($resultObject);
+        return response()->json([
+        "data" => $data_info,
+        "previledge" => [
+            'is_role_editable' => 1,
+            'is_role_deletable' => 1
+        ],
+        "status_code" => 200,
+        "type" => "save",
+        "errorMsg" => ""
+    ]);
+}catch (QueryException $e) {
+  return $this->handleDatabaseException($e,"save");
+}
 }
 public function deletegrid(Request $request)
 {

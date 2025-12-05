@@ -317,6 +317,7 @@ public function listaddress(Request $request){
      //WHERE usr_id = '.$userId.' AND add_id::integer =0   
   $authenticatedUser = $request->authUser;
   $userId=$authenticatedUser->usr_id;
+  $userType=$authenticatedUser->usr_user_type;
         //$userId=79;
   $userInfo=$this->getUserInfo($request);
   if($userInfo !=null){
@@ -383,9 +384,14 @@ else{
     add_name_en AS add_name_en,
     add_parent_id AS "rootId",
         ARRAY[]::json[] AS children -- Initialize children as empty array
-        FROM gen_address_structure 
-        WHERE add_id::integer =508
-        /*WHERE add_id::integer =1*/
+        FROM gen_address_structure ';
+        if($userType==3 || $userType==5){
+            $query .='WHERE add_id::integer =1 ';
+        }elseif($userType==1){
+            $query .='WHERE add_id::integer =508 ';
+                }
+        /*WHERE add_id::integer =508*/
+        $query .='
         UNION ALL
         SELECT 
         g.add_id AS id,
