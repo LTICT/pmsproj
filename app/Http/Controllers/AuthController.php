@@ -26,8 +26,8 @@ class AuthController extends Controller
     {
         $email = strtolower($request->input('email'));
         $password=$request->input('password');
-        if (RateLimiter::tooManyAttempts($email, 2)){
-            return response()->json(['status' => 'error', 'message' => 'Incorrect email/Password','retry_after_minutes'=>5], 429);
+        if (RateLimiter::tooManyAttempts($email, 5)){
+            return response()->json(['status' => 'error', 'message' => 'Incorrect email/Password','retry_after_minutes'=>2], 429);
       }else{
         $this->validateLogin($request);
         //$credentials = $request->only('email', 'password');

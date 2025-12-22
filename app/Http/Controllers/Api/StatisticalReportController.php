@@ -396,19 +396,23 @@ if (isset($endTime) && !empty($endTime)) {
 }*/
 }else if($reportType==101){
     //CSO Information
- $query="SELECT cso_type AS \"CSO Type\",
-          FROM pms_cso_info";
+ $query="SELECT cso_type AS \"CSO Type\" FROM pms_cso_info";
 $query .= " WHERE 1=1";
 }else if($reportType==102){
     //CSO Project
     //psc_name AS \"$cluster\",
  $query="SELECT prs_status_name{$suffix} AS \"$projectStatus\",
           prj_name AS \"$projectname\",
-          cso_type AS \"CSO Type\",          
+           CASE 
+        WHEN cso_type::integer = 1 THEN 'Local'
+        WHEN cso_type::integer = 2 THEN 'International'
+        ELSE 'Unknown'
+    END AS \"CSO Type\",          
           (prj_admin_cost + prj_program_cost) AS \"Actual Budget\",
           (prj_direct_ben_male + prj_direct_ben_female) AS \"Direct Beneficiery\",
           (prj_indirect_ben_male + prj_indirect_ben_female) AS \"In-direct Beneficiery\"
           FROM pms_project";
+
 //$query .= " INNER JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id";
 //$query .= " INNER JOIN prj_sector_category ON pms_project.prj_cluster_id = prj_sector_category.psc_id";
 $query .= " INNER JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id";
@@ -418,20 +422,25 @@ $query .= " WHERE prj_owner_type=2 AND prj_object_type_id=5";
     //Citizenship Project by location\
     //pct_name{$suffix} AS \"$projectcategory\",
     $query="SELECT 
+    pct_name{$suffix} AS \"$projectcategory\",
+    sci_name{$suffix} AS \"$sectorname\",
     zone.add_name{$suffix} AS \"$zone\",
     woreda.add_name{$suffix} AS \"$woreda\",
     SUM(prj_total_actual_budget) AS \"Actual Budget\",
     SUM(prj_rural_ben_number) AS \"Beneficiary\",
     COUNT(prj_id) AS \"Project Count\"
     FROM pms_project";
-//$query .= " INNER JOIN pms_sector_information ON pms_project.prj_sector_id = pms_sector_information.sci_id";
-$query .= " INNER JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id";
+$query .= " LEFT JOIN pms_sector_information ON pms_project.prj_sector_id = pms_sector_information.sci_id";
+$query .= " LEFT JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id";
 //$query .= " INNER JOIN prj_sector_category ON pms_project.prj_cluster_id = prj_sector_category.psc_id";
-$query .= " INNER JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id";
+$query .= " LEFT JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id";
 $query .= " LEFT JOIN gen_address_structure zone ON pms_project.prj_location_zone_id = zone.add_id";
 $query .= " LEFT JOIN gen_address_structure woreda ON pms_project.prj_location_woreda_id = woreda.add_id";
 $query .= " WHERE prj_owner_type=3 ";
-$query .= " GROUP BY zone.add_name{$suffix}, woreda.add_name{$suffix}";
+$query =$this->getSearchParamCitizenship($request,$query);
+$query .= " GROUP BY zone.add_name{$suffix}, woreda.add_name{$suffix}, sci_name{$suffix}, pct_name{$suffix}";
+
+
 }
 //for governmental projects
 if($reportType <=100){

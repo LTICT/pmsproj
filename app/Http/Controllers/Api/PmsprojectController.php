@@ -57,10 +57,9 @@ WHERE prp_project_id = ".$id."
               $performance_info=DB::select($query);
             //END PROJECT PERFORMANCE
               //START COST
-              $query='SELECT SUM(bdr_released_amount) AS released_amount, rqc_name_en as budget_type FROM pms_budget_request ';
+     $query='SELECT SUM(bdr_released_amount) AS released_amount, rqc_name_en as budget_type FROM pms_budget_request ';
      $query .=" INNER JOIN pms_request_category ON pms_request_category.rqc_id=pms_budget_request.bdr_request_category_id ";
      $query .=" WHERE bdr_project_id= ".$id." AND bdr_request_status=3 GROUP BY rqc_name_en ";
-
       /** 
       * $query='SELECT rqc_name_or AS request_category, bdr_released_amount
      FROM pms_budget_request ';
@@ -212,7 +211,7 @@ SELECT * FROM project_hierarchy';
         $permissionData=$this->getPagePermission($request,9, "project_info");
         //dd($permissionData);
         //dump($permissionData);
-        $query='SELECT prj_parent_id,prj_object_type_id, prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,add_name_or, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
+        $query='SELECT prj_measured_figure,prj_measurement_unit, prj_parent_id,prj_object_type_id, prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,add_name_or, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
         prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,
         prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_description,
         prj_start_date_gc,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,
@@ -248,109 +247,127 @@ SELECT * FROM project_hierarchy';
 
 //Only to search and display data
         public function listgridsearch(Request $request){
-        $page = (int) $request->input('page', 1);
-        $perPage = (int) $request->input('per_page', 20);
-        //$page = 1;
-        //$perPage = 5;
-        $offset = ($page - 1) * $perPage;
-        $permissionData=$this->getPagePermission($request,9, "project_info");
-        //dd($permissionData);
-        //dump($permissionData);
-        //START COUNT
-        $query='SELECT COUNT(prj_id) AS total_count FROM pms_project ';
-        $query .=' WHERE prj_owner_type =1';
-        $query=$this->getSearchParam($request,$query);
-        $prjprojectstatusid=$request->input('prj_project_status_id');
-        if(isset($prjprojectstatusid) && !empty($prjprojectstatusid)){
-            $query .=" AND prj_project_status_id='".$prjprojectstatusid."'";
-        }
-        $prjprojectcategoryid=$request->input('prj_project_category_id');
-        if(isset($prjprojectcategoryid) && !empty($prjprojectcategoryid)){
-            $query .=" AND prj_project_category_id='".$prjprojectcategoryid."'";
-        }
-         $programID=$request->input('program_id');
-        if(isset($programID) && !empty($programID)){
-            $query .=" AND prj_program_id='".$programID."'";
-        }
-        $parentId=$request->input('parent_id');
-        if(isset($parentId) && !empty($parentId)){
-            $query .=" AND prj_parent_id='".$parentId."'";
-        }
-         $objectTypeId=$request->input('object_type_id');
-        if(isset($objectTypeId) && !empty($objectTypeId)){
-            $query .=" AND prj_object_type_id='".$objectTypeId."'";
-        }
-        $sectorId=$request->input('prj_sector_id');
-if(isset($sectorId) && !empty($sectorId)){
-$query .=" AND prj_sector_id='".$sectorId."'";
-}
-        $data_info=DB::select($query);
-        $total=1;
-        if(isset($data_info) && !empty($data_info)){
-            $total=$data_info[0]->total_count;                
-            }
-            $totalPages = (int) ceil($total / $perPage);
+       
+    $permissionData=$this->getPagePermission($request,9, "project_info");
+    $page    = max((int) $request->input('page', 1), 1);
+    $perPage = max((int) $request->input('per_page', 20), 1);
+    $offset  = ($page - 1) * $perPage;
 
-        //END COUNT
-        $query="SELECT prj_measured_figure,prj_measurement_unit,prj_parent_id,prj_object_type_id,sci_name_en AS sector_name,prs_color_code AS color_code,prs_id AS status_id, prs_status_name_en AS status_name,(zone_info.add_name_or || '-' || woreda_info.add_name_or) AS  zone_name, prj_name_en,prj_name_am,prj_department_id,prj_id,prj_name,prj_code, prj_project_status_id,prj_project_category_id,prj_total_estimate_budget,prj_total_actual_budget,
-        prj_geo_location,prj_sector_id,prj_location_region_id,prj_location_zone_id,prj_location_woreda_id,
-        prj_location_description,prj_owner_region_id,prj_owner_zone_id,prj_owner_woreda_id,prj_owner_description,
-        prj_start_date_gc,prj_start_date_plan_gc,prj_end_date_actual_et,prj_end_date_actual_gc,
-        prj_end_date_plan_gc,prj_outcome,prj_remark
-        ,prj_owner_id,prj_urban_ben_number,prj_rural_ben_number,1 AS is_editable, 1 AS is_deletable,prj_program_id FROM pms_project ";
-        $query .=' LEFT JOIN pms_project_status ON pms_project_status.prs_id= pms_project.prj_project_status_id';
-        $query .=' LEFT JOIN gen_address_structure zone_info ON zone_info.add_id= pms_project.prj_owner_zone_id';
-        $query .=' LEFT JOIN gen_address_structure woreda_info ON woreda_info.add_id= pms_project.prj_owner_woreda_id';
-        $query .=' LEFT JOIN pms_sector_information ON pms_sector_information.sci_id= pms_project.prj_sector_id';
-        $query .=' WHERE prj_owner_type =1';
-        $query=$this->getSearchParam($request,$query);
-        $prjprojectstatusid=$request->input('prj_project_status_id');
-        if(isset($prjprojectstatusid) && isset($prjprojectstatusid)){
-            $query .=" AND prj_project_status_id='".$prjprojectstatusid."'";
-        }
-        $prjprojectcategoryid=$request->input('prj_project_category_id');
-        if(isset($prjprojectcategoryid) && isset($prjprojectcategoryid)){
-            $query .=" AND prj_project_category_id='".$prjprojectcategoryid."'";
-        }
-        $prjstartdategc=$request->input('prj_start_date_gc');
-        if(isset($prjstartdategc) && isset($prjstartdategc)){
-            $query .=' AND prj_start_date_gc="'.$prjstartdategc.'"';
-        }
-        $prjstartdateplangc=$request->input('prj_start_date_plan_gc');
-        if(isset($prjstartdateplangc) && isset($prjstartdateplangc)){
-            $query .=' AND prj_start_date_plan_gc="'.$prjstartdateplangc.'"';
-        }
-        $prjenddateactualgc=$request->input('prj_end_date_actual_gc');
-        if(isset($prjenddateactualgc) && isset($prjenddateactualgc)){
-            $query .=' AND prj_end_date_actual_gc="'.$prjenddateactualgc.'"';
-        }
-        $prjenddateplangc=$request->input('prj_end_date_plan_gc');
-        if(isset($prjenddateplangc) && isset($prjenddateplangc)){
-            $query .=' AND prj_end_date_plan_gc="'.$prjenddateplangc.'"';
-        }
-         $programID=$request->input('program_id');
-        if(isset($programID) && isset($programID)){
-            $query .=" AND prj_program_id='".$programID."'";
-        }
-        $parentId=$request->input('parent_id');
-        if(isset($parentId) && isset($parentId)){
-            $query .=" AND prj_parent_id='".$parentId."'";
-        }
-         $objectTypeId=$request->input('object_type_id');
-        if(isset($objectTypeId) && isset($objectTypeId)){
-            $query .=" AND prj_object_type_id='".$objectTypeId."'";
-        }
-        $sectorId=$request->input('prj_sector_id');
-if(isset($sectorId) && isset($sectorId)){
-$query .=" AND prj_sector_id='".$sectorId."'";
-}
-//$query.=' ORDER BY prj_id DESC LIMIT :
-        $query.=" ORDER BY prj_id LIMIT :limit OFFSET :offset";
-        //$this->getQueryInfo($query);
-        $data_info=DB::select($query, [
-    'limit'  => (int) $perPage,
-    'offset' => (int) $offset,
-]);
+    // ============================
+    // Base Query (SINGLE SOURCE)
+    // ============================
+    $baseQuery = DB::table('pms_project')
+        ->leftJoin('pms_project_status', 'pms_project_status.prs_id', '=', 'pms_project.prj_project_status_id')
+        ->leftJoin('gen_address_structure AS zone_info', 'zone_info.add_id', '=', 'pms_project.prj_owner_zone_id')
+        ->leftJoin('gen_address_structure AS woreda_info', 'woreda_info.add_id', '=', 'pms_project.prj_owner_woreda_id')
+        ->leftJoin('pms_sector_information', 'pms_sector_information.sci_id', '=', 'pms_project.prj_sector_id')
+        ->where('prj_owner_type', 1);
+
+    // ============================
+    // Search helper (same as before)
+    // ============================
+    $baseQuery = $this->getSearchParamQuery($request, $baseQuery);
+
+    // ============================
+    // Filters (APPLIED ONCE)
+    // ============================
+    if ($request->filled('prj_project_status_id')) {
+        $baseQuery->where('prj_project_status_id', $request->prj_project_status_id);
+    }
+
+    if ($request->filled('prj_project_category_id')) {
+        $baseQuery->where('prj_project_category_id', $request->prj_project_category_id);
+    }
+
+    if ($request->filled('program_id')) {
+        $baseQuery->where('prj_program_id', $request->program_id);
+    }
+
+    if ($request->filled('parent_id')) {
+        $baseQuery->where('prj_parent_id', $request->parent_id);
+    }
+
+    if ($request->filled('object_type_id')) {
+        $baseQuery->where('prj_object_type_id', $request->object_type_id);
+    }
+
+    if ($request->filled('prj_sector_id')) {
+        $baseQuery->where('prj_sector_id', $request->prj_sector_id);
+    }
+
+    if ($request->filled('prj_start_date_gc')) {
+        $baseQuery->whereDate('prj_start_date_gc', $request->prj_start_date_gc);
+    }
+
+    if ($request->filled('prj_start_date_plan_gc')) {
+        $baseQuery->whereDate('prj_start_date_plan_gc', $request->prj_start_date_plan_gc);
+    }
+
+    if ($request->filled('prj_end_date_actual_gc')) {
+        $baseQuery->whereDate('prj_end_date_actual_gc', $request->prj_end_date_actual_gc);
+    }
+
+    if ($request->filled('prj_end_date_plan_gc')) {
+        $baseQuery->whereDate('prj_end_date_plan_gc', $request->prj_end_date_plan_gc);
+    }
+
+    // ============================
+    // COUNT (clone)
+    // ============================
+    $total = (clone $baseQuery)->count('prj_id');
+    $totalPages = (int) ceil($total / $perPage);
+    // ============================
+    // DATA (same query)
+    // ============================
+    $data_info = $baseQuery
+        ->select([
+            'prj_measured_figure',
+            'prj_measurement_unit',
+            'prj_parent_id',
+            'prj_object_type_id',
+            'pms_sector_information.sci_name_en AS sector_name',
+            'pms_project_status.prs_color_code AS color_code',
+            'pms_project_status.prs_id AS status_id',
+            'pms_project_status.prs_status_name_en AS status_name',
+            DB::raw("(zone_info.add_name_or || '-' || woreda_info.add_name_or) AS zone_name"),
+            'prj_name_en',
+            'prj_name_am',
+            'prj_department_id',
+            'prj_id',
+            'prj_name',
+            'prj_code',
+            'prj_project_status_id',
+            'prj_project_category_id',
+            'prj_total_estimate_budget',
+            'prj_total_actual_budget',
+            'prj_geo_location',
+            'prj_sector_id',
+            'prj_location_region_id',
+            'prj_location_zone_id',
+            'prj_location_woreda_id',
+            'prj_location_description',
+            'prj_owner_region_id',
+            'prj_owner_zone_id',
+            'prj_owner_woreda_id',
+            'prj_owner_description',
+            'prj_start_date_gc',
+            'prj_start_date_plan_gc',
+            'prj_end_date_actual_et',
+            'prj_end_date_actual_gc',
+            'prj_end_date_plan_gc',
+            'prj_outcome',
+            'prj_remark',
+            'prj_owner_id',
+            'prj_urban_ben_number',
+            'prj_rural_ben_number',
+            DB::raw('1 AS is_editable'),
+            DB::raw('1 AS is_deletable'),
+            'prj_program_id',
+        ])
+        ->orderByDesc('prj_id')
+        ->offset($offset)
+        ->limit($perPage)
+        ->get();
         $tabInfo=$this->getTabPermission($request);
         $resultObject= array(
             "data" =>$data_info,
@@ -409,7 +426,7 @@ $query .=" AND prj_sector_id='".$sectorId."'";
             'prj_name'=> 'max:200',
             'prj_name_am'=> 'max:200',
             'prj_name_en'=> 'max:200',
-            'prj_code'=> 'max:20',
+            'prj_code'=> 'max:30',
             'prj_project_status_id'=> 'max:200',
             'prj_project_category_id'=> 'max:200',
             'prj_project_budget_source_id'=> 'max:200',
@@ -431,7 +448,7 @@ $query .=" AND prj_sector_id='".$sectorId."'";
             'prj_end_date_plan_gc'=> 'max:15',
             'prj_end_date_plan_et'=> 'max:15',
             'prj_outcome'=> 'max:425',
-            'prj_remark'=> 'max:100',
+            'prj_remark'=> 'max:425',
         ];
         $id=$request->get("prj_id");
        $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "update",$id);
@@ -537,7 +554,7 @@ public function insertgrid(Request $request)
         'prj_name'=> 'max:200',
         'prj_name_am'=> 'max:200',
         'prj_name_en'=> 'max:200',
-        'prj_code'=> 'max:20',
+        'prj_code'=> 'max:30',
         'prj_project_status_id'=> 'max:200',
         'prj_project_category_id'=> 'max:200',
         'prj_project_budget_source_id'=> 'max:200',
@@ -559,7 +576,7 @@ public function insertgrid(Request $request)
         'prj_end_date_plan_gc'=> 'max:15',
         'prj_end_date_plan_et'=> 'max:15',
         'prj_outcome'=> 'max:425',
-        'prj_remark'=> 'max:100'
+        'prj_remark'=> 'max:425'
     ];
 $validationResult = $this->handleLaravelException($request, $attributeNames, $rules, "save");
 if ($validationResult !== false) {

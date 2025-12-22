@@ -220,6 +220,7 @@ $query .=" AND sci_sector_category_id='".$sectorCategory."'";
             if(!empty($sectorid) && is_numeric($sectorid)){
                 $query .= " AND prj_sector_id = ".intval($sectorid); 
             }
+            $query =$this->getSearchParam($request,$query);
        }else if($reportType==9){
     $query = ' SELECT DISTINCT location_zone.add_name_or AS zone,
                 cni_name AS cni_name, location_woreda.add_name_or AS woreda,pms_budget_year.bdy_name AS budgetyear,
@@ -267,6 +268,7 @@ $query .=" AND sci_sector_category_id='".$sectorCategory."'";
             if(!empty($sectorid) && is_numeric($sectorid)){
                 $query .= " AND prj_sector_id = ".intval($sectorid); 
             }
+            $query =$this->getSearchParam($request,$query);
        }
 
 else if($reportType==10 ){
@@ -321,9 +323,8 @@ else if($reportType==10 ){
         if(!empty($sectorid) && is_numeric($sectorid)){
             $query .= " AND prj_sector_id = ".intval($sectorid); 
         }
-
-   }
-   else if($reportType==11){
+$query =$this->getSearchParam($request,$query);
+   }else if($reportType==11){
       $query = ' SELECT  location_zone.add_name_or AS zone,
                 location_woreda.add_name_or AS woreda,
                 prj_name, prj_code ,prj_location_description,sci_name_or AS sector,
@@ -331,24 +332,24 @@ else if($reportType==10 ){
                 prp_physical_performance, prp_physical_planned,
                 prp_pyhsical_planned_month_1, prp_pyhsical_planned_month_2, prp_pyhsical_planned_month_3,prp_pyhsical_planned_month_4,prp_pyhsical_planned_month_5,
                 prp_pyhsical_planned_month_6,prp_pyhsical_planned_month_7,prp_pyhsical_planned_month_8,prp_pyhsical_planned_month_9,prp_pyhsical_planned_month_10,prp_pyhsical_planned_month_11,prp_pyhsical_planned_month_12,
-                 ( COALESCE(prp_pyhsical_planned_month_1, 0) +
-                    COALESCE(prp_pyhsical_planned_month_2, 0) +
-                    COALESCE(prp_pyhsical_planned_month_3, 0) 
+                 ( COALESCE(prp_pyhsical_planned_month_11, 0) +
+                    COALESCE(prp_pyhsical_planned_month_12, 0) +
+                    COALESCE(prp_pyhsical_planned_month_1, 0) 
                 ) AS quarter1total,
 
-                ( COALESCE(prp_pyhsical_planned_month_4, 0) +
-                    COALESCE(prp_pyhsical_planned_month_5, 0) +
-                    COALESCE(prp_pyhsical_planned_month_6, 0) 
+                ( COALESCE(prp_pyhsical_planned_month_2, 0) +
+                    COALESCE(prp_pyhsical_planned_month_3, 0) +
+                    COALESCE(prp_pyhsical_planned_month_4, 0) 
                 ) AS quarter2total,
 
-                 ( COALESCE(prp_pyhsical_planned_month_7, 0) +
-                    COALESCE(prp_pyhsical_planned_month_8, 0) +
-                    COALESCE(prp_pyhsical_planned_month_9, 0) 
+                 ( COALESCE(prp_pyhsical_planned_month_5, 0) +
+                    COALESCE(prp_pyhsical_planned_month_6, 0) +
+                    COALESCE(prp_pyhsical_planned_month_7, 0) 
                 ) AS quarter3total,
 
-                 ( COALESCE(prp_pyhsical_planned_month_10, 0) +
-                    COALESCE(prp_pyhsical_planned_month_11, 0) +
-                    COALESCE(prp_pyhsical_planned_month_12, 0) 
+                 ( COALESCE(prp_pyhsical_planned_month_8, 0) +
+                    COALESCE(prp_pyhsical_planned_month_9, 0) +
+                    COALESCE(prp_pyhsical_planned_month_10, 0) 
                 ) AS quarter4total,
                 prp_budget_baseline,prp_physical_baseline FROM pms_project
                 INNER JOIN pms_sector_information 
@@ -374,9 +375,9 @@ else if($reportType==10 ){
         if(!empty($sectorid) && is_numeric($sectorid)){
             $query .= " AND prj_sector_id = ".intval($sectorid); 
         }
-   }
-
-  else if($reportType==12){
+        $query =$this->getSearchParam($request,$query);
+        //$this->getQueryInfo($query);
+   }else if($reportType==12){
       $query = ' SELECT  location_zone.add_name_or AS zone,
                 location_woreda.add_name_or AS woreda,
                 prj_name, prj_code , prj_location_description, sci_name_or AS sector,
@@ -384,24 +385,24 @@ else if($reportType==10 ){
                 prp_physical_performance, prp_physical_planned,
                 prp_finan_planned_month_1, prp_finan_planned_month_2, prp_finan_planned_month_3,prp_finan_planned_month_4,prp_finan_planned_month_5,
                 prp_finan_planned_month_6,prp_finan_planned_month_7,prp_finan_planned_month_8,prp_finan_planned_month_9,prp_finan_planned_month_10,prp_finan_planned_month_11,prp_finan_planned_month_12,
-                 ( COALESCE(prp_finan_planned_month_1, 0) +
-                    COALESCE(prp_finan_planned_month_2, 0) +
-                    COALESCE(prp_finan_planned_month_3, 0) 
+                 ( COALESCE(prp_finan_planned_month_11, 0) +
+                    COALESCE(prp_finan_planned_month_12, 0) +
+                    COALESCE(prp_finan_planned_month_1, 0) 
                 ) AS quarter1total,
 
-                ( COALESCE(prp_finan_planned_month_4, 0) +
-                    COALESCE(prp_finan_planned_month_5, 0) +
-                    COALESCE(prp_finan_planned_month_6, 0) 
+                ( COALESCE(prp_finan_planned_month_2, 0) +
+                    COALESCE(prp_finan_planned_month_3, 0) +
+                    COALESCE(prp_finan_planned_month_4, 0) 
                 ) AS quarter2total,
 
-                 ( COALESCE(prp_finan_planned_month_7, 0) +
-                    COALESCE(prp_finan_planned_month_8, 0) +
-                    COALESCE(prp_finan_planned_month_9, 0) 
+                 ( COALESCE(prp_finan_planned_month_5, 0) +
+                    COALESCE(prp_finan_planned_month_6, 0) +
+                    COALESCE(prp_finan_planned_month_7, 0) 
                 ) AS quarter3total,
 
-                 ( COALESCE(prp_finan_planned_month_10, 0) +
-                    COALESCE(prp_finan_planned_month_11, 0) +
-                    COALESCE(prp_finan_planned_month_12, 0) 
+                 ( COALESCE(prp_finan_planned_month_8, 0) +
+                    COALESCE(prp_finan_planned_month_9, 0) +
+                    COALESCE(prp_finan_planned_month_10, 0) 
                 ) AS quarter4total,
 
                 prp_budget_baseline,prp_physical_baseline FROM pms_project
@@ -429,9 +430,8 @@ else if($reportType==10 ){
         if(!empty($sectorid) && is_numeric($sectorid)){
             $query .= " AND prj_sector_id = ".intval($sectorid); 
         }
-   }
-
-     else if($reportType==13){
+        $query =$this->getSearchParam($request,$query);
+   }else if($reportType==13){
       $query = ' SELECT  prj_name, pct_name_or, kpi_name_or, psc_name AS sectorcategory, pms_budget_year.bdy_name AS budgetyear,kpr_description,kpi_unit_measurement,
             kpr_planned_month_1, kpr_planned_month_2, kpr_planned_month_3, kpr_planned_month_4,kpr_planned_month_5,kpr_planned_month_6, kpr_planned_month_7, kpr_planned_month_8, kpr_planned_month_9,kpr_planned_month_10, kpr_planned_month_11, kpr_planned_month_12,
                  ( COALESCE(kpr_planned_month_1, 0) +
@@ -465,11 +465,11 @@ else if($reportType==10 ){
                  COALESCE(kpr_planned_month_10, 0) +
                  COALESCE(kpr_planned_month_11, 0) +
                  COALESCE(kpr_planned_month_12, 0)) AS totalplan FROM pms_project
-                LEFT JOIN pms_project_category  ON pms_project.prj_project_category_id = pms_project_category.pct_id
-                LEFT JOIN prj_sector_category  ON pms_project_category.pct_parent_id = prj_sector_category.psc_id
-               LEFT JOIN pms_project_kpi_result ON pms_project_kpi_result.kpr_project_id=pms_project.prj_id
-                LEFT JOIN pms_project_kpi ON pms_project_kpi.kpi_id=pms_project_kpi_result.kpr_project_kpi_id 
-                LEFT JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_project_kpi_result.kpr_year_id ';
+                INNER JOIN pms_project_category  ON pms_project.prj_project_category_id = pms_project_category.pct_id
+                INNER JOIN prj_sector_category  ON pms_project_category.pct_parent_id = prj_sector_category.psc_id
+               INNER JOIN pms_project_kpi_result ON pms_project_kpi_result.kpr_project_id=pms_project.prj_id
+                INNER JOIN pms_project_kpi ON pms_project_kpi.kpi_id=pms_project_kpi_result.kpr_project_kpi_id 
+                INNER JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_project_kpi_result.kpr_year_id ';
              $query .=' WHERE 1=1';
 
       $budgetyearid = $request->input('prp_budget_year_id');
@@ -488,6 +488,9 @@ else if($reportType==10 ){
         }
      
    }else if($reportType==14){
+    $authenticatedUser = $request->authUser;
+        $userTypeId=$authenticatedUser->usr_user_type;
+        $userId=$authenticatedUser->usr_id;
     //START PROGRAM
     $query='WITH RECURSIVE program_hierarchy AS (
     -- Anchor member: Start from the root project (change the ID as needed)
@@ -507,7 +510,7 @@ else if($reportType==10 ){
         sci_name_en::varchar AS sci_name_en
     FROM pms_program_info
     INNER JOIN pms_sector_information ON pms_sector_information.sci_id=pms_program_info.pri_sector_id
-    WHERE pri_object_type_id=1
+    WHERE pri_object_type_id=1 AND  sci_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_status=1 AND  usc_user_id='.$userId.')
     UNION ALL
     -- Recursive member: Get children of the current node
     SELECT 
@@ -568,9 +571,9 @@ $sql = "
     INNER JOIN pms_budget_request br ON br.bdr_project_id = p.prj_id
     INNER JOIN pms_project_category pc ON p.prj_project_category_id = pc.pct_id
     INNER JOIN pms_sector_information s ON p.prj_sector_id = s.sci_id
-    INNER JOIN prj_sector_category sc ON sc.psc_id = s.sci_sector_category_id
-    GROUP BY s.sci_id
-";
+    INNER JOIN prj_sector_category sc ON sc.psc_id = s.sci_sector_category_id ";
+$sql =$this->getSearchParam($request,$sql);
+$sql .=" GROUP BY s.sci_id";
 // Execute query
 $result = DB::select($sql);
 
@@ -600,9 +603,9 @@ $sql = "
     INNER JOIN pms_budget_request br ON br.bdr_project_id = p.prj_id
     INNER JOIN pms_project_category pc ON p.prj_project_category_id = pc.pct_id
     INNER JOIN pms_sector_information s ON p.prj_sector_id = s.sci_id
-    INNER JOIN prj_sector_category sc ON sc.psc_id = s.sci_sector_category_id
-    GROUP BY s.sci_id
-";
+    INNER JOIN prj_sector_category sc ON sc.psc_id = s.sci_sector_category_id";
+$sql =$this->getSearchParam($request,$sql);
+$sql .=" GROUP BY s.sci_id";
 // Execute query
 $result = DB::select($sql);
 // Return response
@@ -628,9 +631,10 @@ $sql = "
     INNER JOIN pms_budget_request br ON br.bdr_project_id = p.prj_id
     INNER JOIN pms_project_category pc ON p.prj_project_category_id = pc.pct_id
     INNER JOIN pms_sector_information s ON p.prj_sector_id = s.sci_id
-    INNER JOIN prj_sector_category sc ON sc.psc_id = s.sci_sector_category_id
-    GROUP BY s.sci_id
-";
+    INNER JOIN prj_sector_category sc ON sc.psc_id = s.sci_sector_category_id ";
+
+    $sql =$this->getSearchParam($request,$sql);
+$sql .=" GROUP BY s.sci_id";
 // Execute query
 $result = DB::select($sql);
 // Return response
@@ -662,9 +666,9 @@ $sql = "
     INNER JOIN pms_budget_request br ON br.bdr_project_id = p.prj_id
     INNER JOIN pms_project_category pc ON p.prj_project_category_id = pc.pct_id
     INNER JOIN pms_sector_information s ON p.prj_sector_id = s.sci_id
-    INNER JOIN prj_sector_category sc ON sc.psc_id = s.sci_sector_category_id
-    GROUP BY s.sci_id
-";
+    INNER JOIN prj_sector_category sc ON sc.psc_id = s.sci_sector_category_id";
+    $sql =$this->getSearchParam($request,$sql);
+$sql .=" GROUP BY s.sci_id";
 // Execute query
 $result = DB::select($sql);
 // Return response
@@ -693,9 +697,9 @@ $sql = "
     INNER JOIN pms_project_category pc ON p.prj_project_category_id = pc.pct_id
     INNER JOIN pms_sector_information s ON p.prj_sector_id = s.sci_id
     INNER JOIN prj_sector_category sc ON sc.psc_id = s.sci_sector_category_id
-    INNER JOIN gen_address_structure add ON p.prj_owner_woreda_id = add.add_id
-    GROUP BY add.add_id
-";
+    INNER JOIN gen_address_structure add ON p.prj_owner_woreda_id = add.add_id ";
+$sql =$this->getSearchParam($request,$sql);
+$sql .=" GROUP BY add.add_id";
 // Execute query
 $result = DB::select($sql);
 // Return response
@@ -726,9 +730,9 @@ $sql = "
     INNER JOIN pms_project_category pc ON p.prj_project_category_id = pc.pct_id
     INNER JOIN pms_sector_information s ON p.prj_sector_id = s.sci_id
     INNER JOIN prj_sector_category sc ON sc.psc_id = s.sci_sector_category_id
-    INNER JOIN gen_address_structure add ON p.prj_owner_zone_id = add.add_id
-    GROUP BY add.add_id
-";
+    INNER JOIN gen_address_structure add ON p.prj_owner_zone_id = add.add_id ";
+$sql =$this->getSearchParam($request,$sql);
+$sql .=" GROUP BY add.add_id";
 // Execute query
 $result = DB::select($sql);
 // Return response
@@ -755,7 +759,7 @@ return response()->json([
 ], 200, [], JSON_NUMERIC_CHECK);
     //END 20
    }
-   $prjlocationzoneid = $request->input('prj_location_zone_id');
+   /*$prjlocationzoneid = $request->input('prj_location_zone_id');
     if(!empty($prjlocationzoneid)){
         $query .= " AND pms_project.prj_location_zone_id = '".$prjlocationzoneid."'"; 
     }
@@ -763,7 +767,7 @@ return response()->json([
     $prjlocationworedaid = $request->input('prj_location_woreda_id');
     if(!empty($prjlocationworedaid)){
         $query .= " AND pms_project.prj_location_woreda_id = '".$prjlocationworedaid."'"; 
-    }
+    }*/
     //$query =$this->getSearchParam($request,$query);
 //$query .="GROUP BY sci_id";
 //END COMMON PARAMETERS

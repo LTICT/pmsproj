@@ -46,8 +46,16 @@ $scisectorcategoryid=$request->input('sector_category_id');
 if(isset($scisectorcategoryid) && isset($scisectorcategoryid)){
     $query .=" AND sci_sector_category_id='".$scisectorcategoryid."'"; 
 }
+$authenticatedUser = $request->authUser;
+        $userTypeId=$authenticatedUser->usr_user_type;
+        $userId=$authenticatedUser->usr_id;
+        if($userTypeId ==1 ){
+            $query .=" AND sci_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_status=1 AND  usc_user_id=".$userId." )";
+        }
 $query.=' ORDER BY sci_id ASC';
+//$this->getQueryInfo($query);
 $data_info=DB::select($query);
+
 $resultObject= array(
     "data" =>$data_info,
     "previledge"=>array('is_role_editable'=>$permissionData->pem_edit ?? 0,'is_role_deletable'=>$permissionData->pem_delete ?? 0,'is_role_can_add'=>$permissionData->pem_insert ?? 0));

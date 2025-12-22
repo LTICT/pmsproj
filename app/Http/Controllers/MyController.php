@@ -118,6 +118,96 @@ public function handleDatabaseException($e, $actionType){
         "column"=>""
     ],458);
 	}
+	public function getSearchParamQuery(Request $request, $query)
+{
+    $userInfo = $this->getUserInfo($request);
+
+    if (!$userInfo) {
+        return $query;
+    }
+
+    $userId        = $userInfo->usr_id;
+    $zoneId        = $userInfo->usr_zone_id;
+    $woredaId      = $userInfo->usr_woreda_id;
+    $sectorId      = $userInfo->usr_sector_id;
+    $departmentId  = $userInfo->usr_department_id;
+    $userTypeId    = $userInfo->usr_user_type;
+
+    $prjOwnerZoneId   = $request->input('prj_location_zone_id');
+    $prjOwnerWoredaId = $request->input('prj_location_woreda_id');
+    $prjName          = $request->input('prj_name');
+    $prjCode          = $request->input('prj_code');
+    $include          = $request->input('include');
+    $projectDeptId    = $request->input('prj_department_id');
+    $projectSectorId  = $request->input('prj_sector_id');
+
+    // =====================================
+    // Owner type (mandatory)
+    // =====================================
+    $query->where('prj_owner_type', $userTypeId);
+
+    // =====================================
+    // Project name / code search
+    // =====================================
+    if ($request->filled('prj_name')) {
+        $query->where('prj_name', 'ILIKE', '%' . $prjName . '%');
+    }
+
+    if ($request->filled('prj_code')) {
+        $query->where('prj_code', 'ILIKE', '%' . $prjCode . '%');
+    }
+
+    // =====================================
+    // Zone filtering
+    // =====================================
+    if (!empty($zoneId) && $zoneId > 0) {
+        $query->where('prj_owner_zone_id', $zoneId);
+    } elseif (!empty($prjOwnerZoneId) && $prjOwnerZoneId > 0) {
+        $query->where('prj_owner_zone_id', $prjOwnerZoneId);
+    }
+
+    // =====================================
+    // Woreda filtering
+    // =====================================
+    if (!empty($woredaId) && $woredaId > 0) {
+        $query->where('prj_owner_woreda_id', $woredaId);
+    } elseif (!empty($prjOwnerWoredaId) && $prjOwnerWoredaId > 0) {
+        $query->where('prj_owner_woreda_id', $prjOwnerWoredaId);
+    } elseif (!empty($prjOwnerZoneId) && $prjOwnerZoneId > 0 && $include == 0) {
+        $query->where('prj_owner_woreda_id', 0);
+    }
+
+    // =====================================
+    // Sector access control (subquery)
+    // =====================================
+    if ($userTypeId == 1) {
+        $query->whereIn('prj_sector_id', function ($subQuery) use ($userId) {
+            $subQuery->select('usc_sector_id')
+                ->from('tbl_user_sector')
+                ->where('usc_status', 1)
+                ->where('usc_user_id', $userId);
+        });
+    }
+
+    // =====================================
+    // (Commented logic preserved intentionally)
+    // =====================================
+    /*
+    if (!empty($sectorId) && $sectorId > 1) {
+        $query->where('prj_sector_id', $sectorId);
+    } elseif (!empty($projectSectorId) && $projectSectorId > 1) {
+        $query->where('prj_sector_id', $projectSectorId);
+    }
+
+    if (!empty($departmentId) && $departmentId > 1) {
+        $query->where('prj_department_id', $departmentId);
+    } elseif (!empty($projectDeptId) && $projectDeptId > 1) {
+        $query->where('prj_department_id', $projectDeptId);
+    }
+    */
+
+    return $query;
+}
 
 	public function getSearchParam($request,$query){
 		$userInfo=$this->getUserInfo($request);
@@ -150,8 +240,8 @@ public function handleDatabaseException($e, $actionType){
 			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $prjownerzoneid>0){
 				$query .=" AND prj_owner_zone_id='".$prjownerzoneid."'";   
 			}else if($include ==0){
-				$query .=" AND prj_owner_zone_id=0"; 
-				$query .=" AND prj_owner_woreda_id=0"; 
+				//$query .=" AND prj_owner_zone_id=0"; 
+				//$query .=" AND prj_owner_woreda_id=0"; 
 			}
 			if(isset($woredaId) && !empty($woredaId) && $woredaId > 0){
 				$query .=" AND prj_owner_woreda_id='".$woredaId."'"; 
