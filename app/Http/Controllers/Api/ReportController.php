@@ -431,6 +431,113 @@ $query =$this->getSearchParam($request,$query);
             $query .= " AND prj_sector_id = ".intval($sectorid); 
         }
         $query =$this->getSearchParam($request,$query);
+   }else if($reportType==22){
+      $query = ' SELECT  location_zone.add_name_or AS zone,
+                location_woreda.add_name_or AS woreda,
+                prj_name, prj_code ,prj_location_description,sci_name_or AS sector,
+                 pms_budget_year.bdy_name AS budgetyear,prj_measurement_unit,prj_measured_figure,
+                prp_physical_performance, prp_physical_planned,
+                prp_pyhsical_actual_month_1, prp_pyhsical_actual_month_2, prp_pyhsical_actual_month_3,prp_pyhsical_actual_month_4,prp_pyhsical_actual_month_5,
+                prp_pyhsical_actual_month_6,prp_pyhsical_actual_month_7,prp_pyhsical_actual_month_8,prp_pyhsical_actual_month_9,prp_pyhsical_actual_month_10,prp_pyhsical_actual_month_11,prp_pyhsical_actual_month_12,
+                 ( COALESCE(prp_pyhsical_actual_month_11, 0) +
+                    COALESCE(prp_pyhsical_actual_month_12, 0) +
+                    COALESCE(prp_pyhsical_actual_month_1, 0) 
+                ) AS quarter1total,
+
+                ( COALESCE(prp_pyhsical_actual_month_2, 0) +
+                    COALESCE(prp_pyhsical_actual_month_3, 0) +
+                    COALESCE(prp_pyhsical_actual_month_4, 0) 
+                ) AS quarter2total,
+
+                 ( COALESCE(prp_pyhsical_actual_month_5, 0) +
+                    COALESCE(prp_pyhsical_actual_month_6, 0) +
+                    COALESCE(prp_pyhsical_actual_month_7, 0) 
+                ) AS quarter3total,
+
+                 ( COALESCE(prp_pyhsical_actual_month_8, 0) +
+                    COALESCE(prp_pyhsical_actual_month_9, 0) +
+                    COALESCE(prp_pyhsical_actual_month_10, 0) 
+                ) AS quarter4total,
+                prp_budget_baseline,prp_physical_baseline FROM pms_project
+                INNER JOIN pms_sector_information 
+                    ON pms_project.prj_sector_id = pms_sector_information.sci_id
+                INNER JOIN pms_project_performance 
+                    ON pms_project.prj_id = pms_project_performance.prp_project_id
+                INNER JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_project_performance.prp_budget_year_id
+                INNER JOIN gen_address_structure AS location_zone 
+                    ON pms_project.prj_location_zone_id = location_zone.add_id
+                LEFT JOIN gen_address_structure AS location_woreda 
+                    ON pms_project.prj_location_woreda_id = location_woreda.add_id';
+      $query .=' WHERE 1=1';
+      $budgetyearid = $request->input('prp_budget_year_id');
+        if(!empty($budgetyearid) && is_numeric($budgetyearid)){
+            $query .= " AND prp_budget_year_id = ".intval($budgetyearid); 
+        }
+        $reportstartdate = $request->input('report_dateStart');
+        $reportenddate = $request->input('report_dateEnd');
+       if (!empty($reportstartdate) && !empty($reportenddate)) {
+            $query .= " AND prp_record_date_gc BETWEEN '{$reportstartdate}' AND '{$reportenddate}'";
+        }
+     $sectorid = $request->input('prj_sector_id');
+        if(!empty($sectorid) && is_numeric($sectorid)){
+            $query .= " AND prj_sector_id = ".intval($sectorid); 
+        }
+        $query =$this->getSearchParam($request,$query);
+        //$this->getQueryInfo($query);
+   }else if($reportType==23){
+      $query = ' SELECT prp_budget_planned, location_zone.add_name_or AS zone,
+                location_woreda.add_name_or AS woreda,
+                prj_name, prj_code , prj_location_description, sci_name_or AS sector,
+                pms_budget_year.bdy_name AS budgetyear,prj_measurement_unit,prj_measured_figure,
+                prp_physical_performance, prp_physical_planned,
+                prp_finan_actual_month_1, prp_finan_actual_month_2, prp_finan_actual_month_3,prp_finan_actual_month_4,prp_finan_actual_month_5,
+                prp_finan_actual_month_6,prp_finan_actual_month_7,prp_finan_actual_month_8,prp_finan_actual_month_9,prp_finan_actual_month_10,prp_finan_actual_month_11,prp_finan_actual_month_12,
+                 ( COALESCE(prp_finan_actual_month_11, 0) +
+                    COALESCE(prp_finan_actual_month_12, 0) +
+                    COALESCE(prp_finan_actual_month_1, 0) 
+                ) AS quarter1total,
+
+                ( COALESCE(prp_finan_actual_month_2, 0) +
+                    COALESCE(prp_finan_actual_month_3, 0) +
+                    COALESCE(prp_finan_actual_month_4, 0) 
+                ) AS quarter2total,
+
+                 ( COALESCE(prp_finan_actual_month_5, 0) +
+                    COALESCE(prp_finan_actual_month_6, 0) +
+                    COALESCE(prp_finan_actual_month_7, 0) 
+                ) AS quarter3total,
+
+                 ( COALESCE(prp_finan_actual_month_8, 0) +
+                    COALESCE(prp_finan_actual_month_9, 0) +
+                    COALESCE(prp_finan_actual_month_10, 0) 
+                ) AS quarter4total,
+
+                prp_budget_baseline,prp_physical_baseline FROM pms_project
+                INNER JOIN pms_sector_information 
+                    ON pms_project.prj_sector_id = pms_sector_information.sci_id
+                INNER JOIN pms_project_performance 
+                    ON pms_project.prj_id = pms_project_performance.prp_project_id
+                INNER JOIN pms_budget_year ON pms_budget_year.bdy_id=pms_project_performance.prp_budget_year_id
+                INNER JOIN gen_address_structure AS location_zone 
+                    ON pms_project.prj_location_zone_id = location_zone.add_id
+                LEFT JOIN gen_address_structure AS location_woreda 
+                    ON pms_project.prj_location_woreda_id = location_woreda.add_id';
+      $query .=' WHERE 1=1';
+
+      $budgetyearid = $request->input('prp_budget_year_id');
+        if(!empty($budgetyearid) && is_numeric($budgetyearid)){
+            $query .= " AND prp_budget_year_id = ".intval($budgetyearid); 
+        }
+        $reportstartdate = $request->input('report_dateStart');
+        $reportenddate = $request->input('report_dateEnd');
+       if (!empty($reportstartdate) && !empty($reportenddate)) {
+            $query .= " AND prp_record_date_gc BETWEEN '{$reportstartdate}' AND '{$reportenddate}'";
+        }
+     $sectorid = $request->input('prj_sector_id');
+        if(!empty($sectorid) && is_numeric($sectorid)){
+            $query .= " AND prj_sector_id = ".intval($sectorid); 
+        }
+        $query =$this->getSearchParam($request,$query);
    }else if($reportType==13){
       $query = ' SELECT  prj_name, pct_name_or, kpi_name_or, psc_name AS sectorcategory, pms_budget_year.bdy_name AS budgetyear,kpr_description,kpi_unit_measurement,
             kpr_planned_month_1, kpr_planned_month_2, kpr_planned_month_3, kpr_planned_month_4,kpr_planned_month_5,kpr_planned_month_6, kpr_planned_month_7, kpr_planned_month_8, kpr_planned_month_9,kpr_planned_month_10, kpr_planned_month_11, kpr_planned_month_12,
@@ -750,7 +857,7 @@ return response()->json([
         prj_end_date_plan_gc, cso_phone, cso_email, prj_remark, cso_type  FROM pms_project ';
         $sql .= ' INNER JOIN pms_cso_info ON pms_project.prj_owner_id = pms_cso_info.cso_id';
         $sql .=' LEFT JOIN gen_address_structure zone_info ON zone_info.add_id= pms_project.prj_location_zone_id';
-        $sql .=' WHERE prj_owner_type=2';
+        $sql .=' WHERE prj_owner_type=2 AND prj_object_type_id=1 ';
 // Execute query
 $result = DB::select($sql);
 // Return response

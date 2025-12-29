@@ -394,11 +394,11 @@ $endTime = $request->input('handover_dateEnd');
 if (isset($endTime) && !empty($endTime)) {
     $query .= " AND prh_handover_date_gc <= '".$endTime." 23 59 59'"; 
 }*/
-}else if($reportType==101){
+}else if($reportType==102){
     //CSO Information
  $query="SELECT cso_type AS \"CSO Type\" FROM pms_cso_info";
 $query .= " WHERE 1=1";
-}else if($reportType==102){
+}else if($reportType==101){
     //CSO Project
     //psc_name AS \"$cluster\",
  $query="SELECT prs_status_name{$suffix} AS \"$projectStatus\",
@@ -417,7 +417,7 @@ $query .= " WHERE 1=1";
 //$query .= " INNER JOIN prj_sector_category ON pms_project.prj_cluster_id = prj_sector_category.psc_id";
 $query .= " INNER JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id";
 $query .= " INNER JOIN pms_cso_info ON pms_project.prj_owner_id = pms_cso_info.cso_id";
-$query .= " WHERE prj_owner_type=2 AND prj_object_type_id=5";
+$query .= " WHERE prj_owner_type=2 AND prj_object_type_id=1";
 }else if($reportType==201){
     //Citizenship Project by location\
     //pct_name{$suffix} AS \"$projectcategory\",

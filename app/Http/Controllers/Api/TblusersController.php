@@ -39,79 +39,139 @@ class TblusersController extends MyController
         return view('users.show_tbl_users', $data);
     }
     public function listgrid(Request $request){
-       $query='SELECT usr_owner_id, usr_user_type, usr_directorate_id, usr_team_id, usr_officer_id, usr_id,usr_email,usr_password,usr_full_name,usr_phone_number,sci_name_or AS sector_name,
-       usr_role_id,usr_region_id, usr_zone_id,usr_woreda_id,usr_kebele_id,usr_sector_id,
-       usr_department_id,usr_is_active,usr_picture,usr_last_logged_in,usr_ip,
-       usr_remember_token,usr_notified,usr_description,usr_create_time,
-       usr_update_time,usr_delete_time,usr_created_by,usr_status,1 AS is_editable, 1 AS is_deletable,
-       zone_data.add_name_or AS zone_name, woreda_data.add_name_or AS woreda_name,
-        gen_department.dep_name_or as dep_name FROM tbl_users ';
-       $query .= ' LEFT JOIN gen_address_structure zone_data ON tbl_users.usr_zone_id = zone_data.add_id';
-       $query .= ' LEFT JOIN gen_address_structure woreda_data ON tbl_users.usr_woreda_id = woreda_data.add_id';
-       $query .= ' LEFT JOIN gen_department ON tbl_users.usr_department_id = gen_department.dep_id';
-       $query .= ' LEFT JOIN pms_sector_information ON tbl_users.usr_sector_id = pms_sector_information.sci_id';
-       $query .=' WHERE 1=1';
-       $usremail=$request->input('usr_email');
-       if(isset($usremail) && isset($usremail)){
-        $query .=" AND usr_email='".$usremail."'";
+    $page    = max((int) $request->input('page', 1), 1);
+    $perPage = max((int) $request->input('per_page', 10), 1);
+    $offset  = ($page - 1) * $perPage;
+
+    // ============================
+    // Base Query (SINGLE SOURCE)
+    // ============================
+    $baseQuery = DB::table('tbl_users')
+        ->leftJoin('gen_address_structure AS zone_data', 'tbl_users.usr_zone_id', '=', 'zone_data.add_id')
+        ->leftJoin('gen_address_structure AS woreda_data', 'tbl_users.usr_woreda_id', '=', 'woreda_data.add_id')
+        ->leftJoin('gen_department', 'tbl_users.usr_department_id', '=', 'gen_department.dep_id')
+        ->leftJoin('pms_sector_information', 'tbl_users.usr_sector_id', '=', 'pms_sector_information.sci_id');
+
+    // ============================
+    // Filters (applied once)
+    // ============================
+    if ($request->filled('usr_email')) {
+        $baseQuery->where('usr_email', 'LIKE', '%' . trim($request->usr_email) . '%');
     }
-    $usrfullname=$request->input('usr_full_name');
-    if(isset($usrfullname) && isset($usrfullname)){
-        $query .=" AND usr_full_name='".$usrfullname."'";
+
+    if ($request->filled('usr_full_name')) {
+        $baseQuery->where('usr_full_name', 'LIKE', '%' . trim($request->usr_full_name) . '%');
     }
-    $usrphonenumber=$request->input('usr_phone_number');
-    if(isset($usrphonenumber) && isset($usrphonenumber)){
-        $query .=" AND usr_phone_number LIKE '%".$usrphonenumber."%'";
+
+    if ($request->filled('usr_phone_number')) {
+        $baseQuery->where('usr_phone_number', 'LIKE', '%' . $request->usr_phone_number . '%');
     }
-    $usrroleid=$request->input('usr_role_id');
-    if(isset($usrroleid) && isset($usrroleid)){
-        $query .=' AND usr_role_id="'.$usrroleid.'"';
+
+    if ($request->filled('usr_role_id')) {
+        $baseQuery->where('usr_role_id', $request->usr_role_id);
     }
-    $usrregionid=$request->input('usr_region_id');
-    if(isset($usrregionid) && isset($usrregionid)){
-        $query .=" AND usr_region_id='".$usrregionid."'";
+
+    if ($request->filled('usr_region_id')) {
+        $baseQuery->where('usr_region_id', $request->usr_region_id);
     }
-    $usrzoneid=$request->input('usr_zone_id');
-    if(isset($usrzoneid) && isset($usrzoneid)){
-        $query .=" AND usr_zone_id='".$usrzoneid."'";
+
+    if ($request->filled('usr_zone_id')) {
+        $baseQuery->where('usr_zone_id', $request->usr_zone_id);
     }
-    $usrworedaid=$request->input('usr_woreda_id');
-    if(isset($usrworedaid) && isset($usrworedaid)){
-        $query .=" AND usr_woreda_id='".$usrworedaid."'";
+
+    if ($request->filled('usr_woreda_id')) {
+        $baseQuery->where('usr_woreda_id', $request->usr_woreda_id);
     }
-    $usrkebeleid=$request->input('usr_kebele_id');
-    if(isset($usrkebeleid) && isset($usrkebeleid)){
-        $query .=' AND usr_kebele_id="'.$usrkebeleid.'"';
+
+    if ($request->filled('usr_kebele_id')) {
+        $baseQuery->where('usr_kebele_id', $request->usr_kebele_id);
     }
-    $usrsectorid=$request->input('usr_sector_id');
-    if(isset($usrsectorid) && isset($usrsectorid)){
-        $query .=" AND usr_sector_id='".$usrsectorid."'";
+
+    if ($request->filled('usr_sector_id')) {
+        $baseQuery->where('usr_sector_id', $request->usr_sector_id);
     }
-    $usrdepartmentid=$request->input('usr_department_id');
-    if(isset($usrdepartmentid) && isset($usrdepartmentid)){
-        $query .=' AND usr_department_id="'.$usrdepartmentid.'"';
+
+    if ($request->filled('usr_department_id')) {
+        $baseQuery->where('usr_department_id', $request->usr_department_id);
     }
-    $usrisactive=$request->input('usr_is_active');
-    if(isset($usrisactive) && isset($usrisactive)){
-        $query .=' AND usr_is_active="'.$usrisactive.'"';
+
+    if ($request->filled('usr_is_active')) {
+        $baseQuery->where('usr_is_active', $request->usr_is_active);
     }
-    $usrpicture=$request->input('usr_picture');
-    if(isset($usrpicture) && isset($usrpicture)){
-        $query .=' AND usr_picture="'.$usrpicture.'"';
+
+    if ($request->filled('usr_picture')) {
+        $baseQuery->where('usr_picture', $request->usr_picture);
     }
-    $usrlastloggedin=$request->input('usr_last_logged_in');
-    if(isset($usrlastloggedin) && isset($usrlastloggedin)){
-        $query .=' AND usr_last_logged_in="'.$usrlastloggedin.'"';
+
+    if ($request->filled('usr_last_logged_in')) {
+        $baseQuery->where('usr_last_logged_in', $request->usr_last_logged_in);
     }
-    $usrip=$request->input('usr_ip');
-    if(isset($usrip) && isset($usrip)){
-        $query .=' AND usr_ip="'.$usrip.'"';
+
+    if ($request->filled('usr_ip')) {
+        $baseQuery->where('usr_ip', $request->usr_ip);
     }
-    $query.=' ORDER BY usr_id DESC';
-    $data_info=DB::select($query);
+
+    // ============================
+    // COUNT (clone base query)
+    // ============================
+    $total = (clone $baseQuery)->count('usr_id');
+    $totalPages = (int) ceil($total / $perPage);
+    // ============================
+    // DATA (same base query)
+    // ============================
+    $data_info = $baseQuery
+        ->select([
+            'usr_owner_id',
+            'usr_user_type',
+            'usr_directorate_id',
+            'usr_team_id',
+            'usr_officer_id',
+            'usr_id',
+            'usr_email',
+            'usr_password',
+            'usr_full_name',
+            'usr_phone_number',
+            'pms_sector_information.sci_name_or AS sector_name',
+            'usr_role_id',
+            'usr_region_id',
+            'usr_zone_id',
+            'usr_woreda_id',
+            'usr_kebele_id',
+            'usr_sector_id',
+            'usr_department_id',
+            'usr_is_active',
+            'usr_picture',
+            'usr_last_logged_in',
+            'usr_ip',
+            'usr_remember_token',
+            'usr_notified',
+            'usr_description',
+            'usr_create_time',
+            'usr_update_time',
+            'usr_delete_time',
+            'usr_created_by',
+            'usr_status',
+            DB::raw('1 AS is_editable'),
+            DB::raw('1 AS is_deletable'),
+            'zone_data.add_name_or AS zone_name',
+            'woreda_data.add_name_or AS woreda_name',
+            'gen_department.dep_name_or AS dep_name',
+        ])
+        ->orderByDesc('usr_id')
+        ->offset($offset)
+        ->limit($perPage)
+        ->get();
     $resultObject= array(
         "data" =>$data_info,
-        "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1));
+        "previledge"=>array('is_role_editable'=>1,'is_role_deletable'=>1,'is_role_can_add'=>1),
+    'pagination' => [
+            'current_page' => $page,
+            'per_page' => $perPage,
+            'total' => $total,
+            'total_pages' => $totalPages,
+            'has_next' => $page < $totalPages,
+            'has_prev' => $page > 1,
+        ]);
     return response()->json($resultObject,200, [], JSON_NUMERIC_CHECK);
 }
 

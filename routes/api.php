@@ -33,6 +33,10 @@ Route::get('/checkconfig/{id}', function ($id) {
 }
     return 'Config is NOT cached';
 });
+Route::post('database-backup', 'Api\DatabaseBackupController@backup');
+/*Route::get('/database-backups', [DatabaseBackupController::class, 'index']);
+Route::post('/database-backup/{id}/restore', [DatabaseBackupController::class, 'restore']);*/
+
 Route::post('user/signup', 'Api\GenSignupController@signup');
 Route::post('forgot-password', 'Auth\PasswordResetController@sendResetLink');
 // Reset password route
@@ -512,13 +516,21 @@ Route::resource('procurement_information', 'PmsprocurementinformationController'
     Route::post('project_kpi_result/insertgrid', 'Api\PmsprojectkpiresultController@insertgrid');
     Route::post('project_kpi_result/updategrid', 'Api\PmsprojectkpiresultController@updategrid');
     Route::post('project_kpi_result/deletegrid', 'Api\PmsprojectkpiresultController@deletegrid');
-
     //Route::resource('implementing_area', 'PmsimplementingareaController');
     Route::post('implementing_area/listgrid', 'Api\PmsimplementingareaController@listgrid');
     Route::post('implementing_area/insertgrid', 'Api\PmsimplementingareaController@insertgrid');
     Route::post('implementing_area/updategrid', 'Api\PmsimplementingareaController@updategrid');
     Route::post('implementing_area/deletegrid', 'Api\PmsimplementingareaController@deletegrid');
-
+    
+    Route::post('project_evaluation/listgrid', 'Api\PmsprojectevaluationController@listgrid');
+    Route::post('project_evaluation/insertgrid', 'Api\PmsprojectevaluationController@insertgrid');
+    Route::post('project_evaluation/updategrid', 'Api\PmsprojectevaluationController@updategrid');
+    Route::post('project_evaluation/deletegrid', 'Api\PmsprojectevaluationController@deletegrid');
+    
+    Route::post('project_plan_detail/listgrid', 'Api\PmsprojectplandetailController@listgrid');
+    Route::post('project_plan_detail/insertgrid', 'Api\PmsprojectplandetailController@insertgrid');
+    Route::post('project_plan_detail/updategrid', 'Api\PmsprojectplandetailController@updategrid');
+    Route::post('project_plan_detail/deletegrid', 'Api\PmsprojectplandetailController@deletegrid');
 });
 
    //START CACHE MANAGEMENT

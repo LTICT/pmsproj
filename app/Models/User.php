@@ -32,8 +32,7 @@ protected $table = 'tbl_users';
      *
      * @var array
      */
-    protected $fillable = ['email', 'password',
-    ];
+    protected $fillable = ['email', 'password','usr_last_logged_in'];
 
     /**
      * The attributes that should be hidden for arrays.
