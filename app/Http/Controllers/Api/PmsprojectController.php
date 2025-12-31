@@ -310,6 +310,7 @@ SELECT * FROM project_hierarchy';
     if ($request->filled('prj_end_date_plan_gc')) {
         $baseQuery->whereDate('prj_end_date_plan_gc', $request->prj_end_date_plan_gc);
     }
+   
 
     // ============================
     // COUNT (clone)

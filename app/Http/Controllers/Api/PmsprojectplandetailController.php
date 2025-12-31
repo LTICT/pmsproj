@@ -97,7 +97,7 @@ if(isset($endTime) && isset($endTime)){
 $projectplanid=$request->input('prp_plan_id');
 $requesttype=$request->input('request_type');
 if(isset($projectplanid) && isset($projectplanid)){
-    $query .= " AND prp_plan_id = '$prpprojectid'";
+    $query .= " AND prp_plan_id = '$projectplanid'";
 }
 //END
 $query.=' ORDER BY prp_id DESC';

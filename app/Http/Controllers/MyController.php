@@ -353,8 +353,8 @@ public function handleDatabaseException($e, $actionType){
 			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $prjownerzoneid>0){
 				$query .=" AND prj_location_zone_id='".$prjownerzoneid."'";
 			}else if($include ==0){
-				$query .=" AND prj_location_zone_id=0"; 
-				$query .=" AND prj_location_woreda_id=0"; 
+				//$query .=" AND prj_location_zone_id=0"; 
+				//$query .=" AND prj_location_woreda_id=0"; 
 			}
 
 			if(isset($woredaId) && !empty($woredaId) && $woredaId > 0){
@@ -362,7 +362,7 @@ public function handleDatabaseException($e, $actionType){
 			}else if(isset($prjownerworedaid) && isset($prjownerworedaid) && $prjownerworedaid>0){
 				$query .=" AND prj_location_woreda_id='".$prjownerworedaid."'";   
 			}else if(isset($prjownerzoneid) && isset($prjownerzoneid) && $include ==0 && $prjownerzoneid > 0){
-				$query .=" AND prj_location_woreda_id=0"; 
+				//$query .=" AND (prj_location_woreda_id=0 OR prj_location_woreda_id IS NULL OR prj_location_woreda_id::text IN ('', '0'))"; 
 			}
 			//$query .=" AND prj_sector_id IN (SELECT usc_sector_id FROM tbl_user_sector WHERE usc_user_id=".$userId." )";
 			if(isset($sectorId) && !empty($sectorId) && $sectorId > 1){

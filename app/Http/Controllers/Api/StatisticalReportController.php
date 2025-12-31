@@ -443,6 +443,10 @@ $query .= " GROUP BY zone.add_name{$suffix}, woreda.add_name{$suffix}, sci_name{
 
 }
 //for governmental projects
+($reportType==8){
+   $query .= " ORDER BY sci_id"; 
+}
+
 if($reportType <=100){
     $query =$this->getSearchParam($request,$query);
 }
