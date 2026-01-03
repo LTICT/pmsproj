@@ -310,8 +310,32 @@ SELECT * FROM project_hierarchy';
     if ($request->filled('prj_end_date_plan_gc')) {
         $baseQuery->whereDate('prj_end_date_plan_gc', $request->prj_end_date_plan_gc);
     }
-   
-
+    if ($request->filled('prj_age')) {
+        $age = (int) $request->prj_age;
+     $baseQuery->whereRaw("
+    prj_start_date_plan_gc ~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
+    AND prj_start_date_plan_gc::date < CURRENT_DATE - INTERVAL '{$age} years'
+");
+    }
+    if ($request->filled('prj_should_be_completed')) {
+        if($request->prj_should_be_completed == 'yes'){
+      $baseQuery->whereRaw("
+    prj_end_date_plan_gc ~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
+    AND prj_end_date_plan_gc::date <= CURRENT_DATE
+");
+  }      
+    }
+    if ($request->filled('prj_to_be_completed')) {
+        // AND prj_end_date_plan_gc::date >= CURRENT_DATE
+        if($request->prj_to_be_completed == 'yes'){
+            $baseQuery->whereRaw("
+    prj_end_date_plan_gc ~ '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
+    AND prj_end_date_plan_gc::date BETWEEN
+        CURRENT_DATE - INTERVAL '5 months'
+        AND CURRENT_DATE + INTERVAL '6 months'
+");
+        }
+    }
     // ============================
     // COUNT (clone)
     // ============================
@@ -365,7 +389,7 @@ SELECT * FROM project_hierarchy';
             DB::raw('1 AS is_deletable'),
             'prj_program_id',
         ])
-        ->orderByDesc('prj_id')
+        ->orderBy('prj_sector_id')
         ->offset($offset)
         ->limit($perPage)
         ->get();

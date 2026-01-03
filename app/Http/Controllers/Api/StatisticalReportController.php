@@ -29,6 +29,7 @@ $totalestimatebudget = trans("form_lang.prj_total_estimate_budget");
 $totalactualbudget = trans("form_lang.prj_total_actual_budget");
 $sectorname = trans("form_lang.sector_name");
 $zone = trans("form_lang.zone");
+$owner_zone = "Owner Zone";
 $woreda = trans("form_lang.woreda");
 $startdategc = trans("form_lang.prj_start_date_gc");
 $urbanbennumber = trans("form_lang.prj_urban_ben_number");
@@ -90,7 +91,8 @@ $query = "SELECT
     prs_status_name{$suffix} AS \"$projectStatus\",
     pct_name{$suffix} AS \"$projectcategory\",
     sci_name{$suffix} AS \"$sectorname\",
-    gen_address_structure.add_name{$suffix} AS \"$zone\",
+    zone_location.add_name{$suffix} AS \"$zone\",
+    woreda_owner.add_name{$suffix} AS \"$owner_zone\",
     prj_name || prj_code AS \"$projectname\",     
     prj_total_estimate_budget AS \"$totalestimatebudget\",
     prj_total_actual_budget AS \"$totalactualbudget\",    
@@ -101,7 +103,8 @@ FROM pms_project";
 $query .= " LEFT JOIN pms_sector_information ON pms_project.prj_sector_id = pms_sector_information.sci_id";
 $query .= " LEFT JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id";
 $query .= " LEFT JOIN pms_project_status ON pms_project.prj_project_status_id = pms_project_status.prs_id";
-$query .= " LEFT JOIN gen_address_structure ON pms_project.prj_location_zone_id = gen_address_structure.add_id";
+$query .= " LEFT JOIN gen_address_structure zone_location ON pms_project.prj_location_zone_id = zone_location.add_id";
+$query .= " LEFT JOIN gen_address_structure woreda_owner ON pms_project.prj_owner_woreda_id = woreda_owner.add_id";
 $query .= " WHERE 1=1";
 }
 //Project employees
@@ -443,7 +446,7 @@ $query .= " GROUP BY zone.add_name{$suffix}, woreda.add_name{$suffix}, sci_name{
 
 }
 //for governmental projects
-($reportType==8){
+if($reportType==8){
    $query .= " ORDER BY sci_id"; 
 }
 

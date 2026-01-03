@@ -699,6 +699,7 @@ $sql = "
         (ARRAY_AGG(sc.psc_id ORDER BY p.prj_id ASC))[1] AS sector_category_id,
        (ARRAY_AGG(s.sci_name_or ORDER BY p.prj_id ASC))[1] AS sector_name,
     (ARRAY_AGG(sc.psc_name ORDER BY p.prj_id ASC))[1] AS sector_category_name,
+    SUM(bdr_requested_amount) AS requested_amount,
     SUM(bdr_source_government_approved) AS gov_approved,
     SUM(bdr_source_support_approved) AS support_approved,
     SUM(bdr_source_credit_approved) AS credit_approved,
@@ -837,7 +838,7 @@ $sql = "
     INNER JOIN pms_project_category pc ON p.prj_project_category_id = pc.pct_id
     INNER JOIN pms_sector_information s ON p.prj_sector_id = s.sci_id
     INNER JOIN prj_sector_category sc ON sc.psc_id = s.sci_sector_category_id
-    INNER JOIN gen_address_structure add ON p.prj_owner_zone_id = add.add_id ";
+    INNER JOIN gen_address_structure add ON p.prj_owner_woreda_id = add.add_id ";
 $sql =$this->getSearchParam($request,$sql);
 $sql .=" GROUP BY add.add_id";
 // Execute query
@@ -878,6 +879,10 @@ return response()->json([
     //$query =$this->getSearchParam($request,$query);
 //$query .="GROUP BY sci_id";
 //END COMMON PARAMETERS
+ if($reportType==8){
+    $query .= " ORDER BY prj_sector_id ";
+ }
+
  $data_info=DB::select($query);
 $resultObject= array(
     "data" =>$data_info,
