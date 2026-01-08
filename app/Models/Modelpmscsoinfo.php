@@ -1,8 +1,8 @@
 <?php
 namespace App\Models;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\BaseModel;
 
-class Modelpmscsoinfo extends Model
+class Modelpmscsoinfo extends BaseModel
 {
     const CREATED_AT = 'cso_create_time';
     const UPDATED_AT = 'cso_update_time';

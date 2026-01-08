@@ -787,7 +787,7 @@ return response()->json([
    }else if($reportType==19){
     //START 19, 3.5
     // Fetch fiscalYear safely
-$sectorCategory = collect(DB::select("SELECT psc_id, psc_name FROM prj_sector_category"));
+$sectorCategory = collect(DB::select("SELECT psc_id, psc_name FROM prj_sector_category WHERE psc_gov_active =1"));
 // Dynamically generate pivot columns
 $cols = $sectorCategory->map(function ($z) {
     $sectorCategoryId = (int) $z->psc_id; // ensure integer to prevent SQL injection

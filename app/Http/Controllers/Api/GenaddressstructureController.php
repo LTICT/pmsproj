@@ -313,6 +313,7 @@ function buildTree(array $elements, $parentId = null) {
     return $branch;
 }
 public function listaddress(Request $request){
+
         //INNER JOIN tbl_users ON tbl_users.usr_zone_id = gen_address_structure.add_id
      //WHERE usr_id = '.$userId.' AND add_id::integer =0   
   $authenticatedUser = $request->authUser;
@@ -324,7 +325,7 @@ public function listaddress(Request $request){
             $zoneId=$userInfo->usr_zone_id;
             $woredaId=$userInfo->usr_woreda_id;
             //if user is zone or woreda user
-  if( $woredaId > 0){
+  if( $woredaId > 1){
    $query='WITH RECURSIVE address_hierarchy AS (
     SELECT 
     add_id AS id,
@@ -349,7 +350,7 @@ public function listaddress(Request $request){
 )
    SELECT * FROM address_hierarchy';
    //AND add_parent_id::text = '.$woredaId.'::text
-}else if($zoneId > 0 ){
+}else if($zoneId > 1 ){
    // if(){
    $query='WITH RECURSIVE address_hierarchy AS (
     SELECT 
@@ -389,6 +390,8 @@ else{
             $query .='WHERE add_id::integer =1 ';
         }elseif($userType==1){
             $query .='WHERE add_id::integer =508 ';
+                }elseif($userType==2){
+            $query .='WHERE add_id::integer =1 ';
                 }
         /*WHERE add_id::integer =508*/
         $query .='

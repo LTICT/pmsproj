@@ -49,5 +49,8 @@ return [
 'prs_status_name_or'=>'የፕሮጀክት ሁኔታ',
 'request_status'=>'ጥያቄ ያለበት ሁኔታ',
 "bdr_requested_amount"=>"የተጠየ መጠን",
-"bdr_approved_amount"=>"የጸደቀ መጠን"
+"bdr_approved_amount"=>"የጸደቀ መጠን",
+"project_start_date"=>"ፕሮጀክት የጀመረበት ዓ.ም",
+"project_end_date"=>"ፕሮጀክት የሚያልቅበት ዓ.ም",
+"project_age"=>"የፕሮጀክት እድሜ በአመት"
  ];

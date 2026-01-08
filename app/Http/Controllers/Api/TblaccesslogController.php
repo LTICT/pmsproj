@@ -55,14 +55,14 @@ class TblaccesslogController extends MyController
         if ($request->filled('log_time_start')) {
             $decodedDate = urldecode($request->log_time_start);
             // Parse as date
-            $date = Carbon::createFromFormat('Y/m/d', $decodedDate);
+            $date = Carbon::createFromFormat('Y-m-d', $decodedDate);
             $query->where('acl_create_time', '>=', $date->toDateString() . ' 00:00:00');
         }
 
         if ($request->filled('log_time_end')) {
             $decodedDate = urldecode($request->log_time_end);
             // Parse as date
-            $date = Carbon::createFromFormat('Y/m/d', $decodedDate);
+            $date = Carbon::createFromFormat('Y-m-d', $decodedDate);
             $query->where('acl_create_time', '<=', $date->toDateString() . ' 23:59:59');
         }
 

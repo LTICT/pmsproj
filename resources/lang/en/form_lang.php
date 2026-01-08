@@ -50,5 +50,8 @@ return [
 'prs_status_name_or'=>'Project Status',
 'request_status'=>'Request Status',
 "bdr_requested_amount"=>"Request Amount",
-"bdr_approved_amount"=>"Approved Amount"
+"bdr_approved_amount"=>"Approved Amount",
+"project_start_date"=>"Project Start Year",
+"project_end_date"=>"Project End Year",
+"project_age"=>"Project Age"
  ];

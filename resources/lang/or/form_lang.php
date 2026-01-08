@@ -49,5 +49,8 @@ return [
 'prs_status_name_or'=>'Haala Proojektii',
 'request_status'=>'Haalaa Gaafffi Irra Jiru',
 "bdr_requested_amount"=>"Hanga Gaafatame",
-"bdr_approved_amount"=>"Hanga Deggarame"
+"bdr_approved_amount"=>"Hanga Deggarame",
+"project_start_date"=>"Bara Jalqabame",
+"project_end_date"=>"Bara Xumuramu",
+"project_age"=>"Umurii Pirojektii"
  ];

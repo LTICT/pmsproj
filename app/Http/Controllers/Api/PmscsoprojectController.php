@@ -191,7 +191,7 @@ $query .= " LEFT JOIN gen_address_structure location_woreda ON pms_project.prj_l
         if(isset($objectTypeId) && isset($objectTypeId)){
             $query .=" AND prj_object_type_id='".$objectTypeId."'";
         }
-        $query.=' ORDER BY prj_id DESC';
+        $query.=' ORDER BY cso_id ASC';
         //$this->getQueryInfo($query);
         $data_info=DB::select($query);
 
@@ -444,7 +444,7 @@ public function insertgrid(Request $request)
             //$requestData['prj_department_id']=$userInfo->usr_department_id;
         }
         //set project status to 1 - Draft when a new project is created
-        $requestData['prj_project_status_id']=1;
+        //$requestData['prj_project_status_id']=1;
         $requestData['prj_owner_type']=2;
         $requestData['prj_parent_id']=$request->get('parent_id');
         $requestData['prj_object_type_id']=$request->get('object_type_id');

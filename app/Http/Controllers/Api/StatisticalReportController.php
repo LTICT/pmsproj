@@ -76,6 +76,10 @@ $requestStatus = trans("form_lang.request_status");
 $requestAmount = trans("form_lang.bdr_requested_amount");
 $approvedAmount = trans("form_lang.bdr_released_amount");
 $cluster=trans("form_lang.prj_cluster_id");
+$startDate=trans("form_lang.project_start_date");
+$endDate=trans("form_lang.project_end_date");
+$projectAge=trans("form_lang.project_age");
+
 // Determine column suffix based on locale
 if ($locale == "or") {
     $suffix = "_or";
@@ -98,7 +102,12 @@ $query = "SELECT
     prj_total_actual_budget AS \"$totalactualbudget\",    
     prj_start_date_gc AS \"$startdategc\",
     prj_urban_ben_number AS \"$urbanbennumber\",
-    prj_rural_ben_number AS \"$ruralbennumber\"
+    prj_rural_ben_number AS \"$ruralbennumber\",
+    SUBSTRING(prj_start_date_plan_gc FROM 1 FOR 4) AS \"$startDate\",
+    SUBSTRING(prj_end_date_plan_gc FROM 1 FOR 4) AS \"$endDate\",
+   EXTRACT( YEAR  FROM AGE(CURRENT_DATE, prj_start_date_plan_gc::date)
+)::int AS \"$projectAge\"
+
 FROM pms_project";
 $query .= " LEFT JOIN pms_sector_information ON pms_project.prj_sector_id = pms_sector_information.sci_id";
 $query .= " LEFT JOIN pms_project_category ON pms_project.prj_project_category_id = pms_project_category.pct_id";

@@ -371,6 +371,8 @@ SELECT * FROM project_hierarchy';
             'prj_location_zone_id',
             'prj_location_woreda_id',
             'prj_location_description',
+            'prj_location_description_en',
+            'prj_location_description_or',
             'prj_owner_region_id',
             'prj_owner_zone_id',
             'prj_owner_woreda_id',
